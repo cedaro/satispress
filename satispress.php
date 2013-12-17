@@ -104,7 +104,8 @@ class SatisPress {
 	/**
 	 * Process a SatisPress request.
 	 *
-	 * Determines if the current request is for packages.json or a whitelisted package and routes to the appropriate method.
+	 * Determines if the current request is for packages.json or a whitelisted
+	 * package and routes to the appropriate method.
 	 *
 	 * @since 0.1.0
 	 *
@@ -189,7 +190,10 @@ class SatisPress {
 	/**
 	 * Retrieve a list of whitelisted plugins and associated data.
 	 *
-	 * Plugins should be added to the whitelist by hooking into the 'satispress_plugins' filter and appending a plugin's basename to the array. The basename is the main plugin file's relative path from the plugin directory. Ex. simple-image-widget/simple-image-widget.php
+	 * Plugins should be added to the whitelist by hooking into the
+	 * 'satispress_plugins' filter and appending a plugin's basename to the
+	 * array. The basename is the main plugin file's relative path from the
+	 * plugin directory. Ex. simple-image-widget/simple-image-widget.php
 	 *
 	 * @since 0.1.0
 	 * @todo Create a model for the plugin format.
