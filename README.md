@@ -4,7 +4,7 @@ Generate a Composer repository from a list of installed WordPress plugins.
 
 ## Why a WordPress Installation?
 
-Many plugins don't haven publicly accessible repositories, so managing them with Composer can be a hassle. Instead, SatisPress allows plugins to be managed in a standard WordPress installation, leveraging the built-in update process. The whitelisted plugins are exposed via an automatically generated `packages.json` for inclusion as a `composer` repository type in `composer.json` or `satis.json`.
+Many plugins don't have publicly accessible repositories, so managing them with Composer can be a hassle. Instead, SatisPress allows plugins to be managed in a standard WordPress installation, leveraging the built-in update process. The whitelisted plugins are exposed via an automatically generated `packages.json` for inclusion as a Composer repository in `composer.json` or `satis.json`.
 
 ## Whitelisting Plugins
 
