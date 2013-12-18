@@ -2,8 +2,6 @@
 /**
  * SatisPress
  *
- * @since 0.1.0
- *
  * @package SatisPress
  * @author Brady Vercher <brady@blazersix.com>
  * @license GPL-2.0+
@@ -12,7 +10,7 @@
  * Plugin Name: SatisPress
  * Plugin URI: https://github.com/bradyvercher/satispress
  * Description: Expose installed plugins as Composer packages.
- * Version: 0.1.0
+ * Version: 0.2.0
  * Author: Brady Vercher
  * Author URI: http://www.blazersix.com/
  * License: GPL-2.0+
@@ -20,8 +18,10 @@
  */
 
 /**
- * Load helper functions and libraries.
+ * Load helpers.
  */
+include( dirname( __FILE__ ) . '/includes/class-satispress-package.php' );
+include( dirname( __FILE__ ) . '/includes/class-satispress-plugin.php' );
 include( dirname( __FILE__ ) . '/includes/class-satispress-version-parser.php' );
 include( dirname( __FILE__ ) . '/includes/functions.php' );
 
@@ -64,12 +64,178 @@ class SatisPress {
 	 * @see SatisPress::instance();
 	 */
 	private function __construct() {
+		add_action( 'plugins_loaded', array( $this, 'load' ) );
+	}
+
+	/**
+	 * Load SatisPress.
+	 *
+	 * @since 0.2.0
+	 */
+	public function load() {
 		add_action( 'init', array( $this, 'add_rewrite_rules' ) );
 		add_filter( 'query_vars', array( $this, 'query_vars' ) );
 		add_action( 'parse_request', array( $this, 'process_request' ) );
 
+		// Cache the existing version of a plugin before it's updated.
+		if ( apply_filters( 'satispress_cache_plugins_before_update', true ) ) {
+			add_filter( 'upgrader_pre_install', array( $this, 'cache_plugin_before_update' ), 10, 2 );
+		}
+
+		// Delete the 'satispress_packages_json' transient.
+		add_action( 'upgrader_process_complete', array( $this, 'flush_packages_json_cache' ) );
+		add_action( 'set_site_transient_update_plugins', array( $this, 'flush_packages_json_cache' ) );
+
 		register_activation_hook( __FILE__, array( $this, 'activate' ) );
-		register_deactivation_hook( __FILE__, array( $this, 'deactivate' ) );
+	}
+
+	/**
+	 * Process a SatisPress request.
+	 *
+	 * Determines if the current request is for packages.json or a whitelisted
+	 * package and routes it to the appropriate method.
+	 *
+	 * @since 0.1.0
+	 *
+	 * @param object $wp Current WordPress environment instance (passed by reference).
+	 */
+	public function process_request( $wp ) {
+		if ( ! isset( $wp->query_vars['satispress'] ) || empty( $wp->query_vars['satispress'] ) ) {
+			return;
+		}
+
+		require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+
+		$slug = $wp->query_vars['satispress'];
+		$version = isset( $wp->query_vars['satispress_version'] ) ? $wp->query_vars['satispress_version'] : '';
+
+		// Send packages.json
+		if ( 'packages.json' == $slug ) {
+			echo self::get_packages_json();
+			exit;
+		}
+
+		$plugins = $this->get_plugins();
+		if ( ! isset( $plugins[ $slug ] ) ) {
+			$this->send_404();
+			wp_die();
+		}
+
+		$package = new SatisPress_Package( $plugins[ $slug ] );
+
+		$this->send_package( $package, $version );
+	}
+
+	/**
+	 * Retrieve JSON for the packages.json file.
+	 *
+	 * @todo Consider caching to a satic file instead.
+	 *
+	 * @since 0.1.0
+	 *
+	 * @return string
+	 */
+	public function get_packages_json() {
+		$json = get_transient( 'satispress_packages_json' );
+
+		if ( ! $json ) {
+			$packages = array();
+			$plugins = $this->get_plugins();
+
+			foreach ( $plugins as $slug => $plugin ) {
+				$package = new SatisPress_Package( $plugin );
+				$packages[ $package->get_name() ] = $package->get_package_definition();
+			}
+
+			$json = json_encode( array( 'packages' => $packages ), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
+			set_transient( 'satispress_packages_json', $json, 43200 ); // 12 hours.
+		}
+
+		return $json;
+	}
+
+	/**
+	 * Retrieve a list of plugin objects.
+	 *
+	 * @since 0.1.0
+	 *
+	 * @return array
+	 */
+	public function get_plugins() {
+		$plugins = array();
+		$whitelist = $this->get_whitelist();
+
+		if ( empty( $whitelist ) ) {
+			return array();
+		}
+
+		foreach ( $whitelist as $plugin_basename ) {
+			$plugin = new SatisPress_Plugin( $plugin_basename );
+
+			if ( ! file_exists( $plugin->get_file() ) || '' == $plugin->get_version( 'normalized' ) ) {
+				continue;
+			}
+
+			$plugins[ $plugin->get_slug() ] = $plugin;
+		}
+
+		return $plugins;
+	}
+
+	/**
+	 * Retrieve a list of whitelisted plugins.
+	 *
+	 * Plugins should be added to the whitelist by hooking into the
+	 * 'satispress_plugins' filter and appending a plugin's basename to the
+	 * array. The basename is the main plugin file's relative path from the
+	 * plugin directory. Ex. simple-image-widget/simple-image-widget.php
+	 *
+	 * @access protected
+	 * @since 0.2.0
+	 *
+	 * @return string
+	 */
+	protected function get_whitelist() {
+		return apply_filters( 'satispress_plugins', array() );
+	}
+
+	/**
+	 * Retrieve the path where packages are cached.
+	 *
+	 * Defaults to 'wp-content/uploads/satispress/'.
+	 *
+	 * @since 0.1.0
+	 *
+	 * @return string
+	 */
+	public function cache_path() {
+		$uploads = wp_upload_dir();
+		$path = trailingslashit( $uploads['path'] ) . 'satispress/';
+
+		if ( ! file_exists( $path ) ) {
+			wp_mkdir_p( $path );
+		}
+
+		return apply_filters( 'satispress_cache_path', $path );
+	}
+
+	/**
+	 * Cache the current version of a plugin before it's udpated.
+	 *
+	 * @since 0.2.0
+	 *
+	 * @param bool $result Whether the plugin update/install process should continue.
+	 * @param array $data Extra data passed by the update/install process.
+	 * @return bool
+	 */
+	public function cache_plugin_before_update( $result, $data ) {
+		if ( ! empty( $data['plugin'] ) && in_array( $data['plugin'], $this->get_whitelist() ) ) {
+			$plugin = new SatisPress_Plugin( $data['plugin'] );
+			$package = new SatisPress_Package( $plugin );
+			$package->archive();
+		}
+
+		return $result;
 	}
 
 	/**
@@ -102,196 +268,26 @@ class SatisPress {
 	}
 
 	/**
-	 * Process a SatisPress request.
-	 *
-	 * Determines if the current request is for packages.json or a whitelisted
-	 * package and routes to the appropriate method.
-	 *
-	 * @since 0.1.0
-	 *
-	 * @param object $wp Current WordPress environment instance (passed by reference).
-	 */
-	public function process_request( $wp ) {
-		if ( ! isset( $wp->query_vars['satispress'] ) || empty( $wp->query_vars['satispress'] ) ) {
-			return;
-		}
-
-		$slug = $wp->query_vars['satispress'];
-		$version = $wp->query_vars['satispress_version'];
-
-		// Send the packages.json
-		if ( 'packages.json' == $slug ) {
-			echo self::get_packages_json();
-			exit;
-		}
-
-		$packages = $this->get_plugins();
-		if ( ! isset( $packages[ $slug ] ) ) {
-			$this->send_404();
-		}
-
-		$this->send_package( $packages[ $slug ], $version );
-	}
-
-	/**
-	 * Retrieve JSON for the packages.json file.
-	 *
-	 * @todo Include previously cached package versions.
-	 *
-	 * @since 0.1.0
-	 *
-	 * @return string
-	 */
-	public function get_packages_json() {
-		$json = get_transient( 'satispress_packages_json' );
-		$json = null; // @todo For testing.
-
-		if ( ! $json ) {
-			$whitelist = $this->get_plugins();
-
-			$packages = array();
-			$vendor = apply_filters( 'satispress_vendor', 'satispress' );
-
-			foreach ( $whitelist as $slug => $plugin ) {
-				$package_name = $vendor . '/' . $slug;
-
-				$packages[ $package_name ] = array(
-					$plugin['version'] => array(
-						'name'               => $package_name,
-						'version'            => wp_strip_all_tags( $plugin['version'] ),
-						'version_normalized' => $plugin['version_normalized'],
-						'dist'               => array(
-							'type' => 'zip',
-							'url'  => esc_url_raw( sprintf( home_url( '/satispress/%s/%s' ), $slug, $plugin['version_normalized'] ) ),
-						),
-						'require'            => array(
-							'composer/installers' => '~1.0',
-						),
-						'type'               => 'wordpress-plugin',
-						'authors'            => array(
-							array(
-								'name'     => wp_strip_all_tags( $plugin['data']['Author'] ),
-								'homepage' => esc_url_raw( $plugin['data']['AuthorURI'] ),
-							),
-						),
-						'description'        => wp_strip_all_tags( $plugin['data']['Description'] ),
-						'homepage'           => esc_url_raw( $plugin['data']['PluginURI'] ),
-					),
-				);
-			}
-
-			$json = json_encode( array( 'packages' => $packages ), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
-			set_transient( 'satispress_packages_json', $json, 43200 ); // 12 hours.
-		}
-
-		return $json;
-	}
-
-	/**
-	 * Retrieve a list of whitelisted plugins and associated data.
-	 *
-	 * Plugins should be added to the whitelist by hooking into the
-	 * 'satispress_plugins' filter and appending a plugin's basename to the
-	 * array. The basename is the main plugin file's relative path from the
-	 * plugin directory. Ex. simple-image-widget/simple-image-widget.php
-	 *
-	 * @since 0.1.0
-	 * @todo Create a model for the plugin format.
-	 *
-	 * @return array
-	 */
-	public function get_plugins() {
-		$plugins = array();
-		$whitelist = apply_filters( 'satispress_plugins', array() );
-
-		if ( empty( $whitelist ) ) {
-			return array();
-		}
-
-		require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-
-		foreach ( $whitelist as $plugin_basename ) {
-			$slug = dirname( $plugin_basename );
-			$slug = ( '.' == $slug ) ? basename( $plugin_basename, '.php' ) : $slug;
-			$slug = sanitize_title_with_dashes( $slug );
-
-			$plugin_file = WP_PLUGIN_DIR . '/' . $plugin_basename;
-			if ( ! file_exists( $plugin_file ) ) {
-				continue;
-			}
-
-			$plugin_data = get_plugin_data( $plugin_file, false, false );
-			$version = $plugin_data['Version'];
-			$version_normalized = SatisPress_Version_Parser::normalize( $version );
-			if ( empty( $version_normalized ) ) {
-				continue;
-			}
-
-			$plugins[ $slug ] = array(
-				'slug'               => $slug,
-				'version'            => $version,
-				'version_normalized' => $version_normalized,
-				'plugin_basename'    => $plugin_basename,
-				'plugin_file'        => $plugin_file,
-				'plugin_dir'         => ( '.' == dirname( $plugin_file ) ) ? $plugin_file : dirname( $plugin_file ),
-				'data'               => $plugin_data,
-			);
-		}
-
-		return $plugins;
-	}
-
-	/**
-	 * Retrieve the path where packages are cached.
-	 *
-	 * Defaults to 'wp-content/uploads/satispress/'.
-	 *
-	 * @since 0.1.0
-	 *
-	 * @return string
-	 */
-	public function archive_path() {
-		$uploads = wp_upload_dir();
-		$path = trailingslashit( $uploads['path'] ) . 'satispress/';
-
-		if ( ! file_exists( $path ) ) {
-			wp_mkdir_p( $path );
-		}
-
-		return apply_filters( 'satispress_archive_path', $path );
-	}
-
-	/**
 	 * Send a package zip.
 	 *
 	 * Sends a 404 header if the specified version isn't available.
 	 *
 	 * @since 0.1.0
 	 *
-	 * @param array $package Package information in the format returned by SatisPress:get_plugins().
+	 * @param SatisPress_Package $package Package object.
 	 * @param string $version Optional. Version of the package to send. Defaults to the current version.
 	 */
 	protected function send_package( $package, $version = '' ) {
-		require_once( ABSPATH . 'wp-admin/includes/class-pclzip.php' );
+		$file = $package->archive( $version );
 
-		$satispress_path = $this->archive_path();
-		$version = empty( $version ) ? $package['version_normalized'] : $version;
-		$filename = $satispress_path . $package['slug'] . '/' . $package['slug'] . '-' . $version . '.zip';
-
-		// Only create the zip if the requested version matches the current version of the plugin.
-		if ( $version == $package['version_normalized'] && ! file_exists( $filename ) ) {
-			wp_mkdir_p( dirname( $filename ) );
-
-			$zip = new PclZip( $filename );
-			$zip->create( $package['plugin_dir'], PCLZIP_OPT_REMOVE_PATH, WP_PLUGIN_DIR );
-		}
-
-		// Send a 404 if the package doesn't exit.
-		if ( ! file_exists( $filename ) ) {
+		// Send a 404 if the file doesn't exit.
+		if ( ! $file ) {
 			$this->send_404();
 		}
 
-		satispress_send_file( $filename );
+		do_action( 'satispress_send_package', $package, $version, $file );
+
+		satispress_send_file( $file );
 		exit;
 	}
 
@@ -307,7 +303,20 @@ class SatisPress {
 	}
 
 	/**
+	 * Flush the packages.json cache.
 	 *
+	 * @since 0.2.0
+	 */
+	public function flush_packages_json_cache() {
+		delete_transient( 'satispress_packages_json' );
+	}
+
+	/**
+	 * Functionality during activation.
+	 *
+	 * Sets a flag to flush rewrite rules on the request after actvation.
+	 *
+	 * @since 0.1.0
 	 */
 	public function activate() {
 		update_option( 'satispress_flush_rewrite_rules', 'yes' );

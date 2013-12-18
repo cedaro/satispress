@@ -1,13 +1,6 @@
 <?php
 /**
- * Version parser.
- *
- * @package SatisPress
- * @since 0.1.0
- */
-
-/**
- * Simplied version parser from Composer for normalizing version numbers.
+ * Simplified version parser from Composer.
  *
  * @package SatisPress
  * @since 0.1.0
