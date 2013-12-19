@@ -89,7 +89,7 @@ Securing the repository should be possible using the same methods outlined in th
 
 ### HTTP Basic Authentication
 
-To provide simple solution, SatisPress ships with an add-on called "SatisPress Basic Authentication" that protects packages with HTTP Basic Authentication. Only users registered in WordPress will have access to the packages. After activating, make sure an .htaccess exists in `wp-content/uploads/satispress/` to prevent direct access.
+To provide a simple solution, SatisPress ships with an add-on called "SatisPress Basic Authentication" that protects packages with HTTP Basic Authentication. Only users registered in WordPress will have access to the packages. After activating, make sure an `.htaccess` file exists in `wp-content/uploads/satispress/` to prevent direct access.
 
 Support is built into the add-on for the [Limit Login Attempts](http://wordpress.org/plugins/limit-login-attempts/) plugin.
 
