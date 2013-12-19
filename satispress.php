@@ -11,7 +11,7 @@
  * Plugin URI: https://github.com/bradyvercher/satispress
  * Description: Generate a Composer repository from installed WordPress plugins.
  * Version: 0.2.0
- * Author: Brady Vercher
+ * Author: Blazer Six
  * Author URI: http://www.blazersix.com/
  * License: GPL-2.0+
  * License URI: http://www.gnu.org/licenses/gpl-2.0.html
