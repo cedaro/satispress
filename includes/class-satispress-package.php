@@ -128,7 +128,7 @@ class SatisPress_Package {
 			$url = home_url( sprintf( '/satispress/%s/%s', $this->plugin->get_slug(), $version ) );
 		}
 
-		return $url;
+		return apply_filters( 'satispress_package_url', $url, $this, $version );
 	}
 
 	/**
