@@ -210,7 +210,7 @@ class SatisPress {
 	 */
 	public function cache_path() {
 		$uploads = wp_upload_dir();
-		$path = trailingslashit( $uploads['path'] ) . 'satispress/';
+		$path = trailingslashit( $uploads['basedir'] ) . 'satispress/';
 
 		if ( ! file_exists( $path ) ) {
 			wp_mkdir_p( $path );
