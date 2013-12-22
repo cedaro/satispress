@@ -21,7 +21,8 @@
  * Load helpers.
  */
 include( dirname( __FILE__ ) . '/includes/class-satispress-package.php' );
-include( dirname( __FILE__ ) . '/includes/class-satispress-plugin.php' );
+include( dirname( __FILE__ ) . '/includes/class-satispress-package-plugin.php' );
+include( dirname( __FILE__ ) . '/includes/class-satispress-package-theme.php' );
 include( dirname( __FILE__ ) . '/includes/class-satispress-version-parser.php' );
 include( dirname( __FILE__ ) . '/includes/functions.php' );
 
@@ -78,8 +79,8 @@ class SatisPress {
 		add_action( 'parse_request', array( $this, 'process_request' ) );
 
 		// Cache the existing version of a plugin before it's updated.
-		if ( apply_filters( 'satispress_cache_plugins_before_update', true ) ) {
-			add_filter( 'upgrader_pre_install', array( $this, 'cache_plugin_before_update' ), 10, 2 );
+		if ( apply_filters( 'satispress_cache_packages_before_update', true ) ) {
+			add_filter( 'upgrader_pre_install', array( $this, 'cache_package_before_update' ), 10, 2 );
 		}
 
 		// Delete the 'satispress_packages_json' transient.
@@ -100,7 +101,7 @@ class SatisPress {
 	 * @param object $wp Current WordPress environment instance (passed by reference).
 	 */
 	public function process_request( $wp ) {
-		if ( ! isset( $wp->query_vars['satispress'] ) || empty( $wp->query_vars['satispress'] ) ) {
+		if ( ! isset( $wp->query_vars['satispress'] ) ) {
 			return;
 		}
 
@@ -109,27 +110,33 @@ class SatisPress {
 		$slug = $wp->query_vars['satispress'];
 		$version = isset( $wp->query_vars['satispress_version'] ) ? $wp->query_vars['satispress_version'] : '';
 
+		// Main index request.
+		// Ex: http://example.com/satispress/
+		if ( empty( $slug ) ) {
+			do_action( 'satispress_index' );
+			return;
+		}
+
 		// Send packages.json
 		if ( 'packages.json' == $slug ) {
 			echo self::get_packages_json();
 			exit;
 		}
 
-		$plugins = $this->get_plugins();
-		if ( ! isset( $plugins[ $slug ] ) ) {
+		// Send a package if it has been whitelisted.
+		$packages = $this->get_packages();
+		if ( ! isset( $packages[ $slug ] ) ) {
 			$this->send_404();
 			wp_die();
 		}
 
-		$package = new SatisPress_Package( $plugins[ $slug ] );
-
-		$this->send_package( $package, $version );
+		$this->send_package( $packages[ $slug ], $version );
 	}
 
 	/**
 	 * Retrieve JSON for the packages.json file.
 	 *
-	 * @todo Consider caching to a satic file instead.
+	 * @todo Consider caching to a static file instead.
 	 *
 	 * @since 0.1.0
 	 *
@@ -137,17 +144,17 @@ class SatisPress {
 	 */
 	public function get_packages_json() {
 		$json = get_transient( 'satispress_packages_json' );
+		$json = null;
 
 		if ( ! $json ) {
-			$packages = array();
-			$plugins = $this->get_plugins();
+			$data = array();
+			$packages = $this->get_packages();
 
-			foreach ( $plugins as $slug => $plugin ) {
-				$package = new SatisPress_Package( $plugin );
-				$packages[ $package->get_name() ] = $package->get_package_definition();
+			foreach ( $packages as $slug => $package ) {
+				$data[ $package->get_package_name() ] = $package->get_package_definition();
 			}
 
-			$json = json_encode( array( 'packages' => $packages ), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
+			$json = json_encode( array( 'packages' => $data ), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
 			set_transient( 'satispress_packages_json', $json, 43200 ); // 12 hours.
 		}
 
@@ -155,40 +162,66 @@ class SatisPress {
 	}
 
 	/**
-	 * Retrieve a list of plugin objects.
+	 * Retrieve a package by its slug and type.
 	 *
-	 * @since 0.1.0
+	 * @since 0.2.0
 	 *
-	 * @return array
+	 * @param string $slug Package slug (plugin basename or theme directory name).
+	 * @param string $type Package type.
+	 * @return SatisPress_Package
 	 */
-	public function get_plugins() {
-		$plugins = array();
+	public function get_package( $slug, $type ) {
+		$package = false;
 		$whitelist = $this->get_whitelist();
 
-		if ( empty( $whitelist ) ) {
-			return array();
-		}
-
-		foreach ( $whitelist as $plugin_basename ) {
-			$plugin = new SatisPress_Plugin( $plugin_basename );
-
-			if ( ! file_exists( $plugin->get_file() ) || '' == $plugin->get_version( 'normalized' ) ) {
-				continue;
+		if ( in_array( $slug, $whitelist[ $type ] ) ) {
+			if ( 'plugin' == $type ) {
+				$package = new SatisPress_Package_Plugin( $slug );
+			} elseif ( 'theme' == $type ) {
+				$package = new SatisPress_Package_Theme( $slug );
 			}
-
-			$plugins[ $plugin->get_slug() ] = $plugin;
 		}
 
-		return $plugins;
+		return $package;
 	}
 
 	/**
-	 * Retrieve a list of whitelisted plugins.
+	 * Retrieve a list of packages.
+	 *
+	 * @since 0.2.0
+	 *
+	 * @return array
+	 */
+	public function get_packages() {
+		$packages = array();
+		$whitelist = $this->get_whitelist();
+
+		foreach ( $whitelist as $type => $identifiers ) {
+			if ( empty( $identifiers ) ) {
+				continue;
+			}
+
+			foreach ( $identifiers as $identifier ) {
+				$package = $this->get_package( $identifier, $type );
+				if ( $package && '' !== $package->get_version_normalized() ) {
+					$packages[ $identifier ] = $package;
+				}
+			}
+		}
+
+		return $packages;
+	}
+
+	/**
+	 * Retrieve a list of whitelisted packages.
 	 *
 	 * Plugins should be added to the whitelist by hooking into the
 	 * 'satispress_plugins' filter and appending a plugin's basename to the
 	 * array. The basename is the main plugin file's relative path from the
-	 * plugin directory. Ex. simple-image-widget/simple-image-widget.php
+	 * root plugin directory. Example: simple-image-widget/simple-image-widget.php
+	 *
+	 * Themes should be added by hooking into the 'satispress_themes' filter and
+	 * appending the name of the theme directory. Example: genesis
 	 *
 	 * @access protected
 	 * @since 0.2.0
@@ -196,7 +229,10 @@ class SatisPress {
 	 * @return string
 	 */
 	protected function get_whitelist() {
-		return apply_filters( 'satispress_plugins', array() );
+		return array(
+			'plugin' => apply_filters( 'satispress_plugins', array() ),
+			'theme'  => apply_filters( 'satispress_themes', array() ),
+		);
 	}
 
 	/**
@@ -228,10 +264,16 @@ class SatisPress {
 	 * @param array $data Extra data passed by the update/install process.
 	 * @return bool
 	 */
-	public function cache_plugin_before_update( $result, $data ) {
-		if ( ! empty( $data['plugin'] ) && in_array( $data['plugin'], $this->get_whitelist() ) ) {
-			$plugin = new SatisPress_Plugin( $data['plugin'] );
-			$package = new SatisPress_Package( $plugin );
+	public function cache_package_before_update( $result, $data ) {
+		if ( empty( $data['plugin'] ) && empty( $data['theme'] ) ) {
+			return $result;
+		}
+
+		$type = ( isset( $data['plugin'] ) ) ? 'plugin' : 'theme';
+		$slug = $data[ $type ];
+
+		$package = $this->get_package( $data[ $type ], $type );
+		if ( $package ) {
 			$package->archive();
 		}
 
@@ -239,7 +281,7 @@ class SatisPress {
 	}
 
 	/**
-	 * Add a rewrite rule to handle SatiPress requests.
+	 * Add a rewrite rule to handle SatisPress requests.
 	 *
 	 * @since 0.1.0
 	 */

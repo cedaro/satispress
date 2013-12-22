@@ -5,7 +5,7 @@
  * @package SatisPress
  * @since 0.2.0
  */
-class SatisPress_Plugin {
+class SatisPress_Package_Plugin extends SatisPress_Package {
 	/**
 	 * Plugin basename.
 	 *
@@ -109,6 +109,17 @@ class SatisPress_Plugin {
 	}
 
 	/**
+	 * Retrieve the plugin homepage.
+	 *
+	 * @since 0.2.0
+	 *
+	 * @return string
+	 */
+	public function get_homepage() {
+		return $this->get_data( 'PluginURI' );
+	}
+
+	/**
 	 * Retrieve the plugin name.
 	 *
 	 * @since 0.2.0
@@ -117,6 +128,19 @@ class SatisPress_Plugin {
 	 */
 	public function get_name() {
 		return $this->get_data( 'Name' );
+	}
+
+	/**
+	 * Retrieve the root directory for the package type.
+	 *
+	 * This is the directory path that will be stripped when the plugin is zipped.
+	 *
+	 * @since 0.2.0
+	 *
+	 * @return string
+	 */
+	public function get_package_root() {
+		return WP_PLUGIN_DIR;
 	}
 
 	/**
@@ -137,17 +161,6 @@ class SatisPress_Plugin {
 	}
 
 	/**
-	 * Retrieve the plugin URL.
-	 *
-	 * @since 0.2.0
-	 *
-	 * @return string
-	 */
-	public function get_plugin_uri() {
-		return $this->get_data( 'PluginURI' );
-	}
-
-	/**
 	 * Retrieve the plugin slug.
 	 *
 	 * Created from the name of the plugin directory or the plugin file if it
@@ -162,23 +175,25 @@ class SatisPress_Plugin {
 	}
 
 	/**
-	 * Retrieve the plugin version.
-	 *
-	 * Accepts 'normalized' to retrieve a normalized version string.
+	 * Retrieve the type of Composer package.
 	 *
 	 * @since 0.2.0
 	 *
-	 * @param string $format Optional. Defaults to the version set in the plugin headers.
 	 * @return string
 	 */
-	public function get_version( $format = '' ) {
-		$version = $this->get_data( 'Version' );
+	public function get_type() {
+		return 'wordpress-plugin';
+	}
 
-		if ( 'normalized' == $format ) {
-			$version = SatisPress_Version_Parser::normalize( $version );
-		}
-
-		return $version;
+	/**
+	 * Retrieve the plugin version.
+	 *
+	 * @since 0.2.0
+	 *
+	 * @return string
+	 */
+	public function get_version() {
+		return $this->get_data( 'Version' );
 	}
 
 	/**
