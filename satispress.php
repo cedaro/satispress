@@ -154,7 +154,8 @@ class SatisPress {
 				$data[ $package->get_package_name() ] = $package->get_package_definition();
 			}
 
-			$json = json_encode( array( 'packages' => $data ), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
+			$json = json_encode( array( 'packages' => $data ) );
+			$json = str_replace( '\\/', '/', $json ); // Unescape slashes (PHP 5.3 compatible method).
 			set_transient( 'satispress_packages_json', $json, 43200 ); // 12 hours.
 		}
 
