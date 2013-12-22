@@ -111,8 +111,7 @@ class SatisPress_Authentication_Basic {
 	 * @since 0.1.0
 	 */
 	protected function save_htaccess() {
-		$satispress = SatisPress::instance();
-		$cache_path = $satispress->cache_path();
+		$cache_path = SatisPress::instance()->cache_path();
 		$htaccess_file = $cache_path . '.htaccess';
 
 		if ( ( ! file_exists( $htaccess_file ) && is_writable( $cache_path ) ) || is_writable( $htaccess_file ) ) {
