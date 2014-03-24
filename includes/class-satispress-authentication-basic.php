@@ -1,24 +1,6 @@
 <?php
 /**
- * SatisPress Basic Authentication
- *
- * @package SatisPress\Authentication\Basic
- * @author Brady Vercher <brady@blazersix.com>
- * @license GPL-2.0+
- *
- * @wordpress-plugin
- * Plugin Name: SatisPress Basic Authentication
- * Plugin URI: https://github.com/bradyvercher/satispress
- * Description: Retstrict access to SatisPress packages with HTTP Basic Authentication.
- * Version: 0.1.0
- * Author: Blazer Six
- * Author URI: http://www.blazersix.com/
- * License: GPL-2.0+
- * License URI: http://www.gnu.org/licenses/gpl-2.0.html
- */
-
-/**
- * Main plugin class.
+ * SatisPress basic authentication class.
  *
  * @package SatisPress\Authentication\Basic
  * @author Brady Vercher <brady@blazersix.com>
@@ -131,7 +113,3 @@ class SatisPress_Authentication_Basic {
 		}
 	}
 }
-
-global $satispress_basic_auth;
-$satispress_basic_auth = new SatisPress_Authentication_Basic();
-$satispress_basic_auth->load();
