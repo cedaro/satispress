@@ -3,8 +3,31 @@
  * Helper functions.
  *
  * @package SatisPress
+ * @author Brady Vercher <brady@blazersix.com>
  * @since 0.1.0
  */
+
+/**
+ * Retrieve the permalink for packages.json
+ *
+ * @since 0.2.0
+ *
+ * @param array $args
+ * @return string
+ */
+function satispress_get_packages_permalink( $args = array() ) {
+	$permalink = get_option( 'permalink_structure' );
+	if ( empty( $permalink ) ) {
+		$url = add_query_arg( 'satispress', 'packages.json', home_url( '/' ) );
+
+	} else {
+		// Leave off the packages.json if 'base' arg is true.
+		$suffix = ( isset( $args['base'] ) && $args['base'] ) ? '' : 'packages.json';
+		$url = sprintf( home_url( '/satispress/%s' ), $suffix );
+	}
+
+	return $url;
+}
 
 /**
  * Send a download.

@@ -1,16 +1,25 @@
 <?php
 /**
- * Theme class.
+ * Theme package class.
  *
  * @package SatisPress
+ * @author Brady Vercher <brady@blazersix.com>
  * @since 0.2.0
  */
 class SatisPress_Package_Theme extends SatisPress_Package {
 	/**
+	 * Base path where packages are cached.
+	 *
+	 * @since 0.2.0
+	 * @type string
+	 */
+	protected $archive_path;
+
+	/**
 	 * Theme slug.
 	 *
-	 * @access protected
-	 * @var string
+	 * @since 0.2.0
+	 * @type string
 	 */
 	protected $slug;
 
@@ -19,8 +28,8 @@ class SatisPress_Package_Theme extends SatisPress_Package {
 	 *
 	 * Data cached from wp_get_theme(). Includes theme headers.
 	 *
-	 * @access protected
-	 * @var array
+	 * @since 0.2.0
+	 * @type array
 	 */
 	protected $theme;
 
@@ -31,9 +40,10 @@ class SatisPress_Package_Theme extends SatisPress_Package {
 	 *
 	 * @param string $theme_directory Name of the theme directory.
 	 */
-	public function __construct( $theme_directory ) {
+	public function __construct( $theme_directory, $archive_path ) {
 		$this->slug = $theme_directory;
 		$this->theme = wp_get_theme( $theme_directory );
+		$this->archive_path = trailingslashit( $archive_path );
 	}
 
 	/**

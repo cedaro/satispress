@@ -1,0 +1,28 @@
+{
+  "name": "satispress",
+  "version": "0.2.0",
+  "description": "Generate a Composer repository from installed WordPress plugins and themes.",
+  "main": "Gruntfile.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bradyvercher/satispress.git"
+  },
+  "author": {
+    "name": "Brady Vercher",
+    "email": "brady@blazersix.com",
+    "url": "http://www.blazersix.com/"
+  },
+  "license": "GPL-2.0+",
+  "bugs": {
+    "url": "https://github.com/bradyvercher/satispress/issues"
+  },
+  "homepage": "https://github.com/bradyvercher/satispress",
+  "devDependencies": {
+    "grunt": "~0.4.4",
+    "grunt-autoprefixer": "~0.7.3",
+    "grunt-contrib-jshint": "~0.10.0",
+    "grunt-contrib-watch": "~0.6.1",
+    "grunt-wp-i18n": "~0.4.3",
+    "matchdep": "~0.3.0"
+  }
+}

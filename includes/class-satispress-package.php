@@ -3,6 +3,7 @@
  * Package class.
  *
  * @package SatisPress
+ * @author Brady Vercher <brady@blazersix.com>
  * @since 0.2.0
  */
 class SatisPress_Package {
@@ -17,7 +18,6 @@ class SatisPress_Package {
 	 */
 	public function get_package_name() {
 		$vendor = apply_filters( 'satispress_vendor', 'satispress' );
-
 		return $vendor . '/' . $this->get_slug();
 	}
 
@@ -29,9 +29,6 @@ class SatisPress_Package {
 	 * directory. The version numbers and archive URL are the only parts of the
 	 * definition that will differ, even if additional data changes between
 	 * versions.
-	 *
-	 * @todo Consider persisting additional data in a package.json in each cache
-	 *       directory.
 	 *
 	 * @since 0.2.0
 	 *
@@ -125,8 +122,7 @@ class SatisPress_Package {
 		$slug = $this->get_slug();
 		$current_version = $this->get_version();
 
-		$base_path = SatisPress::instance()->cache_path();
-		$package_cache_path = $base_path . $slug . '/';
+		$package_cache_path = $this->archive_path . $slug . '/';
 		if ( ! file_exists( $package_cache_path ) ) {
 			return array();
 		}
@@ -149,7 +145,9 @@ class SatisPress_Package {
 	}
 
 	/**
+	 * Retrieve the normalized version number.
 	 *
+	 * @since 0.2.0
 	 */
 	public function get_version_normalized() {
 		return SatisPress_Version_Parser::normalize( $this->get_version() );
@@ -168,8 +166,7 @@ class SatisPress_Package {
 		$version_normalized = SatisPress_Version_Parser::normalize( $version );
 
 		$slug = $this->get_slug();
-		$base_path = SatisPress::instance()->cache_path();
-		$filename = $base_path . $slug . '/' . $slug . '-' . $version . '.zip';
+		$filename = $this->archive_path . $slug . '/' . $slug . '-' . $version . '.zip';
 
 		// Only create the zip if the requested version matches the current version of the plugin.
 		if ( $version_normalized == $this->get_version_normalized() && ! file_exists( $filename ) ) {

@@ -1,0 +1,51 @@
+/* Plugins Screen
+------------------------------------------------------------------------------*/
+
+.column-satispress input[type="checkbox"] {
+	float: left;
+	margin-top: 4px;
+}
+
+.column-satispress .spinner {
+	float: left;
+}
+
+
+/* Settings Screen
+------------------------------------------------------------------------------*/
+
+.nav-tab-wrapper-title {
+	display: inline-block;
+	margin-right: 20px;
+}
+
+.satispress-tab-panel {
+	display: none;
+}
+
+.satispress-tab-panel.is-active {
+	display: block;
+}
+
+.satispress-field-error {
+	color: #ff0000;
+}
+
+.satispress-package {
+	margin-top: 20px;
+}
+
+.satispress-package tbody th {
+	width: 150px;
+}
+
+.satispress-repository-snippet {
+	background: #333;
+	color: #fff;
+	line-height: 1.2;
+	padding: 10px;
+}
+
+.satispress-repository-snippet code {
+	background: transparent;
+}

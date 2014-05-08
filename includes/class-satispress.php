@@ -10,7 +10,8 @@ class SatisPress {
 	/**
 	 * The main SatisPress instance.
 	 *
-	 * @var SatisPress
+	 * @since 0.1.0
+	 * @type SatisPress
 	 */
 	private static $instance;
 
@@ -45,9 +46,18 @@ class SatisPress {
 	 * @since 0.2.0
 	 */
 	public function load() {
+		if ( is_admin() ) {
+			$this->load_admin();
+		}
+
+		$basic_auth = new SatisPress_Authentication_Basic();
+		$basic_auth->set_base_path( $this->cache_path() );
+		$basic_auth->load();
+
 		add_action( 'init', array( $this, 'add_rewrite_rules' ) );
 		add_filter( 'query_vars', array( $this, 'query_vars' ) );
 		add_action( 'parse_request', array( $this, 'process_request' ) );
+		add_filter( 'satispress_vendor', array( $this, 'filter_vendor' ), 5 );
 
 		// Cache the existing version of a plugin before it's updated.
 		if ( apply_filters( 'satispress_cache_packages_before_update', true ) ) {
@@ -58,18 +68,17 @@ class SatisPress {
 		add_action( 'upgrader_process_complete', array( $this, 'flush_packages_json_cache' ) );
 		add_action( 'set_site_transient_update_plugins', array( $this, 'flush_packages_json_cache' ) );
 
-		if ( is_admin() ) {
-			$manage_screen = new SatisPress_Admin_Screen_ManagePlugins();
-			$manage_screen->load();
-
-			$settings_screen = new SatisPress_Admin_Screen_Settings();
-			$settings_screen->load();
-		}
-
-		$basic_auth = new SatisPress_Authentication_Basic();
-		$basic_auth->load();
-
 		register_activation_hook( __FILE__, array( $this, 'activate' ) );
+	}
+
+	/**
+	 * Load the admin.
+	 *
+	 * @since 0.2.0
+	 */
+	public function load_admin() {
+		$admin = new SatisPress_Admin();
+		$admin->load();
 	}
 
 	/**
@@ -136,9 +145,10 @@ class SatisPress {
 				$data[ $package->get_package_name() ] = $package->get_package_definition();
 			}
 
-			$json = json_encode( array( 'packages' => $data ) );
+			$options = version_compare( phpversion(), '5.3', '>' ) ? JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT : 0;
+			$json = json_encode( array( 'packages' => $data ), $options );
 			$json = str_replace( '\\/', '/', $json ); // Unescape slashes (PHP 5.3 compatible method).
-			set_transient( 'satispress_packages_json', $json, 43200 ); // 12 hours.
+			set_transient( 'satispress_packages_json', $json, HOUR_IN_SECONDS * 12 );
 		}
 
 		return $json;
@@ -157,12 +167,10 @@ class SatisPress {
 		$package = false;
 		$whitelist = $this->get_whitelist();
 
-		if ( in_array( $slug, $whitelist[ $type ] ) ) {
-			if ( 'plugin' == $type ) {
-				$package = new SatisPress_Package_Plugin( $slug );
-			} elseif ( 'theme' == $type ) {
-				$package = new SatisPress_Package_Theme( $slug );
-			}
+		if ( 'plugin' == $type ) {
+			$package = new SatisPress_Package_Plugin( $slug, $this->cache_path() );
+		} elseif ( 'theme' == $type ) {
+			$package = new SatisPress_Package_Theme( $slug, $this->cache_path() );
 		}
 
 		return $package;
@@ -212,13 +220,18 @@ class SatisPress {
 	 */
 	protected function get_whitelist() {
 		$plugins = apply_filters( 'satispress_plugins', array() );
+		$themes  = apply_filters( 'satispress_themes', array() );
 
+		// @todo Implement these through a filter instead.
 		$options = (array) get_option( 'satispress_plugins' );
 		$plugins = array_filter( array_unique( array_merge( $plugins, $options ) ) );
 
+		$options = (array) get_option( 'satispress_themes', array() );
+		$themes = array_filter( array_unique( array_merge( $themes, $options ) ) );
+
 		return array(
 			'plugin' => $plugins,
-			'theme'  => apply_filters( 'satispress_themes', array() ),
+			'theme'  => $themes,
 		);
 	}
 
@@ -318,6 +331,23 @@ class SatisPress {
 
 		satispress_send_file( $file );
 		exit;
+	}
+
+	/**
+	 * Update the vendor string based on the vendor setting value.
+	 *
+	 * @since 0.2.0
+	 *
+	 * @param string $vendor Vendor string.
+	 * @return string
+	 */
+	public function filter_vendor( $vendor ) {
+		$option = get_option( 'satispress' );
+		if ( ! empty( $option['vendor'] ) ) {
+			$vendor = $option['vendor'];
+		}
+
+		return $vendor;
 	}
 
 	/**

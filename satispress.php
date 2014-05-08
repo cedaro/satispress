@@ -17,7 +17,29 @@
  * License URI: http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-include( dirname( __FILE__ ) . '/includes/functions.php' );
+if ( ! defined( 'SATISPRESS_DIR' ) ) {
+	/**
+	 * Path directory path.
+	 *
+	 * @since 0.2.0
+	 * @type string SATISPRESS_DIR
+	 */
+	define( 'SATISPRESS_DIR', plugin_dir_path( __FILE__ ) );
+}
+
+if ( ! defined( 'SATISPRESS_URL' ) ) {
+	/**
+	 * URL to the plugin's root directory.
+	 *
+	 * Includes trailing slash.
+	 *
+	 * @since 0.2.0
+	 * @type string SATISPRESS_URL
+	 */
+	define( 'SATISPRESS_URL', plugin_dir_url( __FILE__ ) );
+}
+
+include( SATISPRESS_DIR . 'includes/functions.php' );
 
 /**
  * Autoloader callback.
@@ -33,13 +55,12 @@ function satispress_autoloader( $class ) {
 		return;
 	}
 
-	$file = dirname( __FILE__ ) . '/includes/class-' . strtolower( str_replace( '_', '-', $class ) ) . '.php';
+	$file = SATISPRESS_DIR . 'includes/class-' . strtolower( str_replace( '_', '-', $class ) ) . '.php';
 
 	if ( file_exists( $file ) ) {
 		require_once( $file );
 	}
 }
 spl_autoload_register( 'satispress_autoloader' );
-
 
 SatisPress::instance();

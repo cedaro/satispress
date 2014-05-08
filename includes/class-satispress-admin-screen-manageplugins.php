@@ -17,24 +17,23 @@ class SatisPress_Admin_Screen_ManagePlugins {
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_assets' ) );
 		add_filter( 'manage_plugins_columns', array( $this, 'register_columns' ) );
 		add_action( 'manage_plugins_custom_column', array( $this, 'display_columns' ), 10, 3 );
-		add_action( 'admin_footer-plugins.php', array( $this, 'admin_footer' ) );
-
-		//add_action( 'after_plugin_row', array( $this, 'after_plugin_row' ), 10, 3 );
 	}
 
 	/**
 	 * Toggle whether or not a plugin is included in packages.json.
 	 *
 	 * @since 0.2.0
-	 * @todo Implement the nonce.
 	 */
 	public function ajax_toggle_plugin_status() {
-		if ( ! isset( $_POST['plugin_file'] ) /*|| ! isset( $_POST['nonce']*/ ) {
+		if ( ! isset( $_POST['plugin_file'] ) || ! isset( $_POST['_wpnonce'] ) ) {
 			return;
 		}
 
 		$plugin = $_POST['plugin_file'];
-		$plugins = get_option( 'satispress_plugins' );
+		$plugins = (array) get_option( 'satispress_plugins' );
+
+		// Bail if the nonce can't be verified.
+		check_admin_referer( 'toggle-status_' . $plugin );
 
 		if ( false !== ( $key = array_search( $plugin, $plugins ) ) ) {
 			unset( $plugins[ $key ] );
@@ -56,7 +55,8 @@ class SatisPress_Admin_Screen_ManagePlugins {
 	 * @param  string $hook_suffix Screen hook id.
 	 */
 	public function enqueue_assets( $hook_suffix ) {
-		wp_enqueue_script( 'wp-util' );
+		wp_enqueue_script( 'satispress-admin' );
+		wp_enqueue_style( 'satispress-admin' );
 	}
 
 	/**
@@ -88,65 +88,18 @@ class SatisPress_Admin_Screen_ManagePlugins {
 
 		$packages = SatisPress::instance()->get_packages();
 		$plugins = get_option( 'satispress_plugins' );
-		$plugin = new SatisPress_Package_Plugin( $plugin_file );
+		$plugin = SatisPress::instance()->get_package( $plugin_file, 'plugin' );
 
-		$checked = checked( isset( $packages[ $plugin->get_slug() ] ), true, false );
-		$disabled = ( empty( $checked ) || in_array( $plugin_file, $plugins ) ) ? '' : ' disabled="disabled"';
+		printf( '<input type="checkbox" value="%1$s"%2$s%3$s class="satispress-status">',
+			esc_attr( $plugin_file ),
+			checked( isset( $packages[ $plugin->get_slug() ] ), true, false ),
+			( empty( $checked ) || in_array( $plugin_file, $plugins ) ) ? '' : ' disabled="disabled"'
+		);
 
-		echo '<input type="checkbox" value="' . esc_attr( $plugin_file ) . '"' . $checked . $disabled . ' class="satispress-status">';
 		echo '<span class="spinner"></span>';
+
+		printf( '<input type="hidden" value="%s" class="satispress-status-nonce">',
+			esc_attr( wp_create_nonce( 'toggle-status_' . $plugin_file ) )
+		);
 	}
-
-	/**
-	 * Print script to toggle plugin status.
-	 *
-	 * @since 0.2.0
-	 */
-	public function admin_footer() {
-		?>
-		<script>
-		(function( $ ) {
-			$( '.satispress-status' ).on( 'change', function() {
-				var $checkbox = $( this ),
-					$spinner = $( this ).siblings( '.spinner' ).show();
-
-				wp.ajax.post( 'satispress_toggle_plugin', {
-					plugin_file: $checkbox.val(),
-					status: $checkbox.prop( 'checked' )
-				}).done(function() {
-					$checkbox.show();
-					$spinner.hide();
-				});
-			});
-		})( jQuery );
-		</script>
-		<style type="text/css">
-		.column-satispress input[type="checkbox"] {
-			float: left;
-			margin-top: 4px;
-		}
-
-		.column-satispress .spinner {
-			float: left;
-		}
-		</style>
-		<?php
-	}
-
-	/*
-	public function after_plugin_row( $plugin_file, $plugin_data, $status ) {
-		$columns = get_column_headers( get_current_screen()->id );
-		$class = is_plugin_active( $plugin_file ) ? 'active' : 'inactive';
-
-		echo '<tr class="' . $class . '">';
-			echo '<td colspan="' . count( $columns ) . '">';
-				$package = new SatisPress_Package_Plugin( $plugin_file );
-
-				echo '<pre>';
-					//print_r( $package->get_package_definition() );
-				echo '</pre>';
-			echo '</td>';
-		echo '</tr>';
-	}
-	*/
 }

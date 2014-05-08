@@ -1,18 +1,27 @@
 <?php
 /**
- * Plugin class.
+ * Plugin package class.
  *
  * @package SatisPress
+ * @author Brady Vercher <brady@blazersix.com>
  * @since 0.2.0
  */
 class SatisPress_Package_Plugin extends SatisPress_Package {
+	/**
+	 * Base path where packages are cached.
+	 *
+	 * @since 0.2.0
+	 * @type string
+	 */
+	protected $archive_path;
+
 	/**
 	 * Plugin basename.
 	 *
 	 * Relative path from the plugins directory to the main plugin file.
 	 *
-	 * @access protected
-	 * @var string
+	 * @since 0.2.0
+	 * @type string
 	 */
 	protected $basename;
 
@@ -21,8 +30,8 @@ class SatisPress_Package_Plugin extends SatisPress_Package {
 	 *
 	 * Data cached from get_plugin_data(). Includes plugin headers.
 	 *
-	 * @access protected
-	 * @var array
+	 * @since 0.2.0
+	 * @type array
 	 */
 	protected $data;
 
@@ -33,8 +42,8 @@ class SatisPress_Package_Plugin extends SatisPress_Package {
 	 * it doesn't reside in a directory. May not match the slug in the
 	 * wordpress.org repository.
 	 *
-	 * @access protected
-	 * @var string
+	 * @since 0.2.0
+	 * @type string
 	 */
 	protected $slug;
 
@@ -45,12 +54,12 @@ class SatisPress_Package_Plugin extends SatisPress_Package {
 	 *
 	 * @param string $basename Plugin basename (relative path from the plugins directory).
 	 */
-	public function __construct( $basename ) {
+	public function __construct( $basename, $archive_path ) {
 		$this->basename = $basename;
-
 		$slug = dirname( $basename );
 		$slug = ( '.' == $slug ) ? basename( $basename, '.php' ) : $slug;
 		$this->slug = sanitize_title_with_dashes( $slug );
+		$this->archive_path = trailingslashit( $archive_path );
 	}
 
 	/**

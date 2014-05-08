@@ -8,54 +8,60 @@ Many plugins and themes don't have public repositories, so managing them with Co
 
 The whitelisted packages are exposed via an automatically generated `packages.json` for inclusion as a Composer repository in a project's `composer.json` or even your own `satis.json`.
 
-## Whitelisting Plugins
+## Installation
 
-Plugins must be whitelisted to be exposed as Composer packages.
+1. Download the [latest release](https://github.com/bradyvercher/satispress/archive/master.zip) from GitHub.
+2. Go to the __Plugins &rarr; Add New__ screen in your WordPress admin panel and click the __Upload__ tab at the top.
+3. Upload the zipped archive.
+4. Click the __Activate Plugin__ link after installation completes.
 
-Create a custom WordPress plugin and hook into the `satispress_plugins` filter. The plugin basename should be added to the array returned by the filter. The basename is the main plugin file's relative path from the root plugin directory.
+## Setup ##
 
-```php
-<?php
-/**
- * Plugin Name: SatisPress Plugins
- */
+### Whitelisting Packages (Plugins & Themes)
 
-/**
- * Whitelist plugins to expose as Composer packages.
- *
- * @param array $plugins Whitelisted plugins.
- * @return array
- */
-add_filter( 'satispress_plugins', function( $plugins ) {
-	$plugins[] = 'better-internal-link-search/better-internal-link-search.php';
-	$plugins[] = 'premium-plugin/main-plugin-file.php';
+Plugins and themes must be whitelisted to be exposed as Composer packages.
 
-	return $plugins;
-} );
-```
+Plugins can be whitelisted by visiting the __Plugins__ screen in your WordPress admin panel and toggling the checkbox for each plugin in the "SatisPress" column.
 
-## Whitelisting Themes
+Themes can be toggled on the Settings screen at __Settings &rarr; SatisPress__.
 
-Similar to plugins, whitelisting themes requires hooking into the `satispress_themes` filter and adding the theme directory to the returned array.
+### Package Caching
 
-```php
-<?php
-/**
- * Whitelist themes to expose as Composer packages.
- *
- * @param array $themes Whitelisted themes.
- * @return array
- */
-add_filter( 'satispress_themes', function( $themes ) {
-	$themes[] = 'genesis';
+Plugins and themes are automatically cached before being updated by WordPress and all known versions are exposed in `packages.json`.
 
-	return $themes;
-} );
-```
+Essentially, WordPress could be set up so that simply fetching packages actually triggers automatic updates for core and plugins. The only time you would need to log in is to install and set up new plugins or themes! (Automatic updates may not work with premium plugins or themes with a custom update process).
+
+Install the [Update Control](http://wordpress.org/plugins/update-control/) plugin to tweak auto-update settings for plugins, themes and core.
+
+### Security
+
+**Be aware that the Composer repository and packages are public by default.**
+
+Securing the repository should be possible using the same methods outlined in the [Satis documentation](http://getcomposer.org/doc/articles/handling-private-packages-with-satis.md#security).
+
+#### HTTP Basic Authentication
+
+To provide a simple solution, SatisPress ships with a setting to enable HTTP Basic Authentication to protect packages. Only users registered in WordPress will have access to the packages. After activating, make sure an `.htaccess` file exists in `wp-content/uploads/satispress/` to prevent direct access.
+
+The [Limit Login Attempts](http://wordpress.org/plugins/limit-login-attempts/) plugin is supported to prevent brute force login attempts.
+
+### Debugging
+
+#### `packages.json` Transient
+
+The generated `packages.json` is cached for 12 hours via the transients API. It will be flushed whenever WordPress checks for new plugin versions or after any theme, plugin, or core is updated. Be sure to flush the `satispress_packages_json` transient if you need to regenerate it otherwise.
+
+#### Rewrite Rules
+
+Flush rewrite rules and make sure the `satispress` rule exists if you're having trouble accessing `packages.json` or any of the packages. [Rewrite Rules Inspector](http://wordpress.org/plugins/rewrite-rules-inspector/) is a handy plugin for viewing or flushing rewrite rules.
+
+### Premium Themes
+
+Themes with custom upgrade routines must be active in order to determine whether updates are available, so upgrading them will probably be a manual process.
 
 ## Requiring SatisPress Packages
 
-Add the SatisPress repository to the list of repositories in `composer.json` or `satis.json`, then require the packages using "satispress" as the vendor:
+Once SatisPress is installed and configured you can include the SatisPress repository in the list of repositories in your `composer.json` or `satis.json`, then require the packages using "satispress" (or your custom setting) as the vendor:
 
 ```json
 {
@@ -74,57 +80,6 @@ Add the SatisPress repository to the list of repositories in `composer.json` or 
 }
 ```
 
-The vendor can be changed by hooking into the `satispress_vendor` filter in your custom plugin:
+## Roadmap
 
-```php
-<?php
-/**
- * Update the default vendor.
- *
- * @param string $vendor Default vendor.
- * @return string
- */
-add_filter( 'satispress_vendor', function( $vendor ) {
-	return 'satispress';
-} );
-```
-
-## Cached Packages
-
-Plugins and themes are automatically cached before being updated by WordPress and all known versions are exposed in `packages.json`.
-
-Essentially, WordPress could be set up so that simply fetching packages actually triggers automatic updates for core and plugins. The only time you would need to log in is to install and set up new plugins or themes! (Automatic updates may not work with premium plugins or themes with a custom update process).
-
-```php
-<?php
-// @link http://codex.wordpress.org/Configuring_Automatic_Background_Updates
-add_filter( 'allow_dev_auto_core_updates', '__return_true' );
-add_filter( 'auto_update_plugin', '__return_true' );
-add_filter( 'auto_update_theme', '__return_true' );
-```
-
-## Security
-
-**Be aware that the Composer repository and packages are public by default.**
-
-Securing the repository should be possible using the same methods outlined in the [Satis documentation](http://getcomposer.org/doc/articles/handling-private-packages-with-satis.md#security).
-
-### HTTP Basic Authentication
-
-To provide a simple solution, SatisPress ships with an add-on called "SatisPress Basic Authentication" that protects packages with HTTP Basic Authentication. Only users registered in WordPress will have access to the packages. After activating, make sure an `.htaccess` file exists in `wp-content/uploads/satispress/` to prevent direct access.
-
-The [Limit Login Attempts](http://wordpress.org/plugins/limit-login-attempts/) plugin is supported to prevent brute force login attempts.
-
-## Debugging
-
-### `packages.json` Transient
-
-The generated `packages.json` is cached for 12 hours via the transients API. It will be flushed whenever WordPress checks for new plugin versions or after any theme, plugin, or core is updated. Be sure to flush the `satispress_packages_json` transient if you need to regenerate it otherwise.
-
-### Rewrite Rules
-
-Flush rewrite rules and make sure the `satispress` rule exists if you're having trouble accessing `packages.json` or any of the packages. [Rewrite Rules Inspector](http://wordpress.org/plugins/rewrite-rules-inspector/) is a handy plugin for viewing or flushing rewrite rules.
-
-## Premium Themes
-
-Themes with custom upgrade routines must be active in order to determine whether updates are available, so upgrading them will probably be a manual process.
+* Allow additional packages to be defined on the settings screen.

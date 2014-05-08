@@ -46,7 +46,7 @@ class SatisPress_Version_Parser {
                 . ( ! empty( $matches[4] ) ? $matches[4] : '.0' );
             $index = 5;
         }
-		
+
 		// Match date-based versioning.
 		elseif ( preg_match( '{^v?(\d{4}(?:[.:-]?\d{2}){1,6}(?:[.:-]?\d{1,3})?)' . self::$modifierRegex . '$}i', $version, $matches ) ) {
             $version = preg_replace('{\D}', '-', $matches[1]);

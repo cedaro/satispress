@@ -4,27 +4,43 @@
  *
  * @package SatisPress\Authentication\Basic
  * @author Brady Vercher <brady@blazersix.com>
- * @since 0.1.0
+ * @since 0.2.0
  */
 class SatisPress_Authentication_Basic {
 	/**
+	 * Base path for cached packages.
+	 *
+	 * @since 0.2.0
+	 * @type string
+	 */
+	public $base_path = '';
+
+	/**
 	 * Load the plugin.
 	 *
-	 * @since 0.1.0
+	 * @since 0.2.0
 	 */
 	public function load() {
 		add_action( 'satispress_send_package', array( $this, 'authorize_package_request' ) );
 		add_action( 'satispress_pre_basic_authentication', array( $this, 'limit_login_attempts' ) );
+		add_filter( 'update_option_satispress', array( $this, 'maybe_setup' ), 10, 2 );
+	}
 
-		// Setup related.
-		add_action( 'admin_init', array( $this, 'maybe_setup' ) );
-		register_activation_hook( __FILE__, array( $this, 'activate' ) );
+	/**
+	 * Set the base path for cached packages.
+	 *
+	 * @since 0.2.0
+	 *
+	 * @param string $path Base cache path.
+	 */
+	public function set_base_path( $path ) {
+		$this->base_path = $path;
 	}
 
 	/**
 	 * Authenticate requests for SatisPress packages using HTTP Basic Authentication.
 	 *
-	 * @since 0.1.0
+	 * @since 0.2.0
 	 */
 	public function authorize_package_request() {
 		$user = is_user_logged_in() ? wp_get_current_user() : false;
@@ -46,7 +62,7 @@ class SatisPress_Authentication_Basic {
 	/**
 	 * Show an error message from the Limit Login Attempts plugin.
 	 *
-	 * @since 0.1.0
+	 * @since 0.2.0
 	 */
 	public function limit_login_attempts( $user ) {
 		global $error;
@@ -62,54 +78,27 @@ class SatisPress_Authentication_Basic {
 	}
 
 	/**
-	 * Set up the plugin if SatisPress is active.
-	 *
-	 * @since 0.1.0
-	 */
-	public function maybe_setup() {
-		if ( 'yes' != get_option( 'satispress_setup_basicauth' ) || ! class_exists( 'SatisPress' ) ) {
-			return;
-		}
-
-		$this->save_htaccess();
-		update_option( 'satispress_setup_basicauth', 'no' );
-	}
-
-	/**
-	 * Plugin activation routine.
-	 *
-	 * @since 0.1.0
-	 */
-	public function activate() {
-		update_option( 'satispress_setup_basicauth', 'yes' );
-		$this->maybe_setup();
-	}
-
-	/**
-	 * Lock down the cache folder with .htaccess.
+	 * Update .htaccess rules when the setting is changed.
 	 *
 	 * Creates an .htaccess file in the cache directory with a 'Deny from all' rule to prevent direct access.
 	 *
-	 * @since 0.1.0
+	 * @since 0.2.0
+	 *
+	 * @param array $old_value Current settings values.
+	 * @param array $value Saved settings.
 	 */
-	protected function save_htaccess() {
-		$cache_path = SatisPress::instance()->cache_path();
-		$htaccess_file = $cache_path . '.htaccess';
-
-		if ( ( ! file_exists( $htaccess_file ) && is_writable( $cache_path ) ) || is_writable( $htaccess_file ) ) {
-			$htaccess = '';
-			if ( file_exists( $htaccess_file ) ) {
-				$htaccess = file_get_contents( $htaccess_file );
-			}
-
-			$rules = array();
-			$directive = 'Deny from all';
-
-			if ( false === strpos( $htaccess, $directive ) ) {
-				$rules[] = $directive;
-			}
-
-			insert_with_markers( $htaccess_file, 'SatisPress', $rules );
+	public function maybe_setup( $old_value, $value ) {
+		if ( ! isset( $value[ 'enable_basic_authentication' ] ) ) {
+			return;
 		}
+
+		$rules = array();
+		if ( 'yes' === $value['enable_basic_authentication'] ) {
+			$rules[] = 'Deny from all';
+		}
+
+		$htaccess = new SatisPress_Htaccess( $this->base_path );
+		$htaccess->add_rules( $rules );
+		$htaccess->save();
 	}
 }
