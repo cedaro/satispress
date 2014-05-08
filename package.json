@@ -5,7 +5,7 @@
   "main": "Gruntfile.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/bradyvercher/satispress.git"
+    "url": "https://github.com/blazersix/satispress.git"
   },
   "author": {
     "name": "Brady Vercher",
@@ -14,9 +14,9 @@
   },
   "license": "GPL-2.0+",
   "bugs": {
-    "url": "https://github.com/bradyvercher/satispress/issues"
+    "url": "https://github.com/blazersix/satispress/issues"
   },
-  "homepage": "https://github.com/bradyvercher/satispress",
+  "homepage": "https://github.com/blazersix/satispress",
   "devDependencies": {
     "grunt": "~0.4.4",
     "grunt-autoprefixer": "~0.7.3",

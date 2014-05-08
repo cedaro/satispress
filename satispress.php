@@ -8,7 +8,7 @@
  *
  * @wordpress-plugin
  * Plugin Name: SatisPress
- * Plugin URI: https://github.com/bradyvercher/satispress
+ * Plugin URI: https://github.com/blazersix/satispress
  * Description: Generate a Composer repository from installed WordPress plugins and themes.
  * Version: 0.2.0
  * Author: Blazer Six
