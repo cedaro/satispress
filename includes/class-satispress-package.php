@@ -44,6 +44,7 @@ class SatisPress_Package {
 			'dist'                    => array(
 				'type'                => 'zip',
 				'url'                 => esc_url_raw( $this->get_archive_url() ),
+				'shasum'              => sha1_file( $this->archive() ),
 			),
 			'require'                 => array(
 				'composer/installers' => '~1.0',
@@ -70,6 +71,7 @@ class SatisPress_Package {
 				$template['version'] = $version;
 				$template['version_normalized'] = SatisPress_Version_Parser::normalize( $version );
 				$template['dist']['url'] = esc_url_raw( $this->get_archive_url( $version ) );
+				$template['dist']['shasum'] = sha1_file( $this->archive( $version ) );
 
 				$versions[ $version ] = $template;
 			}
