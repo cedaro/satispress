@@ -21,9 +21,12 @@ class SatisPress_Authentication_Basic {
 	 * @since 0.2.0
 	 */
 	public function load() {
-		add_action( 'satispress_send_package', array( $this, 'authorize_package_request' ) );
-		add_action( 'satispress_pre_basic_authentication', array( $this, 'limit_login_attempts' ) );
 		add_filter( 'update_option_satispress', array( $this, 'maybe_setup' ), 10, 2 );
+		$options = get_option( 'satispress' );
+		if ( isset( $options['enable_basic_authentication'] ) && 'yes' === $options['enable_basic_authentication'] ) {
+			add_action( 'satispress_send_package', array( $this, 'authorize_package_request' ) );
+			add_action( 'satispress_pre_basic_authentication', array( $this, 'limit_login_attempts' ) );
+		}
 	}
 
 	/**
