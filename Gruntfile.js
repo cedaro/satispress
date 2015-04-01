@@ -1,20 +1,11 @@
-/*global exports:false, module:false, require:false */
+/*jshint node:true */
 
 module.exports = function( grunt ) {
 	'use strict';
 
-	require('matchdep').filterDev('grunt-*').forEach( grunt.loadNpmTasks );
+	require( 'matchdep' ).filterDev( 'grunt-*' ).forEach( grunt.loadNpmTasks );
 
 	grunt.initConfig({
-
-		autoprefixer: {
-			options: {
-				browsers: ['> 1%', 'last 2 versions', 'ff 17', 'opera 12.1', 'ie 8', 'android 4']
-			},
-			plugin: {
-				src: 'assets/css/admin.css'
-			}
-		},
 
 		jshint: {
 			options: {
@@ -29,20 +20,25 @@ module.exports = function( grunt ) {
 		makepot: {
 			plugin: {
 				options: {
-					type: 'wp-plugin'
+					mainFile: 'satispress.php',
+					potHeaders: {
+						poedit: true
+					},
+					type: 'wp-plugin',
+					updateTimestamp: false
 				}
 			}
 		},
 
 		watch: {
 			js: {
-				files: ['<%= jshint.plugin %>'],
-				tasks: ['jshint', 'uglify']
+				files: [ '<%= jshint.plugin %>' ],
+				tasks: [ 'jshint' ]
 			}
 		}
 
 	});
 
-	grunt.registerTask('default', ['jshint', 'autoprefixer', 'watch']);
+	grunt.registerTask( 'default', [ 'jshint', 'watch' ] );
 
 };
