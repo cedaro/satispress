@@ -1,6 +1,6 @@
 {
   "name": "satispress",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Generate a Composer repository from installed WordPress plugins and themes.",
   "main": "Gruntfile.js",
   "repository": {

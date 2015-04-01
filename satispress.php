@@ -10,11 +10,13 @@
  * Plugin Name: SatisPress
  * Plugin URI: https://github.com/blazersix/satispress
  * Description: Generate a Composer repository from installed WordPress plugins and themes.
- * Version: 0.2.0
+ * Version: 0.2.1
  * Author: Blazer Six
  * Author URI: http://www.blazersix.com/
  * License: GPL-2.0+
  * License URI: http://www.gnu.org/licenses/gpl-2.0.html
+ * Text Domain: satispress
+ * Domain Path: /languages
  */
 
 if ( ! defined( 'SATISPRESS_DIR' ) ) {
