@@ -1,22 +1,22 @@
 {
-	"name": "blazersix/satispress",
-	"description": "Expose installed plugins as Composer packages.",
-	"keywords": ["wordpress", "composer", "satis"],
-	"type": "wordpress-plugin",
-	"homepage": "https://github.com/blazersix/satispress",
-	"license": "GPL-2.0+",
-	"authors": [
-		{
-			"name": "Brady Vercher",
-			"email": "brady@blazersix.com",
-			"homepage": "http://www.blazersix.com/"
-		}
-	],
-	"support": {
-		"issues": "https://github.com/blazersix/satispress/issues",
-		"source": "https://github.com/blazersix/satispress"
-	},
-	"require": {
-		"composer/installers": "~1.0"
-	}
+  "name": "blazersix/satispress",
+  "description": "Expose installed plugins as Composer packages.",
+  "keywords": ["wordpress", "composer", "satis"],
+  "type": "wordpress-plugin",
+  "homepage": "https://github.com/blazersix/satispress",
+  "license": "GPL-2.0+",
+  "authors": [
+    {
+      "name": "Brady Vercher",
+      "email": "brady@blazersix.com",
+      "homepage": "http://www.blazersix.com/"
+    }
+  ],
+  "support": {
+    "issues": "https://github.com/blazersix/satispress/issues",
+    "source": "https://github.com/blazersix/satispress"
+  },
+  "require": {
+    "composer/installers": "~1.0"
+  }
 }
