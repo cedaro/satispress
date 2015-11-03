@@ -55,6 +55,10 @@ class SatisPress_Admin_Screen_ManagePlugins {
 	 * @param  string $hook_suffix Screen hook id.
 	 */
 	public function enqueue_assets( $hook_suffix ) {
+		if ( $hook_suffix !== 'plugins.php' ) {
+			return;
+		}
+
 		wp_enqueue_script( 'satispress-admin' );
 		wp_enqueue_style( 'satispress-admin' );
 	}
