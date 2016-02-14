@@ -41,9 +41,11 @@ function satispress_send_file( $file ) {
 	if ( function_exists( 'apache_setenv' ) ) {
 		@apache_setenv( 'no-gzip', 1 );
 	}
+	if(get_magic_quotes_runtime()) {
+		@set_magic_quotes_runtime( 0 );
+	}
 	@ini_set( 'zlib.output_compression', 'Off' );
 	@set_time_limit( 0 );
-	@set_magic_quotes_runtime( 0 );
 	@ob_end_clean();
 	if ( ob_get_level() ) {
 		@ob_end_clean(); // Zip corruption fix.
