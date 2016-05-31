@@ -46,6 +46,14 @@ class SatisPress_Authentication_Basic {
 	 * @since 0.2.0
 	 */
 	public function authorize_package_request() {
+		// Some CGI/FastCGI implementations don't set the PHP_AUTH_* variables, so
+		// potentially set them from a .htaccess environment rule.
+		// See https://github.com/blazersix/satispress/wiki/Basic-Auth
+		if ( ! isset( $_SERVER['PHP_AUTH_USER'] ) && isset( $_SERVER['HTTP_AUTHORIZATION'] ) ) {
+			list( $_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'] ) =
+				explode( ':', base64_decode( substr( $_SERVER['HTTP_AUTHORIZATION'], 6 ) ) );
+		}
+		
 		$user = is_user_logged_in() ? wp_get_current_user() : false;
 
 		if ( ! $user && isset( $_SERVER['PHP_AUTH_USER'] ) ) {
