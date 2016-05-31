@@ -1,5 +1,5 @@
 <div class="wrap">
-	<h1><?php _e( 'SatisPress', 'satispress' ); ?></h2>
+	<h1><?php _e( 'SatisPress', 'satispress' ); ?></h1>
 	<h2 class="nav-tab-wrapper">
 		<a href="#satispress-settings" class="nav-tab nav-tab-active"><?php _e( 'Settings', 'satispress' ); ?></a>
 		<a href="#satispress-packages" class="nav-tab"><?php _e( 'Packages', 'satispress' ); ?></a>
