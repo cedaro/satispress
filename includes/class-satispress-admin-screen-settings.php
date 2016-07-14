@@ -194,7 +194,7 @@ class SatisPress_Admin_Screen_Settings {
 	 * @since 0.2.0
 	 */
 	public function render_section_security_description() {
-		_e( 'Your packages are public by default. At a minimum, you can secure them using HTTP Basic Authentication.', 'satispress' );
+		_e( 'Your packages are public by default. At a minimum, you can secure them using HTTP Basic Authentication. Valid credentials are a WP username and password.', 'satispress' );
 	}
 
 	/**
