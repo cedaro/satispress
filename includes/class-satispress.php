@@ -110,6 +110,7 @@ class SatisPress {
 
 		// Send packages.json
 		if ( 'packages.json' == $slug ) {
+			header( 'Content-Type: application/json; charset=' . get_option( 'blog_charset' ) );
 			echo self::get_packages_json();
 			exit;
 		}
