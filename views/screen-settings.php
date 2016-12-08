@@ -1,24 +1,32 @@
 <div class="wrap">
 	<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
 	<h2 class="nav-tab-wrapper">
-		<a href="#satispress-settings" class="nav-tab nav-tab-active"><?php _e( 'Settings', 'satispress' ); ?></a>
-		<a href="#satispress-packages" class="nav-tab"><?php _e( 'Packages', 'satispress' ); ?></a>
+		<a href="#satispress-settings" class="nav-tab nav-tab-active"><?php esc_html_e( 'Settings', 'satispress' ); ?></a>
+		<a href="#satispress-packages" class="nav-tab"><?php esc_html_e( 'Packages', 'satispress' ); ?></a>
 	</h2>
 
 	<div id="satispress-settings" class="satispress-tab-panel is-active">
 		<p>
-			<?php _e( 'Your SatisPress repository is available at:', 'satispress' ); ?>
+			<?php esc_html_e( 'Your SatisPress repository is available at:', 'satispress' ); ?>
 			<a href="<?php echo esc_url( $permalink ); ?>"><?php echo esc_html( $permalink ); ?></a>
 		</p>
 		<p>
-			<?php _e( 'Add it to the <code>repositories</code> list in your composer.json:', 'satispress' ); ?>
+			<?php
+			$allowed_html = array( 'code' => array() );
+			printf(
+				/* translators: 1: <code>repositories</code>, 2: <code>composer.json</code> */
+				esc_html__( 'Add it to the %1$s list in your %2$s:', 'satispress' ),
+				wp_kses( '<code>repositories</code>', $allowed_html ),
+				wp_kses( '<code>composer.json</code>', $allowed_html )
+			);
+			?>
 		</p>
 
-<pre class="satispress-repository-snippet"><code>{
+		<pre class="satispress-repository-snippet"><code>{
 	"repositories": [
 		{
 			"type": "composer",
-			"url": "<?php echo satispress_get_packages_permalink( array( 'base' => true ) ); ?>"
+			"url": "<?php echo esc_url( satispress_get_packages_permalink( array( 'base' => true ) ) ); ?>"
 		}
 	]
 }</code></pre>
