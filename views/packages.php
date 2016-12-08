@@ -30,17 +30,15 @@ if ( ! empty( $packages ) ) :
 					<th><?php _e( 'Releases', 'satispress' ); ?></th>
 					<td>
 						<?php $version = $package->get_version(); ?>
-						<a href="<?php echo $package->get_archive_url( $version ); ?>"><?php echo $version; ?></a>
-
-						<?php
+						<a href="<?php echo $package->get_archive_url( $version ); ?>"><?php echo $version; ?></a><?php
 						$versions = $package->get_cached_versions();
-						if ( ! empty( $versions ) ) :
-							foreach ( $versions as $version ) :
-								?>
-								<a href="<?php echo $package->get_archive_url( $version ); ?>"><?php echo $version; ?></a>
-								<?php
-							endforeach;
-						endif;
+						if ( ! empty( $versions ) ) {
+							$versions = array_map( function($version) use ($package) {
+								return '<a href="' . $package->get_archive_url( $version ) . '">' . $version . '</a>';
+							}, $versions);
+
+							echo ', ' . implode(', ', $versions );
+						}
 						?>
 					</td>
 				</tr>
