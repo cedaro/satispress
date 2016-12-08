@@ -30,7 +30,7 @@ if ( ! empty( $packages ) ) :
 				<th><?php esc_html_e( 'Releases', 'satispress' ); ?></th>
 				<td>
 					<?php $version = $package->get_version(); ?>
-					<a href="<?php echo esc_url( $package->get_archive_url( $version ) ); ?>"><?php echo esc_html( $version ); ?></a><?php
+					<strong><a href="<?php echo esc_url( $package->get_archive_url( $version ) ); ?>"><?php echo esc_html( $version ); ?></a></strong><?php
 					$versions = $package->get_cached_versions();
 					if ( ! empty( $versions ) ) {
 						$versions = array_map( function( $version ) use ( $package ) {
