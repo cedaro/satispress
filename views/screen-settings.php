@@ -16,8 +16,8 @@
 			printf(
 				/* translators: 1: <code>repositories</code>, 2: <code>composer.json</code> */
 				esc_html__( 'Add it to the %1$s list in your %2$s:', 'satispress' ),
-				wp_kses( '<code>repositories</code>', $allowed_html ),
-				wp_kses( '<code>composer.json</code>', $allowed_html )
+				'<code>repositories</code>',
+				'<code>composer.json</code>'
 			);
 			?>
 		</p>
