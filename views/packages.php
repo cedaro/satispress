@@ -1,4 +1,12 @@
 <?php
+/**
+ * Packages page view.
+ *
+ * @package SatisPress
+ * @author Brady Vercher <brady@blazersix.com>
+ * @since 0.2.0
+ */
+
 if ( ! empty( $packages ) ) :
 	foreach ( $packages as $package ) :
 		?>

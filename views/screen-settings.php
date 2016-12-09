@@ -1,3 +1,13 @@
+<?php
+/**
+ * Settings page view.
+ *
+ * @package SatisPress
+ * @author Brady Vercher <brady@blazersix.com>
+ * @since 0.2.0
+ */
+
+?>
 <div class="wrap">
 	<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
 	<h2 class="nav-tab-wrapper">
