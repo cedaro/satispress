@@ -5,13 +5,13 @@ if ( ! empty( $packages ) ) :
 		<table class="satispress-package widefat">
 			<thead>
 			<tr>
-				<th colspan="2"><?php echo $package->get_package_name(); ?></th>
+				<th colspan="2"><?php echo esc_html( $package->get_package_name() ); ?></th>
 			</tr>
 			</thead>
 			<tbody>
 			<?php if ( $description = $package->get_description() ) : ?>
 				<tr>
-					<td colspan="2"><?php echo wp_strip_all_tags( $description ); ?></td>
+					<td colspan="2"><?php echo esc_html( wp_strip_all_tags( $description ) ); ?></td>
 				</tr>
 			<?php endif; ?>
 
