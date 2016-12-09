@@ -17,13 +17,17 @@ if ( ! empty( $packages ) ) :
 			</tr>
 			</thead>
 			<tbody>
-			<?php if ( $description = $package->get_description() ) : ?>
+			<?php
+			$description = $package->get_description();
+			if ( $description ) : ?>
 				<tr>
 					<td colspan="2"><?php echo esc_html( wp_strip_all_tags( $description ) ); ?></td>
 				</tr>
 			<?php endif; ?>
 
-			<?php if ( $homepage = $package->get_homepage() ) : ?>
+			<?php
+			$homepage = $package->get_homepage();
+			if ( $homepage ) : ?>
 				<tr>
 					<th><?php esc_html_e( 'Homepage', 'satispress' ); ?></th>
 					<td><a href="<?php echo esc_url( $homepage ); ?>"><?php echo esc_html( $homepage ); ?></a></td>
