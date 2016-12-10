@@ -136,7 +136,6 @@ class SatisPress {
 	 */
 	public function get_packages_json() {
 		$json = get_transient( 'satispress_packages_json' );
-		$json = null;
 
 		if ( ! $json ) {
 			$data = array();
