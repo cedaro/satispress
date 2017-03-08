@@ -218,9 +218,72 @@ class SatisPress_Package_Plugin extends SatisPress_Package {
 	 */
 	protected function get_data( $prop ) {
 		if ( empty( $this->data ) ) {
-			$this->data = get_plugin_data( $this->get_file(), false, false );
+			$this->data = $this->get_plugin_data( $this->get_file(), false, false );
 		}
 
 		return ( isset( $this->data[ $prop ] ) ) ? $this->data[ $prop ] : '';
 	}
+
+
+	/**
+	 * Get the plugin details
+	 *
+	 * This function is a copy of the original WordPress core function, with "Plugin Type"
+	 * Added for distinction wordpress-plugin and wordpress-muplugin
+	 *
+	 * @since 0.2.2
+	 *
+	 * @param	string		$plugin_file	Path to the plugin file.
+	 * @param	boolean		$markup		 	If the returned data should have HTML markup applied.
+	 * @param	boolean		$translate		If the returned data should be translated.
+	 *
+	 * @return  boolean		$markup
+	 */
+	protected function get_plugin_data( $plugin_file, $markup = true, $translate = true ) {
+
+	    $default_headers = array(
+			'Name' => 'Plugin Name',
+	        'PluginURI' => 'Plugin URI',
+	        'Version' => 'Version',
+	        'Description' => 'Description',
+	        'Author' => 'Author',
+	        'AuthorURI' => 'Author URI',
+	        'TextDomain' => 'Text Domain',
+	        'DomainPath' => 'Domain Path',
+			'Type' => 'Plugin Type',
+	        'Network' => 'Network',
+	        // Site Wide Only is deprecated in favor of Network.
+	        '_sitewide' => 'Site Wide Only',
+	    );
+
+	    $plugin_data = get_file_data( $plugin_file, $default_headers, 'plugin' );
+
+	    // Site Wide Only is the old header for Network
+	    if ( ! $plugin_data['Network'] && $plugin_data['_sitewide'] ) {
+	        /* translators: 1: Site Wide Only: true, 2: Network: true */
+	        _deprecated_argument( __FUNCTION__, '3.0.0', sprintf( __( 'The %1$s plugin header is deprecated. Use %2$s instead.' ), '<code>Site Wide Only: true</code>', '<code>Network: true</code>' ) );
+	        $plugin_data['Network'] = $plugin_data['_sitewide'];
+	    }
+	    $plugin_data['Network'] = ( 'true' == strtolower( $plugin_data['Network'] ) );
+	    unset( $plugin_data['_sitewide'] );
+
+	    // If no text domain is defined fall back to the plugin slug.
+	    if ( ! $plugin_data['TextDomain'] ) {
+	        $plugin_slug = dirname( plugin_basename( $plugin_file ) );
+	        if ( '.' !== $plugin_slug && false === strpos( $plugin_slug, '/' ) ) {
+	            $plugin_data['TextDomain'] = $plugin_slug;
+	        }
+	    }
+
+	    if ( $markup || $translate ) {
+	        $plugin_data = _get_plugin_data_markup_translate( $plugin_file, $plugin_data, $markup, $translate );
+	    } else {
+	        $plugin_data['Title']      = $plugin_data['Name'];
+	        $plugin_data['AuthorName'] = $plugin_data['Author'];
+	    }
+
+	    return $plugin_data;
+	}
+
+
 }
