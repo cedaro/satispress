@@ -191,7 +191,15 @@ class SatisPress_Package_Plugin extends SatisPress_Package {
 	 * @return string
 	 */
 	public function get_type() {
-		return 'wordpress-plugin';
+
+        $type = $this->get_data( 'Type' );
+
+		if ( $type == 'mu-plugin') {
+			return "wordpress-muplugin";
+		} else {
+			return "wordpress-plugin";
+		}
+
 	}
 
 	/**
