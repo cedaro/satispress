@@ -79,7 +79,3 @@ Once SatisPress is installed and configured you can include the SatisPress repos
     }
 }
 ```
-
-## Roadmap
-
-* Allow additional packages to be defined on the settings screen.
