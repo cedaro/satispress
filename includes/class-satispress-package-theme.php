@@ -47,6 +47,17 @@ class SatisPress_Package_Theme extends SatisPress_Package {
 	}
 
 	/**
+	 * Whether the theme is installed.
+	 *
+	 * @since 0.2.3
+	 *
+	 * @return boolean
+	 */
+	public function is_installed() {
+		return $this->theme->exists();
+	}
+
+	/**
 	 * Retrieve the theme author.
 	 *
 	 * @since 0.2.0

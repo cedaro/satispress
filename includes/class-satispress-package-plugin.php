@@ -63,6 +63,17 @@ class SatisPress_Package_Plugin extends SatisPress_Package {
 	}
 
 	/**
+	 * Whether the plugin exists.
+	 *
+	 * @since 0.2.3
+	 *
+	 * @return boolean
+	 */
+	public function is_installed() {
+		return file_exists( $this->get_file() );
+	}
+
+	/**
 	 * Retrieve the plugin author.
 	 *
 	 * @since 0.2.0

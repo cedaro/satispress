@@ -194,7 +194,7 @@ class SatisPress {
 
 			foreach ( $identifiers as $identifier ) {
 				$package = $this->get_package( $identifier, $type );
-				if ( $package && '' !== $package->get_version_normalized() ) {
+				if ( $package && $package->is_installed() && '' !== $package->get_version_normalized() ) {
 					$packages[ $package->get_slug() ] = $package;
 				}
 			}
