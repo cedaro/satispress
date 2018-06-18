@@ -1,6 +1,6 @@
 <?php
 /**
- * SatisPress_Package class
+ * SatisPress_Package abstract class
  *
  * @package SatisPress
  * @license GPL-2.0-or-later
@@ -8,11 +8,11 @@
  */
 
 /**
- * Package class.
+ * Abstract package class.
  *
  * @since 0.2.0
  */
-class SatisPress_Package {
+abstract class SatisPress_Package {
 	/**
 	 * Retrieve the package name.
 	 *
@@ -24,6 +24,7 @@ class SatisPress_Package {
 	 */
 	public function get_package_name() {
 		$vendor = apply_filters( 'satispress_vendor', 'satispress' );
+
 		return $vendor . '/' . $this->get_slug();
 	}
 
@@ -192,4 +193,105 @@ class SatisPress_Package {
 
 		return $filename;
 	}
+
+	/**
+	 * Whether the package is installed.
+	 *
+	 * @since 0.3.0
+	 *
+	 * @return boolean
+	 */
+	abstract public function is_installed();
+
+	/**
+	 * Retrieve the package author.
+	 *
+	 * @since 0.3.0
+	 *
+	 * @return string
+	 */
+	abstract public function get_author();
+
+	/**
+	 * Retrieve the package author's URL.
+	 *
+	 * @since 0.3.0
+	 *
+	 * @return string
+	 */
+	abstract public function get_author_uri();
+
+	/**
+	 * Retrieve the package description.
+	 *
+	 * @since 0.3.0
+	 *
+	 * @return string
+	 */
+	abstract public function get_description();
+
+	/**
+	 * Retrieve the package homepage.
+	 *
+	 * @since 0.3.0
+	 *
+	 * @return string
+	 */
+	abstract public function get_homepage();
+
+	/**
+	 * Retrieve the package name.
+	 *
+	 * @since 0.3.0
+	 *
+	 * @return string
+	 */
+	abstract public function get_name();
+
+	/**
+	 * Retrieve the root directory for the package type.
+	 *
+	 * This is the directory path that will be stripped when the package is zipped.
+	 *
+	 * @since 0.3.0
+	 *
+	 * @return string
+	 */
+	abstract public function get_package_root();
+
+	/**
+	 * Retrieve the path to the package.
+	 *
+	 * @since 0.3.0
+	 *
+	 * @return string
+	 */
+	abstract public function get_path();
+
+	/**
+	 * Retrieve the package slug.
+	 *
+	 * @since 0.2.0
+	 *
+	 * @return string
+	 */
+	abstract public function get_slug();
+
+	/**
+	 * Retrieve the type of Composer package.
+	 *
+	 * @since 0.3.0
+	 *
+	 * @return string
+	 */
+	abstract public function get_type();
+
+	/**
+	 * Retrieve the package version.
+	 *
+	 * @since 0.3.0
+	 *
+	 * @return string
+	 */
+	abstract public function get_version();
 }
