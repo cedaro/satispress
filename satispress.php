@@ -41,7 +41,7 @@ if ( ! defined( 'SATISPRESS_URL' ) ) {
 	define( 'SATISPRESS_URL', plugin_dir_url( __FILE__ ) );
 }
 
-require SATISPRESS_DIR . 'includes/functions.php';
+require SATISPRESS_DIR . 'src/functions.php';
 
 /**
  * Autoloader callback.
@@ -57,7 +57,7 @@ function satispress_autoloader( $class ) {
 		return;
 	}
 
-	$file = SATISPRESS_DIR . 'includes/class-' . strtolower( str_replace( '_', '-', $class ) ) . '.php';
+	$file = SATISPRESS_DIR . 'src/class-' . strtolower( str_replace( '_', '-', $class ) ) . '.php';
 
 	if ( file_exists( $file ) ) {
 		require_once $file;
