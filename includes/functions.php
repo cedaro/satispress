@@ -72,7 +72,7 @@ if ( ! function_exists( 'readfile_chunked' ) ) :
  *
  * Reads file in chunks so big downloads are possible without changing php.ini.
  *
- * @link http://codeigniter.com/wiki/Download_helper_for_large_files/
+ * @link https://github.com/bcit-ci/CodeIgniter/wiki/Download-helper-for-large-files
  *
  * @since 0.1.0
  *
