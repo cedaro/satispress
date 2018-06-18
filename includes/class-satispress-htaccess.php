@@ -27,7 +27,7 @@ class SatisPress_Htaccess {
 	 * @since 0.2.0
 	 * @var array
 	 */
-	protected $rules = array();
+	protected $rules = [];
 
 	/**
 	 * Constructor method.

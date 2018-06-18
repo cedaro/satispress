@@ -15,7 +15,7 @@
  * @param array $args Query string parameters.
  * @return string
  */
-function satispress_get_packages_permalink( $args = array() ) {
+function satispress_get_packages_permalink( $args = [] ) {
 	$permalink = get_option( 'permalink_structure' );
 	if ( empty( $permalink ) ) {
 		$url = add_query_arg( 'satispress', 'packages.json', home_url( '/' ) );

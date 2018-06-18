@@ -37,7 +37,7 @@
 	"repositories": [
 		{
 			"type": "composer",
-			"url": "<?php echo esc_url( satispress_get_packages_permalink( array( 'base' => true ) ) ); ?>"
+			"url": "<?php echo esc_url( satispress_get_packages_permalink( [ 'base' => true ] ) ); ?>"
 		}
 	]
 }</code></pre>

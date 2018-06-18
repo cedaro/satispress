@@ -27,11 +27,11 @@ class SatisPress_Admin_Screen_Settings {
 	 * @since 0.2.0
 	 */
 	public function load() {
-		add_action( 'admin_menu', array( $this, 'add_menu_item' ) );
-		add_action( 'admin_init', array( $this, 'register_settings' ) );
-		add_action( 'admin_init', array( $this, 'add_sections' ) );
-		add_action( 'admin_init', array( $this, 'add_settings' ) );
-		add_action( 'admin_notices', array( $this, 'htaccess_notice' ) );
+		add_action( 'admin_menu', [ $this, 'add_menu_item' ] );
+		add_action( 'admin_init', [ $this, 'register_settings' ] );
+		add_action( 'admin_init', [ $this, 'add_sections' ] );
+		add_action( 'admin_init', [ $this, 'add_settings' ] );
+		add_action( 'admin_notices', [ $this, 'htaccess_notice' ] );
 	}
 
 	/**
@@ -56,10 +56,10 @@ class SatisPress_Admin_Screen_Settings {
 			__( 'SatisPress', 'satispress' ),
 			'manage_options',
 			'satispress',
-			array( $this, 'render_screen' )
+			[ $this, 'render_screen' ]
 		);
 
-		add_action( 'load-' . $screen_hook, array( $this, 'setup_screen' ) );
+		add_action( 'load-' . $screen_hook, [ $this, 'setup_screen' ] );
 	}
 
 	/**
@@ -70,7 +70,7 @@ class SatisPress_Admin_Screen_Settings {
 	 */
 	public function setup_screen() {
 		$screen = get_current_screen();
-		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_assets' ) );
+		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_assets' ] );
 	}
 
 	/**
@@ -89,8 +89,8 @@ class SatisPress_Admin_Screen_Settings {
 	 * @since 0.2.0
 	 */
 	public function register_settings() {
-		register_setting( 'satispress', 'satispress', array( $this, 'sanitize_settings' ) );
-		register_setting( 'satispress', 'satispress_themes', array( $this, 'sanitize_theme_settings' ) );
+		register_setting( 'satispress', 'satispress', [ $this, 'sanitize_settings' ] );
+		register_setting( 'satispress', 'satispress_themes', [ $this, 'sanitize_theme_settings' ] );
 	}
 
 	/**
@@ -109,14 +109,14 @@ class SatisPress_Admin_Screen_Settings {
 		add_settings_section(
 			'security',
 			__( 'Security', 'satispress' ),
-			array( $this, 'render_section_security_description' ),
+			[ $this, 'render_section_security_description' ],
 			'satispress'
 		);
 
 		add_settings_section(
 			'themes',
 			__( 'Themes', 'satispress' ),
-			array( $this, 'render_section_themes_description' ),
+			[ $this, 'render_section_themes_description' ],
 			'satispress'
 		);
 	}
@@ -130,7 +130,7 @@ class SatisPress_Admin_Screen_Settings {
 		add_settings_field(
 			'vendor',
 			__( 'Vendor', 'satispress' ),
-			array( $this, 'render_field_vendor' ),
+			[ $this, 'render_field_vendor' ],
 			'satispress',
 			'default'
 		);
@@ -138,7 +138,7 @@ class SatisPress_Admin_Screen_Settings {
 		add_settings_field(
 			'enable_basic_authentication',
 			__( 'Authentication', 'satispress' ),
-			array( $this, 'render_field_basic_authentication' ),
+			[ $this, 'render_field_basic_authentication' ],
 			'satispress',
 			'security'
 		);
@@ -146,7 +146,7 @@ class SatisPress_Admin_Screen_Settings {
 		add_settings_field(
 			'themes',
 			__( 'Themes', 'satispress' ),
-			array( $this, 'render_field_themes' ),
+			[ $this, 'render_field_themes' ],
 			'satispress',
 			'themes'
 		);
@@ -259,7 +259,7 @@ class SatisPress_Admin_Screen_Settings {
 	 * @since 0.2.0
 	 */
 	public function render_field_themes() {
-		$value = get_option( 'satispress_themes', array() );
+		$value = get_option( 'satispress_themes', [] );
 
 		$themes = wp_get_themes();
 		foreach ( $themes as $slug => $theme ) {

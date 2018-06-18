@@ -19,10 +19,10 @@ class SatisPress_Admin_Screen_ManagePlugins {
 	 * @since 0.2.0
 	 */
 	public function load() {
-		add_action( 'wp_ajax_satispress_toggle_plugin', array( $this, 'ajax_toggle_plugin_status' ) );
-		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_assets' ) );
-		add_filter( 'manage_plugins_columns', array( $this, 'register_columns' ) );
-		add_action( 'manage_plugins_custom_column', array( $this, 'display_columns' ), 10, 3 );
+		add_action( 'wp_ajax_satispress_toggle_plugin', [ $this, 'ajax_toggle_plugin_status' ] );
+		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_assets' ] );
+		add_filter( 'manage_plugins_columns', [ $this, 'register_columns' ] );
+		add_action( 'manage_plugins_custom_column', [ $this, 'display_columns' ], 10, 3 );
 	}
 
 	/**

@@ -41,30 +41,30 @@ class SatisPress_Package {
 	 * @return string
 	 */
 	public function get_package_definition() {
-		$versions = array();
+		$versions = [];
 
-		$template = array(
+		$template = [
 			'name'               => $this->get_package_name(),
 			'version'            => wp_strip_all_tags( $this->get_version() ),
 			'version_normalized' => $this->get_version_normalized(),
-			'dist'               => array(
+			'dist'               => [
 				'type'   => 'zip',
 				'url'    => esc_url_raw( $this->get_archive_url() ),
 				'shasum' => sha1_file( $this->archive() ),
-			),
-			'require'            => array(
+			],
+			'require'            => [
 				'composer/installers' => '~1.0',
-			),
+			],
 			'type'               => $this->get_type(),
-			'authors'            => array(
-				array(
+			'authors'            => [
+				[
 					'name'     => wp_strip_all_tags( $this->get_author() ),
 					'homepage' => esc_url_raw( $this->get_author_uri() ),
-				),
-			),
+				],
+			],
 			'description'        => wp_strip_all_tags( $this->get_description() ),
 			'homepage'           => esc_url_raw( $this->get_homepage() ),
-		);
+		];
 
 		// Add the most current version.
 		$versions[ $this->get_version() ] = $template;
@@ -104,10 +104,10 @@ class SatisPress_Package {
 		$permalink = get_option( 'permalink_structure' );
 		if ( empty( $permalink ) ) {
 			$url = add_query_arg(
-				array(
+				[
 					'satispress'         => $this->get_slug(),
 					'satispress_version' => $version,
-				),
+				],
 				home_url( 'index.php' )
 			);
 		} else {

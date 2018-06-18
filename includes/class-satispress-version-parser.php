@@ -117,14 +117,14 @@ class SatisPress_Version_Parser {
 	public static function normalizeBranch( $name ) {
 		$name = trim( $name );
 
-		if ( in_array( $name, array( 'master', 'trunk', 'default' ), true ) ) {
+		if ( in_array( $name, [ 'master', 'trunk', 'default' ], true ) ) {
 			return self::normalize( $name );
 		}
 
 		if ( preg_match( '{^v?(\d++)(\.(?:\d++|[xX*]))?(\.(?:\d++|[xX*]))?(\.(?:\d++|[xX*]))?$}i', $name, $matches ) ) {
 			$version = '';
 			for ( $i = 1; $i < 5; $i++ ) {
-				$version .= isset( $matches[ $i ] ) ? str_replace( array( '*', 'X' ), 'x', $matches[ $i ] ) : '.x';
+				$version .= isset( $matches[ $i ] ) ? str_replace( [ '*', 'X' ], 'x', $matches[ $i ] ) : '.x';
 			}
 
 			return str_replace( 'x', '9999999', $version ) . '-dev';

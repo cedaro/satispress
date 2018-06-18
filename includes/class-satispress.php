@@ -43,7 +43,7 @@ class SatisPress {
 	 * @see SatisPress::instance();
 	 */
 	private function __construct() {
-		add_action( 'plugins_loaded', array( $this, 'load' ) );
+		add_action( 'plugins_loaded', [ $this, 'load' ] );
 	}
 
 	/**
@@ -60,21 +60,21 @@ class SatisPress {
 		$basic_auth->set_base_path( $this->cache_path() );
 		$basic_auth->load();
 
-		add_action( 'init', array( $this, 'add_rewrite_rules' ) );
-		add_filter( 'query_vars', array( $this, 'query_vars' ) );
-		add_action( 'parse_request', array( $this, 'process_request' ) );
-		add_filter( 'satispress_vendor', array( $this, 'filter_vendor' ), 5 );
+		add_action( 'init', [ $this, 'add_rewrite_rules' ] );
+		add_filter( 'query_vars', [ $this, 'query_vars' ] );
+		add_action( 'parse_request', [ $this, 'process_request' ] );
+		add_filter( 'satispress_vendor', [ $this, 'filter_vendor' ], 5 );
 
 		// Cache the existing version of a plugin before it's updated.
 		if ( apply_filters( 'satispress_cache_packages_before_update', true ) ) {
-			add_filter( 'upgrader_pre_install', array( $this, 'cache_package_before_update' ), 10, 2 );
+			add_filter( 'upgrader_pre_install', [ $this, 'cache_package_before_update' ], 10, 2 );
 		}
 
 		// Delete the 'satispress_packages_json' transient.
-		add_action( 'upgrader_process_complete', array( $this, 'flush_packages_json_cache' ) );
-		add_action( 'set_site_transient_update_plugins', array( $this, 'flush_packages_json_cache' ) );
+		add_action( 'upgrader_process_complete', [ $this, 'flush_packages_json_cache' ] );
+		add_action( 'set_site_transient_update_plugins', [ $this, 'flush_packages_json_cache' ] );
 
-		register_activation_hook( __FILE__, array( $this, 'activate' ) );
+		register_activation_hook( __FILE__, [ $this, 'activate' ] );
 	}
 
 	/**
@@ -153,8 +153,14 @@ class SatisPress {
 			}
 
 			$options = version_compare( phpversion(), '5.3', '>' ) ? JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT : 0;
-			$json    = wp_json_encode( array( 'packages' => $data ), $options );
-			$json    = str_replace( '\\/', '/', $json ); // Unescape slashes (PHP 5.3 compatible method).
+
+			$json = wp_json_encode(
+				[
+					'packages' => $data,
+				],
+				$options
+			);
+			$json = str_replace( '\\/', '/', $json ); // Unescape slashes (PHP 5.3 compatible method).
 			set_transient( 'satispress_packages_json', $json, HOUR_IN_SECONDS * 12 );
 		}
 
@@ -226,20 +232,20 @@ class SatisPress {
 	 * @return string
 	 */
 	protected function get_whitelist() {
-		$plugins = apply_filters( 'satispress_plugins', array() );
-		$themes  = apply_filters( 'satispress_themes', array() );
+		$plugins = apply_filters( 'satispress_plugins', [] );
+		$themes  = apply_filters( 'satispress_themes', [] );
 
 		// @todo Implement these through a filter instead.
 		$options = (array) get_option( 'satispress_plugins' );
 		$plugins = array_filter( array_unique( array_merge( $plugins, $options ) ) );
 
-		$options = (array) get_option( 'satispress_themes', array() );
+		$options = (array) get_option( 'satispress_themes', [] );
 		$themes  = array_filter( array_unique( array_merge( $themes, $options ) ) );
 
-		return array(
+		return [
 			'plugin' => $plugins,
 			'theme'  => $themes,
-		);
+		];
 	}
 
 	/**

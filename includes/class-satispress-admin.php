@@ -1,6 +1,6 @@
 <?php
 /**
- * SatisPress_Htaccess class
+ * SatisPress_Admin class
  *
  * @package SatisPress
  * @license GPL-2.0-or-later
@@ -28,7 +28,7 @@ class SatisPress_Admin {
 		$settings_screen->set_base_path( $base_path );
 		$settings_screen->load();
 
-		add_action( 'admin_init', array( $this, 'register_assets' ) );
+		add_action( 'admin_init', [ $this, 'register_assets' ] );
 	}
 
 	/**
@@ -37,7 +37,7 @@ class SatisPress_Admin {
 	 * @since 0.2.0
 	 */
 	public function register_assets() {
-		wp_register_script( 'satispress-admin', SATISPRESS_URL . 'assets/js/admin.js', array( 'jquery', 'wp-util' ) );
+		wp_register_script( 'satispress-admin', SATISPRESS_URL . 'assets/js/admin.js', [ 'jquery', 'wp-util' ] );
 		wp_register_style( 'satispress-admin', SATISPRESS_URL . 'assets/css/admin.css' );
 	}
 }
