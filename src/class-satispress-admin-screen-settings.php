@@ -14,12 +14,24 @@
  */
 class SatisPress_Admin_Screen_Settings {
 	/**
-	 * Base patch for packages.
+	 * Handler for .htaccess files.
 	 *
-	 * @since 0.2.0
-	 * @var string
+	 * @since 0.3.0
+	 *
+	 * @var SatisPress_Htaccess
 	 */
-	public $base_path = '';
+	protected $htaccess_handler;
+
+	/**
+	 * Constructor
+	 *
+	 * @since 0.3.0
+	 *
+	 * @param SatisPress_Htaccess $htaccess_handler Handler for .htaccess files.
+	 */
+	public function __construct( SatisPress_Htaccess $htaccess_handler ) {
+		$this->htaccess_handler = $htaccess_handler;
+	}
 
 	/**
 	 * Load the screen.
@@ -32,17 +44,6 @@ class SatisPress_Admin_Screen_Settings {
 		add_action( 'admin_init', [ $this, 'add_sections' ] );
 		add_action( 'admin_init', [ $this, 'add_settings' ] );
 		add_action( 'admin_notices', [ $this, 'htaccess_notice' ] );
-	}
-
-	/**
-	 * Set the base path for packages.
-	 *
-	 * @since 0.2.0
-	 *
-	 * @param string $path Base path for packages.
-	 */
-	public function set_base_path( $path ) {
-		$this->base_path = $path;
 	}
 
 	/**
@@ -244,8 +245,7 @@ class SatisPress_Admin_Screen_Settings {
 			</label>
 		</p>
 		<?php
-		$htaccess = new SatisPress_Htaccess( $this->base_path );
-		if ( ! $htaccess->is_writable() ) {
+		if ( ! $this->htaccess_handler->is_writable() ) {
 			printf(
 				'<p class="satispress-field-error">%s</p>',
 				esc_html__( '.htaccess file isn\'t writable.', 'satispress' )
@@ -279,9 +279,8 @@ class SatisPress_Admin_Screen_Settings {
 	 */
 	public function htaccess_notice() {
 		$value         = $this->get_setting( 'enable_basic_authentication', 'no' );
-		$htaccess_file = $this->base_path . '.htaccess';
 
-		if ( 'yes' === $value && ! file_exists( $htaccess_file ) ) {
+		if ( 'yes' === $value && ! $this->htaccess_handler->file_exists() ) {
 			?>
 			<div class="error">
 				<p>

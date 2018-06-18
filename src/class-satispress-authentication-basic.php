@@ -1,6 +1,6 @@
 <?php
 /**
- * SatisPress_Htaccess class
+ * SatisPress_Authentication_Basic class
  *
  * @package SatisPress
  * @license GPL-2.0-or-later
@@ -14,12 +14,24 @@
  */
 class SatisPress_Authentication_Basic {
 	/**
-	 * Base path for cached packages.
+	 * Handler for .htaccess files.
 	 *
-	 * @since 0.2.0
-	 * @var string
+	 * @since 0.3.0
+	 *
+	 * @var SatisPress_Htaccess
 	 */
-	public $base_path = '';
+	protected $htaccess_handler;
+
+	/**
+	 * Constructor
+	 *
+	 * @since 0.3.0
+	 *
+	 * @param SatisPress_Htaccess $htaccess_handler Handler for .htaccess files.
+	 */
+	public function __construct( SatisPress_Htaccess $htaccess_handler ) {
+		$this->htaccess_handler = $htaccess_handler;
+	}
 
 	/**
 	 * Load the plugin.
@@ -33,17 +45,6 @@ class SatisPress_Authentication_Basic {
 			add_action( 'satispress_send_package', [ $this, 'authorize_package_request' ] );
 			add_action( 'satispress_pre_basic_authentication', [ $this, 'limit_login_attempts' ] );
 		}
-	}
-
-	/**
-	 * Set the base path for cached packages.
-	 *
-	 * @since 0.2.0
-	 *
-	 * @param string $path Base cache path.
-	 */
-	public function set_base_path( $path ) {
-		$this->base_path = $path;
 	}
 
 	/**
@@ -116,8 +117,7 @@ class SatisPress_Authentication_Basic {
 			$rules[] = 'Deny from all';
 		}
 
-		$htaccess = new SatisPress_Htaccess( $this->base_path );
-		$htaccess->add_rules( $rules );
-		$htaccess->save();
+		$this->htaccess_handler->add_rules( $rules );
+		$this->htaccess_handler->save();
 	}
 }

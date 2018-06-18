@@ -19,13 +19,14 @@ class SatisPress_Admin {
 	 * @since 0.2.0
 	 */
 	public function load() {
-		$base_path = SatisPress::instance()->cache_path();
-
 		$manage_screen = new SatisPress_Admin_Screen_ManagePlugins();
 		$manage_screen->load();
 
-		$settings_screen = new SatisPress_Admin_Screen_Settings();
-		$settings_screen->set_base_path( $base_path );
+		$htaccess_handler = new SatisPress_Htaccess(
+			SatisPress::instance()->cache_path()
+		);
+
+		$settings_screen = new SatisPress_Admin_Screen_Settings( $htaccess_handler );
 		$settings_screen->load();
 
 		add_action( 'admin_init', [ $this, 'register_assets' ] );

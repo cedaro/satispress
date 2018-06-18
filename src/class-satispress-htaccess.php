@@ -37,17 +37,6 @@ class SatisPress_Htaccess {
 	 * @param string $path Directory path where .htaccess is located.
 	 */
 	public function __construct( $path = '' ) {
-		$this->set_path( $path );
-	}
-
-	/**
-	 * Set the directory path where .htaccess is located.
-	 *
-	 * @since 0.2.0
-	 *
-	 * @param string $path Directory path where .htaccess is located.
-	 */
-	public function set_path( $path ) {
 		$this->path = $path;
 	}
 
@@ -87,6 +76,17 @@ class SatisPress_Htaccess {
 	}
 
 	/**
+	 * Determine if the .htaccess file exists.
+	 *
+	 * @since 0.3.0
+	 *
+	 * @return bool True if hte file exists, false otherwise.
+	 */
+	public function file_exists() {
+		return file_exists( $this->get_file() );
+	}
+
+	/**
 	 * Determine if the .htaccess file is writable.
 	 *
 	 * @since 0.2.0
@@ -95,7 +95,7 @@ class SatisPress_Htaccess {
 	 */
 	public function is_writable() {
 		$file = $this->get_file();
-		return ( ! file_exists( $file ) && is_writable( $this->path ) ) || is_writable( $file );
+		return ( ! $this->file_exists() && is_writable( $this->path ) ) || is_writable( $file );
 	}
 
 	/**

@@ -56,8 +56,9 @@ class SatisPress {
 			$this->load_admin();
 		}
 
-		$basic_auth = new SatisPress_Authentication_Basic();
-		$basic_auth->set_base_path( $this->cache_path() );
+		$htaccess_handler = new SatisPress_Htaccess( $this->cache_path );
+
+		$basic_auth = new SatisPress_Authentication_Basic( $htaccess_handler );
 		$basic_auth->load();
 
 		add_action( 'init', [ $this, 'add_rewrite_rules' ] );
