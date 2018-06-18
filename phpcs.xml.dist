@@ -32,10 +32,10 @@
 		<exclude-pattern>views/</exclude-pattern>
 	</rule>
 	<rule ref="WordPress.NamingConventions.ValidFunctionName">
-		<exclude-pattern>includes/class-satispress-version-parser.php</exclude-pattern>
+		<exclude-pattern>src/class-satispress-version-parser.php</exclude-pattern>
 	</rule>
 	<rule ref="WordPress.NamingConventions.ValidVariableName">
-		<exclude-pattern>includes/class-satispress-version-parser.php</exclude-pattern>
+		<exclude-pattern>src/class-satispress-version-parser.php</exclude-pattern>
 	</rule>
 	<rule ref="WordPress.WP.I18n">
 		<properties>
