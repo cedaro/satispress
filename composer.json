@@ -1,23 +1,51 @@
 {
-  "name": "blazersix/satispress",
-  "description": "Expose installed plugins as Composer packages.",
-  "keywords": ["wordpress", "composer", "satis"],
-  "type": "wordpress-plugin",
-  "homepage": "https://github.com/blazersix/satispress",
-  "license": "GPL-2.0+",
-  "authors": [
-    {
-      "name": "Brady Vercher",
-      "email": "brady@blazersix.com",
-      "homepage": "http://www.blazersix.com/"
-    }
-  ],
-  "support": {
-    "issues": "https://github.com/blazersix/satispress/issues",
-    "source": "https://github.com/blazersix/satispress"
-  },
-  "require": {
-    "php": "^5.6 || ^7",
-    "composer/installers": "~1.0"
-  }
+	"name": "blazersix/satispress",
+	"description": "Expose installed plugins as Composer packages.",
+	"keywords": [
+		"wordpress",
+		"composer",
+		"satis"
+	],
+	"type": "wordpress-plugin",
+	"homepage": "https://github.com/blazersix/satispress",
+	"license": "GPL-2.0-or-later",
+	"authors": [
+		{
+			"name": "Brady Vercher",
+			"email": "brady@blazersix.com",
+			"homepage": "http://www.blazersix.com/"
+		},
+		{
+			"name": "Gary Jones",
+			"homepage": "https://gamajo.com",
+			"role": "Developer"
+		}
+	],
+	"support": {
+		"issues": "https://github.com/blazersix/satispress/issues",
+		"source": "https://github.com/blazersix/satispress"
+	},
+	"config": {
+		"sort-packages": true
+	},
+	"minimum-stability": "dev",
+	"prefer-stable": true,
+	"require": {
+		"php": "^5.6 || ^7",
+		"composer/installers": "~1.0"
+	},
+	"require-dev": {
+		"dealerdirect/phpcodesniffer-composer-installer": "^0.4.4",
+		"roave/security-advisories": "dev-master",
+		"squizlabs/php_codesniffer": "^3.3",
+		"sirbrillig/phpcs-variable-analysis": "^2.0",
+		"wimg/php-compatibility": "^8.1",
+		"wp-coding-standards/wpcs": "^0.14.1"
+	},
+	"scripts": {
+		"install-codestandards": [
+			"Dealerdirect\\Composer\\Plugin\\Installers\\PHPCodeSniffer\\Plugin::run"
+		],
+		"phpcs": "./vendor/bin/phpcs"
+	}
 }
