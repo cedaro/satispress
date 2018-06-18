@@ -278,7 +278,7 @@ class SatisPress_Admin_Screen_Settings {
 	 * @since 0.2.0
 	 */
 	public function htaccess_notice() {
-		$value         = $this->get_setting( 'enable_basic_authentication', 'no' );
+		$value = $this->get_setting( 'enable_basic_authentication', 'no' );
 
 		if ( 'yes' === $value && ! $this->htaccess_handler->file_exists() ) {
 			?>
