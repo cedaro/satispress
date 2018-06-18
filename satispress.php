@@ -13,7 +13,7 @@
  * Version: 0.2.3
  * Author: Blazer Six
  * Author URI: http://www.blazersix.com/
- * License: GPL-2.0+
+ * License: GPL-2.0-or-later
  * License URI: http://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: satispress
  * Domain Path: /languages
@@ -41,7 +41,7 @@ if ( ! defined( 'SATISPRESS_URL' ) ) {
 	define( 'SATISPRESS_URL', plugin_dir_url( __FILE__ ) );
 }
 
-include( SATISPRESS_DIR . 'includes/functions.php' );
+require SATISPRESS_DIR . 'includes/functions.php';
 
 /**
  * Autoloader callback.
@@ -60,7 +60,7 @@ function satispress_autoloader( $class ) {
 	$file = SATISPRESS_DIR . 'includes/class-' . strtolower( str_replace( '_', '-', $class ) ) . '.php';
 
 	if ( file_exists( $file ) ) {
-		require_once( $file );
+		require_once $file;
 	}
 }
 spl_autoload_register( 'satispress_autoloader' );

@@ -1,9 +1,15 @@
 <?php
 /**
- * Package class.
+ * SatisPress_Package class
  *
  * @package SatisPress
- * @author Brady Vercher <brady@blazersix.com>
+ * @license GPL-2.0-or-later
+ * @since 0.2.0
+ */
+
+/**
+ * Package class.
+ *
  * @since 0.2.0
  */
 class SatisPress_Package {
@@ -38,26 +44,26 @@ class SatisPress_Package {
 		$versions = array();
 
 		$template = array(
-			'name'                    => $this->get_package_name(),
-			'version'                 => wp_strip_all_tags( $this->get_version() ),
-			'version_normalized'      => $this->get_version_normalized(),
-			'dist'                    => array(
-				'type'                => 'zip',
-				'url'                 => esc_url_raw( $this->get_archive_url() ),
-				'shasum'              => sha1_file( $this->archive() ),
+			'name'               => $this->get_package_name(),
+			'version'            => wp_strip_all_tags( $this->get_version() ),
+			'version_normalized' => $this->get_version_normalized(),
+			'dist'               => array(
+				'type'   => 'zip',
+				'url'    => esc_url_raw( $this->get_archive_url() ),
+				'shasum' => sha1_file( $this->archive() ),
 			),
-			'require'                 => array(
+			'require'            => array(
 				'composer/installers' => '~1.0',
 			),
-			'type'                    => $this->get_type(),
-			'authors'                 => array(
+			'type'               => $this->get_type(),
+			'authors'            => array(
 				array(
-					'name'            => wp_strip_all_tags( $this->get_author() ),
-					'homepage'        => esc_url_raw( $this->get_author_uri() ),
+					'name'     => wp_strip_all_tags( $this->get_author() ),
+					'homepage' => esc_url_raw( $this->get_author_uri() ),
 				),
 			),
-			'description'             => wp_strip_all_tags( $this->get_description() ),
-			'homepage'                => esc_url_raw( $this->get_homepage() ),
+			'description'        => wp_strip_all_tags( $this->get_description() ),
+			'homepage'           => esc_url_raw( $this->get_homepage() ),
 		);
 
 		// Add the most current version.
@@ -68,10 +74,10 @@ class SatisPress_Package {
 		if ( ! empty( $cached_versions ) ) {
 			foreach ( $cached_versions as $version ) {
 				// Update the template.
-				$template['version'] = $version;
+				$template['version']            = $version;
 				$template['version_normalized'] = SatisPress_Version_Parser::normalize( $version );
-				$template['dist']['url'] = esc_url_raw( $this->get_archive_url( $version ) );
-				$template['dist']['shasum'] = sha1_file( $this->archive( $version ) );
+				$template['dist']['url']        = esc_url_raw( $this->get_archive_url( $version ) );
+				$template['dist']['shasum']     = sha1_file( $this->archive( $version ) );
 
 				$versions[ $version ] = $template;
 			}
@@ -119,25 +125,25 @@ class SatisPress_Package {
 	 * @return array
 	 */
 	public function get_cached_versions() {
-		$versions = array();
+		$versions = [];
 
-		$slug = $this->get_slug();
+		$slug            = $this->get_slug();
 		$current_version = $this->get_version();
 
 		$package_cache_path = $this->archive_path . $slug . '/';
 		if ( ! file_exists( $package_cache_path ) ) {
-			return array();
+			return [];
 		}
 
 		$files = new DirectoryIterator( $package_cache_path );
 		if ( ! empty( $files ) ) {
 			foreach ( $files as $file ) {
-				if ( '.' == $file || '..' == $file ) {
+				if ( '.' === $file || '..' === $file ) {
 					continue;
 				}
 
 				$version = str_replace( $slug . '-', '', basename( $file, '.zip' ) );
-				if ( $version != $current_version ) {
+				if ( $version !== $current_version ) {
 					$versions[] = $version;
 				}
 			}
@@ -164,15 +170,15 @@ class SatisPress_Package {
 	 * @return string Full path to the archive.
 	 */
 	public function archive( $version = '' ) {
-		$version = empty( $version ) ? $this->get_version() : $version;
+		$version            = empty( $version ) ? $this->get_version() : $version;
 		$version_normalized = SatisPress_Version_Parser::normalize( $version );
 
-		$slug = $this->get_slug();
+		$slug     = $this->get_slug();
 		$filename = $this->archive_path . $slug . '/' . $slug . '-' . $version . '.zip';
 
 		// Only create the zip if the requested version matches the current version of the plugin.
-		if ( $version_normalized == $this->get_version_normalized() && ! file_exists( $filename ) ) {
-			require_once( ABSPATH . 'wp-admin/includes/class-pclzip.php' );
+		if ( $version_normalized === $this->get_version_normalized() && ! file_exists( $filename ) ) {
+			require_once ABSPATH . 'wp-admin/includes/class-pclzip.php';
 
 			wp_mkdir_p( dirname( $filename ) );
 

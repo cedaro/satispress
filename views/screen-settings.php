@@ -1,9 +1,9 @@
 <?php
 /**
- * Settings page view.
+ * Views: Settings page
  *
  * @package SatisPress
- * @author Brady Vercher <brady@blazersix.com>
+ * @license GPL-2.0-or-later
  * @since 0.2.0
  */
 
@@ -22,7 +22,8 @@
 		</p>
 		<p>
 			<?php
-			$allowed_html = array( 'code' => array() );
+			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Need to update global variable.
+			$allowed_html = [ 'code' => [] ];
 			printf(
 				/* translators: 1: <code>repositories</code>, 2: <code>composer.json</code> */
 				esc_html__( 'Add it to the %1$s list in your %2$s:', 'satispress' ),
@@ -49,6 +50,6 @@
 	</div>
 
 	<div id="satispress-packages" class="satispress-tab-panel">
-		<?php include( SATISPRESS_DIR . 'views/packages.php' ); ?>
+		<?php require SATISPRESS_DIR . 'views/packages.php'; ?>
 	</div>
 </div>

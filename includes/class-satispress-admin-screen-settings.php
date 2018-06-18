@@ -1,9 +1,15 @@
 <?php
 /**
- * Settings screen.
+ * SatisPress_Admin_Screen_Settings class
  *
  * @package SatisPress
- * @author Brady Vercher <brady@blazersix.com>
+ * @license GPL-2.0-or-later
+ * @since 0.2.0
+ */
+
+/**
+ * Settings screen.
+ *
  * @since 0.2.0
  */
 class SatisPress_Admin_Screen_Settings {
@@ -11,7 +17,7 @@ class SatisPress_Admin_Screen_Settings {
 	 * Base patch for packages.
 	 *
 	 * @since 0.2.0
-	 * @type string
+	 * @var string
 	 */
 	public $base_path = '';
 
@@ -150,13 +156,15 @@ class SatisPress_Admin_Screen_Settings {
 	 * Sanitize settings.
 	 *
 	 * @since 0.2.0
+	 *
+	 * @param array $value Settings values.
 	 */
-	public function sanitize_settings( $value ) {
+	public function sanitize_settings( array $value ) {
 		if ( ! empty( $value['vendor'] ) ) {
 			$value['vendor'] = sanitize_text_field( $value['vendor'] );
 		}
 
-		if ( ! isset( $value['enable_basic_authentication' ] ) ) {
+		if ( ! isset( $value['enable_basic_authentication'] ) ) {
 			$value['enable_basic_authentication'] = 'no';
 		} else {
 			$value['enable_basic_authentication'] = 'yes';
@@ -184,8 +192,8 @@ class SatisPress_Admin_Screen_Settings {
 	 */
 	public function render_screen() {
 		$permalink = satispress_get_packages_permalink();
-		$packages = SatisPress::instance()->get_packages();
-		include( SATISPRESS_DIR . 'views/screen-settings.php' );
+		$packages  = SatisPress::instance()->get_packages();
+		include SATISPRESS_DIR . 'views/screen-settings.php';
 	}
 
 	/**
@@ -194,7 +202,7 @@ class SatisPress_Admin_Screen_Settings {
 	 * @since 0.2.0
 	 */
 	public function render_section_security_description() {
-		_e( 'Your packages are public by default. At a minimum, you can secure them using HTTP Basic Authentication. Valid credentials are a WP username and password.', 'satispress' );
+		esc_html_e( 'Your packages are public by default. At a minimum, you can secure them using HTTP Basic Authentication. Valid credentials are a WP username and password.', 'satispress' );
 	}
 
 	/**
@@ -203,7 +211,7 @@ class SatisPress_Admin_Screen_Settings {
 	 * @since 0.2.0
 	 */
 	public function render_section_themes_description() {
-		_e( 'Choose themes to make available in your SatisPress repository.', 'satispress' );
+		esc_html_e( 'Choose themes to make available in your SatisPress repository.', 'satispress' );
 	}
 
 	/**
@@ -232,13 +240,16 @@ class SatisPress_Admin_Screen_Settings {
 		<p class="satispress-togglable-field">
 			<label>
 				<input type="checkbox" name="satispress[enable_basic_authentication]" id="satispress-enable-basic-authentication" value="yes" <?php checked( $value, 'yes' ); ?>>
-				<?php _e( 'Enable HTTP Basic Authentication?', 'satispress' ); ?>
+				<?php esc_html_e( 'Enable HTTP Basic Authentication?', 'satispress' ); ?>
 			</label>
 		</p>
 		<?php
 		$htaccess = new SatisPress_Htaccess( $this->base_path );
 		if ( ! $htaccess->is_writable() ) {
-			printf( '<p class="satispress-field-error">%s</p>', __( ".htaccess file isn't writable." ) );
+			printf(
+				'<p class="satispress-field-error">%s</p>',
+				esc_html__( '.htaccess file isn\'t writable.', 'satispress' )
+			);
 		}
 	}
 
@@ -252,10 +263,11 @@ class SatisPress_Admin_Screen_Settings {
 
 		$themes = wp_get_themes();
 		foreach ( $themes as $slug => $theme ) {
-			printf( '<label><input type="checkbox" name="satispress_themes[]" value="%1$s" %2$s> %3$s</label><br>',
+			printf(
+				'<label><input type="checkbox" name="satispress_themes[]" value="%1$s" %2$s> %3$s</label><br>',
 				esc_attr( $slug ),
-				checked( in_array( $slug, $value ), true, false ),
-				$theme->get( 'Name' )
+				checked( in_array( $slug, $value, true ), true, false ),
+				esc_html( $theme->get( 'Name' ) )
 			);
 		}
 	}
@@ -266,14 +278,14 @@ class SatisPress_Admin_Screen_Settings {
 	 * @since 0.2.0
 	 */
 	public function htaccess_notice() {
-		$value = $this->get_setting( 'enable_basic_authentication', 'no' );
+		$value         = $this->get_setting( 'enable_basic_authentication', 'no' );
 		$htaccess_file = $this->base_path . '.htaccess';
 
 		if ( 'yes' === $value && ! file_exists( $htaccess_file ) ) {
 			?>
 			<div class="error">
 				<p>
-					<?php _e( "Warning: .htaccess doesn't exist. Your SatisPress packages are public.", 'satispress' ); ?>
+					<?php esc_html_e( "Warning: .htaccess doesn't exist. Your SatisPress packages are public.", 'satispress' ); ?>
 				</p>
 			</div>
 			<?php
@@ -285,8 +297,8 @@ class SatisPress_Admin_Screen_Settings {
 	 *
 	 * @since 0.2.0
 	 *
-	 * @param string $key Setting name.
-	 * @param mixed $default Optional. Default setting value.
+	 * @param string $key     Setting name.
+	 * @param mixed  $default Optional. Default setting value.
 	 * @return mixed
 	 */
 	protected function get_setting( $key, $default = false ) {
@@ -304,7 +316,8 @@ class SatisPress_Admin_Screen_Settings {
 	 */
 	protected function get_view( $file ) {
 		ob_start();
-		include( SATISPRESS_DIR . 'views/' . $file );
+		include SATISPRESS_DIR . 'views/' . $file;
+
 		return ob_get_clean();
 	}
 }

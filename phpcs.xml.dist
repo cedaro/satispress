@@ -14,7 +14,7 @@
 	<arg name="extensions" value="php"/>
 
 	<!-- Rules: Good use of variables -->
-	<rule ref="VariableAnalysis"/>
+	<!-- <rule ref="VariableAnalysis"/> -->
 
 	<!-- Rules: Check PHP version compatibility -->
 	<config name="testVersion" value="5.6-"/>
@@ -29,6 +29,13 @@
 		<properties>
 			<property name="prefixes" type="array" value="satispress"/>
 		</properties>
+		<exclude-pattern>views/</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.NamingConventions.ValidFunctionName">
+		<exclude-pattern>includes/class-satispress-version-parser.php</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.NamingConventions.ValidVariableName">
+		<exclude-pattern>includes/class-satispress-version-parser.php</exclude-pattern>
 	</rule>
 	<rule ref="WordPress.WP.I18n">
 		<properties>

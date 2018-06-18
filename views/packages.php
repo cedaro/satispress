@@ -1,9 +1,9 @@
 <?php
 /**
- * Packages page view.
+ * Views: Packages page
  *
  * @package SatisPress
- * @author Brady Vercher <brady@blazersix.com>
+ * @license GPL-2.0-or-later
  * @since 0.2.0
  */
 
@@ -19,7 +19,8 @@ if ( ! empty( $packages ) ) :
 			<tbody>
 			<?php
 			$description = $package->get_description();
-			if ( $description ) : ?>
+			if ( $description ) :
+				?>
 				<tr>
 					<td colspan="2"><?php echo esc_html( wp_strip_all_tags( $description ) ); ?></td>
 				</tr>
@@ -27,7 +28,8 @@ if ( ! empty( $packages ) ) :
 
 			<?php
 			$homepage = $package->get_homepage();
-			if ( $homepage ) : ?>
+			if ( $homepage ) :
+				?>
 				<tr>
 					<th><?php esc_html_e( 'Homepage', 'satispress' ); ?></th>
 					<td><a href="<?php echo esc_url( $homepage ); ?>"><?php echo esc_html( $homepage ); ?></a></td>
@@ -42,7 +44,8 @@ if ( ! empty( $packages ) ) :
 				<th><?php esc_html_e( 'Releases', 'satispress' ); ?></th>
 				<td>
 					<?php $version = $package->get_version(); ?>
-					<strong><a href="<?php echo esc_url( $package->get_archive_url( $version ) ); ?>"><?php echo esc_html( $version ); ?></a></strong><?php
+					<strong><a href="<?php echo esc_url( $package->get_archive_url( $version ) ); ?>"><?php echo esc_html( $version ); ?></a></strong>
+					<?php
 					$versions = $package->get_cached_versions();
 					if ( ! empty( $versions ) ) {
 						$versions = array_map( function( $version ) use ( $package ) {

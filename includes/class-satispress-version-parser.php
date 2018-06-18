@@ -1,5 +1,13 @@
 <?php
 /**
+ * SatisPress_Version_Parser class
+ *
+ * @package SatisPress
+ * @license GPL-2.0-or-later
+ * @since 0.1.0
+ */
+
+/**
  * Simplified version parser from Composer.
  *
  * @package SatisPress
@@ -9,18 +17,25 @@
  * @link https://github.com/composer/semver/blob/master/src/VersionParser.php
  */
 class SatisPress_Version_Parser {
+	/**
+	 * Modifier pattern
+	 *
+	 * @var string
+	 */
 	private static $modifierRegex = '[._-]?(?:(stable|beta|b|RC|alpha|a|patch|pl|p)((?:[.-]?\d+)*+)?)?([.-]?dev)?';
 
 	/**
 	 * Normalizes a version string to be able to perform comparisons on it.
 	 *
-	 * @param string $version
-	 * @param string $fullVersion optional complete version string to give more context.
+	 * @throws \UnexpectedValueException Thrown when given an invalid version string.
+	 *
+	 * @param string $version     Version string.
+	 * @param string $fullVersion Optional complete version string to give more context.
 	 * @return array
 	 */
-	public static function normalize( $version, $fullVersion = null )
-	{
+	public static function normalize( $version, $fullVersion = null ) {
 		$version = trim( $version );
+
 		if ( null === $fullVersion ) {
 			$fullVersion = $version;
 		}
@@ -51,13 +66,11 @@ class SatisPress_Version_Parser {
 				. ( ! empty( $matches[2] ) ? $matches[2] : '.0' )
 				. ( ! empty( $matches[3] ) ? $matches[3] : '.0' )
 				. ( ! empty( $matches[4] ) ? $matches[4] : '.0' );
-			$index = 5;
-		}
-
-		// Match date-based versioning.
-		elseif ( preg_match( '{^v?(\d{4}(?:[.:-]?\d{2}){1,6}(?:[.:-]?\d{1,3})?)' . self::$modifierRegex . '$}i', $version, $matches ) ) {
+			$index   = 5;
+		} elseif ( preg_match( '{^v?(\d{4}(?:[.:-]?\d{2}){1,6}(?:[.:-]?\d{1,3})?)' . self::$modifierRegex . '$}i', $version, $matches ) ) {
+			// Match date-based versioning.
 			$version = preg_replace( '{\D}', '.', $matches[1] );
-			$index = 2;
+			$index   = 2;
 		}
 
 		// Add version modifiers if a version was matched.
@@ -80,7 +93,10 @@ class SatisPress_Version_Parser {
 		if ( preg_match( '{(.*?)[.-]?dev$}i', $version, $match ) ) {
 			try {
 				return self::normalizeBranch( $match[1] );
-			} catch ( Exception $e ) {}
+			// phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch
+			} catch ( Exception $e ) {
+				// noop.
+			}
 		}
 
 		$extraMessage = '';
@@ -95,20 +111,20 @@ class SatisPress_Version_Parser {
 	/**
 	 * Normalizes a branch name to be able to perform comparisons on it.
 	 *
-	 * @param string $name
-	 * @return array
+	 * @param string $name Branch name.
+	 * @return array Branch name.
 	 */
 	public static function normalizeBranch( $name ) {
 		$name = trim( $name );
 
-		if ( in_array( $name, array( 'master', 'trunk', 'default' ) ) ) {
+		if ( in_array( $name, array( 'master', 'trunk', 'default' ), true ) ) {
 			return self::normalize( $name );
 		}
 
 		if ( preg_match( '{^v?(\d++)(\.(?:\d++|[xX*]))?(\.(?:\d++|[xX*]))?(\.(?:\d++|[xX*]))?$}i', $name, $matches ) ) {
 			$version = '';
 			for ( $i = 1; $i < 5; $i++ ) {
-				$version .= isset( $matches[ $i ]) ? str_replace( array( '*', 'X' ), 'x', $matches[ $i ] ) : '.x';
+				$version .= isset( $matches[ $i ] ) ? str_replace( array( '*', 'X' ), 'x', $matches[ $i ] ) : '.x';
 			}
 
 			return str_replace( 'x', '9999999', $version ) . '-dev';
@@ -117,6 +133,14 @@ class SatisPress_Version_Parser {
 		return 'dev-' . $name;
 	}
 
+	/**
+	 * Allow for stability aliases.
+	 *
+	 * @since 0.1.0
+	 *
+	 * @param string $stability Existing stability string.
+	 * @return string Consolidated stability string.
+	 */
 	private static function expandStability( $stability ) {
 		$stability = strtolower( $stability );
 

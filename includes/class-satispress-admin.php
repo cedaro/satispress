@@ -1,9 +1,15 @@
 <?php
 /**
- * Admininistration class.
+ * SatisPress_Htaccess class
  *
  * @package SatisPress
- * @author Brady Vercher <brady@blazersix.com>
+ * @license GPL-2.0-or-later
+ * @since 0.2.0
+ */
+
+/**
+ * Admininistration class.
+ *
  * @since 0.2.0
  */
 class SatisPress_Admin {

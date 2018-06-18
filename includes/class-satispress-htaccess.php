@@ -1,9 +1,15 @@
 <?php
 /**
- * Class to interact with the .htaccess file.
+ * SatisPress_Htaccess class
  *
  * @package SatisPress
- * @author Brady Vercher <brady@blazersix.com>
+ * @license GPL-2.0-or-later
+ * @since 0.2.0
+ */
+
+/**
+ * Interact with the .htaccess file.
+ *
  * @since 0.2.0
  */
 class SatisPress_Htaccess {
@@ -11,7 +17,7 @@ class SatisPress_Htaccess {
 	 * The directory path where .htaccess is located.
 	 *
 	 * @since 0.2.0
-	 * @type string
+	 * @var string
 	 */
 	protected $path = '';
 
@@ -19,7 +25,7 @@ class SatisPress_Htaccess {
 	 * .htaccess rules.
 	 *
 	 * @since 0.2.0
-	 * @type array
+	 * @var array
 	 */
 	protected $rules = array();
 

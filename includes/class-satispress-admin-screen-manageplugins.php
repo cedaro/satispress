@@ -1,9 +1,15 @@
 <?php
 /**
- * Manage plugins screen.
+ * SatisPress_Admin_Screen_ManagePlugins class
  *
  * @package SatisPress
- * @author Brady Vercher <brady@blazersix.com>
+ * @license GPL-2.0-or-later
+ * @since 0.2.0
+ */
+
+/**
+ * Manage plugins screen.
+ *
  * @since 0.2.0
  */
 class SatisPress_Admin_Screen_ManagePlugins {
@@ -29,13 +35,15 @@ class SatisPress_Admin_Screen_ManagePlugins {
 			return;
 		}
 
-		$plugin = $_POST['plugin_file'];
+		// phpcs:ignore WordPress.CSRF.NonceVerification.NoNonceVerification
+		$plugin  = $_POST['plugin_file'];
 		$plugins = (array) get_option( 'satispress_plugins' );
 
 		// Bail if the nonce can't be verified.
 		check_admin_referer( 'toggle-status_' . $plugin );
 
-		if ( false !== ( $key = array_search( $plugin, $plugins ) ) ) {
+		$key = array_search( $plugin, $plugins, true );
+		if ( false !== $key ) {
 			unset( $plugins[ $key ] );
 		} else {
 			$plugins[] = $plugin;
@@ -55,7 +63,7 @@ class SatisPress_Admin_Screen_ManagePlugins {
 	 * @param  string $hook_suffix Screen hook id.
 	 */
 	public function enqueue_assets( $hook_suffix ) {
-		if ( $hook_suffix !== 'plugins.php' ) {
+		if ( 'plugins.php' !== $hook_suffix ) {
 			return;
 		}
 
@@ -83,7 +91,7 @@ class SatisPress_Admin_Screen_ManagePlugins {
 	 *
 	 * @param string $column_name Column identifier.
 	 * @param string $plugin_file Plugin file basename.
-	 * @param array $plugin_data Array of plugin data.
+	 * @param array  $plugin_data Array of plugin data.
 	 */
 	public function display_columns( $column_name, $plugin_file, $plugin_data ) {
 		if ( 'satispress' !== $column_name ) {
@@ -91,13 +99,13 @@ class SatisPress_Admin_Screen_ManagePlugins {
 		}
 
 		$packages = SatisPress::instance()->get_packages();
-		$plugins = get_option( 'satispress_plugins' );
-		$plugin = SatisPress::instance()->get_package( $plugin_file, 'plugin' );
+		$plugins  = get_option( 'satispress_plugins' );
+		$plugin   = SatisPress::instance()->get_package( $plugin_file, 'plugin' );
 
 		printf( '<input type="checkbox" value="%1$s"%2$s%3$s class="satispress-status">',
 			esc_attr( $plugin_file ),
 			checked( isset( $packages[ $plugin->get_slug() ] ), true, false ),
-			( empty( $checked ) || in_array( $plugin_file, $plugins ) ) ? '' : ' disabled="disabled"'
+			( empty( $checked ) || in_array( $plugin_file, $plugins, true ) ) ? '' : ' disabled="disabled"'
 		);
 
 		echo '<span class="spinner"></span>';

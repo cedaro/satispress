@@ -1,9 +1,15 @@
 <?php
 /**
- * Main plugin class.
+ * SatisPress class
  *
  * @package SatisPress
- * @author Brady Vercher <brady@blazersix.com>
+ * @license GPL-2.0-or-later
+ * @since 0.2.0
+ */
+
+/**
+ * Main plugin class.
+ *
  * @since 0.1.0
  */
 class SatisPress {
@@ -11,7 +17,7 @@ class SatisPress {
 	 * The main SatisPress instance.
 	 *
 	 * @since 0.1.0
-	 * @type SatisPress
+	 * @var SatisPress
 	 */
 	private static $instance;
 
@@ -23,8 +29,8 @@ class SatisPress {
 	 * @return SatisPress
 	 */
 	public static function instance() {
-		if ( null == self::$instance ) {
-			self::$instance = new self;
+		if ( null === self::$instance ) {
+			self::$instance = new self();
 		}
 
 		return self::$instance;
@@ -96,21 +102,22 @@ class SatisPress {
 			return;
 		}
 
-		require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+		require_once ABSPATH . 'wp-admin/includes/plugin.php';
 
-		$slug = $wp->query_vars['satispress'];
+		$slug    = $wp->query_vars['satispress'];
 		$version = isset( $wp->query_vars['satispress_version'] ) ? $wp->query_vars['satispress_version'] : '';
 
 		// Main index request.
-		// Ex: http://example.com/satispress/
+		// Ex: http://example.com/satispress/ .
 		if ( empty( $slug ) ) {
 			do_action( 'satispress_index' );
 			return;
 		}
 
-		// Send packages.json
-		if ( 'packages.json' == $slug ) {
+		// Send packages.json.
+		if ( 'packages.json' === $slug ) {
 			header( 'Content-Type: application/json; charset=' . get_option( 'blog_charset' ) );
+			// phpcs:ignore WordPress.XSS.EscapeOutput.OutputNotEscaped -- JSON
 			echo self::get_packages_json();
 			exit;
 		}
@@ -138,7 +145,7 @@ class SatisPress {
 		$json = get_transient( 'satispress_packages_json' );
 
 		if ( ! $json ) {
-			$data = array();
+			$data     = [];
 			$packages = $this->get_packages();
 
 			foreach ( $packages as $slug => $package ) {
@@ -146,8 +153,8 @@ class SatisPress {
 			}
 
 			$options = version_compare( phpversion(), '5.3', '>' ) ? JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT : 0;
-			$json = json_encode( array( 'packages' => $data ), $options );
-			$json = str_replace( '\\/', '/', $json ); // Unescape slashes (PHP 5.3 compatible method).
+			$json    = wp_json_encode( array( 'packages' => $data ), $options );
+			$json    = str_replace( '\\/', '/', $json ); // Unescape slashes (PHP 5.3 compatible method).
 			set_transient( 'satispress_packages_json', $json, HOUR_IN_SECONDS * 12 );
 		}
 
@@ -164,12 +171,12 @@ class SatisPress {
 	 * @return SatisPress_Package
 	 */
 	public function get_package( $slug, $type ) {
-		$package = false;
+		$package   = false;
 		$whitelist = $this->get_whitelist();
 
-		if ( 'plugin' == $type ) {
+		if ( 'plugin' === $type ) {
 			$package = new SatisPress_Package_Plugin( $slug, $this->cache_path() );
-		} elseif ( 'theme' == $type ) {
+		} elseif ( 'theme' === $type ) {
 			$package = new SatisPress_Package_Theme( $slug, $this->cache_path() );
 		}
 
@@ -184,7 +191,7 @@ class SatisPress {
 	 * @return array
 	 */
 	public function get_packages() {
-		$packages = array();
+		$packages  = [];
 		$whitelist = $this->get_whitelist();
 
 		foreach ( $whitelist as $type => $identifiers ) {
@@ -227,7 +234,7 @@ class SatisPress {
 		$plugins = array_filter( array_unique( array_merge( $plugins, $options ) ) );
 
 		$options = (array) get_option( 'satispress_themes', array() );
-		$themes = array_filter( array_unique( array_merge( $themes, $options ) ) );
+		$themes  = array_filter( array_unique( array_merge( $themes, $options ) ) );
 
 		return array(
 			'plugin' => $plugins,
@@ -246,7 +253,7 @@ class SatisPress {
 	 */
 	public function cache_path() {
 		$uploads = wp_upload_dir();
-		$path = trailingslashit( $uploads['basedir'] ) . 'satispress/';
+		$path    = trailingslashit( $uploads['basedir'] ) . 'satispress/';
 
 		if ( ! file_exists( $path ) ) {
 			wp_mkdir_p( $path );
@@ -260,8 +267,8 @@ class SatisPress {
 	 *
 	 * @since 0.2.0
 	 *
-	 * @param bool $result Whether the plugin update/install process should continue.
-	 * @param array $data Extra data passed by the update/install process.
+	 * @param bool  $result Whether the plugin update/install process should continue.
+	 * @param array $data   Extra data passed by the update/install process.
 	 * @return bool
 	 */
 	public function cache_package_before_update( $result, $data ) {
@@ -288,10 +295,10 @@ class SatisPress {
 	public function add_rewrite_rules() {
 		add_rewrite_rule( 'satispress/([^/]+)(/([^/]+))?/?$', 'index.php?satispress=$matches[1]&satispress_version=$matches[3]', 'top' );
 
-		if ( ! is_network_admin() && 'yes' == get_option( 'satispress_flush_rewrite_rules' ) ) {
+		if ( ! is_network_admin() && 'yes' === get_option( 'satispress_flush_rewrite_rules' ) ) {
 			update_option( 'satispress_flush_rewrite_rules', 'no' );
 			flush_rewrite_rules();
-        }
+		}
 	}
 
 	/**
@@ -317,7 +324,7 @@ class SatisPress {
 	 * @since 0.1.0
 	 *
 	 * @param SatisPress_Package $package Package object.
-	 * @param string $version Optional. Version of the package to send. Defaults to the current version.
+	 * @param string             $version Optional. Version of the package to send. Defaults to the current version.
 	 */
 	protected function send_package( $package, $version = '' ) {
 		$file = $package->archive( $version );
