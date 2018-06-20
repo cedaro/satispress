@@ -52,7 +52,7 @@ class SatisPress {
 	 * @since 0.2.0
 	 */
 	public function load() {
-		$htaccess_handler = new SatisPress_Htaccess( $this->cache_path );
+		$htaccess_handler = new SatisPress_Htaccess( $this->cache_path() );
 
 		if ( is_admin() ) {
 			$manage_screen = new SatisPress_Admin_Screen_ManagePlugins();
