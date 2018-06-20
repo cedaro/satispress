@@ -4,7 +4,7 @@
  *
  * @package SatisPress
  * @author Brady Vercher <brady@blazersix.com>
- * @license GPL-2.0+
+ * @license GPL-2.0-or-later
  *
  * @wordpress-plugin
  * Plugin Name: SatisPress
@@ -24,7 +24,7 @@ if ( ! defined( 'SATISPRESS_DIR' ) ) {
 	 * Path directory path.
 	 *
 	 * @since 0.2.0
-	 * @type string SATISPRESS_DIR
+	 * @var string SATISPRESS_DIR
 	 */
 	define( 'SATISPRESS_DIR', plugin_dir_path( __FILE__ ) );
 }
@@ -36,13 +36,14 @@ if ( ! defined( 'SATISPRESS_URL' ) ) {
 	 * Includes trailing slash.
 	 *
 	 * @since 0.2.0
-	 * @type string SATISPRESS_URL
+	 * @var string SATISPRESS_URL
 	 */
 	define( 'SATISPRESS_URL', plugin_dir_url( __FILE__ ) );
 }
 
 require SATISPRESS_DIR . 'src/functions.php';
 
+spl_autoload_register( 'satispress_autoloader' );
 /**
  * Autoloader callback.
  *
@@ -63,6 +64,5 @@ function satispress_autoloader( $class ) {
 		require_once $file;
 	}
 }
-spl_autoload_register( 'satispress_autoloader' );
 
 SatisPress::instance();
