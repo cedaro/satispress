@@ -284,7 +284,13 @@ class SatisPress_Admin_Screen_Settings {
 			?>
 			<div class="error">
 				<p>
-					<?php esc_html_e( "Warning: .htaccess doesn't exist. Your SatisPress packages are public.", 'satispress' ); ?>
+					<?php
+					echo sprintf(
+						/* translators: %s: <code>.htaccess</code> */
+						esc_html__( 'Warning: %s doesn\'t exist. Your SatisPress packages are public.', 'satispress' ),
+						'<code>.htaccess</code>'
+					);
+					?>
 				</p>
 			</div>
 			<?php
