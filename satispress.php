@@ -21,6 +21,8 @@
  * Requires PHP: 5.6
  */
 
+declare ( strict_types = 1 );
+
 namespace SatisPress;
 
 if ( ! defined( 'SATISPRESS_DIR' ) ) {
