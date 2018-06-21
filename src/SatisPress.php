@@ -131,7 +131,7 @@ class SatisPress {
 				$data[ $package->get_package_name() ] = $package->get_package_definition();
 			}
 
-			$options = version_compare( phpversion(), '5.3', '>' ) ? JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT : 0;
+			$options = version_compare( PHP_VERSION, '5.3', '>' ) ? JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT : 0;
 
 			$json = wp_json_encode(
 				[

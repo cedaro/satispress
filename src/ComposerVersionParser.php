@@ -68,7 +68,7 @@ class ComposerVersionParser implements VersionParser {
 		}
 
 		// If requirement is branch-like, use full name.
-		if ( 'dev-' === strtolower( substr( $version, 0, 4 ) ) ) {
+		if ( 0 === stripos( $version, 'dev-' ) ) {
 			return 'dev-' . substr( $version, 4 );
 		}
 
@@ -91,7 +91,7 @@ class ComposerVersionParser implements VersionParser {
 		}
 
 		// Add version modifiers if a version was matched.
-		if ( isset( $index ) ) {
+		if ( null !== $index ) {
 			if ( ! empty( $matches[ $index ] ) ) {
 				if ( 'stable' === $matches[ $index ] ) {
 					return $version;

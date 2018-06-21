@@ -17,7 +17,7 @@ namespace SatisPress;
  * @param array $args Optional. Query string parameters. Default is an empty array.
  * @return string
  */
-function get_packages_permalink( $args = null ) {
+function get_packages_permalink( array $args = null ) {
 	if ( null === $args ) {
 		$args = [];
 	}
@@ -97,7 +97,7 @@ function readfile_chunked( $file ) {
 	$chunk_size = 1024 * 1024;
 
 	// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fopen
-	$handle = fopen( $file, 'r' );
+	$handle = fopen( $file, 'rb' );
 	if ( false === $handle ) {
 		return false;
 	}

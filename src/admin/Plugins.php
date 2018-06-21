@@ -51,7 +51,7 @@ class Plugins {
 	 * @since 0.2.0
 	 */
 	public function ajax_toggle_plugin_status() {
-		if ( ! isset( $_POST['plugin_file'] ) || ! isset( $_POST['_wpnonce'] ) ) {
+		if ( ! isset( $_POST[ 'plugin_file' ], $_POST[ '_wpnonce' ] ) ) {
 			return;
 		}
 

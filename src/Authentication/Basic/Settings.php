@@ -97,10 +97,10 @@ class Settings extends \SatisPress\Authentication\Settings {
 	 * @return array Settings values.
 	 */
 	public function sanitize_settings( array $value ) {
-		if ( ! isset( $value['enable_basic_authentication'] ) ) {
-			$value['enable_basic_authentication'] = 'no';
+		if ( isset( $value[ 'enable_basic_authentication' ] ) ) {
+			$value[ 'enable_basic_authentication' ] = 'yes';
 		} else {
-			$value['enable_basic_authentication'] = 'yes';
+			$value[ 'enable_basic_authentication' ] = 'no';
 		}
 
 		return $value;
