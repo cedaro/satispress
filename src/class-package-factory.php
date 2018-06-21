@@ -1,6 +1,6 @@
 <?php
 /**
- * SatisPress_Package_Factory class
+ * Package_Factory class
  *
  * @package SatisPress
  * @license GPL-2.0-or-later
@@ -14,9 +14,9 @@ namespace SatisPress;
  *
  * @since 0.3.0
  */
-final class SatisPress_Package_Factory {
+final class Package_Factory {
 	/**
-	 * Simle factory.
+	 * Simple factory.
 	 *
 	 * @since 0.3.0
 	 *
@@ -29,9 +29,9 @@ final class SatisPress_Package_Factory {
 	public function create( $package, $slug, $cache_path ) {
 		switch ( $package ) {
 			case 'plugin':
-				return new SatisPress_Package_Plugin( $slug, $cache_path );
+				return new Package_Plugin( $slug, $cache_path );
 			case 'theme':
-				return new SatisPress_Package_Theme( $slug, $cache_path );
+				return new Package_Theme( $slug, $cache_path );
 			default:
 				return false;
 		}

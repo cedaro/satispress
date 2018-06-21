@@ -1,6 +1,6 @@
 <?php
 /**
- * SatisPress_Htaccess class
+ * Htaccess class
  *
  * @package SatisPress
  * @license GPL-2.0-or-later
@@ -14,7 +14,7 @@ namespace SatisPress;
  *
  * @since 0.2.0
  */
-class SatisPress_Htaccess {
+class Htaccess {
 	/**
 	 * The directory path where .htaccess is located.
 	 *

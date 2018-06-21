@@ -1,6 +1,6 @@
 <?php
 /**
- * SatisPress_Admin_Screen_Settings class
+ * Admin_Screen_Settings class
  *
  * @package SatisPress
  * @license GPL-2.0-or-later
@@ -14,13 +14,13 @@ namespace SatisPress;
  *
  * @since 0.2.0
  */
-class SatisPress_Admin_Screen_Settings {
+class Admin_Screen_Settings {
 	/**
 	 * Handler for .htaccess files.
 	 *
 	 * @since 0.3.0
 	 *
-	 * @var SatisPress_Htaccess
+	 * @var Htaccess
 	 */
 	protected $htaccess_handler;
 
@@ -29,9 +29,9 @@ class SatisPress_Admin_Screen_Settings {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @param SatisPress_Htaccess $htaccess_handler Handler for .htaccess files.
+	 * @param Htaccess $htaccess_handler Handler for .htaccess files.
 	 */
-	public function __construct( SatisPress_Htaccess $htaccess_handler ) {
+	public function __construct( Htaccess $htaccess_handler ) {
 		$this->htaccess_handler = $htaccess_handler;
 	}
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * SatisPress_Package_Plugin class
+ * Package_Plugin class
  *
  * @package SatisPress
  * @license GPL-2.0-or-later
@@ -14,7 +14,7 @@ namespace SatisPress;
  *
  * @since 0.2.0
  */
-class SatisPress_Package_Plugin extends SatisPress_Package {
+class Package_Plugin extends Package {
 	/**
 	 * Base path where packages are cached.
 	 *

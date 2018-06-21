@@ -1,6 +1,6 @@
 <?php
 /**
- * SatisPress_Admin_Screen_ManagePlugins class
+ * Admin_Screen_ManagePlugins class
  *
  * @package SatisPress
  * @license GPL-2.0-or-later
@@ -14,7 +14,7 @@ namespace SatisPress;
  *
  * @since 0.2.0
  */
-class SatisPress_Admin_Screen_ManagePlugins {
+class Admin_Screen_ManagePlugins {
 	/**
 	 * Load the screen.
 	 *

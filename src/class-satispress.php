@@ -54,19 +54,19 @@ class SatisPress {
 	 * @since 0.2.0
 	 */
 	public function load() {
-		$htaccess_handler = new SatisPress_Htaccess( $this->cache_path() );
+		$htaccess_handler = new Htaccess( $this->cache_path() );
 
 		if ( is_admin() ) {
-			$manage_screen = new SatisPress_Admin_Screen_ManagePlugins();
+			$manage_screen = new Admin_Screen_ManagePlugins();
 			$manage_screen->load();
 
-			$settings_screen = new SatisPress_Admin_Screen_Settings( $htaccess_handler );
+			$settings_screen = new Admin_Screen_Settings( $htaccess_handler );
 			$settings_screen->load();
 
 			add_action( 'admin_init', [ $this, 'register_assets' ] );
 		}
 
-		$basic_auth = new SatisPress_Authentication_Basic( $htaccess_handler );
+		$basic_auth = new Authentication_Basic( $htaccess_handler );
 		$basic_auth->load();
 
 		add_action( 'init', [ $this, 'add_rewrite_rules' ] );
@@ -183,10 +183,11 @@ class SatisPress {
 	 *
 	 * @param string $slug Package slug (plugin basename or theme directory name).
 	 * @param string $type Package type.
-	 * @return SatisPress_Package
+	 *
+	 * @return Package
 	 */
 	public function get_package( $slug, $type ) {
-		$package_factory = new SatisPress_Package_Factory();
+		$package_factory = new Package_Factory();
 
 		return $package_factory->create( $type, $slug, $this->cache_path() );
 	}
@@ -331,8 +332,8 @@ class SatisPress {
 	 *
 	 * @since 0.1.0
 	 *
-	 * @param SatisPress_Package $package Package object.
-	 * @param string             $version Optional. Version of the package to send. Defaults to the current version.
+	 * @param Package $package Package object.
+	 * @param string  $version Optional. Version of the package to send. Defaults to the current version.
 	 */
 	protected function send_package( $package, $version = '' ) {
 		$file = $package->archive( $version );

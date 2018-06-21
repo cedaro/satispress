@@ -1,6 +1,6 @@
 <?php
 /**
- * SatisPress_Version_Parser class
+ * Version_Parser class
  *
  * @package SatisPress
  * @license GPL-2.0-or-later
@@ -18,7 +18,7 @@ namespace SatisPress;
  * @link https://github.com/composer/composer/blob/master/src/Composer/Package/Version/VersionParser.php
  * @link https://github.com/composer/semver/blob/master/src/VersionParser.php
  */
-class SatisPress_Version_Parser {
+class Version_Parser {
 	/**
 	 * Modifier pattern
 	 *
