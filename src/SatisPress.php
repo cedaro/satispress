@@ -69,6 +69,9 @@ class SatisPress {
 		$basic_auth = new Authentication\Basic( $htaccess_handler );
 		$basic_auth->load();
 
+		$limit_login_attempts = new Integration\LimitLoginAttempts();
+		$limit_login_attempts->load();
+
 		add_action( 'init', [ $this, 'add_rewrite_rules' ] );
 		add_filter( 'query_vars', [ $this, 'query_vars' ] );
 		add_action( 'parse_request', [ $this, 'process_request' ] );

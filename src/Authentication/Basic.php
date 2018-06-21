@@ -47,7 +47,6 @@ class Basic {
 		$options = get_option( 'satispress' );
 		if ( isset( $options['enable_basic_authentication'] ) && 'yes' === $options['enable_basic_authentication'] ) {
 			add_action( 'satispress_send_package', [ $this, 'authorize_package_request' ] );
-			add_action( 'satispress_pre_basic_authentication', [ $this, 'limit_login_attempts' ] );
 		}
 	}
 
@@ -79,26 +78,6 @@ class Basic {
 			header( 'HTTP/1.0 401 Unauthorized' );
 			exit;
 		}
-	}
-
-	/**
-	 * Show an error message from the Limit Login Attempts plugin.
-	 *
-	 * @since 0.2.0
-	 *
-	 * @param mixed $user User.
-	 */
-	public function limit_login_attempts( $user ) {
-		global $error;
-
-		if ( function_exists( 'limit_login_get_message' ) ) {
-			$message = limit_login_get_message();
-			if ( '' !== $message ) {
-				wp_die( wp_kses_post( $error . $message ) );
-			}
-		}
-
-		return $user;
 	}
 
 	/**
