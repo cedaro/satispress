@@ -23,18 +23,22 @@ final class PackageFactory {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @param string $package    Package type.
-	 * @param string $slug       Package slug.
-	 * @param string $cache_path Base path to cache.
-	 *
-	 * @return [type] [description]
+	 * @param string $package_type Package type.
+	 * @param string $slug         Package slug.
+	 * @param string $cache_path   Base path to cache.
+	 * @return Package|false Package or false if package type is not known.
 	 */
-	public function create( $package, $slug, $cache_path ) {
-		switch ( $package ) {
+	public function create( $package_type, $slug, $cache_path ) {
+		$version_parser = new ComposerVersionParser();
+		switch ( $package_type ) {
 			case 'plugin':
-				return new Plugin( $slug, $cache_path );
+				$package = new Plugin( $slug, $cache_path );
+				$package->set_version_parser( $version_parser );
+				return $package;
 			case 'theme':
-				return new Theme( $slug, $cache_path );
+				$package = new Theme( $slug, $cache_path );
+				$package->set_version_parser( $version_parser );
+				return $package;
 			default:
 				return false;
 		}
