@@ -9,7 +9,7 @@
 
 namespace SatisPress;
 
-use SatisPress\Admin\Manage_Plugins;
+use SatisPress\Admin\Plugins;
 use SatisPress\Admin\Settings;
 
 /**
@@ -60,7 +60,7 @@ class SatisPress {
 		$htaccess_handler = new Htaccess( $this->cache_path() );
 
 		if ( is_admin() ) {
-			$manage_screen = new Manage_Plugins();
+			$manage_screen = new Plugins();
 			$manage_screen->load();
 
 			$settings_screen = new Settings( $htaccess_handler );
@@ -69,7 +69,7 @@ class SatisPress {
 			add_action( 'admin_init', [ $this, 'register_assets' ] );
 		}
 
-		$basic_auth = new Authentication_Basic( $htaccess_handler );
+		$basic_auth = new AuthenticationBasic( $htaccess_handler );
 		$basic_auth->load();
 
 		add_action( 'init', [ $this, 'add_rewrite_rules' ] );
@@ -190,7 +190,7 @@ class SatisPress {
 	 * @return Package
 	 */
 	public function get_package( $slug, $type ) {
-		$package_factory = new Package_Factory();
+		$package_factory = new PackageFactory();
 
 		return $package_factory->create( $type, $slug, $this->cache_path() );
 	}

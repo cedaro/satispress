@@ -78,7 +78,7 @@ abstract class Package {
 			foreach ( $cached_versions as $version ) {
 				// Update the template.
 				$template['version']            = $version;
-				$template['version_normalized'] = Version_Parser::normalize( $version );
+				$template['version_normalized'] = VersionParser::normalize( $version );
 				$template['dist']['url']        = esc_url_raw( $this->get_archive_url( $version ) );
 				$template['dist']['shasum']     = sha1_file( $this->archive( $version ) );
 
@@ -161,7 +161,7 @@ abstract class Package {
 	 * @since 0.2.0
 	 */
 	public function get_version_normalized() {
-		return Version_Parser::normalize( $this->get_version() );
+		return VersionParser::normalize( $this->get_version() );
 	}
 
 	/**
@@ -174,7 +174,7 @@ abstract class Package {
 	 */
 	public function archive( $version = '' ) {
 		$version            = empty( $version ) ? $this->get_version() : $version;
-		$version_normalized = Version_Parser::normalize( $version );
+		$version_normalized = VersionParser::normalize( $version );
 
 		$slug     = $this->get_slug();
 		$filename = $this->archive_path . $slug . '/' . $slug . '-' . $version . '.zip';

@@ -1,6 +1,6 @@
 <?php
 /**
- * Package_Factory class
+ * PackageFactory class
  *
  * @package SatisPress
  * @license GPL-2.0-or-later
@@ -17,7 +17,7 @@ use SatisPress\PackageType\Theme;
  *
  * @since 0.3.0
  */
-final class Package_Factory {
+final class PackageFactory {
 	/**
 	 * Simple factory.
 	 *

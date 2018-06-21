@@ -1,6 +1,6 @@
 <?php
 /**
- * Version_Parser class
+ * VersionParser class
  *
  * @package SatisPress
  * @license GPL-2.0-or-later
@@ -20,7 +20,7 @@ namespace SatisPress;
  * @author Jordi Boggiano <j.boggiano@seld.be>
  * @link https://github.com/composer/semver/blob/2b303e43d14d15cc90c8e8db4a1cdb6259f1a5c5/src/VersionParser.php
  */
-class Version_Parser {
+class VersionParser {
 
 	/**
 	 * Regex to match pre-release data (sort of).

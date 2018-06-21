@@ -77,10 +77,8 @@ function satispress_autoloader( $class ) {
 
 	// Replace the namespace prefix with the base directory, replace namespace separators
 	// with directory separators in the relative class name, append with .php.
-	$file = $base_dir . \strtolower( \str_replace( '_', '-', \str_replace( '\\', '/', $relative_class ) ) ) . '.php';
+	$file = $base_dir . \str_replace( '\\', '/', $relative_class ) . '.php';
 
-	// Add class- before final file name.
-	$file = substr_replace( $file, '/class-', (int) \strrpos( $file, '/' ), 1 );
 
 	if ( file_exists( $file ) ) {
 		require_once $file;

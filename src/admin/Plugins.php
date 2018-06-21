@@ -1,6 +1,6 @@
 <?php
 /**
- * Manage_Plugins class
+ * Plugins class
  *
  * @package SatisPress
  * @license GPL-2.0-or-later
@@ -16,7 +16,7 @@ use SatisPress\SatisPress;
  *
  * @since 0.2.0
  */
-class Manage_Plugins {
+class Plugins {
 	/**
 	 * Load the screen.
 	 *
