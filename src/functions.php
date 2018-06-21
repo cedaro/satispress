@@ -14,10 +14,14 @@ namespace SatisPress;
  *
  * @since 0.2.0
  *
- * @param array $args Query string parameters.
+ * @param array $args Optional. Query string parameters. Default is an empty array.
  * @return string
  */
-function get_packages_permalink( $args = [] ) {
+function get_packages_permalink( $args = null ) {
+	if ( null === $args ) {
+		$args = [];
+	}
+
 	$permalink = get_option( 'permalink_structure' );
 	if ( empty( $permalink ) ) {
 		$url = add_query_arg( 'satispress', 'packages.json', home_url( '/' ) );
@@ -84,11 +88,10 @@ function send_file( $file ) {
  *
  * @since 0.1.0
  *
- * @param string $file     A file path.
- * @param bool   $retbytes Optional. Whether to return the number of
- *                         bytes. Default is true.
+ * @param string $file A file path.
+ * @return bool True if file could be opened, written and closed, false otherwise.
  */
-function readfile_chunked( $file, $retbytes = true ) {
+function readfile_chunked( $file ) {
 	$buffer     = '';
 	$cnt        = 0;
 	$chunk_size = 1024 * 1024;
@@ -106,18 +109,8 @@ function readfile_chunked( $file, $retbytes = true ) {
 		echo $buffer;
 		ob_flush();
 		flush();
-
-		if ( $retbytes ) {
-			$cnt += strlen( $buffer );
-		}
 	}
 
 	// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fclose
-	$status = fclose( $handle );
-
-	if ( $retbytes && $status ) {
-		return $cnt;
-	}
-
-	return $status;
+	return fclose( $handle );
 }

@@ -10,7 +10,6 @@
 namespace SatisPress\Admin;
 
 use SatisPress\PackageManager;
-use SatisPress\SatisPress;
 
 /**
  * Manage plugins screen.
@@ -110,6 +109,8 @@ class Plugins {
 	 *
 	 * @since 0.2.0
 	 *
+	 * @throws \Exception If package type not known.
+	 *
 	 * @param string $column_name Column identifier.
 	 * @param string $plugin_file Plugin file basename.
 	 * @param array  $plugin_data Array of plugin data.
@@ -125,8 +126,8 @@ class Plugins {
 
 		printf( '<input type="checkbox" value="%1$s"%2$s%3$s class="satispress-status">',
 			esc_attr( $plugin_file ),
-			checked( isset( $packages[ $plugin->get_slug() ] ), true, false ),
-			( empty( $checked ) || in_array( $plugin_file, $plugins, true ) ) ? '' : ' disabled="disabled"'
+			\checked( isset( $packages[ $plugin->get_slug() ] ), true, false ),
+			\disabled( ! isset( $packages[ $plugin->get_slug() ] ) || in_array( $plugin_file, $plugins, true ), false, false )
 		);
 
 		echo '<span class="spinner"></span>';

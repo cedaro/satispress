@@ -4,7 +4,7 @@
  *
  * @package SatisPress
  * @license GPL-2.0-or-later
- * @since 0.2.0
+ * @since 0.3.0
  */
 
 namespace SatisPress\Authentication\Basic;
@@ -14,7 +14,7 @@ use SatisPress\Htaccess;
 /**
  * SatisPress authentication interface.
  *
- * @since 0.2.0
+ * @since 0.3.0
  */
 class Settings extends \SatisPress\Authentication\Settings {
 	/**
@@ -40,7 +40,7 @@ class Settings extends \SatisPress\Authentication\Settings {
 	/**
 	 * Load the screen.
 	 *
-	 * @since 0.2.0
+	 * @since 0.3.0
 	 */
 	public function load() {
 		add_filter( 'update_option_satispress', [ $this, 'maybe_setup' ], 10, 2 );
@@ -54,7 +54,7 @@ class Settings extends \SatisPress\Authentication\Settings {
 	 *
 	 * Creates an .htaccess file in the cache directory with a 'Deny from all' rule to prevent direct access.
 	 *
-	 * @since 0.2.0
+	 * @since 0.3.0
 	 *
 	 * @param array $old_value Current settings values.
 	 * @param array $value Saved settings.
@@ -91,9 +91,10 @@ class Settings extends \SatisPress\Authentication\Settings {
 	/**
 	 * Sanitize settings.
 	 *
-	 * @since 0.2.0
+	 * @since 0.3.0
 	 *
 	 * @param array $value Settings values.
+	 * @return array Settings values.
 	 */
 	public function sanitize_settings( array $value ) {
 		if ( ! isset( $value['enable_basic_authentication'] ) ) {
@@ -108,7 +109,7 @@ class Settings extends \SatisPress\Authentication\Settings {
 	/**
 	 * Display the basic authentication settings field.
 	 *
-	 * @since 0.2.0
+	 * @since 0.3.0
 	 */
 	public function render_field_basic_authentication() {
 		$value = $this->get_setting( 'enable_basic_authentication', 'no' );
@@ -131,7 +132,7 @@ class Settings extends \SatisPress\Authentication\Settings {
 	/**
 	 * Display a notice if Basic Authentication is enabled and .htaccess doesn't exist.
 	 *
-	 * @since 0.2.0
+	 * @since 0.3.0
 	 */
 	public function htaccess_notice() {
 		$value = $this->get_setting( 'enable_basic_authentication', 'no' );

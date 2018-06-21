@@ -54,6 +54,7 @@ spl_autoload_register( __NAMESPACE__ . '\\satispress_autoloader' );
  * Converts a class name to a file path and requires it if it exists.
  *
  * @since 0.2.0
+ * @link https://www.php-fig.org/psr/psr-4/examples/
  *
  * @param string $class Class name.
  */

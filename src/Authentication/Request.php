@@ -1,18 +1,18 @@
 <?php
 /**
- * Authentication interface
+ * Authentication request interface
  *
  * @package SatisPress
  * @license GPL-2.0-or-later
- * @since 0.2.0
+ * @since 0.3.0
  */
 
 namespace SatisPress\Authentication;
 
 /**
- * SatisPress authentication interface.
+ * Authentication request interface.
  *
- * @since 0.2.0
+ * @since 0.3.0
  */
 interface Request {
 	/**

@@ -97,7 +97,7 @@ class SatisPress {
 		if ( 'packages.json' === $slug ) {
 			header( 'Content-Type: application/json; charset=' . get_option( 'blog_charset' ) );
 			// phpcs:ignore WordPress.XSS.EscapeOutput.OutputNotEscaped -- JSON
-			echo self::get_packages_json();
+			echo $this->get_packages_json();
 			exit;
 		}
 
@@ -210,7 +210,11 @@ class SatisPress {
 	 * @param Package $package Package object.
 	 * @param string  $version Optional. Version of the package to send. Defaults to the current version.
 	 */
-	protected function send_package( $package, $version = '' ) {
+	protected function send_package( $package, $version = null ) {
+		if ( null === $version ) {
+			$version = '';
+		}
+
 		$file = $package->archive( $version );
 
 		// Send a 404 if the file doesn't exit.

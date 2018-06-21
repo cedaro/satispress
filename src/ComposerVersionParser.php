@@ -14,6 +14,11 @@ namespace SatisPress;
  *
  * Latest refresh 2018-06-21.
  *
+ * - Retained methods: normalize, normalizeBranch, expandStability.
+ * - Retained property: $modifierRegex
+ * - Remove everything else.
+ * - Rename methods, property and variables to snake_case.
+ *
  * @package SatisPress
  * @since 0.1.0
  *
@@ -21,7 +26,6 @@ namespace SatisPress;
  * @link https://github.com/composer/semver/blob/2b303e43d14d15cc90c8e8db4a1cdb6259f1a5c5/src/VersionParser.php
  */
 class ComposerVersionParser implements VersionParser {
-
 	/**
 	 * Regex to match pre-release data (sort of).
 	 *
@@ -44,8 +48,7 @@ class ComposerVersionParser implements VersionParser {
 	 *
 	 * @param string $version      Version string.
 	 * @param string $full_version Optional complete version string to give more context.
-	 *
-	 * @return string
+	 * @return string Normalized version string.
 	 */
 	public function normalize( $version, $full_version = null ) {
 		$version = trim( $version );

@@ -10,7 +10,9 @@
 namespace SatisPress;
 
 /**
- * Abstract package class.
+ * Abstract Composer package class.
+ *
+ * Extended by child classes like Plugin and Theme.
  *
  * @since 0.2.0
  */
@@ -48,7 +50,7 @@ abstract class Package {
 	 *
 	 * @since 0.2.0
 	 *
-	 * @return string
+	 * @return array
 	 */
 	public function get_package_definition() {
 		$versions = [];
@@ -104,15 +106,14 @@ abstract class Package {
 	 * @param string $version Optional. Package version. Defaults to the current version.
 	 * @return string
 	 */
-	public function get_archive_url( $version = '' ) {
-		$url = '';
-
-		if ( empty( $version ) ) {
+	public function get_archive_url( $version = null ) {
+		if ( null === $version ) {
 			$version = $this->get_version();
 		}
 
-		$permalink = get_option( 'permalink_structure' );
-		if ( empty( $permalink ) ) {
+		$url = home_url( sprintf( '/satispress/%s/%s', $this->get_slug(), $version ) );
+
+		if ( empty( get_option( 'permalink_structure' ) ) ) {
 			$url = add_query_arg(
 				[
 					'satispress'         => $this->get_slug(),
@@ -120,8 +121,6 @@ abstract class Package {
 				],
 				home_url( 'index.php' )
 			);
-		} else {
-			$url = home_url( sprintf( '/satispress/%s/%s', $this->get_slug(), $version ) );
 		}
 
 		return apply_filters( 'satispress_package_url', $url, $this, $version );
@@ -166,6 +165,8 @@ abstract class Package {
 	 * Retrieve the normalized version number.
 	 *
 	 * @since 0.2.0
+	 *
+	 * @return string Normalized version number.
 	 */
 	public function get_version_normalized() {
 		return $this->version_parser->normalize( $this->get_version() );
@@ -179,7 +180,11 @@ abstract class Package {
 	 * @param string $version Optional. Version number. Defaults to the current version.
 	 * @return string Full path to the archive.
 	 */
-	public function archive( $version = '' ) {
+	public function archive( $version = null ) {
+		if ( null === $version ) {
+			$version = '';
+		}
+
 		$version            = empty( $version ) ? $this->get_version() : $version;
 		$version_normalized = $this->version_parser->normalize( $version );
 

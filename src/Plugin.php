@@ -4,7 +4,7 @@
  *
  * @package SatisPress
  * @license GPL-2.0-or-later
- * @since 0.2.0
+ * @since 0.3.0
  */
 
 namespace SatisPress;
@@ -12,13 +12,13 @@ namespace SatisPress;
 /**
  * Main plugin class - composition root.
  *
- * @since 0.1.0
+ * @since 0.3.0
  */
 class Plugin implements Composable {
 	/**
 	 * Compose the object graph.
 	 *
-	 * @since 0.2.0
+	 * @since 0.3.0
 	 */
 	public function compose() {
 		$htaccess_handler = new Htaccess( $this->cache_path() );
@@ -65,7 +65,7 @@ class Plugin implements Composable {
 			wp_mkdir_p( $path );
 		}
 
-		return apply_filters( 'satispress_cache_path', $path );
+		return (string) apply_filters( 'satispress_cache_path', $path );
 	}
 
 	/**

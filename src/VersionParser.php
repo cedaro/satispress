@@ -4,7 +4,7 @@
  *
  * @package SatisPress
  * @license GPL-2.0-or-later
- * @since 0.1.0
+ * @since 0.3.0
  */
 
 namespace SatisPress;
@@ -19,11 +19,13 @@ interface VersionParser {
 	/**
 	 * Normalizes a version string to be able to perform comparisons on it.
 	 *
+	 * @since 0.3.0
+	 *
 	 * @throws \UnexpectedValueException Thrown when given an invalid version string.
 	 *
 	 * @param string $version      Version string.
 	 * @param string $full_version Optional complete version string to give more context.
-	 * @return string
+	 * @return string Normalized version string.
 	 */
 	public function normalize( $version, $full_version = null );
 }

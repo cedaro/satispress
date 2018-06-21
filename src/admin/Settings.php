@@ -11,7 +11,6 @@ namespace SatisPress\Admin;
 
 use function SatisPress\get_packages_permalink;
 use SatisPress\PackageManager;
-use SatisPress\SatisPress;
 
 /**
  * Settings screen.
@@ -131,7 +130,7 @@ class Settings {
 	public function add_settings() {
 		add_settings_field(
 			'vendor',
-			__( 'Vendor', 'satispress' ),
+			'<label for="satispress-vendor">' . __( 'Vendor', 'satispress' ) . '</label>',
 			[ $this, 'render_field_vendor' ],
 			'satispress',
 			'default'
@@ -152,13 +151,14 @@ class Settings {
 	 * @since 0.2.0
 	 *
 	 * @param array $value Settings values.
+	 * @return array Sanitized and filtered settings values.
 	 */
 	public function sanitize_settings( array $value ) {
 		if ( ! empty( $value['vendor'] ) ) {
 			$value['vendor'] = sanitize_text_field( $value['vendor'] );
 		}
 
-		return apply_filters( 'satispress_sanitize_settings', $value );
+		return (array) apply_filters( 'satispress_sanitize_settings', $value );
 	}
 
 	/**
@@ -211,7 +211,7 @@ class Settings {
 		$value = $this->get_setting( 'vendor', '' );
 		?>
 		<p>
-			<input type="text" name="satispress[vendor]" id="satispress-vendor" value="<?php echo esc_attr( $value ); ?>"><br>
+			<input type="text" name="satispress[vendor]" id="satispress-vendor" value="<?php echo esc_attr( $value ); ?>"><br />
 			<span class="description">Default is <code>satispress</code></span>
 		</p>
 		<?php
@@ -228,7 +228,7 @@ class Settings {
 		$themes = wp_get_themes();
 		foreach ( $themes as $slug => $theme ) {
 			printf(
-				'<label><input type="checkbox" name="satispress_themes[]" value="%1$s" %2$s> %3$s</label><br>',
+				'<label><input type="checkbox" name="satispress_themes[]" value="%1$s"%2$s> %3$s</label><br />',
 				esc_attr( $slug ),
 				checked( in_array( $slug, $value, true ), true, false ),
 				esc_html( $theme->get( 'Name' ) )
@@ -245,9 +245,10 @@ class Settings {
 	 * @param mixed  $default Optional. Default setting value.
 	 * @return mixed
 	 */
-	protected function get_setting( $key, $default = false ) {
+	protected function get_setting( $key, $default = null ) {
 		$option = get_option( 'satispress' );
-		return isset( $option[ $key ] ) ? $option[ $key ] : false;
+
+		return isset( $option[ $key ] ) ? $option[ $key ] : $default;
 	}
 
 	/**

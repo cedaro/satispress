@@ -33,15 +33,18 @@
 		// Handle the checkbox for toggling plugins.
 		$( '.satispress-status' ).on( 'change', function() {
 			var $checkbox = $( this ),
-				$spinner = $( this ).siblings( '.spinner' ).show();
+				$spinner = $( this ).siblings( '.spinner' ).css( 'visibility', 'visible' );
 
 			wp.ajax.post( 'satispress_toggle_plugin', {
 				plugin_file: $checkbox.val(),
 				status: $checkbox.prop( 'checked' ),
 				_wpnonce: $checkbox.siblings( '.satispress-status-nonce' ).val()
 			}).done(function() {
-				$checkbox.show();
-				$spinner.hide();
+				setTimeout( function() {
+					$spinner.css( 'visibility', 'hidden' );
+				}, 300);
+			}).fail(function() {
+				$spinner.hide( 'visibility', 'hidden' );
 			});
 		});
 	});

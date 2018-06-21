@@ -9,6 +9,8 @@
 
 namespace SatisPress;
 
+use Exception;
+
 /**
  * PackageManager class.
  *
@@ -36,9 +38,10 @@ class PackageManager {
 	 *
 	 * @since 0.2.0
 	 *
+	 * @throws Exception If package type not known.
+	 *
 	 * @param string $slug Package slug (plugin basename or theme directory name).
 	 * @param string $type Package type.
-	 *
 	 * @return Package
 	 */
 	public function get_package( $slug, $type ) {
@@ -64,9 +67,15 @@ class PackageManager {
 			}
 
 			foreach ( $identifiers as $identifier ) {
-				$package = $this->get_package( $identifier, $type );
-				if ( $package && $package->is_installed() && '' !== $package->get_version_normalized() ) {
-					$packages[ $package->get_slug() ] = $package;
+				try {
+					$package = $this->get_package( $identifier, $type );
+
+					if ( $package && $package->is_installed() && '' !== $package->get_version_normalized() ) {
+						$packages[ $package->get_slug() ] = $package;
+					}
+				// phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch
+				} catch ( Exception $e ) {
+					// noop.
 				}
 			}
 		}
@@ -87,7 +96,7 @@ class PackageManager {
 	 *
 	 * @since 0.2.0
 	 *
-	 * @return string
+	 * @return array
 	 */
 	protected function get_whitelist() {
 		$plugins = apply_filters( 'satispress_plugins', [] );

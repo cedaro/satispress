@@ -81,3 +81,15 @@ Once SatisPress is installed and configured you can include the SatisPress repos
 	}
 }
 ```
+
+## Troubleshooting
+
+### Basic Auth not working
+
+Certain server arrangements don't allow the Basic Auth credentials to be made available under PHP. To get around this, you'll need to set an environment variable in the site root .htaccess file.
+
+See https://github.com/blazersix/satispress/wiki/Basic-Auth for more info.
+
+## Credits
+
+Created by [Brady Vercher](https://www.blazersix.com/) and supported by [Gary Jones](https://gamajo.com).

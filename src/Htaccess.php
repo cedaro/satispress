@@ -36,9 +36,13 @@ class Htaccess {
 	 *
 	 * @since 0.2.0
 	 *
-	 * @param string $path Directory path where .htaccess is located.
+	 * @param string $path Optional. Directory path where .htaccess is located. Default is empty string.
 	 */
-	public function __construct( $path = '' ) {
+	public function __construct( $path = null ) {
+		if ( null === $path ) {
+			$path = '';
+		}
+
 		$this->path = $path;
 	}
 

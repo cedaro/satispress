@@ -9,17 +9,16 @@
 
 namespace SatisPress;
 
-use SatisPress\PackageType\Plugin;
-use SatisPress\PackageType\Theme;
-
 /**
- * Simple Factory.
+ * Simple Factory for creating specific Composer package objects.
  *
  * @since 0.3.0
  */
 final class PackageFactory {
 	/**
-	 * Simple factory.
+	 * Create a Composer package object.
+	 *
+	 * Typical objects returned are Plugin and Theme.
 	 *
 	 * @since 0.3.0
 	 *

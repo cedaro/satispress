@@ -1,6 +1,6 @@
 <?php
 /**
- * LimitLoginAttempts class
+ * Limit Login Attempts plugin integration class
  *
  * @package SatisPress
  * @license GPL-2.0-or-later
@@ -9,8 +9,11 @@
 
 namespace SatisPress\Integration;
 
+use WP_Error;
+use WP_User;
+
 /**
- * Limit Login Attempts integration.
+ * Add support for Limit Login Attempts plugin.
  *
  * @since 0.2.0
  */
@@ -33,6 +36,7 @@ class LimitLoginAttempts {
 	 * @since 0.3.0
 	 *
 	 * @param WP_Error|WP_User $user WP_Error or WP_User objects.
+	 * @return WP_Error|WP_User
 	 */
 	public function limit_login_attempts( $user ) {
 		global $error;

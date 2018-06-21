@@ -1,18 +1,18 @@
 <?php
 /**
- * Authentication interface
+ * Authentication settings abstract class
  *
  * @package SatisPress
  * @license GPL-2.0-or-later
- * @since 0.2.0
+ * @since 0.3.0
  */
 
 namespace SatisPress\Authentication;
 
 /**
- * SatisPress authentication interface.
+ * Authentication settings abstract class.
  *
- * @since 0.2.0
+ * @since 0.3.0
  */
 abstract class Settings {
 	/**
@@ -31,9 +31,9 @@ abstract class Settings {
 	 * @param mixed  $default Optional. Default setting value.
 	 * @return mixed
 	 */
-	protected function get_setting( $key, $default = false ) {
+	protected function get_setting( $key, $default = null ) {
 		$option = get_option( 'satispress' );
 
-		return isset( $option[ $key ] ) ? $option[ $key ] : false;
+		return isset( $option[ $key ] ) ? $option[ $key ] : $default;
 	}
 }
