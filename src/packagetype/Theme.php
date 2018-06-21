@@ -10,6 +10,7 @@
 namespace SatisPress\PackageType;
 
 use SatisPress\Package;
+use SatisPress\VersionParser;
 
 /**
  * Theme package class.
@@ -48,13 +49,15 @@ class Theme extends Package {
 	 *
 	 * @since 0.2.0
 	 *
-	 * @param string $theme_directory Name of the theme directory.
-	 * @param string $archive_path    Base path where packages are cached.
+	 * @param string        $theme_directory Name of the theme directory.
+	 * @param string        $archive_path    Base path where packages are cached.
+	 * @param VersionParser $version_parser  Version parser.
 	 */
-	public function __construct( $theme_directory, $archive_path ) {
-		$this->slug         = $theme_directory;
-		$this->theme        = wp_get_theme( $theme_directory );
-		$this->archive_path = trailingslashit( $archive_path );
+	public function __construct( $theme_directory, $archive_path, $version_parser ) {
+		$this->slug           = $theme_directory;
+		$this->theme          = wp_get_theme( $theme_directory );
+		$this->archive_path   = trailingslashit( $archive_path );
+		$this->version_parser = $version_parser;
 	}
 
 	/**

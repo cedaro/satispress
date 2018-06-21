@@ -10,6 +10,7 @@
 namespace SatisPress\PackageType;
 
 use SatisPress\Package;
+use SatisPress\VersionParser;
 
 /**
  * Plugin package class.
@@ -62,15 +63,17 @@ class Plugin extends Package {
 	 *
 	 * @since 0.2.0
 	 *
-	 * @param string $basename     Plugin basename (relative path from the plugins directory).
-	 * @param string $archive_path Base path where packages are cached.
+	 * @param string        $basename       Plugin basename (relative path from the plugins directory).
+	 * @param string        $archive_path   Base path where packages are cached.
+	 * @param VersionParser $version_parser  Version parser.
 	 */
-	public function __construct( $basename, $archive_path ) {
+	public function __construct( $basename, $archive_path, VersionParser $version_parser ) {
 		$this->basename     = $basename;
 		$slug               = dirname( $basename );
 		$slug               = ( '.' === $slug ) ? basename( $basename, '.php' ) : $slug;
 		$this->slug         = sanitize_title_with_dashes( $slug );
 		$this->archive_path = trailingslashit( $archive_path );
+		$this->version_parser = $version_parser;
 	}
 
 	/**

@@ -23,15 +23,6 @@ abstract class Package {
 	protected $version_parser;
 
 	/**
-	 * Initialise Package object.
-	 *
-	 * @param VersionParser $version_parser Version parser.
-	 */
-	public function set_version_parser( VersionParser $version_parser ) {
-		$this->version_parser = $version_parser;
-	}
-
-	/**
 	 * Retrieve the package name.
 	 *
 	 * Includes the vendor prefix.
