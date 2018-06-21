@@ -139,7 +139,7 @@ abstract class SatisPress_Package {
 		$files = new DirectoryIterator( $package_cache_path );
 		if ( ! empty( $files ) ) {
 			foreach ( $files as $file ) {
-				if ( '.' === $file || '..' === $file ) {
+				if ( $file->isDot() ) {
 					continue;
 				}
 
