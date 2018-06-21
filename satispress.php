@@ -60,7 +60,7 @@ spl_autoload_register( __NAMESPACE__ . '\\satispress_autoloader' );
  *
  * @param string $class Class name.
  */
-function satispress_autoloader( $class ) {
+function satispress_autoloader( string $class ) {
 
 	// Project namespace.
 	$prefix = 'SatisPress\\';

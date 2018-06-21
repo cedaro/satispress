@@ -59,7 +59,7 @@ class Plugin implements Composable {
 	 *
 	 * @return string
 	 */
-	public function cache_path() {
+	public function cache_path(): string {
 		$uploads = wp_upload_dir();
 		$path    = trailingslashit( $uploads['basedir'] ) . 'satispress/';
 

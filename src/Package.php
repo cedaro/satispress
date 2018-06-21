@@ -35,7 +35,7 @@ abstract class Package {
 	 *
 	 * @return string
 	 */
-	public function get_package_name() {
+	public function get_package_name(): string {
 		$vendor = apply_filters( 'satispress_vendor', 'satispress' );
 
 		return $vendor . '/' . $this->get_slug();
@@ -54,7 +54,7 @@ abstract class Package {
 	 *
 	 * @return array
 	 */
-	public function get_package_definition() {
+	public function get_package_definition(): array {
 		$versions = [];
 
 		$template = [
@@ -108,7 +108,7 @@ abstract class Package {
 	 * @param string $version Optional. Package version. Defaults to the current version.
 	 * @return string
 	 */
-	public function get_archive_url( $version = null ) {
+	public function get_archive_url( string $version = null ): string {
 		if ( null === $version ) {
 			$version = $this->get_version();
 		}
@@ -125,7 +125,7 @@ abstract class Package {
 			);
 		}
 
-		return apply_filters( 'satispress_package_url', $url, $this, $version );
+		return (string) apply_filters( 'satispress_package_url', $url, $this, $version );
 	}
 
 	/**
@@ -135,7 +135,7 @@ abstract class Package {
 	 *
 	 * @return array
 	 */
-	public function get_cached_versions() {
+	public function get_cached_versions(): array {
 		$versions = [];
 
 		$slug            = $this->get_slug();
@@ -153,7 +153,7 @@ abstract class Package {
 					continue;
 				}
 
-				$version = str_replace( $slug . '-', '', basename( $file, '.zip' ) );
+				$version = str_replace( $slug . '-', '', basename( $file->getPathname(), '.zip' ) );
 				if ( $version !== $current_version ) {
 					$versions[] = $version;
 				}
@@ -170,7 +170,7 @@ abstract class Package {
 	 *
 	 * @return string Normalized version number.
 	 */
-	public function get_version_normalized() {
+	public function get_version_normalized(): string {
 		return $this->version_parser->normalize( $this->get_version() );
 	}
 
@@ -182,7 +182,7 @@ abstract class Package {
 	 * @param string $version Optional. Version number. Defaults to the current version.
 	 * @return string Full path to the archive.
 	 */
-	public function archive( $version = null ) {
+	public function archive( string $version = null ): string {
 		if ( null === $version ) {
 			$version = '';
 		}
@@ -217,7 +217,7 @@ abstract class Package {
 	 *
 	 * @return boolean
 	 */
-	abstract public function is_installed();
+	abstract public function is_installed(): bool;
 
 	/**
 	 * Retrieve the package author.
@@ -226,7 +226,7 @@ abstract class Package {
 	 *
 	 * @return string
 	 */
-	abstract public function get_author();
+	abstract public function get_author(): string;
 
 	/**
 	 * Retrieve the package author's URL.
@@ -235,7 +235,7 @@ abstract class Package {
 	 *
 	 * @return string
 	 */
-	abstract public function get_author_uri();
+	abstract public function get_author_uri(): string;
 
 	/**
 	 * Retrieve the package description.
@@ -244,7 +244,7 @@ abstract class Package {
 	 *
 	 * @return string
 	 */
-	abstract public function get_description();
+	abstract public function get_description(): string;
 
 	/**
 	 * Retrieve the package homepage.
@@ -253,7 +253,7 @@ abstract class Package {
 	 *
 	 * @return string
 	 */
-	abstract public function get_homepage();
+	abstract public function get_homepage(): string;
 
 	/**
 	 * Retrieve the package name.
@@ -262,7 +262,7 @@ abstract class Package {
 	 *
 	 * @return string
 	 */
-	abstract public function get_name();
+	abstract public function get_name(): string;
 
 	/**
 	 * Retrieve the root directory for the package type.
@@ -273,7 +273,7 @@ abstract class Package {
 	 *
 	 * @return string
 	 */
-	abstract public function get_package_root();
+	abstract public function get_package_root(): string;
 
 	/**
 	 * Retrieve the path to the package.
@@ -282,7 +282,7 @@ abstract class Package {
 	 *
 	 * @return string
 	 */
-	abstract public function get_path();
+	abstract public function get_path(): string;
 
 	/**
 	 * Retrieve the package slug.
@@ -291,7 +291,7 @@ abstract class Package {
 	 *
 	 * @return string
 	 */
-	abstract public function get_slug();
+	abstract public function get_slug(): string;
 
 	/**
 	 * Retrieve the type of Composer package.
@@ -300,7 +300,7 @@ abstract class Package {
 	 *
 	 * @return string
 	 */
-	abstract public function get_type();
+	abstract public function get_type(): string;
 
 	/**
 	 * Retrieve the package version.
@@ -309,5 +309,5 @@ abstract class Package {
 	 *
 	 * @return string
 	 */
-	abstract public function get_version();
+	abstract public function get_version(): string;
 }

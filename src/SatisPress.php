@@ -20,7 +20,7 @@ class SatisPress {
 	/**
 	 * Package manager.
 	 *
-	 * @var string
+	 * @var PackageManager
 	 */
 	protected $package_manager;
 
@@ -122,7 +122,7 @@ class SatisPress {
 	 *
 	 * @return string
 	 */
-	public function get_packages_json() {
+	public function get_packages_json(): string {
 		$json = get_transient( 'satispress_packages_json' );
 
 		if ( ! $json ) {
@@ -157,13 +157,12 @@ class SatisPress {
 	 * @param array $data   Extra data passed by the update/install process.
 	 * @return bool
 	 */
-	public function cache_package_before_update( $result, $data ) {
+	public function cache_package_before_update( bool $result, array $data ): bool {
 		if ( empty( $data['plugin'] ) && empty( $data['theme'] ) ) {
 			return $result;
 		}
 
 		$type = ( isset( $data['plugin'] ) ) ? 'plugin' : 'theme';
-		$slug = $data[ $type ];
 
 		$package = $this->package_manager->get_package( $data[ $type ], $type );
 		if ( $package ) {
@@ -195,7 +194,7 @@ class SatisPress {
 	 * @param array $vars List of query variables.
 	 * @return array
 	 */
-	public function query_vars( $vars ) {
+	public function query_vars( array $vars ): array {
 		$vars[] = 'satispress';
 		$vars[] = 'satispress_version';
 
@@ -212,7 +211,7 @@ class SatisPress {
 	 * @param Package $package Package object.
 	 * @param string  $version Optional. Version of the package to send. Defaults to the current version.
 	 */
-	protected function send_package( $package, $version = null ) {
+	protected function send_package( Package $package, string $version = null ) {
 		if ( null === $version ) {
 			$version = '';
 		}
@@ -238,7 +237,7 @@ class SatisPress {
 	 * @param string $vendor Vendor string.
 	 * @return string
 	 */
-	public function filter_vendor( $vendor ) {
+	public function filter_vendor( string $vendor ): string {
 		$option = get_option( 'satispress' );
 		if ( ! empty( $option['vendor'] ) ) {
 			$vendor = $option['vendor'];

@@ -31,7 +31,7 @@ class PackageManager {
 	 *
 	 * @param string $cache_path Path to where packages are cached.
 	 */
-	public function __construct( $cache_path ) {
+	public function __construct( string $cache_path ) {
 		$this->cache_path = $cache_path;
 	}
 
@@ -46,7 +46,7 @@ class PackageManager {
 	 * @param string $type Package type.
 	 * @return Package
 	 */
-	public function get_package( $slug, $type ) {
+	public function get_package( string $slug, string $type ): Package {
 		$package_factory = new PackageFactory();
 
 		return $package_factory->create( $type, $slug, $this->cache_path );
@@ -59,7 +59,7 @@ class PackageManager {
 	 *
 	 * @return array
 	 */
-	public function get_packages() {
+	public function get_packages(): array {
 		$packages  = [];
 		$whitelist = $this->get_whitelist();
 
@@ -100,7 +100,7 @@ class PackageManager {
 	 *
 	 * @return array
 	 */
-	protected function get_whitelist() {
+	protected function get_whitelist(): array {
 		$plugins = apply_filters( 'satispress_plugins', [] );
 		$themes  = apply_filters( 'satispress_themes', [] );
 

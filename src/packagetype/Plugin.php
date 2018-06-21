@@ -69,7 +69,7 @@ class Plugin extends Package {
 	 * @param string        $archive_path   Base path where packages are cached.
 	 * @param VersionParser $version_parser  Version parser.
 	 */
-	public function __construct( $basename, $archive_path, VersionParser $version_parser ) {
+	public function __construct( string $basename, string $archive_path, VersionParser $version_parser ) {
 		$this->basename       = $basename;
 		$slug                 = dirname( $basename );
 		$slug                 = ( '.' === $slug ) ? basename( $basename, '.php' ) : $slug;
@@ -85,7 +85,7 @@ class Plugin extends Package {
 	 *
 	 * @return boolean
 	 */
-	public function is_installed() {
+	public function is_installed(): bool {
 		return file_exists( $this->get_file() );
 	}
 
@@ -96,7 +96,7 @@ class Plugin extends Package {
 	 *
 	 * @return string
 	 */
-	public function get_author() {
+	public function get_author(): string {
 		return $this->get_data( 'Author' );
 	}
 
@@ -107,7 +107,7 @@ class Plugin extends Package {
 	 *
 	 * @return string
 	 */
-	public function get_author_uri() {
+	public function get_author_uri(): string {
 		return $this->get_data( 'AuthorURI' );
 	}
 
@@ -118,7 +118,7 @@ class Plugin extends Package {
 	 *
 	 * @return string
 	 */
-	public function get_description() {
+	public function get_description(): string {
 		return $this->get_data( 'Description' );
 	}
 
@@ -129,7 +129,7 @@ class Plugin extends Package {
 	 *
 	 * @return string
 	 */
-	public function get_basename() {
+	public function get_basename(): string {
 		return $this->basename;
 	}
 
@@ -140,7 +140,7 @@ class Plugin extends Package {
 	 *
 	 * @return string
 	 */
-	public function get_file() {
+	public function get_file(): string {
 		return WP_PLUGIN_DIR . '/' . $this->basename;
 	}
 
@@ -151,7 +151,7 @@ class Plugin extends Package {
 	 *
 	 * @return string
 	 */
-	public function get_homepage() {
+	public function get_homepage(): string {
 		return $this->get_data( 'PluginURI' );
 	}
 
@@ -162,7 +162,7 @@ class Plugin extends Package {
 	 *
 	 * @return string
 	 */
-	public function get_name() {
+	public function get_name(): string {
 		return $this->get_data( 'Name' );
 	}
 
@@ -175,7 +175,7 @@ class Plugin extends Package {
 	 *
 	 * @return string
 	 */
-	public function get_package_root() {
+	public function get_package_root(): string {
 		return WP_PLUGIN_DIR;
 	}
 
@@ -190,7 +190,7 @@ class Plugin extends Package {
 	 *
 	 * @return string
 	 */
-	public function get_path() {
+	public function get_path(): string {
 		$plugin_file = $this->get_file();
 
 		return ( '.' === dirname( $plugin_file ) ) ? $plugin_file : dirname( $plugin_file );
@@ -206,7 +206,7 @@ class Plugin extends Package {
 	 *
 	 * @return string
 	 */
-	public function get_slug() {
+	public function get_slug(): string {
 		return $this->slug;
 	}
 
@@ -217,7 +217,7 @@ class Plugin extends Package {
 	 *
 	 * @return string
 	 */
-	public function get_type() {
+	public function get_type(): string {
 		return 'wordpress-plugin';
 	}
 
@@ -228,7 +228,7 @@ class Plugin extends Package {
 	 *
 	 * @return string
 	 */
-	public function get_version() {
+	public function get_version(): string {
 		return $this->get_data( 'Version' );
 	}
 
@@ -243,7 +243,7 @@ class Plugin extends Package {
 	 * @param string $prop The property to look up.
 	 * @return string
 	 */
-	protected function get_data( $prop ) {
+	protected function get_data( string $prop ): string {
 		if ( empty( $this->data ) ) {
 			$this->data = get_plugin_data( $this->get_file(), false, false );
 		}

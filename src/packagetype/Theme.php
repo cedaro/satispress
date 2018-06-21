@@ -55,7 +55,7 @@ class Theme extends Package {
 	 * @param string        $archive_path    Base path where packages are cached.
 	 * @param VersionParser $version_parser  Version parser.
 	 */
-	public function __construct( $theme_directory, $archive_path, $version_parser ) {
+	public function __construct( string $theme_directory, string $archive_path, VersionParser $version_parser ) {
 		$this->slug           = $theme_directory;
 		$this->theme          = wp_get_theme( $theme_directory );
 		$this->archive_path   = trailingslashit( $archive_path );
@@ -69,7 +69,7 @@ class Theme extends Package {
 	 *
 	 * @return boolean
 	 */
-	public function is_installed() {
+	public function is_installed(): bool {
 		return $this->theme->exists();
 	}
 
@@ -80,7 +80,7 @@ class Theme extends Package {
 	 *
 	 * @return string
 	 */
-	public function get_author() {
+	public function get_author(): string {
 		return $this->theme->get( 'Author' );
 	}
 
@@ -91,7 +91,7 @@ class Theme extends Package {
 	 *
 	 * @return string
 	 */
-	public function get_author_uri() {
+	public function get_author_uri(): string {
 		return $this->theme->get( 'AuthorURI' );
 	}
 
@@ -102,7 +102,7 @@ class Theme extends Package {
 	 *
 	 * @return string
 	 */
-	public function get_description() {
+	public function get_description(): string {
 		return $this->theme->get( 'Description' );
 	}
 
@@ -113,7 +113,7 @@ class Theme extends Package {
 	 *
 	 * @return string
 	 */
-	public function get_homepage() {
+	public function get_homepage(): string {
 		return $this->theme->get( 'ThemeURI' );
 	}
 
@@ -124,7 +124,7 @@ class Theme extends Package {
 	 *
 	 * @return string
 	 */
-	public function get_name() {
+	public function get_name(): string {
 		return $this->theme->get( 'Name' );
 	}
 
@@ -137,7 +137,7 @@ class Theme extends Package {
 	 *
 	 * @return string
 	 */
-	public function get_package_root() {
+	public function get_package_root(): string {
 		return get_theme_root( $this->get_slug() );
 	}
 
@@ -148,7 +148,7 @@ class Theme extends Package {
 	 *
 	 * @return string
 	 */
-	public function get_path() {
+	public function get_path(): string {
 		return $this->theme->get_stylesheet_directory();
 	}
 
@@ -162,7 +162,7 @@ class Theme extends Package {
 	 *
 	 * @return string
 	 */
-	public function get_slug() {
+	public function get_slug(): string {
 		return $this->slug;
 	}
 
@@ -173,7 +173,7 @@ class Theme extends Package {
 	 *
 	 * @return string
 	 */
-	public function get_type() {
+	public function get_type(): string {
 		return 'wordpress-theme';
 	}
 
@@ -184,7 +184,7 @@ class Theme extends Package {
 	 *
 	 * @return string
 	 */
-	public function get_version() {
+	public function get_version(): string {
 		return $this->theme->get( 'Version' );
 	}
 }

@@ -52,7 +52,7 @@ class ComposerVersionParser implements VersionParser {
 	 * @param string $full_version Optional complete version string to give more context.
 	 * @return string Normalized version string.
 	 */
-	public function normalize( $version, $full_version = null ) {
+	public function normalize( string $version, string $full_version = null ): string {
 		$version = trim( $version );
 
 		if ( null === $full_version ) {
@@ -134,7 +134,7 @@ class ComposerVersionParser implements VersionParser {
 	 * @param string $name Branch name.
 	 * @return string Normalized branch name.
 	 */
-	private function normalize_branch( $name ) {
+	private function normalize_branch( string $name ): string {
 		$name = trim( $name );
 
 		if ( in_array( $name, [ 'master', 'trunk', 'default' ], true ) ) {
@@ -159,7 +159,7 @@ class ComposerVersionParser implements VersionParser {
 	 * @param string $stability Existing stability.
 	 * @return string Normalized stability.
 	 */
-	private function expand_stability( $stability ) {
+	private function expand_stability( string $stability ): string {
 		$stability = strtolower( $stability );
 
 		switch ( $stability ) {

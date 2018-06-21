@@ -23,7 +23,7 @@ class Settings {
 	/**
 	 * Package manager.
 	 *
-	 * @var string
+	 * @var PackageManager
 	 */
 	protected $package_manager;
 
@@ -155,7 +155,7 @@ class Settings {
 	 * @param array $value Settings values.
 	 * @return array Sanitized and filtered settings values.
 	 */
-	public function sanitize_settings( array $value ) {
+	public function sanitize_settings( array $value ): array {
 		if ( ! empty( $value['vendor'] ) ) {
 			$value['vendor'] = sanitize_text_field( $value['vendor'] );
 		}
@@ -171,7 +171,7 @@ class Settings {
 	 * @param mixed $value Setting value.
 	 * @return array
 	 */
-	public function sanitize_theme_settings( $value ) {
+	public function sanitize_theme_settings( $value ): array {
 		return array_filter( array_unique( (array) $value ) );
 	}
 
@@ -259,9 +259,9 @@ class Settings {
 	 * @since 0.2.0
 	 *
 	 * @param string $file View filename.
-	 * @return string
+	 * @return string View output.
 	 */
-	protected function get_view( $file ) {
+	protected function get_view( string $file ): string {
 		ob_start();
 		include SATISPRESS_DIR . 'views/' . $file;
 

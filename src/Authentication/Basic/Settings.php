@@ -59,9 +59,9 @@ class Settings extends \SatisPress\Authentication\Settings {
 	 * @since 0.3.0
 	 *
 	 * @param array $old_value Current settings values.
-	 * @param array $value Saved settings.
+	 * @param array $value     Saved settings.
 	 */
-	public function maybe_setup( $old_value, $value ) {
+	public function maybe_setup( array $old_value, array $value ) {
 		if ( ! isset( $value['enable_basic_authentication'] ) ) {
 			return;
 		}
@@ -98,11 +98,11 @@ class Settings extends \SatisPress\Authentication\Settings {
 	 * @param array $value Settings values.
 	 * @return array Settings values.
 	 */
-	public function sanitize_settings( array $value ) {
-		if ( isset( $value[ 'enable_basic_authentication' ] ) ) {
-			$value[ 'enable_basic_authentication' ] = 'yes';
+	public function sanitize_settings( array $value ): array {
+		if ( isset( $value['enable_basic_authentication'] ) ) {
+			$value['enable_basic_authentication'] = 'yes';
 		} else {
-			$value[ 'enable_basic_authentication' ] = 'no';
+			$value['enable_basic_authentication'] = 'no';
 		}
 
 		return $value;

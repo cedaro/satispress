@@ -33,7 +33,7 @@ abstract class Settings {
 	 * @param mixed  $default Optional. Default setting value.
 	 * @return mixed
 	 */
-	protected function get_setting( $key, $default = null ) {
+	protected function get_setting( string $key, $default = null ) {
 		$option = get_option( 'satispress' );
 
 		return isset( $option[ $key ] ) ? $option[ $key ] : $default;

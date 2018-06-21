@@ -40,7 +40,7 @@ class Htaccess {
 	 *
 	 * @param string $path Optional. Directory path where .htaccess is located. Default is empty string.
 	 */
-	public function __construct( $path = null ) {
+	public function __construct( string $path = null ) {
 		if ( null === $path ) {
 			$path = '';
 		}
@@ -55,7 +55,7 @@ class Htaccess {
 	 *
 	 * @param array $rules List of rules to add.
 	 */
-	public function add_rules( $rules ) {
+	public function add_rules( array $rules ) {
 		$this->rules = array_merge( $this->rules, (array) $rules );
 	}
 
@@ -66,7 +66,7 @@ class Htaccess {
 	 *
 	 * @return string
 	 */
-	public function get_file() {
+	public function get_file(): string {
 		return $this->path . '.htaccess';
 	}
 
@@ -79,8 +79,8 @@ class Htaccess {
 	 *
 	 * @return array
 	 */
-	public function get_rules() {
-		return apply_filters( 'satispress_htaccess_rules', $this->rules );
+	public function get_rules(): array {
+		return (array) apply_filters( 'satispress_htaccess_rules', $this->rules );
 	}
 
 	/**
@@ -90,7 +90,7 @@ class Htaccess {
 	 *
 	 * @return bool True if hte file exists, false otherwise.
 	 */
-	public function file_exists() {
+	public function file_exists(): bool {
 		return file_exists( $this->get_file() );
 	}
 
@@ -101,8 +101,9 @@ class Htaccess {
 	 *
 	 * @return bool
 	 */
-	public function is_writable() {
+	public function is_writable(): bool {
 		$file = $this->get_file();
+
 		return ( ! $this->file_exists() && is_writable( $this->path ) ) || is_writable( $file );
 	}
 

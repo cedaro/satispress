@@ -29,9 +29,9 @@ final class PackageFactory {
 	 * @param string $package_type Package type.
 	 * @param string $slug         Package slug.
 	 * @param string $cache_path   Base path to cache.
-	 * @return Package|false Package or false if package type is not known.
+	 * @return Package Package object.
 	 */
-	public function create( $package_type, $slug, $cache_path ) {
+	public function create( string $package_type, string $slug, string $cache_path ): Package {
 		$version_parser = new ComposerVersionParser();
 
 		$class_name = 'SatisPress\PackageType\\' . ucfirst( $package_type );

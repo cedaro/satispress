@@ -19,7 +19,7 @@ namespace SatisPress;
  * @param array $args Optional. Query string parameters. Default is an empty array.
  * @return string
  */
-function get_packages_permalink( array $args = null ) {
+function get_packages_permalink( array $args = null ): string {
 	if ( null === $args ) {
 		$args = [];
 	}
@@ -43,7 +43,7 @@ function get_packages_permalink( array $args = null ) {
  *
  * @param string $file An absolute file path.
  */
-function send_file( $file ) {
+function send_file( string $file ) {
 	// phpcs:disable Generic.PHP.NoSilencedErrors.Discouraged
 	@session_write_close();
 	if ( function_exists( 'apache_setenv' ) ) {
@@ -93,7 +93,7 @@ function send_file( $file ) {
  * @param string $file A file path.
  * @return bool True if file could be opened, written and closed, false otherwise.
  */
-function readfile_chunked( $file ) {
+function readfile_chunked( string $file ): bool {
 	$buffer     = '';
 	$cnt        = 0;
 	$chunk_size = 1024 * 1024;

@@ -22,7 +22,7 @@ class Plugins {
 	/**
 	 * Package manager.
 	 *
-	 * @var string
+	 * @var PackageManager
 	 */
 	protected $package_manager;
 
@@ -44,7 +44,7 @@ class Plugins {
 		add_action( 'wp_ajax_satispress_toggle_plugin', [ $this, 'ajax_toggle_plugin_status' ] );
 		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_assets' ] );
 		add_filter( 'manage_plugins_columns', [ $this, 'register_columns' ] );
-		add_action( 'manage_plugins_custom_column', [ $this, 'display_columns' ], 10, 3 );
+		add_action( 'manage_plugins_custom_column', [ $this, 'display_columns' ], 10, 2 );
 	}
 
 	/**
@@ -53,7 +53,7 @@ class Plugins {
 	 * @since 0.2.0
 	 */
 	public function ajax_toggle_plugin_status() {
-		if ( ! isset( $_POST[ 'plugin_file' ], $_POST[ '_wpnonce' ] ) ) {
+		if ( ! isset( $_POST['plugin_file'], $_POST['_wpnonce'] ) ) {
 			return;
 		}
 
@@ -82,9 +82,9 @@ class Plugins {
 	 *
 	 * @since 0.2.0
 	 *
-	 * @param  string $hook_suffix Screen hook id.
+	 * @param string $hook_suffix Screen hook id.
 	 */
-	public function enqueue_assets( $hook_suffix ) {
+	public function enqueue_assets( string $hook_suffix ) {
 		if ( 'plugins.php' !== $hook_suffix ) {
 			return;
 		}
@@ -101,8 +101,9 @@ class Plugins {
 	 * @param array $columns List of admin columns.
 	 * @return array
 	 */
-	public function register_columns( $columns ) {
+	public function register_columns( array $columns ): array {
 		$columns['satispress'] = 'SatisPress';
+
 		return $columns;
 	}
 
@@ -115,9 +116,8 @@ class Plugins {
 	 *
 	 * @param string $column_name Column identifier.
 	 * @param string $plugin_file Plugin file basename.
-	 * @param array  $plugin_data Array of plugin data.
 	 */
-	public function display_columns( $column_name, $plugin_file, $plugin_data ) {
+	public function display_columns( string $column_name, string $plugin_file ) {
 		if ( 'satispress' !== $column_name ) {
 			return;
 		}

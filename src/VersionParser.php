@@ -29,5 +29,5 @@ interface VersionParser {
 	 * @param string $full_version Optional complete version string to give more context.
 	 * @return string Normalized version string.
 	 */
-	public function normalize( $version, $full_version = null );
+	public function normalize( string $version, string $full_version = null );
 }
