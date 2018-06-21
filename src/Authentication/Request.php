@@ -7,14 +7,14 @@
  * @since 0.2.0
  */
 
-namespace SatisPress;
+namespace SatisPress\Authentication;
 
 /**
  * SatisPress authentication interface.
  *
  * @since 0.2.0
  */
-interface Authentication {
+interface Request {
 	/**
 	 * Authenticate requests for SatisPress packages.
 	 *

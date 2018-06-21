@@ -7,9 +7,9 @@
  * @since 0.2.0
  */
 
-namespace SatisPress\Authentication;
+namespace SatisPress\Authentication\Basic;
 
-use SatisPress\Authentication;
+use SatisPress\Authentication\Request as RequestInterface;
 use SatisPress\Htaccess;
 
 /**
@@ -17,34 +17,13 @@ use SatisPress\Htaccess;
  *
  * @since 0.2.0
  */
-class Basic implements Authentication {
-	/**
-	 * Handler for .htaccess files.
-	 *
-	 * @since 0.3.0
-	 *
-	 * @var Htaccess
-	 */
-	protected $htaccess_handler;
-
-	/**
-	 * Constructor
-	 *
-	 * @since 0.3.0
-	 *
-	 * @param Htaccess $htaccess_handler Handler for .htaccess files.
-	 */
-	public function __construct( Htaccess $htaccess_handler ) {
-		$this->htaccess_handler = $htaccess_handler;
-	}
-
+class Request implements RequestInterface {
 	/**
 	 * Load the plugin.
 	 *
 	 * @since 0.2.0
 	 */
 	public function load() {
-		add_filter( 'update_option_satispress', [ $this, 'maybe_setup' ], 10, 2 );
 		$options = get_option( 'satispress' );
 		if ( isset( $options['enable_basic_authentication'] ) && 'yes' === $options['enable_basic_authentication'] ) {
 			add_action( 'satispress_send_package', [ $this, 'authenticate' ] );
@@ -79,29 +58,5 @@ class Basic implements Authentication {
 			header( 'HTTP/1.0 401 Unauthorized' );
 			exit;
 		}
-	}
-
-	/**
-	 * Update .htaccess rules when the setting is changed.
-	 *
-	 * Creates an .htaccess file in the cache directory with a 'Deny from all' rule to prevent direct access.
-	 *
-	 * @since 0.2.0
-	 *
-	 * @param array $old_value Current settings values.
-	 * @param array $value Saved settings.
-	 */
-	public function maybe_setup( $old_value, $value ) {
-		if ( ! isset( $value['enable_basic_authentication'] ) ) {
-			return;
-		}
-
-		$rules = [];
-		if ( 'yes' === $value['enable_basic_authentication'] ) {
-			$rules[] = 'Deny from all';
-		}
-
-		$this->htaccess_handler->add_rules( $rules );
-		$this->htaccess_handler->save();
 	}
 }

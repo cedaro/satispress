@@ -9,6 +9,7 @@
 
 namespace SatisPress\Admin;
 
+use SatisPress\PackageManager;
 use SatisPress\SatisPress;
 
 /**
@@ -17,6 +18,22 @@ use SatisPress\SatisPress;
  * @since 0.2.0
  */
 class Plugins {
+	/**
+	 * Package manager.
+	 *
+	 * @var string
+	 */
+	protected $package_manager;
+
+	/**
+	 * Initialise SatisPress object.
+	 *
+	 * @param PackageManager $package_manager Package manager.
+	 */
+	public function __construct( PackageManager $package_manager ) {
+		$this->package_manager = $package_manager;
+	}
+
 	/**
 	 * Load the screen.
 	 *
@@ -102,9 +119,9 @@ class Plugins {
 			return;
 		}
 
-		$packages = SatisPress::instance()->get_packages();
+		$packages = $this->package_manager->get_packages();
 		$plugins  = get_option( 'satispress_plugins' );
-		$plugin   = SatisPress::instance()->get_package( $plugin_file, 'plugin' );
+		$plugin   = $this->package_manager->get_package( $plugin_file, 'plugin' );
 
 		printf( '<input type="checkbox" value="%1$s"%2$s%3$s class="satispress-status">',
 			esc_attr( $plugin_file ),

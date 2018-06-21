@@ -85,4 +85,6 @@ function satispress_autoloader( $class ) {
 	}
 }
 
-SatisPress::instance();
+add_action( 'plugins_loaded', function() {
+	(new Plugin())->compose();
+} );

@@ -10,7 +10,7 @@
 namespace SatisPress\Admin;
 
 use function SatisPress\get_packages_permalink;
-use SatisPress\Htaccess;
+use SatisPress\PackageManager;
 use SatisPress\SatisPress;
 
 /**
@@ -20,23 +20,19 @@ use SatisPress\SatisPress;
  */
 class Settings {
 	/**
-	 * Handler for .htaccess files.
+	 * Package manager.
 	 *
-	 * @since 0.3.0
-	 *
-	 * @var Htaccess
+	 * @var string
 	 */
-	protected $htaccess_handler;
+	protected $package_manager;
 
 	/**
-	 * Constructor
+	 * Initialise SatisPress object.
 	 *
-	 * @since 0.3.0
-	 *
-	 * @param Htaccess $htaccess_handler Handler for .htaccess files.
+	 * @param PackageManager $package_manager Package manager.
 	 */
-	public function __construct( Htaccess $htaccess_handler ) {
-		$this->htaccess_handler = $htaccess_handler;
+	public function __construct( PackageManager $package_manager ) {
+		$this->package_manager = $package_manager;
 	}
 
 	/**
@@ -49,7 +45,6 @@ class Settings {
 		add_action( 'admin_init', [ $this, 'register_settings' ] );
 		add_action( 'admin_init', [ $this, 'add_sections' ] );
 		add_action( 'admin_init', [ $this, 'add_settings' ] );
-		add_action( 'admin_notices', [ $this, 'htaccess_notice' ] );
 	}
 
 	/**
@@ -143,14 +138,6 @@ class Settings {
 		);
 
 		add_settings_field(
-			'enable_basic_authentication',
-			__( 'Authentication', 'satispress' ),
-			[ $this, 'render_field_basic_authentication' ],
-			'satispress',
-			'security'
-		);
-
-		add_settings_field(
 			'themes',
 			__( 'Themes', 'satispress' ),
 			[ $this, 'render_field_themes' ],
@@ -171,13 +158,7 @@ class Settings {
 			$value['vendor'] = sanitize_text_field( $value['vendor'] );
 		}
 
-		if ( ! isset( $value['enable_basic_authentication'] ) ) {
-			$value['enable_basic_authentication'] = 'no';
-		} else {
-			$value['enable_basic_authentication'] = 'yes';
-		}
-
-		return $value;
+		return apply_filters( 'satispress_sanitize_settings', $value );
 	}
 
 	/**
@@ -199,7 +180,7 @@ class Settings {
 	 */
 	public function render_screen() {
 		$permalink = get_packages_permalink();
-		$packages  = SatisPress::instance()->get_packages();
+		$packages  = $this->package_manager->get_packages();
 		include SATISPRESS_DIR . 'views/screen-settings.php';
 	}
 
@@ -237,29 +218,6 @@ class Settings {
 	}
 
 	/**
-	 * Display the basic authentication settings field.
-	 *
-	 * @since 0.2.0
-	 */
-	public function render_field_basic_authentication() {
-		$value = $this->get_setting( 'enable_basic_authentication', 'no' );
-		?>
-		<p class="satispress-togglable-field">
-			<label>
-				<input type="checkbox" name="satispress[enable_basic_authentication]" id="satispress-enable-basic-authentication" value="yes" <?php checked( $value, 'yes' ); ?>>
-				<?php esc_html_e( 'Enable HTTP Basic Authentication?', 'satispress' ); ?>
-			</label>
-		</p>
-		<?php
-		if ( ! $this->htaccess_handler->is_writable() ) {
-			printf(
-				'<p class="satispress-field-error">%s</p>',
-				esc_html__( '.htaccess file isn\'t writable.', 'satispress' )
-			);
-		}
-	}
-
-	/**
 	 * Display the themes list field.
 	 *
 	 * @since 0.2.0
@@ -275,31 +233,6 @@ class Settings {
 				checked( in_array( $slug, $value, true ), true, false ),
 				esc_html( $theme->get( 'Name' ) )
 			);
-		}
-	}
-
-	/**
-	 * Display a notice if Basic Authentication is enabled and .htaccess doesn't exist.
-	 *
-	 * @since 0.2.0
-	 */
-	public function htaccess_notice() {
-		$value = $this->get_setting( 'enable_basic_authentication', 'no' );
-
-		if ( 'yes' === $value && ! $this->htaccess_handler->file_exists() ) {
-			?>
-			<div class="error">
-				<p>
-					<?php
-					echo sprintf(
-						/* translators: %s: <code>.htaccess</code> */
-						esc_html__( 'Warning: %s doesn\'t exist. Your SatisPress packages are public.', 'satispress' ),
-						'<code>.htaccess</code>'
-					);
-					?>
-				</p>
-			</div>
-			<?php
 		}
 	}
 
