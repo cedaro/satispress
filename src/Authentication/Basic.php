@@ -9,6 +9,7 @@
 
 namespace SatisPress\Authentication;
 
+use SatisPress\Authentication;
 use SatisPress\Htaccess;
 
 /**
@@ -16,7 +17,7 @@ use SatisPress\Htaccess;
  *
  * @since 0.2.0
  */
-class Basic {
+class Basic implements Authentication {
 	/**
 	 * Handler for .htaccess files.
 	 *
@@ -46,16 +47,16 @@ class Basic {
 		add_filter( 'update_option_satispress', [ $this, 'maybe_setup' ], 10, 2 );
 		$options = get_option( 'satispress' );
 		if ( isset( $options['enable_basic_authentication'] ) && 'yes' === $options['enable_basic_authentication'] ) {
-			add_action( 'satispress_send_package', [ $this, 'authorize_package_request' ] );
+			add_action( 'satispress_send_package', [ $this, 'authenticate' ] );
 		}
 	}
 
 	/**
-	 * Authenticate requests for SatisPress packages using HTTP Basic Authentication.
+	 * Authenticate requests for SatisPress packages.
 	 *
 	 * @since 0.2.0
 	 */
-	public function authorize_package_request() {
+	public function authenticate() {
 		// Some CGI/FastCGI implementations don't set the PHP_AUTH_* variables, so
 		// potentially set them from a .htaccess environment rule.
 		// See https://github.com/blazersix/satispress/wiki/Basic-Auth .
