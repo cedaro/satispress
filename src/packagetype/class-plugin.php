@@ -1,20 +1,22 @@
 <?php
 /**
- * Package_Plugin class
+ * Plugin class
  *
  * @package SatisPress
  * @license GPL-2.0-or-later
  * @since 0.2.0
  */
 
-namespace SatisPress;
+namespace SatisPress\PackageType;
+
+use SatisPress\Package;
 
 /**
  * Plugin package class.
  *
  * @since 0.2.0
  */
-class Package_Plugin extends Package {
+class Plugin extends Package {
 	/**
 	 * Base path where packages are cached.
 	 *

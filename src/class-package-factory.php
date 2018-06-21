@@ -9,6 +9,9 @@
 
 namespace SatisPress;
 
+use SatisPress\PackageType\Plugin;
+use SatisPress\PackageType\Theme;
+
 /**
  * Simple Factory.
  *
@@ -29,9 +32,9 @@ final class Package_Factory {
 	public function create( $package, $slug, $cache_path ) {
 		switch ( $package ) {
 			case 'plugin':
-				return new Package_Plugin( $slug, $cache_path );
+				return new Plugin( $slug, $cache_path );
 			case 'theme':
-				return new Package_Theme( $slug, $cache_path );
+				return new Theme( $slug, $cache_path );
 			default:
 				return false;
 		}
