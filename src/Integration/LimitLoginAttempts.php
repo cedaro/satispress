@@ -23,7 +23,7 @@ class LimitLoginAttempts {
 	public function load() {
 		$options = get_option( 'satispress' );
 		if ( isset( $options['enable_basic_authentication'] ) && 'yes' === $options['enable_basic_authentication'] ) {
-			add_action( 'satispress_pre_basic_authentication', [ $this, 'limit_login_attempts' ] );
+			add_filter( 'satispress_pre_basic_authentication', [ $this, 'limit_login_attempts' ] );
 		}
 	}
 
@@ -31,8 +31,10 @@ class LimitLoginAttempts {
 	 * Show an error message from the Limit Login Attempts plugin.
 	 *
 	 * @since 0.3.0
+	 *
+	 * @param WP_Error|WP_User $user WP_Error or WP_User objects.
 	 */
-	public function limit_login_attempts() {
+	public function limit_login_attempts( $user ) {
 		global $error;
 
 		if ( function_exists( 'limit_login_get_message' ) ) {
@@ -41,5 +43,7 @@ class LimitLoginAttempts {
 				wp_die( wp_kses_post( $error . $message ) );
 			}
 		}
+
+		return $user;
 	}
 }

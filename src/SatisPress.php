@@ -102,7 +102,7 @@ class SatisPress {
 		}
 
 		// Send a package if it has been whitelisted.
-		$packages = $this->get_packages();
+		$packages = $this->package_manager->get_packages();
 		if ( ! isset( $packages[ $slug ] ) ) {
 			$this->send_404();
 			wp_die();
