@@ -13,9 +13,6 @@
 	<arg name="colors"/>
 	<arg name="extensions" value="php"/>
 
-	<!-- Rules: Good use of variables -->
-	<!-- <rule ref="VariableAnalysis"/> -->
-
 	<!-- Rules: Check PHP version compatibility -->
 	<config name="testVersion" value="7.0-"/>
 	<rule ref="PHPCompatibility"/>
