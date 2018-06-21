@@ -68,11 +68,11 @@ class Plugin extends Package {
 	 * @param VersionParser $version_parser  Version parser.
 	 */
 	public function __construct( $basename, $archive_path, VersionParser $version_parser ) {
-		$this->basename     = $basename;
-		$slug               = dirname( $basename );
-		$slug               = ( '.' === $slug ) ? basename( $basename, '.php' ) : $slug;
-		$this->slug         = sanitize_title_with_dashes( $slug );
-		$this->archive_path = trailingslashit( $archive_path );
+		$this->basename       = $basename;
+		$slug                 = dirname( $basename );
+		$slug                 = ( '.' === $slug ) ? basename( $basename, '.php' ) : $slug;
+		$this->slug           = sanitize_title_with_dashes( $slug );
+		$this->archive_path   = trailingslashit( $archive_path );
 		$this->version_parser = $version_parser;
 	}
 

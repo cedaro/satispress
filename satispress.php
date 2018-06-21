@@ -79,12 +79,11 @@ function satispress_autoloader( $class ) {
 	// with directory separators in the relative class name, append with .php.
 	$file = $base_dir . \str_replace( '\\', '/', $relative_class ) . '.php';
 
-
 	if ( file_exists( $file ) ) {
 		require_once $file;
 	}
 }
 
 add_action( 'plugins_loaded', function() {
-	(new Plugin())->compose();
+	( new Plugin() )->compose();
 } );

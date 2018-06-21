@@ -33,7 +33,7 @@ final class PackageFactory {
 	public function create( $package_type, $slug, $cache_path ) {
 		$version_parser = new ComposerVersionParser();
 
-		$class_name = 'SatisPress\PackageType\\' . ucfirst($package_type);
+		$class_name = 'SatisPress\PackageType\\' . ucfirst( $package_type );
 
 		if ( class_exists( $class_name ) ) {
 			return new $class_name( $slug, $cache_path, $version_parser );

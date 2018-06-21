@@ -142,7 +142,7 @@ class Settings extends \SatisPress\Authentication\Settings {
 				<p>
 					<?php
 					echo sprintf(
-					/* translators: %s: <code>.htaccess</code> */
+						/* translators: %s: <code>.htaccess</code> */
 						esc_html__( 'Warning: %s doesn\'t exist. Your SatisPress packages are public.', 'satispress' ),
 						'<code>.htaccess</code>'
 					);

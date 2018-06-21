@@ -31,8 +31,6 @@ class LimitLoginAttempts {
 	 * Show an error message from the Limit Login Attempts plugin.
 	 *
 	 * @since 0.3.0
-	 *
-	 * @param mixed $user User.
 	 */
 	public function limit_login_attempts() {
 		global $error;

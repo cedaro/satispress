@@ -13,5 +13,10 @@ namespace SatisPress;
  * Segregated interface of something that should be composed.
  */
 interface Composable {
+	/**
+	 * Compose the object graph.
+	 *
+	 * @since 0.3.0
+	 */
 	public function compose();
 }

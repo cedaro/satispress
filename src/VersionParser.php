@@ -21,9 +21,9 @@ interface VersionParser {
 	 *
 	 * @throws \UnexpectedValueException Thrown when given an invalid version string.
 	 *
-	 * @param string $version     Version string.
-	 * @param string $fullVersion Optional complete version string to give more context.
+	 * @param string $version      Version string.
+	 * @param string $full_version Optional complete version string to give more context.
 	 * @return string
 	 */
-	public function normalize( $version, $fullVersion = null );
+	public function normalize( $version, $full_version = null );
 }

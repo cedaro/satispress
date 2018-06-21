@@ -14,8 +14,7 @@ namespace SatisPress\Authentication;
  *
  * @since 0.2.0
  */
-abstract class Settings
-{
+abstract class Settings {
 	/**
 	 * Authenticate requests for SatisPress packages.
 	 *
@@ -34,6 +33,7 @@ abstract class Settings
 	 */
 	protected function get_setting( $key, $default = false ) {
 		$option = get_option( 'satispress' );
+
 		return isset( $option[ $key ] ) ? $option[ $key ] : false;
 	}
 }

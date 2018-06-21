@@ -35,22 +35,23 @@ class ComposerVersionParser implements VersionParser {
 	 *
 	 * @var string
 	 */
-	private $modifierRegex = '[._-]?(?:(stable|beta|b|RC|alpha|a|patch|pl|p)((?:[.-]?\d+)*+)?)?([.-]?dev)?';
+	private $modifier_regex = '[._-]?(?:(stable|beta|b|RC|alpha|a|patch|pl|p)((?:[.-]?\d+)*+)?)?([.-]?dev)?';
 
 	/**
 	 * Normalizes a version string to be able to perform comparisons on it.
 	 *
 	 * @throws \UnexpectedValueException Thrown when given an invalid version string.
 	 *
-	 * @param string $version     Version string.
-	 * @param string $fullVersion Optional complete version string to give more context.
+	 * @param string $version      Version string.
+	 * @param string $full_version Optional complete version string to give more context.
+	 *
 	 * @return string
 	 */
-	public function normalize( $version, $fullVersion = null ) {
+	public function normalize( $version, $full_version = null ) {
 		$version = trim( $version );
 
-		if ( null === $fullVersion ) {
-			$fullVersion = $version;
+		if ( null === $full_version ) {
+			$full_version = $version;
 		}
 
 		// Strip off aliasing.
@@ -74,13 +75,13 @@ class ComposerVersionParser implements VersionParser {
 		}
 
 		// Match classical versioning.
-		if ( preg_match( '{^v?(\d{1,5})(\.\d++)?(\.\d++)?(\.\d++)?' . $this->modifierRegex . '$}i', $version, $matches ) ) {
+		if ( preg_match( '{^v?(\d{1,5})(\.\d++)?(\.\d++)?(\.\d++)?' . $this->modifier_regex . '$}i', $version, $matches ) ) {
 			$version = $matches[1]
 				. ( ! empty( $matches[2] ) ? $matches[2] : '.0' )
 				. ( ! empty( $matches[3] ) ? $matches[3] : '.0' )
 				. ( ! empty( $matches[4] ) ? $matches[4] : '.0' );
 			$index   = 5;
-		} elseif ( preg_match( '{^v?(\d{4}(?:[.:-]?\d{2}){1,6}(?:[.:-]?\d{1,3})?)' . $this->modifierRegex . '$}i', $version, $matches ) ) {
+		} elseif ( preg_match( '{^v?(\d{4}(?:[.:-]?\d{2}){1,6}(?:[.:-]?\d{1,3})?)' . $this->modifier_regex . '$}i', $version, $matches ) ) {
 			// Match date(time) based versioning.
 			$version = preg_replace( '{\D}', '.', $matches[1] );
 			$index   = 2;
@@ -92,7 +93,7 @@ class ComposerVersionParser implements VersionParser {
 				if ( 'stable' === $matches[ $index ] ) {
 					return $version;
 				}
-				$version .= '-' . $this->expandStability( $matches[ $index ] ) . ( ! empty( $matches[ $index + 1 ] ) ? ltrim( $matches[ $index + 1 ], '.-' ) : '' );
+				$version .= '-' . $this->expand_stability( $matches[ $index ] ) . ( ! empty( $matches[ $index + 1 ] ) ? ltrim( $matches[ $index + 1 ], '.-' ) : '' );
 			}
 
 			if ( ! empty( $matches[ $index + 2 ] ) ) {
@@ -105,21 +106,21 @@ class ComposerVersionParser implements VersionParser {
 		// Match dev branches.
 		if ( preg_match( '{(.*?)[.-]?dev$}i', $version, $match ) ) {
 			try {
-				return $this->normalizeBranch( $match[1] );
+				return $this->normalize_branch( $match[1] );
 			// phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch
 			} catch ( \Exception $e ) {
 				// noop.
 			}
 		}
 
-		$extraMessage = '';
-		if ( preg_match( '{ +as +' . preg_quote( $version ) . '$}', $fullVersion ) ) {
-			$extraMessage = ' in "' . $fullVersion . '", the alias must be an exact version';
-		} elseif ( preg_match( '{^' . preg_quote( $version ) . ' +as +}', $fullVersion ) ) {
-			$extraMessage = ' in "' . $fullVersion . '", the alias source must be an exact version, if it is a branch name you should prefix it with dev-';
+		$extra_message = '';
+		if ( preg_match( '{ +as +' . preg_quote( $version ) . '$}', $full_version ) ) {
+			$extra_message = ' in "' . $full_version . '", the alias must be an exact version';
+		} elseif ( preg_match( '{^' . preg_quote( $version ) . ' +as +}', $full_version ) ) {
+			$extra_message = ' in "' . $full_version . '", the alias source must be an exact version, if it is a branch name you should prefix it with dev-';
 		}
 
-		throw new \UnexpectedValueException( 'Invalid version string "' . $version . '"' . $extraMessage );
+		throw new \UnexpectedValueException( 'Invalid version string "' . $version . '"' . $extra_message );
 	}
 
 	/**
@@ -128,7 +129,7 @@ class ComposerVersionParser implements VersionParser {
 	 * @param string $name Branch name.
 	 * @return string Normalized branch name.
 	 */
-	public function normalizeBranch( $name ) {
+	private function normalize_branch( $name ) {
 		$name = trim( $name );
 
 		if ( in_array( $name, [ 'master', 'trunk', 'default' ], true ) ) {
@@ -153,7 +154,7 @@ class ComposerVersionParser implements VersionParser {
 	 * @param string $stability Existing stability.
 	 * @return string Normalized stability.
 	 */
-	private function expandStability( $stability ) {
+	private function expand_stability( $stability ) {
 		$stability = strtolower( $stability );
 
 		switch ( $stability ) {

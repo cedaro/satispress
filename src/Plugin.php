@@ -32,11 +32,10 @@ class Plugin implements Composable {
 		$limit_login_attempts->load();
 
 		if ( is_admin() ) {
-
 			$manage_screen = new Admin\Plugins( $package_manager );
 			$manage_screen->load();
 
-			$settings_screen = new Admin\Settings(  $package_manager );
+			$settings_screen = new Admin\Settings( $package_manager );
 			$settings_screen->load();
 
 			$basic_auth_settings = new Authentication\Basic\Settings( $htaccess_handler );
