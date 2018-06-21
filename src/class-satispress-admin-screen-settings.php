@@ -7,6 +7,8 @@
  * @since 0.2.0
  */
 
+namespace SatisPress;
+
 /**
  * Settings screen.
  *

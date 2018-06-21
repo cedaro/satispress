@@ -7,6 +7,8 @@
  * @since 0.2.0
  */
 
+namespace SatisPress;
+
 /**
  * Abstract package class.
  *
@@ -136,8 +138,8 @@ abstract class SatisPress_Package {
 			return [];
 		}
 
-		$files = new DirectoryIterator( $package_cache_path );
-		if ( ! empty( $files ) ) {
+		$files = new \DirectoryIterator( $package_cache_path );
+		if ( null !== $files ) {
 			foreach ( $files as $file ) {
 				if ( $file->isDot() ) {
 					continue;
@@ -183,7 +185,7 @@ abstract class SatisPress_Package {
 
 			wp_mkdir_p( dirname( $filename ) );
 
-			$zip = new PclZip( $filename );
+			$zip = new \PclZip( $filename );
 			$zip->create( $this->get_path(), PCLZIP_OPT_REMOVE_PATH, $this->get_package_root() );
 		}
 

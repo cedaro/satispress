@@ -7,6 +7,8 @@
  * @since 0.1.0
  */
 
+namespace SatisPress;
+
 /**
  * Simplified version parser from Composer.
  *

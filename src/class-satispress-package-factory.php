@@ -7,6 +7,8 @@
  * @since 0.3.0
  */
 
+namespace SatisPress;
+
 /**
  * Simple Factory.
  *

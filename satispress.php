@@ -19,6 +19,8 @@
  * Domain Path: /languages
  */
 
+namespace SatisPress;
+
 if ( ! defined( 'SATISPRESS_DIR' ) ) {
 	/**
 	 * Path directory path.
@@ -43,7 +45,7 @@ if ( ! defined( 'SATISPRESS_URL' ) ) {
 
 require SATISPRESS_DIR . 'src/functions.php';
 
-spl_autoload_register( 'satispress_autoloader' );
+spl_autoload_register( __NAMESPACE__ .  '\\satispress_autoloader' );
 /**
  * Autoloader callback.
  *
@@ -54,14 +56,32 @@ spl_autoload_register( 'satispress_autoloader' );
  * @param string $class Class name.
  */
 function satispress_autoloader( $class ) {
-	if ( 0 !== strpos( $class, 'SatisPress' ) ) {
+
+	// Project namespace
+	$prefix = 'SatisPress\\';
+
+	$base_dir = SATISPRESS_DIR . 'src/';
+
+	// Does the class use the namespace prefix?
+	$len = strlen( $prefix );
+
+	if ( 0 !== strncmp( $prefix, $class, $len ) ) {
+		// No, move to the next registered autoloader.
 		return;
 	}
 
-	$file = SATISPRESS_DIR . 'src/class-' . strtolower( str_replace( '_', '-', $class ) ) . '.php';
+	// Get the relative class name
+	$relative_class = substr( $class, $len );
+
+	// Replace the namespace prefix with the base directory, replace namespace separators
+	// with directory separators in the relative class name, append with .php
+
+	$file = $base_dir . 'class-' . \strtolower( \str_replace( '_', '-', \str_replace( '\\', '/', $relative_class ) ) ) . '.php';
 
 	if ( file_exists( $file ) ) {
 		require_once $file;
+	} else {
+		die( $file );
 	}
 }
 

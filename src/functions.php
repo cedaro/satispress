@@ -7,6 +7,8 @@
  * @since 0.1.0
  */
 
+namespace SatisPress;
+
 /**
  * Retrieve the permalink for packages.json.
  *
