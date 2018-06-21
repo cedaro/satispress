@@ -9,9 +9,6 @@
 
 namespace SatisPress;
 
-use SatisPress\Admin\Plugins;
-use SatisPress\Admin\Settings;
-
 /**
  * Main plugin class.
  *
@@ -60,16 +57,16 @@ class SatisPress {
 		$htaccess_handler = new Htaccess( $this->cache_path() );
 
 		if ( is_admin() ) {
-			$manage_screen = new Plugins();
+			$manage_screen = new Admin\Plugins();
 			$manage_screen->load();
 
-			$settings_screen = new Settings( $htaccess_handler );
+			$settings_screen = new Admin\Settings( $htaccess_handler );
 			$settings_screen->load();
 
 			add_action( 'admin_init', [ $this, 'register_assets' ] );
 		}
 
-		$basic_auth = new AuthenticationBasic( $htaccess_handler );
+		$basic_auth = new Authentication\Basic( $htaccess_handler );
 		$basic_auth->load();
 
 		add_action( 'init', [ $this, 'add_rewrite_rules' ] );
@@ -392,7 +389,7 @@ class SatisPress {
 	/**
 	 * Functionality during activation.
 	 *
-	 * Sets a flag to flush rewrite rules on the request after actvation.
+	 * Sets a flag to flush rewrite rules on the request after activation.
 	 *
 	 * @since 0.1.0
 	 */

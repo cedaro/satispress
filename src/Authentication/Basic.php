@@ -1,20 +1,22 @@
 <?php
 /**
- * AuthenticationBasic class
+ * Basic class
  *
  * @package SatisPress
  * @license GPL-2.0-or-later
  * @since 0.2.0
  */
 
-namespace SatisPress;
+namespace SatisPress\Authentication;
+
+use SatisPress\Htaccess;
 
 /**
  * SatisPress basic authentication class.
  *
  * @since 0.2.0
  */
-class AuthenticationBasic {
+class Basic {
 	/**
 	 * Handler for .htaccess files.
 	 *
