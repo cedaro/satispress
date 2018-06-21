@@ -9,6 +9,9 @@
 
 namespace SatisPress;
 
+use SatisPress\Admin\Manage_Plugins;
+use SatisPress\Admin\Settings;
+
 /**
  * Main plugin class.
  *
@@ -57,10 +60,10 @@ class SatisPress {
 		$htaccess_handler = new Htaccess( $this->cache_path() );
 
 		if ( is_admin() ) {
-			$manage_screen = new Admin_Screen_ManagePlugins();
+			$manage_screen = new Manage_Plugins();
 			$manage_screen->load();
 
-			$settings_screen = new Admin_Screen_Settings( $htaccess_handler );
+			$settings_screen = new Settings( $htaccess_handler );
 			$settings_screen->load();
 
 			add_action( 'admin_init', [ $this, 'register_assets' ] );
@@ -345,7 +348,7 @@ class SatisPress {
 
 		do_action( 'satispress_send_package', $package, $version, $file );
 
-		satispress_send_file( $file );
+		send_file( $file );
 		exit;
 	}
 

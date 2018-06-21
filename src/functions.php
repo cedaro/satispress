@@ -17,7 +17,7 @@ namespace SatisPress;
  * @param array $args Query string parameters.
  * @return string
  */
-function satispress_get_packages_permalink( $args = [] ) {
+function get_packages_permalink( $args = [] ) {
 	$permalink = get_option( 'permalink_structure' );
 	if ( empty( $permalink ) ) {
 		$url = add_query_arg( 'satispress', 'packages.json', home_url( '/' ) );
@@ -37,7 +37,7 @@ function satispress_get_packages_permalink( $args = [] ) {
  *
  * @param string $file An absolute file path.
  */
-function satispress_send_file( $file ) {
+function send_file( $file ) {
 	// phpcs:disable Generic.PHP.NoSilencedErrors.Discouraged
 	@session_write_close();
 	if ( function_exists( 'apache_setenv' ) ) {
@@ -70,7 +70,7 @@ function satispress_send_file( $file ) {
 		header( 'Content-Length: ' . $size );
 	}
 
-	@satispress_readfile_chunked( $file ) || wp_die( esc_html__( 'File not found', 'satispress' ) );
+	@readfile_chunked( $file ) || wp_die( esc_html__( 'File not found', 'satispress' ) );
 	exit;
 	//phpcs:enable Generic.PHP.NoSilencedErrors.Discouraged
 }
@@ -88,7 +88,7 @@ function satispress_send_file( $file ) {
  * @param bool   $retbytes Optional. Whether to return the number of
  *                         bytes. Default is true.
  */
-function satispress_readfile_chunked( $file, $retbytes = true ) {
+function readfile_chunked( $file, $retbytes = true ) {
 	$buffer     = '';
 	$cnt        = 0;
 	$chunk_size = 1024 * 1024;

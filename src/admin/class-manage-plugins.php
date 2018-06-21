@@ -1,20 +1,22 @@
 <?php
 /**
- * Admin_Screen_ManagePlugins class
+ * Manage_Plugins class
  *
  * @package SatisPress
  * @license GPL-2.0-or-later
  * @since 0.2.0
  */
 
-namespace SatisPress;
+namespace SatisPress\Admin;
+
+use SatisPress\SatisPress;
 
 /**
  * Manage plugins screen.
  *
  * @since 0.2.0
  */
-class Admin_Screen_ManagePlugins {
+class Manage_Plugins {
 	/**
 	 * Load the screen.
 	 *

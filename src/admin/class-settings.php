@@ -1,20 +1,24 @@
 <?php
 /**
- * Admin_Screen_Settings class
+ * Settings class
  *
  * @package SatisPress
  * @license GPL-2.0-or-later
  * @since 0.2.0
  */
 
-namespace SatisPress;
+namespace SatisPress\Admin;
+
+use function SatisPress\get_packages_permalink;
+use SatisPress\Htaccess;
+use SatisPress\SatisPress;
 
 /**
  * Settings screen.
  *
  * @since 0.2.0
  */
-class Admin_Screen_Settings {
+class Settings {
 	/**
 	 * Handler for .htaccess files.
 	 *
@@ -194,7 +198,7 @@ class Admin_Screen_Settings {
 	 * @since 0.2.0
 	 */
 	public function render_screen() {
-		$permalink = satispress_get_packages_permalink();
+		$permalink = get_packages_permalink();
 		$packages  = SatisPress::instance()->get_packages();
 		include SATISPRESS_DIR . 'views/screen-settings.php';
 	}
