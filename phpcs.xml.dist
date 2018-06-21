@@ -17,7 +17,7 @@
 	<!-- <rule ref="VariableAnalysis"/> -->
 
 	<!-- Rules: Check PHP version compatibility -->
-	<config name="testVersion" value="5.6-"/>
+	<config name="testVersion" value="7.0-"/>
 	<rule ref="PHPCompatibility"/>
 
 	<!-- Rules: WordPress Coding Standards -->

@@ -10,7 +10,7 @@ The whitelisted packages are exposed via an automatically generated `packages.js
 
 ## Installation
 
-Requires PHP 5.6
+Requires PHP 7.0
 
 1. Download the [latest release](https://github.com/blazersix/satispress/archive/master.zip) from GitHub.
 2. Go to the __Plugins &rarr; Add New__ screen in your WordPress admin panel and click the __Upload__ tab at the top.
@@ -72,12 +72,12 @@ Once SatisPress is installed and configured you can include the SatisPress repos
 			"type": "composer",
 			"url": "https://example.com/satispress/"
 		}
-    ],
+	],
 	"require": {
 		"composer/installers": "~1.0",
 		"satispress/better-internal-link-search": "*",
 		"satispress/premium-plugin": "*",
 		"satispress/genesis": "*"
-    }
+	}
 }
 ```
