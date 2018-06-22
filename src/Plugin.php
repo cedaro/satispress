@@ -23,6 +23,13 @@ class Plugin implements Composable {
 	 * @since 0.3.0
 	 */
 	public function compose() {
+		/**
+		 * Start composing the object graph in SatisPress.
+		 *
+		 * @since 0.3.0
+		 */
+		do_action( 'satispress_compose' );
+
 		$htaccess_handler = new Htaccess( $this->cache_path() );
 
 		$package_manager = new PackageManager( $this->cache_path() );
@@ -48,6 +55,13 @@ class Plugin implements Composable {
 		$satispress->load();
 
 		register_activation_hook( __FILE__, [ $this, 'activate' ] );
+
+		/**
+		 * Finished composing the object graph in SatisPress.
+		 *
+		 * @since 0.3.0
+		 */
+		do_action( 'satispress_composed' );
 	}
 
 	/**
