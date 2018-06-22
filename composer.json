@@ -1,6 +1,6 @@
 {
 	"name": "blazersix/satispress",
-	"description": "Expose installed plugins as Composer packages.",
+	"description": "Generate a Composer repository from installed WordPress plugins and themes.",
 	"keywords": [
 		"wordpress",
 		"composer",

@@ -1,6 +1,6 @@
 # SatisPress
 
-Generate a Composer repository from a list of installed WordPress plugins and themes.
+Generate a Composer repository from installed WordPress plugins and themes.
 
 ## Why a WordPress Installation?
 
