@@ -47,44 +47,9 @@ if ( ! defined( 'SATISPRESS_URL' ) ) {
 	define( 'SATISPRESS_URL', plugin_dir_url( __FILE__ ) );
 }
 
-require SATISPRESS_DIR . 'src/functions.php';
-
-spl_autoload_register( __NAMESPACE__ . '\\satispress_autoloader' );
-/**
- * Autoloader callback.
- *
- * Converts a class name to a file path and requires it if it exists.
- *
- * @since 0.2.0
- * @link https://www.php-fig.org/psr/psr-4/examples/
- *
- * @param string $class Class name.
- */
-function satispress_autoloader( string $class ) {
-
-	// Project namespace.
-	$prefix = 'SatisPress\\';
-
-	$base_dir = SATISPRESS_DIR . 'src/';
-
-	// Does the class use the namespace prefix?
-	$len = strlen( $prefix );
-
-	if ( 0 !== strncmp( $prefix, $class, $len ) ) {
-		// No, move to the next registered autoloader.
-		return;
-	}
-
-	// Get the relative class name.
-	$relative_class = substr( $class, $len );
-
-	// Replace the namespace prefix with the base directory, replace namespace separators
-	// with directory separators in the relative class name, append with .php.
-	$file = $base_dir . \str_replace( '\\', '/', $relative_class ) . '.php';
-
-	if ( file_exists( $file ) ) {
-		require_once $file;
-	}
+// Load the Composer autoloader.
+if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
+	require __DIR__ . '/vendor/autoload.php';
 }
 
 add_action( 'plugins_loaded', function() {
