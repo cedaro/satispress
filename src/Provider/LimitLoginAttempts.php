@@ -1,31 +1,32 @@
 <?php
-/**
- * Limit Login Attempts plugin integration class
- *
- * @package SatisPress
- * @license GPL-2.0-or-later
- * @since 0.3.0
- */
+ /**
+  * Limit Login Attempts plugin integration.
+  *
+  * @package SatisPress
+  * @license GPL-2.0-or-later
+  * @since 0.3.0
+  */
 
 declare ( strict_types = 1 );
 
-namespace SatisPress\Integration;
+namespace SatisPress\Provider;
 
+use Cedaro\WP\Plugin\AbstractHookProvider;
 use WP_Error;
 use WP_User;
 
 /**
  * Add support for Limit Login Attempts plugin.
  *
- * @since 0.2.0
+ * @since 0.3.0
  */
-class LimitLoginAttempts {
+class LimitLoginAttempts extends AbstractHookProvider {
 	/**
-	 * Load the plugin.
+	 * Register hooks.
 	 *
 	 * @since 0.3.0
 	 */
-	public function load() {
+	public function register_hooks() {
 		$options = get_option( 'satispress' );
 		if ( isset( $options['enable_basic_authentication'] ) && 'yes' === $options['enable_basic_authentication'] ) {
 			add_filter( 'satispress_pre_basic_authentication', [ $this, 'limit_login_attempts' ] );

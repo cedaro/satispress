@@ -1,6 +1,6 @@
 <?php
 /**
- * Settings class
+ * Settings screen provider.
  *
  * @package SatisPress
  * @license GPL-2.0-or-later
@@ -9,17 +9,18 @@
 
 declare ( strict_types = 1 );
 
-namespace SatisPress\Admin;
+namespace SatisPress\Screen;
 
+use Cedaro\WP\Plugin\AbstractHookProvider;
 use function SatisPress\get_packages_permalink;
 use SatisPress\PackageManager;
 
 /**
- * Settings screen.
+ * Settings screen provider class.
  *
  * @since 0.2.0
  */
-class Settings {
+class Settings extends AbstractHookProvider {
 	/**
 	 * Package manager.
 	 *
@@ -37,11 +38,11 @@ class Settings {
 	}
 
 	/**
-	 * Load the screen.
+	 * Register hooks.
 	 *
-	 * @since 0.2.0
+	 * @since 0.3.0
 	 */
-	public function load() {
+	public function register_hooks() {
 		add_action( 'admin_menu', [ $this, 'add_menu_item' ] );
 		add_action( 'admin_init', [ $this, 'register_settings' ] );
 		add_action( 'admin_init', [ $this, 'add_sections' ] );
@@ -183,7 +184,7 @@ class Settings {
 	public function render_screen() {
 		$permalink = get_packages_permalink();
 		$packages  = $this->package_manager->get_packages();
-		include SATISPRESS_DIR . 'views/screen-settings.php';
+		include $this->plugin->get_path( 'views/screen-settings.php' );
 	}
 
 	/**
@@ -263,7 +264,7 @@ class Settings {
 	 */
 	protected function get_view( string $file ): string {
 		ob_start();
-		include SATISPRESS_DIR . 'views/' . $file;
+		include $this->plugin->get_path( 'views/' . $file );
 
 		return ob_get_clean();
 	}
