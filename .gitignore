@@ -1,3 +1,4 @@
-.DS_Store
-node_modules
-/composer.lock
+node_modules/
+vendor/
+composer.lock
+package-lock.json

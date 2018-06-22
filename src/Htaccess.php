@@ -1,17 +1,27 @@
 <?php
 /**
- * Class to interact with the .htaccess file.
+ * Htaccess class
  *
  * @package SatisPress
- * @author Brady Vercher <brady@blazersix.com>
+ * @license GPL-2.0-or-later
  * @since 0.2.0
  */
-class SatisPress_Htaccess {
+
+declare ( strict_types = 1 );
+
+namespace SatisPress;
+
+/**
+ * Interact with the .htaccess file.
+ *
+ * @since 0.2.0
+ */
+class Htaccess {
 	/**
 	 * The directory path where .htaccess is located.
 	 *
 	 * @since 0.2.0
-	 * @type string
+	 * @var string
 	 */
 	protected $path = '';
 
@@ -19,29 +29,22 @@ class SatisPress_Htaccess {
 	 * .htaccess rules.
 	 *
 	 * @since 0.2.0
-	 * @type array
+	 * @var array
 	 */
-	protected $rules = array();
+	protected $rules = [];
 
 	/**
 	 * Constructor method.
 	 *
 	 * @since 0.2.0
 	 *
-	 * @param string $path Directory path where .htaccess is located.
+	 * @param string $path Optional. Directory path where .htaccess is located. Default is empty string.
 	 */
-	public function __construct( $path = '' ) {
-		$this->set_path( $path );
-	}
+	public function __construct( string $path = null ) {
+		if ( null === $path ) {
+			$path = '';
+		}
 
-	/**
-	 * Set the directory path where .htaccess is located.
-	 *
-	 * @since 0.2.0
-	 *
-	 * @param string $path Directory path where .htaccess is located.
-	 */
-	public function set_path( $path ) {
 		$this->path = $path;
 	}
 
@@ -52,7 +55,7 @@ class SatisPress_Htaccess {
 	 *
 	 * @param array $rules List of rules to add.
 	 */
-	public function add_rules( $rules ) {
+	public function add_rules( array $rules ) {
 		$this->rules = array_merge( $this->rules, (array) $rules );
 	}
 
@@ -63,7 +66,7 @@ class SatisPress_Htaccess {
 	 *
 	 * @return string
 	 */
-	public function get_file() {
+	public function get_file(): string {
 		return $this->path . '.htaccess';
 	}
 
@@ -76,8 +79,19 @@ class SatisPress_Htaccess {
 	 *
 	 * @return array
 	 */
-	public function get_rules() {
-		return apply_filters( 'satispress_htaccess_rules', $this->rules );
+	public function get_rules(): array {
+		return (array) apply_filters( 'satispress_htaccess_rules', $this->rules );
+	}
+
+	/**
+	 * Determine if the .htaccess file exists.
+	 *
+	 * @since 0.3.0
+	 *
+	 * @return bool True if hte file exists, false otherwise.
+	 */
+	public function file_exists(): bool {
+		return file_exists( $this->get_file() );
 	}
 
 	/**
@@ -87,9 +101,10 @@ class SatisPress_Htaccess {
 	 *
 	 * @return bool
 	 */
-	public function is_writable() {
+	public function is_writable(): bool {
 		$file = $this->get_file();
-		return ( ! file_exists( $file ) && is_writable( $this->path ) ) || is_writable( $file );
+
+		return ( ! $this->file_exists() && is_writable( $this->path ) ) || is_writable( $file );
 	}
 
 	/**

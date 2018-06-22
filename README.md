@@ -10,6 +10,8 @@ The whitelisted packages are exposed via an automatically generated `packages.js
 
 ## Installation
 
+Requires PHP 7.0
+
 1. Download the [latest release](https://github.com/blazersix/satispress/archive/master.zip) from GitHub.
 2. Go to the __Plugins &rarr; Add New__ screen in your WordPress admin panel and click the __Upload__ tab at the top.
 3. Upload the zipped archive.
@@ -68,14 +70,26 @@ Once SatisPress is installed and configured you can include the SatisPress repos
 	"repositories": [
 		{
 			"type": "composer",
-			"url": "http://example.com/satispress/"
+			"url": "https://example.com/satispress/"
 		}
-    ],
+	],
 	"require": {
 		"composer/installers": "~1.0",
-        "satispress/better-internal-link-search": "*",
+		"satispress/better-internal-link-search": "*",
 		"satispress/premium-plugin": "*",
 		"satispress/genesis": "*"
-    }
+	}
 }
 ```
+
+## Troubleshooting
+
+### Basic Auth not working
+
+Certain server arrangements don't allow the Basic Auth credentials to be made available under PHP. To get around this, you'll need to set an environment variable in the site root .htaccess file.
+
+See https://github.com/blazersix/satispress/wiki/Basic-Auth for more info.
+
+## Credits
+
+Created by [Brady Vercher](https://www.blazersix.com/) and supported by [Gary Jones](https://gamajo.com).
