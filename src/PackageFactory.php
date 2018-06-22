@@ -11,6 +11,8 @@ declare ( strict_types = 1 );
 
 namespace SatisPress;
 
+use Composer\Semver\VersionParser;
+
 /**
  * Simple Factory for creating specific Composer package objects.
  *
@@ -32,7 +34,7 @@ final class PackageFactory {
 	 * @return Package Package object.
 	 */
 	public function create( string $package_type, string $slug, string $cache_path ): Package {
-		$version_parser = new ComposerVersionParser();
+		$version_parser = new VersionParser();
 
 		$class_name = 'SatisPress\PackageType\\' . ucfirst( $package_type );
 

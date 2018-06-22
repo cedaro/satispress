@@ -11,8 +11,8 @@ declare ( strict_types = 1 );
 
 namespace SatisPress\PackageType;
 
+use Composer\Semver\VersionParser;
 use SatisPress\Package;
-use SatisPress\VersionParser;
 
 /**
  * Theme package class.
