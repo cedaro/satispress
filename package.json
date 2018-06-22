@@ -1,27 +1,26 @@
 {
-  "name": "satispress",
-  "version": "0.2.3",
-  "description": "Generate a Composer repository from installed WordPress plugins and themes.",
-  "main": "Gruntfile.js",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/blazersix/satispress.git"
-  },
-  "author": {
-    "name": "Brady Vercher",
-    "email": "brady@blazersix.com",
-    "url": "http://www.blazersix.com/"
-  },
-  "license": "GPL-2.0+",
-  "bugs": {
-    "url": "https://github.com/blazersix/satispress/issues"
-  },
-  "homepage": "https://github.com/blazersix/satispress",
-  "devDependencies": {
-    "grunt": "^1.0.2",
-    "grunt-contrib-jshint": "^1.1.0",
-    "grunt-contrib-watch": "^1.0.0",
-    "grunt-wp-i18n": "^1.0.2",
-    "matchdep": "^2.0.0"
-  }
+	"name": "satispress",
+	"version": "0.3.0-dev",
+	"description": "Generate a Composer repository from installed WordPress plugins and themes.",
+	"main": "Gruntfile.js",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/blazersix/satispress.git"
+	},
+	"author": {
+		"name": "Brady Vercher",
+		"email": "brady@blazersix.com",
+		"url": "http://www.blazersix.com/"
+	},
+	"license": "GPL-2.0+",
+	"bugs": {
+		"url": "https://github.com/blazersix/satispress/issues"
+	},
+	"homepage": "https://github.com/blazersix/satispress",
+	"devDependencies": {
+		"node-wp-i18n": "^1.2.0"
+	},
+	"scripts": {
+		"makepot": "wpi18n makepot --poedit"
+	}
 }
