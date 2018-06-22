@@ -89,7 +89,7 @@ class SatisPress {
 		$version = isset( $wp->query_vars['satispress_version'] ) ? $wp->query_vars['satispress_version'] : '';
 
 		// Main index request.
-		// Ex: http://example.com/satispress/ .
+		// Ex: https://example.com/satispress/ .
 		if ( empty( $slug ) ) {
 			do_action( 'satispress_index' );
 			return;

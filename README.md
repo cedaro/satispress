@@ -33,19 +33,19 @@ Plugins and themes are automatically cached before being updated by WordPress an
 
 Essentially, WordPress could be set up so that simply fetching packages actually triggers automatic updates for core and plugins. The only time you would need to log in is to install and set up new plugins or themes! (Automatic updates may not work with premium plugins or themes with a custom update process).
 
-Install the [Update Control](http://wordpress.org/plugins/update-control/) plugin to tweak auto-update settings for plugins, themes and core.
+Install the [Update Control](https://wordpress.org/plugins/update-control/) plugin to tweak auto-update settings for plugins, themes and core.
 
 ### Security
 
 **Be aware that the Composer repository and packages are public by default.**
 
-Securing the repository should be possible using the same methods outlined in the [Satis documentation](http://getcomposer.org/doc/articles/handling-private-packages-with-satis.md#security).
+Securing the repository should be possible using the same methods outlined in the [Satis documentation](https://getcomposer.org/doc/articles/handling-private-packages-with-satis.md#security).
 
 #### HTTP Basic Authentication
 
 To provide a simple solution, SatisPress ships with a setting to enable HTTP Basic Authentication to protect packages. Only users registered in WordPress will have access to the packages. After activating, make sure an `.htaccess` file exists in `wp-content/uploads/satispress/` to prevent direct access.
 
-The [Limit Login Attempts](http://wordpress.org/plugins/limit-login-attempts/) plugin is supported to prevent brute force login attempts.
+The [Limit Login Attempts](https://wordpress.org/plugins/limit-login-attempts/) plugin is supported to prevent brute force login attempts.
 
 ### Debugging
 
@@ -55,7 +55,7 @@ The generated `packages.json` is cached for 12 hours via the transients API. It 
 
 #### Rewrite Rules
 
-Flush rewrite rules and make sure the `satispress` rule exists if you're having trouble accessing `packages.json` or any of the packages. [Rewrite Rules Inspector](http://wordpress.org/plugins/rewrite-rules-inspector/) is a handy plugin for viewing or flushing rewrite rules.
+Flush rewrite rules and make sure the `satispress` rule exists if you're having trouble accessing `packages.json` or any of the packages. [Rewrite Rules Inspector](https://wordpress.org/plugins/rewrite-rules-inspector/) is a handy plugin for viewing or flushing rewrite rules.
 
 ### Premium Themes
 
