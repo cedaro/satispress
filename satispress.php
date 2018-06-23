@@ -34,8 +34,8 @@ add_action( 'plugins_loaded', function() {
 	( new Plugin() )
 		->set_basename( plugin_basename( __FILE__ ) )
 		->set_directory( plugin_dir_path( __FILE__ ) )
-		->set_file( __DIR__ . '/crate.php' )
-		->set_slug( 'crate' )
+		->set_file( __DIR__ . '/satispress.php' )
+		->set_slug( 'satispress' )
 		->set_url( plugin_dir_url( __FILE__ ) )
 		->compose();
 } );
