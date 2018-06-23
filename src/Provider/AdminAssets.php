@@ -1,11 +1,11 @@
 <?php
- /**
-  * Assets provider.
-  *
-  * @package SatisPress
-  * @license GPL-2.0-or-later
-  * @since 0.3.0
-  */
+/**
+ * Assets provider.
+ *
+ * @package SatisPress
+ * @license GPL-2.0-or-later
+ * @since 0.3.0
+ */
 
 declare ( strict_types = 1 );
 
