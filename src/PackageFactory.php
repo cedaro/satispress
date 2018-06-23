@@ -34,7 +34,7 @@ final class PackageFactory {
 	 * @return Package Package object.
 	 */
 	public function create( string $package_type, string $slug, string $cache_path ): Package {
-		$version_parser = new VersionParser();
+		$version_parser = new ComposerVersionParser( new VersionParser() );
 
 		$class_name = 'SatisPress\PackageType\\' . ucfirst( $package_type );
 
