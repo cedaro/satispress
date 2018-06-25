@@ -2,7 +2,6 @@
 	"name": "satispress",
 	"version": "0.3.0-dev",
 	"description": "Generate a Composer repository from installed WordPress plugins and themes.",
-	"main": "Gruntfile.js",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/blazersix/satispress.git"
