@@ -11,6 +11,7 @@ declare ( strict_types = 1 );
 
 namespace SatisPress\Authentication\Basic;
 
+use Cedaro\WP\Plugin\AbstractHookProvider;
 use SatisPress\Authentication\Request as RequestInterface;
 
 /**
@@ -18,13 +19,13 @@ use SatisPress\Authentication\Request as RequestInterface;
  *
  * @since 0.3.0
  */
-class Request implements RequestInterface {
+class Request extends AbstractHookProvider implements RequestInterface {
 	/**
-	 * Load the plugin.
+	 * Register hooks.
 	 *
 	 * @since 0.3.0
 	 */
-	public function load() {
+	public function register_hooks() {
 		$options = get_option( 'satispress' );
 		if ( isset( $options['enable_basic_authentication'] ) && 'yes' === $options['enable_basic_authentication'] ) {
 			add_action( 'satispress_send_package', [ $this, 'authenticate' ] );

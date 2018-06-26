@@ -11,12 +11,15 @@ declare ( strict_types = 1 );
 
 namespace SatisPress;
 
+use Cedaro\WP\Plugin\AbstractPlugin;
+use Cedaro\WP\Plugin\Provider\I18n;
+
 /**
  * Main plugin class - composition root.
  *
  * @since 0.3.0
  */
-class Plugin implements Composable {
+class Plugin extends AbstractPlugin implements Composable {
 	/**
 	 * Compose the object graph.
 	 *
@@ -30,31 +33,28 @@ class Plugin implements Composable {
 		 */
 		do_action( 'satispress_compose' );
 
-		$htaccess_handler = new Htaccess( $this->cache_path() );
-
 		$package_manager = new PackageManager( $this->cache_path() );
 
-		$basic_auth_request = new Authentication\Basic\Request();
-		$basic_auth_request->load();
-
-		$limit_login_attempts = new Integration\LimitLoginAttempts();
-		$limit_login_attempts->load();
+		// Register hook providers.
+		$this
+			->register_hooks( new I18n() )
+			->register_hooks( new Provider\Activation() )
+			->register_hooks( new Provider\Deactivation() )
+			->register_hooks( new Provider\RewriteRules() )
+			->register_hooks( new Provider\CustomVendor() )
+			->register_hooks( new Authentication\Basic\Request() )
+			->register_hooks( new Provider\RequestHandler( $package_manager ) )
+			->register_hooks( new Provider\LimitLoginAttempts() );
 
 		if ( is_admin() ) {
-			$manage_screen = new Admin\Plugins( $package_manager );
-			$manage_screen->load();
+			$htaccess_handler = new Htaccess( $this->cache_path() );
 
-			$settings_screen = new Admin\Settings( $package_manager );
-			$settings_screen->load();
-
-			$basic_auth_settings = new Authentication\Basic\Settings( $htaccess_handler );
-			$basic_auth_settings->load();
+			$this
+				->register_hooks( new Provider\AdminAssets() )
+				->register_hooks( new Provider\BasicAuthenticationSettings( $htaccess_handler ) )
+				->register_hooks( new Screen\Plugins( $package_manager ) )
+				->register_hooks( new Screen\Settings( $package_manager ) );
 		}
-
-		$satispress = new SatisPress( $package_manager );
-		$satispress->load();
-
-		register_activation_hook( __FILE__, [ $this, 'activate' ] );
 
 		/**
 		 * Finished composing the object graph in SatisPress.
@@ -82,16 +82,5 @@ class Plugin implements Composable {
 		}
 
 		return (string) apply_filters( 'satispress_cache_path', $path );
-	}
-
-	/**
-	 * Functionality during activation.
-	 *
-	 * Sets a flag to flush rewrite rules on the request after activation.
-	 *
-	 * @since 0.1.0
-	 */
-	public function activate() {
-		update_option( 'satispress_flush_rewrite_rules', 'yes' );
 	}
 }

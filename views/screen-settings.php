@@ -54,6 +54,6 @@ namespace SatisPress;
 	</div>
 
 	<div id="satispress-packages" class="satispress-tab-panel">
-		<?php require SATISPRESS_DIR . 'views/packages.php'; ?>
+		<?php require $this->plugin->get_path( 'views/packages.php' ); ?>
 	</div>
 </div>

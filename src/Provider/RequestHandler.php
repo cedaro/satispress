@@ -1,22 +1,27 @@
 <?php
 /**
- * SatisPress class
+ * SatisPress request handler.
  *
  * @package SatisPress
  * @license GPL-2.0-or-later
- * @since 0.2.0
+ * @since 0.3.0
  */
 
 declare ( strict_types = 1 );
 
-namespace SatisPress;
+namespace SatisPress\Provider;
+
+use Cedaro\WP\Plugin\AbstractHookProvider;
+use function SatisPress\send_file;
+use SatisPress\Package;
+use SatisPress\PackageManager;
 
 /**
- * SatisPress class.
+ * Request handler class.
  *
- * @since 0.1.0
+ * @since 0.3.0
  */
-class SatisPress {
+class RequestHandler extends AbstractHookProvider {
 	/**
 	 * Package manager.
 	 *
@@ -34,19 +39,12 @@ class SatisPress {
 	}
 
 	/**
-	 * Load SatisPress.
+	 * Register hooks.
 	 *
-	 * @since 0.2.0
+	 * @since 0.3.0
 	 */
-	public function load() {
-		if ( is_admin() ) {
-			add_action( 'admin_init', [ $this, 'register_assets' ] );
-		}
-
-		add_action( 'init', [ $this, 'add_rewrite_rules' ] );
-		add_filter( 'query_vars', [ $this, 'query_vars' ] );
-		add_action( 'parse_request', [ $this, 'process_request' ] );
-		add_filter( 'satispress_vendor', [ $this, 'filter_vendor' ], 5 );
+	public function register_hooks() {
+		add_action( 'parse_request', [ $this, 'handle_request' ] );
 
 		// Cache the existing version of a plugin before it's updated.
 		if ( apply_filters( 'satispress_cache_packages_before_update', true ) ) {
@@ -59,16 +57,6 @@ class SatisPress {
 	}
 
 	/**
-	 * Register admin scripts and styles.
-	 *
-	 * @since 0.2.0
-	 */
-	public function register_assets() {
-		wp_register_script( 'satispress-admin', SATISPRESS_URL . 'assets/js/admin.js', [ 'jquery', 'wp-util' ] );
-		wp_register_style( 'satispress-admin', SATISPRESS_URL . 'assets/css/admin.css' );
-	}
-
-	/**
 	 * Process a SatisPress request.
 	 *
 	 * Determines if the current request is for packages.json or a whitelisted
@@ -78,7 +66,7 @@ class SatisPress {
 	 *
 	 * @param object $wp Current WordPress environment instance (passed by reference).
 	 */
-	public function process_request( $wp ) {
+	public function handle_request( $wp ) {
 		if ( ! isset( $wp->query_vars['satispress'] ) ) {
 			return;
 		}
@@ -173,35 +161,6 @@ class SatisPress {
 	}
 
 	/**
-	 * Add a rewrite rule to handle SatisPress requests.
-	 *
-	 * @since 0.1.0
-	 */
-	public function add_rewrite_rules() {
-		add_rewrite_rule( 'satispress/([^/]+)(/([^/]+))?/?$', 'index.php?satispress=$matches[1]&satispress_version=$matches[3]', 'top' );
-
-		if ( ! is_network_admin() && 'yes' === get_option( 'satispress_flush_rewrite_rules' ) ) {
-			update_option( 'satispress_flush_rewrite_rules', 'no' );
-			flush_rewrite_rules();
-		}
-	}
-
-	/**
-	 * Whitelist SatisPress query variables.
-	 *
-	 * @since 0.1.0
-	 *
-	 * @param array $vars List of query variables.
-	 * @return array
-	 */
-	public function query_vars( array $vars ): array {
-		$vars[] = 'satispress';
-		$vars[] = 'satispress_version';
-
-		return $vars;
-	}
-
-	/**
 	 * Send a package zip.
 	 *
 	 * Sends a 404 header if the specified version isn't available.
@@ -227,23 +186,6 @@ class SatisPress {
 
 		send_file( $file );
 		exit;
-	}
-
-	/**
-	 * Update the vendor string based on the vendor setting value.
-	 *
-	 * @since 0.2.0
-	 *
-	 * @param string $vendor Vendor string.
-	 * @return string
-	 */
-	public function filter_vendor( string $vendor ): string {
-		$option = get_option( 'satispress' );
-		if ( ! empty( $option['vendor'] ) ) {
-			$vendor = $option['vendor'];
-		}
-
-		return $vendor;
 	}
 
 	/**

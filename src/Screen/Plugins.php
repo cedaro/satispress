@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugins class
+ * Manage Plugins screen provider.
  *
  * @package SatisPress
  * @license GPL-2.0-or-later
@@ -9,16 +9,17 @@
 
 declare ( strict_types = 1 );
 
-namespace SatisPress\Admin;
+namespace SatisPress\Screen;
 
+use Cedaro\WP\Plugin\AbstractHookProvider;
 use SatisPress\PackageManager;
 
 /**
- * Manage plugins screen.
+ * Manage Plugins screen provider class.
  *
  * @since 0.2.0
  */
-class Plugins {
+class Plugins extends AbstractHookProvider {
 	/**
 	 * Package manager.
 	 *
@@ -36,11 +37,11 @@ class Plugins {
 	}
 
 	/**
-	 * Load the screen.
+	 * Register hooks.
 	 *
-	 * @since 0.2.0
+	 * @since 0.3.0
 	 */
-	public function load() {
+	public function register_hooks() {
 		add_action( 'wp_ajax_satispress_toggle_plugin', [ $this, 'ajax_toggle_plugin_status' ] );
 		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_assets' ] );
 		add_filter( 'manage_plugins_columns', [ $this, 'register_columns' ] );

@@ -1,6 +1,6 @@
 <?php
 /**
- * Authentication interface
+ * Basic Authentication settings.
  *
  * @package SatisPress
  * @license GPL-2.0-or-later
@@ -9,16 +9,17 @@
 
 declare ( strict_types = 1 );
 
-namespace SatisPress\Authentication\Basic;
+namespace SatisPress\Provider;
 
+use Cedaro\WP\Plugin\AbstractHookProvider;
 use SatisPress\Htaccess;
 
 /**
- * SatisPress authentication interface.
+ * Basic Authentication settings provider class.
  *
  * @since 0.3.0
  */
-class Settings extends \SatisPress\Authentication\Settings {
+class BasicAuthenticationSettings extends AbstractHookProvider {
 	/**
 	 * Handler for .htaccess files.
 	 *
@@ -40,11 +41,11 @@ class Settings extends \SatisPress\Authentication\Settings {
 	}
 
 	/**
-	 * Load the screen.
+	 * Register hooks.
 	 *
 	 * @since 0.3.0
 	 */
-	public function load() {
+	public function register_hooks() {
 		add_filter( 'update_option_satispress', [ $this, 'maybe_setup' ], 10, 2 );
 		add_action( 'admin_init', [ $this, 'add_settings' ] );
 		add_action( 'admin_notices', [ $this, 'htaccess_notice' ] );
@@ -154,5 +155,20 @@ class Settings extends \SatisPress\Authentication\Settings {
 			</div>
 			<?php
 		}
+	}
+
+	/**
+	 * Retrieve a setting.
+	 *
+	 * @since 0.2.0
+	 *
+	 * @param string $key     Setting name.
+	 * @param mixed  $default Optional. Default setting value.
+	 * @return mixed
+	 */
+	protected function get_setting( string $key, $default = null ) {
+		$option = get_option( 'satispress' );
+
+		return isset( $option[ $key ] ) ? $option[ $key ] : $default;
 	}
 }

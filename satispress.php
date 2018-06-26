@@ -25,68 +25,17 @@ declare ( strict_types = 1 );
 
 namespace SatisPress;
 
-if ( ! defined( 'SATISPRESS_DIR' ) ) {
-	/**
-	 * Path directory path.
-	 *
-	 * @since 0.2.0
-	 * @var string SATISPRESS_DIR
-	 */
-	define( 'SATISPRESS_DIR', plugin_dir_path( __FILE__ ) );
-}
-
-if ( ! defined( 'SATISPRESS_URL' ) ) {
-	/**
-	 * URL to the plugin's root directory.
-	 *
-	 * Includes trailing slash.
-	 *
-	 * @since 0.2.0
-	 * @var string SATISPRESS_URL
-	 */
-	define( 'SATISPRESS_URL', plugin_dir_url( __FILE__ ) );
-}
-
-require SATISPRESS_DIR . 'src/functions.php';
-
-spl_autoload_register( __NAMESPACE__ . '\\satispress_autoloader' );
-/**
- * Autoloader callback.
- *
- * Converts a class name to a file path and requires it if it exists.
- *
- * @since 0.2.0
- * @link https://www.php-fig.org/psr/psr-4/examples/
- *
- * @param string $class Class name.
- */
-function satispress_autoloader( string $class ) {
-
-	// Project namespace.
-	$prefix = 'SatisPress\\';
-
-	$base_dir = SATISPRESS_DIR . 'src/';
-
-	// Does the class use the namespace prefix?
-	$len = strlen( $prefix );
-
-	if ( 0 !== strncmp( $prefix, $class, $len ) ) {
-		// No, move to the next registered autoloader.
-		return;
-	}
-
-	// Get the relative class name.
-	$relative_class = substr( $class, $len );
-
-	// Replace the namespace prefix with the base directory, replace namespace separators
-	// with directory separators in the relative class name, append with .php.
-	$file = $base_dir . \str_replace( '\\', '/', $relative_class ) . '.php';
-
-	if ( file_exists( $file ) ) {
-		require_once $file;
-	}
+// Load the Composer autoloader.
+if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
+	require __DIR__ . '/vendor/autoload.php';
 }
 
 add_action( 'plugins_loaded', function() {
-	( new Plugin() )->compose();
+	( new Plugin() )
+		->set_basename( plugin_basename( __FILE__ ) )
+		->set_directory( plugin_dir_path( __FILE__ ) )
+		->set_file( __DIR__ . '/satispress.php' )
+		->set_slug( 'satispress' )
+		->set_url( plugin_dir_url( __FILE__ ) )
+		->compose();
 } );
