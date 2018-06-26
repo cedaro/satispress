@@ -25,17 +25,24 @@ declare ( strict_types = 1 );
 
 namespace SatisPress;
 
+use Pimple\Container;
+use Pimple\Psr11\Container as PsrContainer;
+
 // Load the Composer autoloader.
 if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
 	require __DIR__ . '/vendor/autoload.php';
 }
 
-add_action( 'plugins_loaded', function() {
-	( new Plugin() )
-		->set_basename( plugin_basename( __FILE__ ) )
-		->set_directory( plugin_dir_path( __FILE__ ) )
-		->set_file( __DIR__ . '/satispress.php' )
-		->set_slug( 'satispress' )
-		->set_url( plugin_dir_url( __FILE__ ) )
-		->compose();
-} );
+// Create a container and register a service provider.
+$container = new Container();
+
+// Initialize the plugin and inject the container.
+$plugin = ( new Plugin() )
+	->set_basename( plugin_basename( __FILE__ ) )
+	->set_directory( plugin_dir_path( __FILE__ ) )
+	->set_file( __DIR__ . '/satispress.php' )
+	->set_slug( 'satispress' )
+	->set_url( plugin_dir_url( __FILE__ ) )
+	->set_container( new PsrContainer( $container ) );
+
+add_action( 'plugins_loaded', [ $plugin, 'compose' ] );
