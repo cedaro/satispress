@@ -25,12 +25,10 @@ class RewriteRules extends AbstractHookProvider {
 	 * @since 0.3.0
 	 */
 	public function register_hooks() {
-		add_filter( 'query_vars',                              array( $this, 'register_query_vars' ) );
-		add_action( 'init',                                    array( $this, 'register_rewrite_rules' ) );
-		add_action( 'generate_rewrite_rules',                  array( $this, 'register_external_rewrite_rules' ) );
-		register_activation_hook( $this->plugin->get_file(),   array( $this, 'activate' ) );
-		register_deactivation_hook( $this->plugin->get_file(), array( $this, 'deactivate' ) );
-		add_action( 'wp_loaded',                               array( $this, 'maybe_flush_rewrite_rules' ) );
+		add_filter( 'query_vars',             array( $this, 'register_query_vars' ) );
+		add_action( 'init',                   array( $this, 'register_rewrite_rules' ) );
+		add_action( 'generate_rewrite_rules', array( $this, 'register_external_rewrite_rules' ) );
+		add_action( 'wp_loaded',              array( $this, 'maybe_flush_rewrite_rules' ) );
 	}
 
 	/**
@@ -75,28 +73,6 @@ class RewriteRules extends AbstractHookProvider {
 			'satispress/packages.json$',
 			'index.php?satispress=packages.json'
 		);
-	}
-
-	/**
-	 * Activation routine.
-	 *
-	 * @since 0.3.0
-	 */
-	public function activate() {
-		update_option( 'satispress_flush_rewrite_rules', 'yes' );
-	}
-
-	/**
-	 * Deactivation routine.
-	 *
-	 * Deleting the rewrite rules option should force WordPress to regenerate
-	 * them next time they're needed.
-	 *
-	 * @since 0.3.0
-	 */
-	public function deactivate() {
-		delete_option( 'rewrite_rules' );
-		delete_option( 'satispress_flush_rewrite_rules' );
 	}
 
 	/**

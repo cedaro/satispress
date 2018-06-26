@@ -46,7 +46,6 @@ class RequestHandler extends AbstractHookProvider {
 	public function register_hooks() {
 		add_action( 'parse_request', [ $this, 'handle_request' ] );
 
-
 		// Cache the existing version of a plugin before it's updated.
 		if ( apply_filters( 'satispress_cache_packages_before_update', true ) ) {
 			add_filter( 'upgrader_pre_install', [ $this, 'cache_package_before_update' ], 10, 2 );
