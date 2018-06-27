@@ -67,11 +67,14 @@ class PackageArchiver extends AbstractHookProvider {
 			return $result;
 		}
 
-		$type = isset( $data['plugin'] ) ? 'plugin' : 'theme';
-
+		$type    = isset( $data['plugin'] ) ? 'plugin' : 'theme';
 		$package = $this->package_manager->get_package( $data[ $type ], $type );
+
 		if ( $package ) {
-			$package->archive();
+			$container       = $this->plugin->get_container();
+			$release_manager = $container->get( 'release.manager' );
+
+			$release_manager->archive( $package->get_installed_release() );
 		}
 
 		return $result;

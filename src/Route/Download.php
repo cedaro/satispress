@@ -14,6 +14,7 @@ namespace SatisPress\Route;
 use function SatisPress\send_file;
 use SatisPress\Package;
 use SatisPress\PackageManager;
+use SatisPress\ReleaseManager;
 use SatisPress\HTTP\Request;
 
 /**
@@ -30,14 +31,23 @@ class Download implements Route {
 	protected $package_manager;
 
 	/**
+	 * Release manager.
+	 *
+	 * @var ReleaseManager
+	 */
+	protected $release_manager;
+
+	/**
 	 * Constructor.
 	 *
 	 * @since 0.3.0
 	 *
 	 * @param PackageManager $package_manager Package manager.
+	 * @param ReleaseManager $release_manager Release manager.
 	 */
-	public function __construct( PackageManager $package_manager ) {
+	public function __construct( PackageManager $package_manager, ReleaseManager $release_manager ) {
 		$this->package_manager = $package_manager;
+		$this->release_manager = $release_manager;
 	}
 
 	/**
@@ -45,6 +55,8 @@ class Download implements Route {
 	 *
 	 * Determines if the current request is for packages.json or a whitelisted
 	 * package and routes it to the appropriate method.
+	 *
+	 * @since 0.3.0
 	 *
 	 * @param Request $request HTTP request instance.
 	 */
@@ -77,7 +89,7 @@ class Download implements Route {
 	 *
 	 * Sends a 404 header if the specified version isn't available.
 	 *
-	 * @since 0.1.0
+	 * @since 0.3.0
 	 *
 	 * @param Package $package Package object.
 	 * @param string  $version Optional. Version of the package to send. Defaults to the current version.
@@ -87,16 +99,35 @@ class Download implements Route {
 			$version = '';
 		}
 
-		$file = $package->archive( $version );
-
-		// Send a 404 if the file doesn't exit.
-		if ( ! $file ) {
+		$releases = $package->get_releases();
+		if ( ! isset( $releases[ $version ] ) ) {
 			$this->send_404();
 		}
 
-		do_action( 'satispress_send_package', $package, $version, $file );
+		$release = $package->get_release( $version );
+		if ( empty( $release ) ) {
+			$this->send_404();
+		}
 
-		send_file( $file );
+		// Archive the currently installed version if the artifact doesn't
+		// already exist.
+		if (
+			! $this->release_manager->exists( $release ) &&
+			$package->get_version() === $version
+		) {
+			$this->release_manager->archive( $release );
+		}
+
+		// Send a 404 if the release isn't available.
+		if ( ! $this->release_manager->exists( $release ) ) {
+			$this->send_404();
+		}
+
+		// @todo Remove this action after updating authentication handlers.
+		do_action( 'satispress_send_package', $package, $version );
+
+		$this->release_manager->send( $release );
+		exit;
 	}
 
 	/**

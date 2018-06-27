@@ -34,6 +34,24 @@ if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
 	require __DIR__ . '/vendor/autoload.php';
 }
 
+/**
+ * Autoload mapped classes.
+ *
+ * @since 0.3.0
+ *
+ * @param string $class Class name.
+ */
+function autoloader_classmap( $class ) {
+	$class_map = array(
+		'PclZip' => ABSPATH . 'wp-admin/includes/class-pclzip.php',
+	);
+
+	if ( isset( $class_map[ $class ] ) ) {
+		require_once $class_map[ $class ];
+	}
+}
+spl_autoload_register( '\SatisPress\autoloader_classmap' );
+
 // Create a container and register a service provider.
 $container = new Container();
 $container->register( new ServiceProvider() );

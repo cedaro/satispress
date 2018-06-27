@@ -37,7 +37,7 @@ class RequestHandler extends AbstractHookProvider {
 	 * @param WP $wp Main WP instance.
 	 */
 	public function dispatch( $wp ) {
-		if ( empty( $wp->query_vars['satispress_route'] )  ) {
+		if ( empty( $wp->query_vars['satispress_route'] ) ) {
 			return;
 		}
 

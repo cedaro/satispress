@@ -16,6 +16,7 @@ use Composer\Semver\VersionParser;
 use Pimple\Container as PimpleContainer;
 use Pimple\ServiceProviderInterface;
 use SatisPress\HTTP\Request;
+use SatisPress\Storage;
 
 /**
  * Plugin service provider class.
@@ -26,9 +27,13 @@ class ServiceProvider implements ServiceProviderInterface {
 	/**
 	 * Register services.
 	 *
-	 * @param \Pimple\Container $container Container instance.
+	 * @param PimpleContainer $container Container instance.
 	 */
 	public function register( PimpleContainer $container ) {
+		$container['archiver'] = function( $container ) {
+			return new Archiver();
+		};
+
 		$container['cache.path'] = function( $container ) {
 			$uploads = wp_upload_dir();
 			$path    = trailingslashit( $uploads['basedir'] ) . 'satispress/';
@@ -58,21 +63,42 @@ class ServiceProvider implements ServiceProviderInterface {
 			return $request;
 		};
 
+		$container['package.factory'] = function( $container ) {
+			return new PackageFactory(
+				$container['release.manager']
+			);
+		};
+
 		$container['package.manager'] = function( $container ) {
-			return new PackageManager( $container['cache.path'] );
+			return new PackageManager(
+				$container['package.factory']
+			);
+		};
+
+		$container['release.manager'] = function( $container ) {
+			return new ReleaseManager(
+				$container['storage'],
+				$container['archiver']
+			);
 		};
 
 		$container['route.composer'] = function( $container ) {
 			return new Route\Composer(
 				$container['package.manager'],
+				$container['release.manager'],
 				$container['version.parser']
 			);
 		};
 
 		$container['route.download'] = function( $container ) {
 			return new Route\Download(
-				$container['package.manager']
+				$container['package.manager'],
+				$container['release.manager']
 			);
+		};
+
+		$container['storage'] = function( $container ) {
+			return new Storage\Local( $container['cache.path'] );
 		};
 
 		$container['version.parser'] = function( $container ) {
