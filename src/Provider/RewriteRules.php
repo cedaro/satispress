@@ -40,8 +40,8 @@ class RewriteRules extends AbstractHookProvider {
 	 * @return array
 	 */
 	public function register_query_vars( $vars ) {
-		$vars[] = 'satispress';
-		$vars[] = 'satispress_version';
+		$vars[] = 'satispress_params';
+		$vars[] = 'satispress_route';
 		return $vars;
 	}
 
@@ -52,8 +52,16 @@ class RewriteRules extends AbstractHookProvider {
 	 */
 	public function register_rewrite_rules() {
 		add_rewrite_rule(
-			'satispress/([^/]+)(/([^/]+))?/?$',
-			'index.php?satispress=$matches[1]&satispress_version=$matches[3]',
+			'satispress/packages.json$',
+			'index.php?satispress_route=composer',
+			'top'
+		);
+
+		// Don't add a file extension. Some servers don't route file extensions
+		// through WordPress' front controller.
+		add_rewrite_rule(
+			'satispress/([^/]+)(/([^/]+))?$',
+			'index.php?satispress_route=download&satispress_params[slug]=$matches[1]&satispress_params[version]=$matches[3]',
 			'top'
 		);
 	}
@@ -71,7 +79,7 @@ class RewriteRules extends AbstractHookProvider {
 	public function register_external_rewrite_rules( $wp_rewrite ) {
 		$wp_rewrite->add_external_rule(
 			'satispress/packages.json$',
-			'index.php?satispress=packages.json'
+			'index.php?satispress_route=composer'
 		);
 	}
 

@@ -12,6 +12,37 @@ declare ( strict_types = 1 );
 namespace SatisPress;
 
 /**
+ * Retrieve the authorization header.
+ *
+ * On certain systems and configurations, the Authorization header will be
+ * stripped out by the server or PHP. Typically this is then used to
+ * generate `PHP_AUTH_USER`/`PHP_AUTH_PASS` but not passed on. We use
+ * `getallheaders` here to try and grab it out instead.
+ *
+ * From https://github.com/WP-API/OAuth1
+ *
+ * @return string|null Authorization header if set, null otherwise
+ */
+function get_authorization_header() {
+	if ( ! empty( $_SERVER['HTTP_AUTHORIZATION'] ) ) {
+		return stripslashes( $_SERVER['HTTP_AUTHORIZATION'] );
+	}
+
+	if ( function_exists( 'getallheaders' ) ) {
+		$headers = getallheaders();
+
+		// Check for the authoization header case-insensitively.
+		foreach ( $headers as $key => $value ) {
+			if ( 'authorization' === strtolower( $key ) ) {
+				return $value;
+			}
+		}
+	}
+
+	return null;
+}
+
+/**
  * Retrieve the permalink for packages.json.
  *
  * @since 0.2.0
