@@ -69,7 +69,7 @@ class Composer implements Route {
 	public function handle_request( Request $request ) {
 		header( 'Content-Type: application/json; charset=' . get_option( 'blog_charset' ) );
 		$items = $this->get_items();
-		echo wp_json_encode( $items );
+		echo wp_json_encode( [ 'packages' => $items ] );
 		exit;
 	}
 
@@ -89,7 +89,7 @@ class Composer implements Route {
 
 			foreach ( $packages as $slug => $package ) {
 				if ( $package->has_releases() ) {
-					$items[ $package->get_package_name() ] = $this->prepare_item_for_response();
+					$items[ $package->get_package_name() ] = $this->prepare_item_for_response( $package );
 				}
 			}
 
@@ -124,7 +124,7 @@ class Composer implements Route {
 				'type'               => $package->get_type(),
 				'authors'            => [
 					'name'     => $package->get_author(),
-					'homepage' => esc_url( $package->get_author_url() ),
+					'homepage' => esc_url( $package->get_author_uri() ),
 				],
 				'description'        => $package->get_description(),
 				'homepage'           => $package->get_homepage(),
