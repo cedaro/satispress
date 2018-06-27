@@ -15,6 +15,7 @@ use function SatisPress\get_authorization_header;
 use Composer\Semver\VersionParser;
 use Pimple\Container as PimpleContainer;
 use Pimple\ServiceProviderInterface;
+use SatisPress\Authentication;
 use SatisPress\HTTP\Request;
 use SatisPress\Storage;
 
@@ -32,6 +33,23 @@ class ServiceProvider implements ServiceProviderInterface {
 	public function register( PimpleContainer $container ) {
 		$container['archiver'] = function( $container ) {
 			return new Archiver();
+		};
+
+		$container['authentication.servers'] = [
+			20  => 'authentication.basic',
+			100 => 'authentication.unauthorized',
+		];
+
+		$container['authentication.basic'] = function( $container ) {
+			return new Authentication\Basic\Server(
+				$container['http.request']
+			);
+		};
+
+		$container['authentication.unauthorized'] = function( $container ) {
+			return new Authentication\UnauthorizedServer(
+				$container['http.request']
+			);
 		};
 
 		$container['cache.path'] = function( $container ) {

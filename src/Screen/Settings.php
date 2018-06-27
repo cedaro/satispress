@@ -193,7 +193,7 @@ class Settings extends AbstractHookProvider {
 	 * @since 0.2.0
 	 */
 	public function render_section_security_description() {
-		esc_html_e( 'Your packages are public by default. At a minimum, you can secure them using HTTP Basic Authentication. Valid credentials are a WP username and password.', 'satispress' );
+		esc_html_e( 'Packges are secured using HTTP Basic Authentication by default. Valid credentials are a WP username and password.', 'satispress' );
 	}
 
 	/**

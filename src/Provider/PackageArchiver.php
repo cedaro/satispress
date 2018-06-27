@@ -50,7 +50,7 @@ class PackageArchiver extends AbstractHookProvider {
 		}
 
 		add_filter( 'pre_set_site_transient_update_plugins', [ $this, 'archive_updates' ], 9999 );
-		add_filter( 'pre_set_site_transient_update_themes',  [ $this, 'archive_updates' ], 9999 );
+		add_filter( 'pre_set_site_transient_update_themes', [ $this, 'archive_updates' ], 9999 );
 
 		// Delete the 'satispress_packages' transient.
 		add_action( 'upgrader_process_complete', [ $this, 'flush_packages_cache' ] );
@@ -62,7 +62,7 @@ class PackageArchiver extends AbstractHookProvider {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @param  object $value Update transient value.
+	 * @param object $value Update transient value.
 	 * @return object
 	 */
 	public function archive_updates( $value ) {

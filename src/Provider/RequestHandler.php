@@ -13,6 +13,7 @@ namespace SatisPress\Provider;
 
 use Cedaro\WP\Plugin\AbstractHookProvider;
 use SatisPress\Route\Route;
+use WP_REST_Server;
 
 /**
  * Request handler class.
@@ -49,8 +50,45 @@ class RequestHandler extends AbstractHookProvider {
 			$request->set_url_params( $wp->query_vars['satispress_params'] );
 		}
 
-		$controller = $this->get_route_controller( $route );
-		$controller->handle_request( $request );
+		if ( $this->check_authentication() ) {
+			$controller = $this->get_route_controller( $route );
+			$controller->handle_request( $request );
+		}
+		exit;
+	}
+
+	/**
+	 * Check authentication.
+	 *
+	 * Calls the WP_REST_Server authentication method to leverage authentication
+	 * handlers built for the REST API.
+	 *
+	 * @since 0.3.0
+	 *
+	 * @see WP_REST_Server::check_authentication()
+	 *
+	 * @return boolean
+	 */
+	protected function check_authentication() {
+		$server = new WP_REST_Server();
+		$result = $server->check_authentication();
+
+		if ( ! is_wp_error( $result ) ) {
+			return true;
+		}
+
+		$response = rest_ensure_response( $result );
+
+		if ( is_wp_error( $response ) ) {
+			$response = $this->error_to_response( $response );
+		} elseif ( $response->is_error() ) {
+			$response = $this->error_to_response( $response->as_error() );
+		}
+
+		$server->send_headers( $response->get_headers() );
+		status_header( $response->get_status() );
+
+		echo wp_json_encode( $response->get_data() );
 		exit;
 	}
 

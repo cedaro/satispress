@@ -42,7 +42,6 @@ class Plugin extends WPPlugin implements Composable {
 			->register_hooks( new Provider\Deactivation() )
 			->register_hooks( new Provider\RewriteRules() )
 			->register_hooks( new Provider\CustomVendor() )
-			->register_hooks( new Authentication\Basic\Request() )
 			->register_hooks( new Provider\RequestHandler() )
 			->register_hooks( new Provider\PackageArchiver( $package_manager ) )
 			->register_hooks( new Provider\LimitLoginAttempts() );
@@ -50,7 +49,6 @@ class Plugin extends WPPlugin implements Composable {
 		if ( is_admin() ) {
 			$this
 				->register_hooks( new Provider\AdminAssets() )
-				->register_hooks( new Provider\BasicAuthenticationSettings( $this->container->get( 'htaccess.handler' ) ) )
 				->register_hooks( new Screen\Plugins( $package_manager ) )
 				->register_hooks( new Screen\Settings( $package_manager ) );
 		}

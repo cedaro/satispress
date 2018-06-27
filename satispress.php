@@ -27,6 +27,7 @@ namespace SatisPress;
 
 use Pimple\Container;
 use Pimple\Psr11\Container as PsrContainer;
+use SatisPress\Provider\Authentication;
 use SatisPress\ServiceProvider;
 
 // Load the Composer autoloader.
@@ -64,5 +65,8 @@ $plugin = ( new Plugin() )
 	->set_slug( 'satispress' )
 	->set_url( plugin_dir_url( __FILE__ ) )
 	->set_container( new PsrContainer( $container ) );
+
+// Authentication handlers need to be registered early.
+$plugin->register_hooks( new Authentication() );
 
 add_action( 'plugins_loaded', [ $plugin, 'compose' ] );
