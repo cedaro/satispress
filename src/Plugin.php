@@ -41,8 +41,7 @@ class Plugin extends WPPlugin implements Composable {
 			->register_hooks( new Provider\RewriteRules() )
 			->register_hooks( new Provider\CustomVendor() )
 			->register_hooks( new Provider\RequestHandler() )
-			->register_hooks( new Provider\PackageArchiver( $package_manager ) )
-			->register_hooks( new Provider\LimitLoginAttempts() );
+			->register_hooks( new Provider\PackageArchiver( $package_manager ) );
 
 		if ( is_admin() ) {
 			$this

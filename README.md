@@ -45,8 +45,6 @@ Securing the repository should be possible using the same methods outlined in th
 
 To provide a simple solution, SatisPress ships with a setting to enable HTTP Basic Authentication to protect packages. Only users registered in WordPress will have access to the packages. After activating, make sure an `.htaccess` file exists in `wp-content/uploads/satispress/` to prevent direct access.
 
-The [Limit Login Attempts](https://wordpress.org/plugins/limit-login-attempts/) plugin is supported to prevent brute force login attempts.
-
 ### Debugging
 
 #### `packages.json` Transient
