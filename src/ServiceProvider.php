@@ -11,6 +11,7 @@ declare ( strict_types = 1 );
 
 namespace SatisPress;
 
+use function SatisPress\generate_random_string;
 use function SatisPress\get_authorization_header;
 use Composer\Semver\VersionParser;
 use Pimple\Container as PimpleContainer;
@@ -52,13 +53,27 @@ class ServiceProvider implements ServiceProviderInterface {
 			);
 		};
 
-		$container['cache.path'] = function( $container ) {
-			$uploads = wp_upload_dir();
-			$path    = trailingslashit( $uploads['basedir'] ) . 'satispress/';
+		$container['cache.directory'] = function( $container ) {
+			$directory = get_option( 'satispress_cache_directory' );
 
-			if ( ! file_exists( $path ) ) {
-				wp_mkdir_p( $path );
+			if ( ! empty( $directory ) ) {
+				return $directory;
 			}
+
+			// Append a random string to help hide it from nosey visitors.
+			$directory = sprintf( 'satispress-%s', generate_random_string() );
+			update_option( 'satispress_cache_directory', $directory );
+
+			return $directory;
+		};
+
+		$container['cache.path'] = function( $container ) {
+			if ( defined( 'SATISPRESS_CACHE_PATH' ) ) {
+				return SATISPRESS_CACHE_PATH;
+			}
+
+			$upload_config = wp_upload_dir();
+			$path          = trailingslashit( path_join( $upload_config['basedir'], $container['cache.directory'] ) );
 
 			return (string) apply_filters( 'satispress_cache_path', $path );
 		};

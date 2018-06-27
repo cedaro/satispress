@@ -46,6 +46,7 @@ class Plugin extends WPPlugin implements Composable {
 
 		if ( is_admin() ) {
 			$this
+				->register_hooks( new Provider\Upgrade() )
 				->register_hooks( new Provider\AdminAssets() )
 				->register_hooks( new Screen\Plugins( $package_manager ) )
 				->register_hooks( new Screen\Settings( $package_manager ) );

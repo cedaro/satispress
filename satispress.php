@@ -30,6 +30,13 @@ use Pimple\Psr11\Container as PsrContainer;
 use SatisPress\Provider;
 use SatisPress\ServiceProvider;
 
+/**
+ * Plugin version.
+ *
+ * @var string
+ */
+const VERSION = '0.3.0-dev';
+
 // Load the Composer autoloader.
 if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
 	require __DIR__ . '/vendor/autoload.php';
