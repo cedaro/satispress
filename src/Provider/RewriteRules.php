@@ -25,10 +25,10 @@ class RewriteRules extends AbstractHookProvider {
 	 * @since 0.3.0
 	 */
 	public function register_hooks() {
-		add_filter( 'query_vars',             array( $this, 'register_query_vars' ) );
-		add_action( 'init',                   array( $this, 'register_rewrite_rules' ) );
-		add_action( 'generate_rewrite_rules', array( $this, 'register_external_rewrite_rules' ) );
-		add_action( 'wp_loaded',              array( $this, 'maybe_flush_rewrite_rules' ) );
+		add_filter( 'query_vars', [ $this, 'register_query_vars' ] );
+		add_action( 'init', [ $this, 'register_rewrite_rules' ] );
+		add_action( 'generate_rewrite_rules', [ $this, 'register_external_rewrite_rules' ] );
+		add_action( 'wp_loaded', [ $this, 'maybe_flush_rewrite_rules' ] );
 	}
 
 	/**

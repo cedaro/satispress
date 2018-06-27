@@ -25,7 +25,7 @@ class Activation extends AbstractHookProvider {
 	 * @since 0.3.0
 	 */
 	public function register_hooks() {
-		register_activation_hook( $this->plugin->get_file(), array( $this, 'activate' ) );
+		register_activation_hook( $this->plugin->get_file(), [ $this, 'activate' ] );
 	}
 
 	/**
