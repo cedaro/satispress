@@ -25,8 +25,7 @@ declare ( strict_types = 1 );
 
 namespace SatisPress;
 
-use Pimple\Container;
-use Pimple\Psr11\Container as PsrContainer;
+use SatisPress\Container;
 use SatisPress\Provider;
 use SatisPress\ServiceProvider;
 
@@ -57,7 +56,7 @@ $plugin = plugin()
 	->set_file( __DIR__ . '/satispress.php' )
 	->set_slug( 'satispress' )
 	->set_url( plugin_dir_url( __FILE__ ) )
-	->set_container( new PsrContainer( $container ) );
+	->set_container( $container );
 
 // Authentication handlers need to be registered early.
 $plugin
