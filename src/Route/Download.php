@@ -123,9 +123,6 @@ class Download implements Route {
 			$this->send_404();
 		}
 
-		// @todo Remove this action after updating authentication handlers.
-		do_action( 'satispress_send_package', $package, $version );
-
 		$this->release_manager->send( $release );
 		exit;
 	}
