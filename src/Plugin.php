@@ -38,8 +38,6 @@ class Plugin extends WPPlugin implements Composable {
 		// Register hook providers.
 		$this
 			->register_hooks( new I18n() )
-			->register_hooks( new Provider\Activation() )
-			->register_hooks( new Provider\Deactivation() )
 			->register_hooks( new Provider\RewriteRules() )
 			->register_hooks( new Provider\CustomVendor() )
 			->register_hooks( new Provider\RequestHandler() )
