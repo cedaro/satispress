@@ -11,6 +11,20 @@ declare ( strict_types = 1 );
 
 namespace SatisPress;
 
+use SatisPress\Plugin;
+
+/**
+ * Retrieve the main plugin instance.
+ *
+ * @since 0.3.0
+ *
+ * @return Plugin
+ */
+function plugin() {
+	static $instance;
+	return $instance ?? new Plugin();
+}
+
 /**
  * Autoload mapped classes.
  *

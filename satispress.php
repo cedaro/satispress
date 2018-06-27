@@ -51,7 +51,7 @@ $container = new Container();
 $container->register( new ServiceProvider() );
 
 // Initialize the plugin and inject the container.
-$plugin = ( new Plugin() )
+$plugin = plugin()
 	->set_basename( plugin_basename( __FILE__ ) )
 	->set_directory( plugin_dir_path( __FILE__ ) )
 	->set_file( __DIR__ . '/satispress.php' )
