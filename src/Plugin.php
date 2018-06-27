@@ -33,7 +33,7 @@ class Plugin extends WPPlugin implements Composable {
 		 */
 		do_action( 'satispress_compose' );
 
-		$package_manager = new PackageManager( $this->cache_path() );
+		$package_manager = $this->container->get( 'package.manager' );
 
 		// Register hook providers.
 		$this
@@ -47,11 +47,9 @@ class Plugin extends WPPlugin implements Composable {
 			->register_hooks( new Provider\LimitLoginAttempts() );
 
 		if ( is_admin() ) {
-			$htaccess_handler = new Htaccess( $this->cache_path() );
-
 			$this
 				->register_hooks( new Provider\AdminAssets() )
-				->register_hooks( new Provider\BasicAuthenticationSettings( $htaccess_handler ) )
+				->register_hooks( new Provider\BasicAuthenticationSettings( $this->container->get( 'htaccess.handler' ) ) )
 				->register_hooks( new Screen\Plugins( $package_manager ) )
 				->register_hooks( new Screen\Settings( $package_manager ) );
 		}
@@ -62,25 +60,5 @@ class Plugin extends WPPlugin implements Composable {
 		 * @since 0.3.0
 		 */
 		do_action( 'satispress_composed' );
-	}
-
-	/**
-	 * Retrieve the path where packages are cached.
-	 *
-	 * Defaults to 'wp-content/uploads/satispress/'.
-	 *
-	 * @since 0.1.0
-	 *
-	 * @return string
-	 */
-	public function cache_path(): string {
-		$uploads = wp_upload_dir();
-		$path    = trailingslashit( $uploads['basedir'] ) . 'satispress/';
-
-		if ( ! file_exists( $path ) ) {
-			wp_mkdir_p( $path );
-		}
-
-		return (string) apply_filters( 'satispress_cache_path', $path );
 	}
 }

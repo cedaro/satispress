@@ -27,6 +27,7 @@ namespace SatisPress;
 
 use Pimple\Container;
 use Pimple\Psr11\Container as PsrContainer;
+use SatisPress\ServiceProvider;
 
 // Load the Composer autoloader.
 if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
@@ -35,6 +36,7 @@ if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
 
 // Create a container and register a service provider.
 $container = new Container();
+$container->register( new ServiceProvider() );
 
 // Initialize the plugin and inject the container.
 $plugin = ( new Plugin() )
