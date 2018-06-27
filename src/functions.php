@@ -12,6 +12,23 @@ declare ( strict_types = 1 );
 namespace SatisPress;
 
 /**
+ * Autoload mapped classes.
+ *
+ * @since 0.3.0
+ *
+ * @param string $class Class name.
+ */
+function autoloader_classmap( $class ) {
+	$class_map = array(
+		'PclZip' => ABSPATH . 'wp-admin/includes/class-pclzip.php',
+	);
+
+	if ( isset( $class_map[ $class ] ) ) {
+		require_once $class_map[ $class ];
+	}
+}
+
+/**
  * Generate a random string.
  *
  * @since 0.3.0
