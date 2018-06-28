@@ -13,11 +13,16 @@ namespace SatisPress;
 
 use function SatisPress\generate_random_string;
 use function SatisPress\get_authorization_header;
+use Cedaro\WP\Plugin\Provider\I18n;
 use Composer\Semver\VersionParser;
 use Pimple\Container as PimpleContainer;
+use Pimple\ServiceIterator;
 use Pimple\ServiceProviderInterface;
+use Pimple\Psr11\ServiceLocator;
 use SatisPress\Authentication;
 use SatisPress\HTTP\Request;
+use SatisPress\Provider;
+use SatisPress\Screen;
 use SatisPress\Storage;
 
 /**
@@ -36,10 +41,14 @@ class ServiceProvider implements ServiceProviderInterface {
 			return new Archiver();
 		};
 
-		$container['authentication.servers'] = [
-			20  => 'authentication.basic',
-			100 => 'authentication.unauthorized',
-		];
+		$container['authentication.servers'] = function( $container ) {
+			$servers = apply_filters( 'satispress_authentication_servers', [
+				20  => 'authentication.basic',
+				100 => 'authentication.unauthorized',
+			] );
+
+			return new ServiceIterator( $container, $servers );
+		};
 
 		$container['authentication.basic'] = function( $container ) {
 			return new Authentication\Basic\Server(
@@ -76,6 +85,59 @@ class ServiceProvider implements ServiceProviderInterface {
 			$path          = trailingslashit( path_join( $upload_config['basedir'], $container['cache.directory'] ) );
 
 			return (string) apply_filters( 'satispress_cache_path', $path );
+		};
+
+		$container['hooks.activation'] = function( $container ) {
+			return new Provider\Activation();
+		};
+
+		$container['hooks.admin_assets'] = function( $container ) {
+			return new Provider\AdminAssets();
+		};
+
+		$container['hooks.authentication'] = function( $container ) {
+			return new Provider\Authentication( $container['authentication.servers'] );
+		};
+
+		$container['hooks.custom_vendor'] = function( $container ) {
+			return new Provider\CustomVendor();
+		};
+
+		$container['hooks.deactivation'] = function( $container ) {
+			return new Provider\Deactivation();
+		};
+
+		$container['hooks.i18n'] = function( $container ) {
+			return new I18n();
+		};
+
+		$container['hooks.package_archiver'] = function( $container ) {
+			$locator = new ServiceLocator( $container, [
+				'package.manager',
+				'release.manager',
+			] );
+
+			return new Provider\PackageArchiver( $locator );
+		};
+
+		$container['hooks.request_handler'] = function( $container ) {
+			return new Provider\RequestHandler(
+				$container['http.request'],
+				$container['route.controllers']
+			);
+		};
+
+		$container['hooks.rewrite_rules'] = function( $container ) {
+			return new Provider\RewriteRules();
+		};
+
+		$container['hooks.upgrade'] = function( $container ) {
+			$locator = new ServiceLocator( $container, [
+				'htaccess' => 'htaccess.handler',
+				'storage',
+			] );
+
+			return new Provider\Upgrade( $locator );
 		};
 
 		$container['htaccess.handler'] = function( $container ) {
@@ -128,6 +190,21 @@ class ServiceProvider implements ServiceProviderInterface {
 				$container['package.manager'],
 				$container['release.manager']
 			);
+		};
+
+		$container['route.controllers'] = function( $container ) {
+			return new ServiceLocator( $container, [
+				'composer' => 'route.composer',
+				'download' => 'route.download',
+			] );
+		};
+
+		$container['screen.plugins'] = function( $container ) {
+			return new Screen\Plugins( $container['package.manager'] );
+		};
+
+		$container['screen.settings'] = function( $container ) {
+			return new Screen\Settings( $container['package.manager'] );
 		};
 
 		$container['storage'] = function( $container ) {

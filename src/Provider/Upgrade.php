@@ -13,6 +13,7 @@ namespace SatisPress\Provider;
 
 use const SatisPress\VERSION;
 use Cedaro\WP\Plugin\AbstractHookProvider;
+use Psr\Container\ContainerInterface;
 use SatisPress\Storage\Local;
 
 /**
@@ -27,6 +28,24 @@ class Upgrade extends AbstractHookProvider {
 	 * @var string
 	 */
 	const VERSION_OPTION_NAME = 'satispress_version';
+
+	/**
+	 * Container.
+	 *
+	 * @var ContainerInterface
+	 */
+	protected $container;
+
+	/**
+	 * Constructor.
+	 *
+	 * @since 0.3.0
+	 *
+	 * @param ContainerInterface $container Container.
+	 */
+	public function __construct( ContainerInterface $container ) {
+		$this->container = $container;
+	}
 
 	/**
 	 * Register hooks.
@@ -63,9 +82,8 @@ class Upgrade extends AbstractHookProvider {
 	 * @since 0.3.0
 	 */
 	public function setup_storage() {
-		$container     = $this->plugin->get_container();
-		$storage       = $container->get( 'storage' );
-		$htaccess      = $container->get( 'htaccess.handler' );
+		$storage       = $this->container->get( 'storage' );
+		$htaccess      = $this->container->get( 'htaccess' );
 		$upload_config = wp_upload_dir();
 
 		if ( ! $storage instanceof Local ) {

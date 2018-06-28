@@ -12,6 +12,8 @@ declare ( strict_types = 1 );
 namespace SatisPress\Provider;
 
 use Cedaro\WP\Plugin\AbstractHookProvider;
+use Psr\Container\ContainerInterface;
+use SatisPress\HTTP\Request;
 use SatisPress\Route\Route;
 use WP_REST_Server;
 
@@ -21,6 +23,33 @@ use WP_REST_Server;
  * @since 0.3.0
  */
 class RequestHandler extends AbstractHookProvider {
+	/**
+	 * Route controllers.
+	 *
+	 * @var ContainerInterface
+	 */
+	protected $controllers;
+
+	/**
+	 * Server request.
+	 *
+	 * @var Request
+	 */
+	protected $request;
+
+	/**
+	 * Constructor.
+	 *
+	 * @since 0.3.0
+	 *
+	 * @param Request            $request     Request instance.
+	 * @param ContainerInterface $controllers Route controllers.
+	 */
+	public function __construct( Request $request, ContainerInterface $controllers ) {
+		$this->request = $request;
+		$this->controllers = $controllers;
+	}
+
 	/**
 	 * Register hooks.
 	 *
@@ -42,17 +71,17 @@ class RequestHandler extends AbstractHookProvider {
 			return;
 		}
 
-		$route   = $wp->query_vars['satispress_route'];
-		$request = $this->plugin->get_container()->get( 'http.request' );
-		$request->set_route( $route );
+		$route = $wp->query_vars['satispress_route'];
+		$this->request->set_route( $route );
 
 		if ( ! empty( $wp->query_vars['satispress_params'] ) ) {
-			$request->set_url_params( $wp->query_vars['satispress_params'] );
+			$this->request->set_url_params( $wp->query_vars['satispress_params'] );
 		}
 
 		if ( $this->check_authentication() ) {
-			$controller = $this->get_route_controller( $route );
-			$controller->handle_request( $request );
+			$this
+				->get_route_controller( $route )
+				->handle_request( $this->request );
 		}
 		exit;
 	}
@@ -101,6 +130,6 @@ class RequestHandler extends AbstractHookProvider {
 	 * @return Route
 	 */
 	protected function get_route_controller( $route ): Route {
-		return $this->plugin->get_container()->get( 'route.' . $route );
+		return $this->controllers->get( $route );
 	}
 }

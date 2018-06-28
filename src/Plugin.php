@@ -33,22 +33,22 @@ class Plugin extends WPPlugin implements Composable {
 		 */
 		do_action( 'satispress_compose' );
 
-		$package_manager = $this->container->get( 'package.manager' );
+		$container = $this->container;
 
 		// Register hook providers.
 		$this
-			->register_hooks( new I18n() )
-			->register_hooks( new Provider\RewriteRules() )
-			->register_hooks( new Provider\CustomVendor() )
-			->register_hooks( new Provider\RequestHandler() )
-			->register_hooks( new Provider\PackageArchiver( $package_manager ) );
+			->register_hooks( $container->get( 'hooks.i18n' ) )
+			->register_hooks( $container->get( 'hooks.rewrite_rules' ) )
+			->register_hooks( $container->get( 'hooks.custom_vendor' ) )
+			->register_hooks( $container->get( 'hooks.request_handler' ) )
+			->register_hooks( $container->get( 'hooks.package_archiver' ) );
 
 		if ( is_admin() ) {
 			$this
-				->register_hooks( new Provider\Upgrade() )
-				->register_hooks( new Provider\AdminAssets() )
-				->register_hooks( new Screen\Plugins( $package_manager ) )
-				->register_hooks( new Screen\Settings( $package_manager ) );
+				->register_hooks( $container->get( 'hooks.upgrade' ) )
+				->register_hooks( $container->get( 'hooks.admin_assets' ) )
+				->register_hooks( $container->get( 'screen.plugins' ) )
+				->register_hooks( $container->get( 'screen.settings' ) );
 		}
 
 		/**

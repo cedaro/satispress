@@ -26,7 +26,6 @@ declare ( strict_types = 1 );
 namespace SatisPress;
 
 use SatisPress\Container;
-use SatisPress\Provider;
 use SatisPress\ServiceProvider;
 
 /**
@@ -58,10 +57,13 @@ $plugin = plugin()
 	->set_url( plugin_dir_url( __FILE__ ) )
 	->set_container( $container );
 
-// Authentication handlers need to be registered early.
 $plugin
-	->register_hooks( new Provider\Activation() )
-	->register_hooks( new Provider\Authentication() )
-	->register_hooks( new Provider\Deactivation() );
+	->register_hooks( $container->get( 'hooks.activation' ) )
+	->register_hooks( $container->get( 'hooks.deactivation' ) );
+
+// Authentication handlers need to be registered early.
+add_action( 'plugins_loaded', function() use ( $plugin, $container ) {
+	$plugin->register_hooks( $container->get( 'hooks.authentication' ) );
+}, 5 );
 
 add_action( 'plugins_loaded', [ $plugin, 'compose' ] );

@@ -12,6 +12,7 @@ declare ( strict_types = 1 );
 namespace SatisPress\Provider;
 
 use Cedaro\WP\Plugin\AbstractHookProvider;
+use Psr\Container\ContainerInterface;
 use SatisPress\Package;
 use SatisPress\PackageManager;
 use SatisPress\Release;
@@ -23,19 +24,21 @@ use SatisPress\Release;
  */
 class PackageArchiver extends AbstractHookProvider {
 	/**
-	 * Package manager.
+	 * Container.
 	 *
-	 * @var PackageManager
+	 * @var ContainerInterface
 	 */
-	protected $package_manager;
+	protected $container;
 
 	/**
-	 * Initialise SatisPress object.
+	 * Constructor.
 	 *
-	 * @param PackageManager $package_manager Package manager.
+	 * @since 0.3.0
+	 *
+	 * @param ContainerInterface $container Container.
 	 */
-	public function __construct( PackageManager $package_manager ) {
-		$this->package_manager = $package_manager;
+	public function __construct( ContainerInterface $container ) {
+		$this->container = $container;
 	}
 
 	/**
@@ -80,8 +83,9 @@ class PackageArchiver extends AbstractHookProvider {
 			// Plugin data is stored as an object. Coerce to an array.
 			$update_data = (array) $update_data;
 
-			$type    = isset( $update_data['plugin'] ) ? 'plugin' : 'theme';
-			$package = $this->package_manager->get_package( $update_data[ $type ], $type );
+			$package_manager = $this->container->get( 'package.manager' );
+			$type            = isset( $update_data['plugin'] ) ? 'plugin' : 'theme';
+			$package         = $package_manager->get_package( $update_data[ $type ], $type );
 
 			// Bail if the package isn't whitelisted.
 			if ( empty( $package ) ) {
@@ -94,7 +98,7 @@ class PackageArchiver extends AbstractHookProvider {
 				$update_data['package']
 			);
 
-			$this->plugin->get_container()->get( 'release.manager' )->archive( $release );
+			$this->container->get( 'release.manager' )->archive( $release );
 		}
 
 		return $value;
@@ -114,13 +118,12 @@ class PackageArchiver extends AbstractHookProvider {
 			return $result;
 		}
 
-		$type    = isset( $data['plugin'] ) ? 'plugin' : 'theme';
-		$package = $this->package_manager->get_package( $data[ $type ], $type );
+		$package_manager = $this->container->get( 'package.manager' );
+		$type            = isset( $data['plugin'] ) ? 'plugin' : 'theme';
+		$package         = $package_manager->get_package( $data[ $type ], $type );
 
 		if ( $package ) {
-			$container       = $this->plugin->get_container();
-			$release_manager = $container->get( 'release.manager' );
-
+			$release_manager = $this->container->get( 'release.manager' );
 			$release_manager->archive( $package->get_installed_release() );
 		}
 

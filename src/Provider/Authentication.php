@@ -12,6 +12,7 @@ declare ( strict_types = 1 );
 namespace SatisPress\Provider;
 
 use Cedaro\WP\Plugin\AbstractHookProvider;
+use Pimple\ServiceIterator;
 
 /**
  * Authentication provider class.
@@ -19,6 +20,22 @@ use Cedaro\WP\Plugin\AbstractHookProvider;
  * @since 0.3.0
  */
 class Authentication extends AbstractHookProvider {
+	/**
+	 * Authentication servers.
+	 *
+	 * @var ServiceIterator
+	 */
+	protected $servers;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param ServiceIteraor $servers Authentication servers.
+	 */
+	public function __construct( ServiceIterator $servers ) {
+		$this->servers = $servers;
+	}
+
 	/**
 	 * Register hooks.
 	 *
@@ -45,10 +62,7 @@ class Authentication extends AbstractHookProvider {
 			return;
 		}
 
-		$container = $this->plugin->get_container();
-
-		foreach ( $container->get( 'authentication.servers' ) as $key ) {
-			$server = $container->get( $key );
+		foreach ( $this->servers as $server ) {
 			add_filter( 'determine_current_user', [ $server, 'authenticate' ] );
 			add_filter( 'rest_authentication_errors', [ $server, 'get_authentication_errors' ] );
 		}
