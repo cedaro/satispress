@@ -19,7 +19,7 @@ use SatisPress\PackageManager;
  *
  * @since 0.2.0
  */
-class Plugins extends AbstractHookProvider {
+class ManagePlugins extends AbstractHookProvider {
 	/**
 	 * Package manager.
 	 *

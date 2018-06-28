@@ -199,8 +199,8 @@ class ServiceProvider implements ServiceProviderInterface {
 			] );
 		};
 
-		$container['screen.plugins'] = function( $container ) {
-			return new Screen\Plugins( $container['package.manager'] );
+		$container['screen.manage_plugins'] = function( $container ) {
+			return new Screen\ManagePlugins( $container['package.manager'] );
 		};
 
 		$container['screen.settings'] = function( $container ) {
