@@ -64,7 +64,6 @@ class Upgrade extends AbstractHookProvider {
 	 */
 	public function setup_storage() {
 		$container     = $this->plugin->get_container();
-		$cache_path    = $container->get( 'cache.path' );
 		$storage       = $container->get( 'storage' );
 		$htaccess      = $container->get( 'htaccess.handler' );
 		$upload_config = wp_upload_dir();
