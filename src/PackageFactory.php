@@ -103,8 +103,8 @@ final class PackageFactory {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @param PackageInterface $package Package instance.
-	 * @return ReleaseInterface
+	 * @param Package $package Package instance.
+	 * @return Release
 	 */
 	protected function get_package_update( $package ) {
 		$release = null;

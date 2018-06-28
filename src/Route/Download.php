@@ -22,7 +22,7 @@ use SatisPress\HTTP\Request;
  *
  * @since 0.3.0
  */
-class Download implements Route {
+class Download implements RouteInterface {
 	/**
 	 * Package manager.
 	 *

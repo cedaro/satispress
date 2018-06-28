@@ -14,7 +14,7 @@ namespace SatisPress;
 use function SatisPress\generate_random_string;
 use function SatisPress\get_authorization_header;
 use Cedaro\WP\Plugin\Provider\I18n;
-use Composer\Semver\VersionParser;
+use Composer\Semver\VersionParser as ComposerVersionParser;
 use Pimple\Container as PimpleContainer;
 use Pimple\ServiceIterator;
 use Pimple\ServiceProviderInterface;
@@ -212,7 +212,7 @@ class ServiceProvider implements ServiceProviderInterface {
 		};
 
 		$container['version.parser'] = function( $container ) {
-			return new ComposerVersionParser( new VersionParser() );
+			return new VersionParser( new ComposerVersionParser() );
 		};
 	}
 }

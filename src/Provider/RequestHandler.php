@@ -14,7 +14,7 @@ namespace SatisPress\Provider;
 use Cedaro\WP\Plugin\AbstractHookProvider;
 use Psr\Container\ContainerInterface;
 use SatisPress\HTTP\Request;
-use SatisPress\Route\Route;
+use SatisPress\Route\RouteInterface;
 use WP_REST_Server;
 
 /**
@@ -127,9 +127,9 @@ class RequestHandler extends AbstractHookProvider {
 	 * @since 0.3.0
 	 *
 	 * @param string $route Route.
-	 * @return Route
+	 * @return RouteInterface
 	 */
-	protected function get_route_controller( $route ): Route {
+	protected function get_route_controller( $route ): RouteInterface {
 		return $this->controllers->get( $route );
 	}
 }
