@@ -46,7 +46,7 @@ class RequestHandler extends AbstractHookProvider {
 	 * @param ContainerInterface $controllers Route controllers.
 	 */
 	public function __construct( Request $request, ContainerInterface $controllers ) {
-		$this->request = $request;
+		$this->request     = $request;
 		$this->controllers = $controllers;
 	}
 

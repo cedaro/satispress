@@ -30,7 +30,7 @@ class Authentication extends AbstractHookProvider {
 	/**
 	 * Constructor.
 	 *
-	 * @param ServiceIteraor $servers Authentication servers.
+	 * @param ServiceIterator $servers Authentication servers.
 	 */
 	public function __construct( ServiceIterator $servers ) {
 		$this->servers = $servers;
