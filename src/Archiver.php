@@ -39,6 +39,7 @@ class Archiver {
 			'.DS_Store',
 			'.git',
 			'coverage',
+			'docs',
 			'dist',
 			'node_modules',
 			'tests',
