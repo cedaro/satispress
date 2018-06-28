@@ -90,9 +90,7 @@ abstract class AbstractServer {
 			return $value;
 		}
 
-		if ( is_wp_error( $this->auth_status ) ) {
-			$this->handle_error( $this->auth_status );
-		}
+		$this->handle_error( $this->auth_status );
 
 		return $this->auth_status;
 	}
