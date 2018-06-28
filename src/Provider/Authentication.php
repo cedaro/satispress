@@ -55,7 +55,7 @@ class Authentication extends AbstractHookProvider {
 	}
 
 	/**
-	 * Whether the current request is for a Crate route or REST endpoint.
+	 * Whether the current request is for a SatisPress route or REST endpoint.
 	 *
 	 * @since 0.3.0
 	 *
