@@ -13,6 +13,7 @@ namespace SatisPress\Authentication\Basic;
 
 use SatisPress\Authentication\AbstractServer;
 use WP_Error;
+use WP_Http as HTTP;
 use WP_User;
 
 /**
@@ -51,7 +52,7 @@ class Server extends AbstractServer {
 			$this->auth_status = new WP_Error(
 				'invalid_request',
 				esc_html__( 'Missing authorization header.', 'satispress' ),
-				[ 'status' => 401 ]
+				[ 'status' => HTTP::UNAUTHORIZED ]
 			);
 
 			return false;
@@ -63,7 +64,7 @@ class Server extends AbstractServer {
 			$this->auth_status = new WP_Error(
 				'invalid_credentianls',
 				esc_html__( 'Invalid credentials.', 'satispress' ),
-				[ 'status' => 401 ]
+				[ 'status' => HTTP::UNAUTHORIZED ]
 			);
 
 			return false;
@@ -84,13 +85,13 @@ class Server extends AbstractServer {
 	protected function handle_error( WP_Error $error ) {
 		$error_data = $error->get_error_data();
 
-		if ( ! empty( $error_data['status'] ) && 401 === $error_data['status'] ) {
+		if ( ! empty( $error_data['status'] ) && HTTP::UNAUTHORIZED === $error_data['status'] ) {
 			header( 'WWW-Authenticate: Basic' );
 		}
 
 		wp_die(
 			wp_kses_data( $error->get_error_message() ),
-			empty( $error_data['status'] ) ? 500 : $error_data['status']
+			empty( $error_data['status'] ) ? HTTP::INTERNAL_SERVER_ERROR : $error_data['status']
 		);
 	}
 }

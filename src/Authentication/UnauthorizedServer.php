@@ -14,6 +14,7 @@ declare ( strict_types = 1 );
 namespace SatisPress\Authentication;
 
 use WP_Error;
+use WP_Http as HTTP;
 
 /**
  * Unauthorized authentication server class.
@@ -39,7 +40,7 @@ class UnauthorizedServer extends AbstractServer {
 		$this->auth_status = new WP_Error(
 			'invalid_credentials',
 			esc_html__( 'Authentication is required for this resource.', 'satispress' ),
-			[ 'status' => 401 ]
+			[ 'status' => HTTP::UNAUTHORIZED ]
 		);
 
 		return false;
@@ -60,7 +61,7 @@ class UnauthorizedServer extends AbstractServer {
 		wp_die(
 			wp_kses_data( $error->get_error_message() ),
 			esc_html__( 'Authentication Required', 'satispress' ),
-			[ 'response' => 401 ]
+			[ 'response' => HTTP::UNAUTHORIZED ]
 		);
 	}
 }
