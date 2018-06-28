@@ -18,6 +18,7 @@
  * Text Domain: satispress
  * Domain Path: /languages
  * GitHub Plugin URI: blazersix/satispress
+ * Release Asset: true
  * Requires PHP: 5.6
  */
 
