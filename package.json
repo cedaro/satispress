@@ -17,6 +17,8 @@
 	},
 	"homepage": "https://github.com/blazersix/satispress",
 	"devDependencies": {
+		"archiver": "^2.1.1",
+		"minimist": "^1.2.0",
 		"node-wp-i18n": "^1.2.0"
 	},
 	"scripts": {
