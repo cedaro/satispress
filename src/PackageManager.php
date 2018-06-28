@@ -20,19 +20,19 @@ use Exception;
  */
 class PackageManager {
 	/**
-	 * Path to where packages are cached.
+	 * Package factory.
 	 *
-	 * @var string
+	 * @var PackageFactory
 	 */
-	protected $cache_path;
+	protected $factory;
 
 	/**
-	 * Initialise SatisPress object.
+	 * Initialize the package manager.
 	 *
-	 * @param string $cache_path Path to where packages are cached.
+	 * @param PackageFactory $factory Package factory.
 	 */
-	public function __construct( string $cache_path ) {
-		$this->cache_path = $cache_path;
+	public function __construct( PackageFactory $factory ) {
+		$this->factory = $factory;
 	}
 
 	/**
@@ -47,9 +47,7 @@ class PackageManager {
 	 * @return Package
 	 */
 	public function get_package( string $slug, string $type ): Package {
-		$package_factory = new PackageFactory();
-
-		return $package_factory->create( $type, $slug, $this->cache_path );
+		return $this->factory->create( $type, $slug );
 	}
 
 	/**
@@ -72,7 +70,7 @@ class PackageManager {
 				try {
 					$package = $this->get_package( $identifier, $type );
 
-					if ( $package && $package->is_installed() && '' !== $package->get_version_normalized() ) {
+					if ( $package && $package->is_installed() ) {
 						$packages[ $package->get_slug() ] = $package;
 					}
 				// phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch

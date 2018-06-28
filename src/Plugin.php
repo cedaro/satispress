@@ -11,7 +11,7 @@ declare ( strict_types = 1 );
 
 namespace SatisPress;
 
-use Cedaro\WP\Plugin\AbstractPlugin;
+use Cedaro\WP\Plugin\Plugin as WPPlugin;
 use Cedaro\WP\Plugin\Provider\I18n;
 
 /**
@@ -19,7 +19,7 @@ use Cedaro\WP\Plugin\Provider\I18n;
  *
  * @since 0.3.0
  */
-class Plugin extends AbstractPlugin implements Composable {
+class Plugin extends WPPlugin implements Composable {
 	/**
 	 * Compose the object graph.
 	 *
@@ -33,27 +33,22 @@ class Plugin extends AbstractPlugin implements Composable {
 		 */
 		do_action( 'satispress_compose' );
 
-		$package_manager = new PackageManager( $this->cache_path() );
+		$container = $this->container;
 
 		// Register hook providers.
 		$this
-			->register_hooks( new I18n() )
-			->register_hooks( new Provider\Activation() )
-			->register_hooks( new Provider\Deactivation() )
-			->register_hooks( new Provider\RewriteRules() )
-			->register_hooks( new Provider\CustomVendor() )
-			->register_hooks( new Authentication\Basic\Request() )
-			->register_hooks( new Provider\RequestHandler( $package_manager ) )
-			->register_hooks( new Provider\LimitLoginAttempts() );
+			->register_hooks( $container->get( 'hooks.i18n' ) )
+			->register_hooks( $container->get( 'hooks.rewrite_rules' ) )
+			->register_hooks( $container->get( 'hooks.custom_vendor' ) )
+			->register_hooks( $container->get( 'hooks.request_handler' ) )
+			->register_hooks( $container->get( 'hooks.package_archiver' ) );
 
 		if ( is_admin() ) {
-			$htaccess_handler = new Htaccess( $this->cache_path() );
-
 			$this
-				->register_hooks( new Provider\AdminAssets() )
-				->register_hooks( new Provider\BasicAuthenticationSettings( $htaccess_handler ) )
-				->register_hooks( new Screen\Plugins( $package_manager ) )
-				->register_hooks( new Screen\Settings( $package_manager ) );
+				->register_hooks( $container->get( 'hooks.upgrade' ) )
+				->register_hooks( $container->get( 'hooks.admin_assets' ) )
+				->register_hooks( $container->get( 'screen.manage_plugins' ) )
+				->register_hooks( $container->get( 'screen.settings' ) );
 		}
 
 		/**
@@ -62,25 +57,5 @@ class Plugin extends AbstractPlugin implements Composable {
 		 * @since 0.3.0
 		 */
 		do_action( 'satispress_composed' );
-	}
-
-	/**
-	 * Retrieve the path where packages are cached.
-	 *
-	 * Defaults to 'wp-content/uploads/satispress/'.
-	 *
-	 * @since 0.1.0
-	 *
-	 * @return string
-	 */
-	public function cache_path(): string {
-		$uploads = wp_upload_dir();
-		$path    = trailingslashit( $uploads['basedir'] ) . 'satispress/';
-
-		if ( ! file_exists( $path ) ) {
-			wp_mkdir_p( $path );
-		}
-
-		return (string) apply_filters( 'satispress_cache_path', $path );
 	}
 }

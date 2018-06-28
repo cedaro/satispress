@@ -21,14 +21,6 @@ use SatisPress\VersionParser;
  */
 class Theme extends Package {
 	/**
-	 * Base path where packages are cached.
-	 *
-	 * @since 0.2.0
-	 * @var string
-	 */
-	protected $archive_path;
-
-	/**
 	 * Theme slug.
 	 *
 	 * @since 0.2.0
@@ -51,15 +43,11 @@ class Theme extends Package {
 	 *
 	 * @since 0.2.0
 	 *
-	 * @param string        $theme_directory Name of the theme directory.
-	 * @param string        $archive_path    Base path where packages are cached.
-	 * @param VersionParser $version_parser  Version parser.
+	 * @param string $theme_directory Name of the theme directory.
 	 */
-	public function __construct( string $theme_directory, string $archive_path, VersionParser $version_parser ) {
-		$this->slug           = $theme_directory;
-		$this->theme          = wp_get_theme( $theme_directory );
-		$this->archive_path   = trailingslashit( $archive_path );
-		$this->version_parser = $version_parser;
+	public function __construct( string $theme_directory ) {
+		$this->slug  = $theme_directory;
+		$this->theme = wp_get_theme( $theme_directory );
 	}
 
 	/**
@@ -126,19 +114,6 @@ class Theme extends Package {
 	 */
 	public function get_name(): string {
 		return $this->theme->get( 'Name' );
-	}
-
-	/**
-	 * Retrieve the root directory for the package type.
-	 *
-	 * This is the directory path that will be stripped when the theme is zipped.
-	 *
-	 * @since 0.2.0
-	 *
-	 * @return string
-	 */
-	public function get_package_root(): string {
-		return get_theme_root( $this->get_slug() );
 	}
 
 	/**

@@ -11,6 +11,88 @@ declare ( strict_types = 1 );
 
 namespace SatisPress;
 
+use SatisPress\Plugin;
+
+/**
+ * Retrieve the main plugin instance.
+ *
+ * @since 0.3.0
+ *
+ * @return Plugin
+ */
+function plugin() {
+	static $instance;
+	return $instance ?? new Plugin();
+}
+
+/**
+ * Autoload mapped classes.
+ *
+ * @since 0.3.0
+ *
+ * @param string $class Class name.
+ */
+function autoloader_classmap( $class ) {
+	$class_map = array(
+		'PclZip' => ABSPATH . 'wp-admin/includes/class-pclzip.php',
+	);
+
+	if ( isset( $class_map[ $class ] ) ) {
+		require_once $class_map[ $class ];
+	}
+}
+
+/**
+ * Generate a random string.
+ *
+ * @since 0.3.0
+ *
+ * @param integer $length Length of the string to generate.
+ * @return string
+ */
+function generate_random_string( $length = 12 ) {
+	$chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+
+	$str = '';
+	$max = strlen( $chars ) - 1;
+	for ( $i = 0; $i < $length; $i++ ) {
+		$str .= substr( $chars, random_int( 0, $max ), 1 );
+	}
+
+	return $str;
+}
+
+/**
+ * Retrieve the authorization header.
+ *
+ * On certain systems and configurations, the Authorization header will be
+ * stripped out by the server or PHP. Typically this is then used to
+ * generate `PHP_AUTH_USER`/`PHP_AUTH_PASS` but not passed on. We use
+ * `getallheaders` here to try and grab it out instead.
+ *
+ * From https://github.com/WP-API/OAuth1
+ *
+ * @return string|null Authorization header if set, null otherwise
+ */
+function get_authorization_header() {
+	if ( ! empty( $_SERVER['HTTP_AUTHORIZATION'] ) ) {
+		return stripslashes( $_SERVER['HTTP_AUTHORIZATION'] );
+	}
+
+	if ( function_exists( 'getallheaders' ) ) {
+		$headers = getallheaders();
+
+		// Check for the authorization header case-insensitively.
+		foreach ( $headers as $key => $value ) {
+			if ( 'authorization' === strtolower( $key ) ) {
+				return $value;
+			}
+		}
+	}
+
+	return null;
+}
+
 /**
  * Retrieve the permalink for packages.json.
  *

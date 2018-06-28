@@ -12,7 +12,6 @@ declare ( strict_types = 1 );
 namespace SatisPress\PackageType;
 
 use SatisPress\Package;
-use SatisPress\VersionParser;
 
 /**
  * Plugin package class.
@@ -20,14 +19,6 @@ use SatisPress\VersionParser;
  * @since 0.2.0
  */
 class Plugin extends Package {
-	/**
-	 * Base path where packages are cached.
-	 *
-	 * @since 0.2.0
-	 * @var string
-	 */
-	protected $archive_path;
-
 	/**
 	 * Plugin basename.
 	 *
@@ -65,17 +56,13 @@ class Plugin extends Package {
 	 *
 	 * @since 0.2.0
 	 *
-	 * @param string        $basename       Plugin basename (relative path from the plugins directory).
-	 * @param string        $archive_path   Base path where packages are cached.
-	 * @param VersionParser $version_parser  Version parser.
+	 * @param string $basename Plugin basename (relative path from the plugins directory).
 	 */
-	public function __construct( string $basename, string $archive_path, VersionParser $version_parser ) {
-		$this->basename       = $basename;
-		$slug                 = dirname( $basename );
-		$slug                 = ( '.' === $slug ) ? basename( $basename, '.php' ) : $slug;
-		$this->slug           = sanitize_title_with_dashes( $slug );
-		$this->archive_path   = trailingslashit( $archive_path );
-		$this->version_parser = $version_parser;
+	public function __construct( string $basename ) {
+		$this->basename = $basename;
+		$slug           = dirname( $basename );
+		$slug           = ( '.' === $slug ) ? basename( $basename, '.php' ) : $slug;
+		$this->slug     = sanitize_title_with_dashes( $slug );
 	}
 
 	/**
@@ -164,19 +151,6 @@ class Plugin extends Package {
 	 */
 	public function get_name(): string {
 		return $this->get_data( 'Name' );
-	}
-
-	/**
-	 * Retrieve the root directory for the package type.
-	 *
-	 * This is the directory path that will be stripped when the plugin is zipped.
-	 *
-	 * @since 0.2.0
-	 *
-	 * @return string
-	 */
-	public function get_package_root(): string {
-		return WP_PLUGIN_DIR;
 	}
 
 	/**

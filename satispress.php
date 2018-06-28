@@ -25,17 +25,45 @@ declare ( strict_types = 1 );
 
 namespace SatisPress;
 
+use SatisPress\Container;
+use SatisPress\ServiceProvider;
+
+/**
+ * Plugin version.
+ *
+ * @var string
+ */
+const VERSION = '0.3.0-dev';
+
 // Load the Composer autoloader.
 if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
 	require __DIR__ . '/vendor/autoload.php';
 }
 
-add_action( 'plugins_loaded', function() {
-	( new Plugin() )
-		->set_basename( plugin_basename( __FILE__ ) )
-		->set_directory( plugin_dir_path( __FILE__ ) )
-		->set_file( __DIR__ . '/satispress.php' )
-		->set_slug( 'satispress' )
-		->set_url( plugin_dir_url( __FILE__ ) )
-		->compose();
-} );
+// Autoload mapped classes.
+spl_autoload_register( __NAMESPACE__ . '\autoloader_classmap' );
+
+
+// Create a container and register a service provider.
+$container = new Container();
+$container->register( new ServiceProvider() );
+
+// Initialize the plugin and inject the container.
+$plugin = plugin()
+	->set_basename( plugin_basename( __FILE__ ) )
+	->set_directory( plugin_dir_path( __FILE__ ) )
+	->set_file( __DIR__ . '/satispress.php' )
+	->set_slug( 'satispress' )
+	->set_url( plugin_dir_url( __FILE__ ) )
+	->set_container( $container );
+
+$plugin
+	->register_hooks( $container->get( 'hooks.activation' ) )
+	->register_hooks( $container->get( 'hooks.deactivation' ) );
+
+// Authentication handlers need to be registered early.
+add_action( 'plugins_loaded', function() use ( $plugin, $container ) {
+	$plugin->register_hooks( $container->get( 'hooks.authentication' ) );
+}, 5 );
+
+add_action( 'plugins_loaded', [ $plugin, 'compose' ] );

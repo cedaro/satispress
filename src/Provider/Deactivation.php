@@ -25,7 +25,7 @@ class Deactivation extends AbstractHookProvider {
 	 * @since 0.3.0
 	 */
 	public function register_hooks() {
-		register_deactivation_hook( $this->plugin->get_file(), array( $this, 'deactivate' ) );
+		register_deactivation_hook( $this->plugin->get_file(), [ $this, 'deactivate' ] );
 	}
 
 	/**

@@ -47,16 +47,19 @@ if ( ! empty( $packages ) ) :
 			<tr>
 				<th><?php esc_html_e( 'Releases', 'satispress' ); ?></th>
 				<td>
-					<?php $version = $package->get_version(); ?>
-					<strong><a href="<?php echo esc_url( $package->get_archive_url( $version ) ); ?>"><?php echo esc_html( $version ); ?></a></strong>
 					<?php
-					$versions = $package->get_cached_versions();
-					if ( ! empty( $versions ) ) {
-						$versions = array_map( function( $version ) use ( $package ) {
-							return '<a href="' . esc_url( $package->get_archive_url( $version ) ) . '">' . esc_html( $version ) . '</a>';
-						}, $versions);
+					if ( $package->has_releases() ) {
+						$versions = array_map( function( $release ) {
+							$is_installed = $release->get_version() === $release->get_package()->get_version();
 
-						echo wp_kses_post( ', ' . implode( ', ', $versions ) );
+							return sprintf(
+								$is_installed ? '<a href="%1$s"><strong>%2$s</strong></a>' : '<a href="%1$s">%2$s</a>',
+								esc_url( $release->get_download_url() ),
+								esc_html( $release->get_version() )
+							);
+						}, $package->get_releases() );
+
+						echo wp_kses_post( implode( ', ', array_filter( $versions ) ) );
 					}
 					?>
 				</td>
