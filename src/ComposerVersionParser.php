@@ -1,6 +1,6 @@
 <?php
 /**
- * Version parser.
+ * Composer version parser.
  *
  * @package SatisPress
  * @license GPL-2.0-or-later
@@ -12,12 +12,12 @@ declare ( strict_types = 1 );
 namespace SatisPress;
 
 /**
- * Version parser class.
+ * Composer version parser class.
  *
  * @package SatisPress
  * @since 0.3.0
  */
-final class VersionParser implements VersionParserInterface {
+final class ComposerVersionParser implements VersionParserInterface {
 	/**
 	 * Version parser instance.
 	 *

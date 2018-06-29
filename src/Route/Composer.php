@@ -16,7 +16,7 @@ use SatisPress\Exception\FileNotFound;
 use SatisPress\Package;
 use SatisPress\PackageManager;
 use SatisPress\ReleaseManager;
-use SatisPress\VersionParser;
+use SatisPress\VersionParserInterface;
 use SatisPress\HTTP\Request;
 
 /**
@@ -51,11 +51,11 @@ class Composer implements RouteInterface {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @param PackageManager $package_manager Package manager.
-	 * @param ReleaseManager $release_manager Release manager.
-	 * @param VersionParser  $version_parser  Version parser.
+	 * @param PackageManager         $package_manager Package manager.
+	 * @param ReleaseManager         $release_manager Release manager.
+	 * @param VersionParserInterface $version_parser  Version parser.
 	 */
-	public function __construct( PackageManager $package_manager, ReleaseManager $release_manager, VersionParser $version_parser ) {
+	public function __construct( PackageManager $package_manager, ReleaseManager $release_manager, VersionParserInterface $version_parser ) {
 		$this->package_manager = $package_manager;
 		$this->release_manager = $release_manager;
 		$this->version_parser  = $version_parser;
