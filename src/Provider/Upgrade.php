@@ -13,9 +13,12 @@ namespace SatisPress\Provider;
 
 use const SatisPress\VERSION;
 use Cedaro\WP\Plugin\AbstractHookProvider;
-use Psr\Container\ContainerInterface;
 use SatisPress\Exception\ExceptionInterface;
+use SatisPress\Htaccess;
+use SatisPress\PackageManager;
+use SatisPress\ReleaseManager;
 use SatisPress\Storage\Local;
+use SatisPress\Storage\StorageInterface;
 
 /**
  * Class for upgrade routines.
@@ -31,21 +34,48 @@ class Upgrade extends AbstractHookProvider {
 	const VERSION_OPTION_NAME = 'satispress_version';
 
 	/**
-	 * Container.
+	 * Htaccess handler.
 	 *
-	 * @var ContainerInterface
+	 * @var Htaccess
 	 */
-	protected $container;
+	protected $htaccess;
+
+	/**
+	 * Package manager.
+	 *
+	 * @var PackageManager
+	 */
+	protected $package_manager;
+
+	/**
+	 * Release manager.
+	 *
+	 * @var ReleaseManager
+	 */
+	protected $release_manager;
+
+	/**
+	 * Storage service.
+	 *
+	 * @var StorageInterface
+	 */
+	protected $storage;
 
 	/**
 	 * Constructor.
 	 *
 	 * @since 0.3.0
 	 *
-	 * @param ContainerInterface $container Container.
+	 * @param PackageManager   $package_manager Package manager.
+	 * @param ReleaseManager   $release_manager Release manager.
+	 * @param StorageInterface $storage         Storage service.
+	 * @param Htaccess         $htaccess        Htaccess handler.
 	 */
-	public function __construct( ContainerInterface $container ) {
-		$this->container = $container;
+	public function __construct( PackageManager $package_manager, ReleaseManager $release_manager, StorageInterface $storage, Htaccess $htaccess ) {
+		$this->htaccess        = $htaccess;
+		$this->package_manager = $package_manager;
+		$this->release_manager = $release_manager;
+		$this->storage         = $storage;
 	}
 
 	/**
@@ -84,12 +114,11 @@ class Upgrade extends AbstractHookProvider {
 	 * @since 0.3.0
 	 */
 	protected function cache_packages() {
-		$packages = $this->container->get( 'package.manager' )->get_packages();
+		$packages = $this->package_manager->get_packages();
 
 		foreach ( $packages as $package ) {
 			try {
-				$release_manager = $this->container->get( 'release.manager' );
-				$release_manager->archive( $package->get_installed_release() );
+				$this->release_manager->archive( $package->get_installed_release() );
 			} catch ( ExceptionInterface $e ) { }
 		}
 	}
@@ -103,11 +132,9 @@ class Upgrade extends AbstractHookProvider {
 	 * @since 0.3.0
 	 */
 	protected function setup_storage() {
-		$storage       = $this->container->get( 'storage' );
-		$htaccess      = $this->container->get( 'htaccess' );
 		$upload_config = wp_upload_dir();
 
-		if ( ! $storage instanceof Local ) {
+		if ( ! $this->storage instanceof Local ) {
 			return;
 		}
 
@@ -115,14 +142,14 @@ class Upgrade extends AbstractHookProvider {
 		// The new directory contains a random suffix.
 		$old_path = path_join( $upload_config['basedir'], 'satispress' );
 		if ( file_exists( $old_path ) ) {
-			rename( $old_path, $storage->get_base_directory() );
+			rename( $old_path, $this->storage->get_base_directory() );
 		}
 
-		if ( ! wp_mkdir_p( $storage->get_base_directory() ) ) {
+		if ( ! wp_mkdir_p( $this->storage->get_base_directory() ) ) {
 			return;
 		}
 
-		$htaccess->add_rules( [ 'deny from all' ] );
-		$htaccess->save();
+		$this->htaccess->add_rules( [ 'deny from all' ] );
+		$this->htaccess->save();
 	}
 }

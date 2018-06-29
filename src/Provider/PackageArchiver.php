@@ -12,11 +12,11 @@ declare ( strict_types = 1 );
 namespace SatisPress\Provider;
 
 use Cedaro\WP\Plugin\AbstractHookProvider;
-use Psr\Container\ContainerInterface;
 use SatisPress\Exception\ExceptionInterface;
 use SatisPress\Package;
 use SatisPress\PackageManager;
 use SatisPress\Release;
+use SatisPress\ReleaseManager;
 
 /**
  * Package archiver class.
@@ -25,21 +25,30 @@ use SatisPress\Release;
  */
 class PackageArchiver extends AbstractHookProvider {
 	/**
-	 * Container.
+	 * Package manager.
 	 *
-	 * @var ContainerInterface
+	 * @var PackageManager
 	 */
-	protected $container;
+	protected $package_manager;
+
+	/**
+	 * Release manager.
+	 *
+	 * @var ReleaseManager
+	 */
+	protected $release_manager;
 
 	/**
 	 * Constructor.
 	 *
 	 * @since 0.3.0
 	 *
-	 * @param ContainerInterface $container Container.
+	 * @param PackageManager $package_manager Package manager.
+	 * @param ReleaseManager $release_manager Release manager.
 	 */
-	public function __construct( ContainerInterface $container ) {
-		$this->container = $container;
+	public function __construct( PackageManager $package_manager, ReleaseManager $release_manager ) {
+		$this->package_manager = $package_manager;
+		$this->release_manager = $release_manager;
 	}
 
 	/**
@@ -130,9 +139,8 @@ class PackageArchiver extends AbstractHookProvider {
 			// Plugin data is stored as an object. Coerce to an array.
 			$update_data = (array) $update_data;
 
-			$package_manager = $this->container->get( 'package.manager' );
-			$type            = isset( $update_data['plugin'] ) ? 'plugin' : 'theme';
-			$package         = $package_manager->get_package( $update_data[ $type ], $type );
+			$type    = isset( $update_data['plugin'] ) ? 'plugin' : 'theme';
+			$package = $this->package_manager->get_package( $update_data[ $type ], $type );
 
 			// Bail if the package isn't whitelisted.
 			if ( empty( $package ) ) {
@@ -146,7 +154,7 @@ class PackageArchiver extends AbstractHookProvider {
 			);
 
 			try {
-				$this->container->get( 'release.manager' )->archive( $release );
+				$this->release_manager->archive( $release );
 			} catch( ExceptionInterface $e ) { }
 		}
 
@@ -186,12 +194,9 @@ class PackageArchiver extends AbstractHookProvider {
 	 * @return Package
 	 */
 	protected function archive_package( string $slug, string $type ): Package {
-		$package_manager = $this->container->get( 'package.manager' );
-		$release_manager = $this->container->get( 'release.manager' );
-
 		try {
-			$package = $package_manager->get_package( $slug, $type );
-			$release_manager->archive( $package->get_installed_release() );
+			$package = $this->package_manager->get_package( $slug, $type );
+			$this->release_manager->archive( $package->get_installed_release() );
 		} catch( ExceptionInterface $e ) { }
 
 		return $package;

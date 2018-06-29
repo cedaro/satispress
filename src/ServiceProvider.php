@@ -112,12 +112,10 @@ class ServiceProvider implements ServiceProviderInterface {
 		};
 
 		$container['hooks.package_archiver'] = function( $container ) {
-			$locator = new ServiceLocator( $container, [
-				'package.manager',
-				'release.manager',
-			] );
-
-			return new Provider\PackageArchiver( $locator );
+			return new Provider\PackageArchiver(
+				$container['package.manager'],
+				$container['release.manager']
+			);
 		};
 
 		$container['hooks.request_handler'] = function( $container ) {
@@ -132,14 +130,12 @@ class ServiceProvider implements ServiceProviderInterface {
 		};
 
 		$container['hooks.upgrade'] = function( $container ) {
-			$locator = new ServiceLocator( $container, [
-				'package.manager',
-				'htaccess' => 'htaccess.handler',
-				'release.manager',
-				'storage',
-			] );
-
-			return new Provider\Upgrade( $locator );
+			return new Provider\Upgrade(
+				$container['package.manager'],
+				$container['release.manager'],
+				$container['storage'],
+				$container['htaccess.handler']
+			);
 		};
 
 		$container['htaccess.handler'] = function( $container ) {
