@@ -20,7 +20,7 @@ use SatisPress\Plugin;
  *
  * @return Plugin
  */
-function plugin() {
+function plugin(): Plugin {
 	static $instance;
 	return $instance ?? new Plugin();
 }
@@ -50,7 +50,7 @@ function autoloader_classmap( $class ) {
  * @param integer $length Length of the string to generate.
  * @return string
  */
-function generate_random_string( $length = 12 ) {
+function generate_random_string( int $length = 12 ): string {
 	$chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
 	$str = '';
@@ -111,7 +111,7 @@ function get_packages_permalink( array $args = null ): string {
 		$url = add_query_arg( 'satispress', 'packages.json', home_url( '/' ) );
 	} else {
 		// Leave off the packages.json if 'base' arg is true.
-		$suffix = ( isset( $args['base'] ) && $args['base'] ) ? '' : 'packages.json';
+		$suffix = isset( $args['base'] ) && $args['base'] ? '' : 'packages.json';
 		$url    = sprintf( home_url( '/satispress/%s' ), $suffix );
 	}
 

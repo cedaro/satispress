@@ -26,7 +26,7 @@ interface StorageInterface {
 	 * @param string $file      Relative file path.
 	 * @return string
 	 */
-	public function checksum( $algorithm, $file );
+	public function checksum( $algorithm, $file ): string;
 
 	/**
 	 * Delete a file.
@@ -36,7 +36,7 @@ interface StorageInterface {
 	 * @param string $file Relative file path.
 	 * @return boolean
 	 */
-	public function delete( $file );
+	public function delete( $file ): bool;
 
 	/**
 	 * Whether a file exists.
@@ -46,7 +46,7 @@ interface StorageInterface {
 	 * @param string $file Relative file path.
 	 * @return boolean
 	 */
-	public function exists( $file );
+	public function exists( $file ): bool;
 
 	/**
 	 * List files.
@@ -56,7 +56,7 @@ interface StorageInterface {
 	 * @param string $path Relative path.
 	 * @return array Array of relative file paths.
 	 */
-	public function list_files( $path );
+	public function list_files( $path ): array;
 
 	/**
 	 * Move a file.
@@ -65,7 +65,7 @@ interface StorageInterface {
 	 * @param string $destination Relative destination path; includes the file name.
 	 * @return boolean
 	 */
-	public function move( $source, $destination );
+	public function move( $source, $destination ): bool;
 
 	/**
 	 * Send a file for client download.

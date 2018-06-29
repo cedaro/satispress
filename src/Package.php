@@ -11,6 +11,8 @@ declare ( strict_types = 1 );
 
 namespace SatisPress;
 
+use SatisPress\Exception\InvalidReleaseVersion;
+
 /**
  * Abstract Composer package class.
  *
@@ -60,6 +62,7 @@ abstract class Package {
 	 * @since 0.3.0
 	 *
 	 * @param string $version Version string.
+	 * @throws InvalidReleaseVersion If the version is invalid.
 	 * @return Release
 	 */
 	public function get_release( $version ): Release {
@@ -88,7 +91,7 @@ abstract class Package {
 	 *
 	 * @return boolean
 	 */
-	public function has_releases() {
+	public function has_releases(): bool {
 		return ! empty( $this->releases );
 	}
 
@@ -99,7 +102,7 @@ abstract class Package {
 	 *
 	 * @return array
 	 */
-	public function get_releases() {
+	public function get_releases(): array {
 		return $this->releases;
 	}
 

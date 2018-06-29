@@ -69,8 +69,9 @@ final class PackageFactory {
 	 * @since 0.3.0
 	 *
 	 * @param Package $package Package instance.
+	 * @return Package
 	 */
-	protected function add_releases( $package ) {
+	protected function add_releases( Package $package ): Package {
 		$releases = $this->release_manager->all( $package );
 
 		if ( $package->is_installed() ) {
@@ -106,7 +107,7 @@ final class PackageFactory {
 	 * @param Package $package Package instance.
 	 * @return Release
 	 */
-	protected function get_package_update( $package ) {
+	protected function get_package_update( Package $package ) {
 		$release = null;
 
 		if ( 'plugin' === $package->get_type() ) {

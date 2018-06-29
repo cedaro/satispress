@@ -73,7 +73,7 @@ class PackageArchiver extends AbstractHookProvider {
 	 * @since 0.3.0
 	 *
 	 * @param string $option_name Option name.
-	 * @param array $value        Value.
+	 * @param array  $value       Value.
 	 */
 	public function archive_on_option_add( string $option_name, $value ) {
 		if ( empty( $value ) || ! is_array( $value ) ) {
@@ -92,8 +92,8 @@ class PackageArchiver extends AbstractHookProvider {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @param array $old_value    Old value.
-	 * @param array $value        New value.
+	 * @param array  $old_value   Old value.
+	 * @param array  $value       New value.
 	 * @param string $option_name Option name.
 	 */
 	public function archive_on_option_update( $old_value, $value, string $option_name ) {
