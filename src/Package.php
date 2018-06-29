@@ -44,6 +44,17 @@ abstract class Package {
 	}
 
 	/**
+	 * Whether the package has any releases.
+	 *
+	 * @since 0.3.0
+	 *
+	 * @return boolean
+	 */
+	public function has_releases(): bool {
+		return ! empty( $this->releases );
+	}
+
+	/**
 	 * Add a release.
 	 *
 	 * @since 0.3.0
@@ -74,28 +85,6 @@ abstract class Package {
 	}
 
 	/**
-	 * Retrieve the installed release.
-	 *
-	 * @since 0.3.0
-	 *
-	 * @return Release
-	 */
-	public function get_installed_release(): Release {
-		return $this->get_release( $this->get_version() );
-	}
-
-	/**
-	 * Whether the package has any releases.
-	 *
-	 * @since 0.3.0
-	 *
-	 * @return boolean
-	 */
-	public function has_releases(): bool {
-		return ! empty( $this->releases );
-	}
-
-	/**
 	 * Retrieve releases.
 	 *
 	 * @since 0.3.0
@@ -104,6 +93,17 @@ abstract class Package {
 	 */
 	public function get_releases(): array {
 		return $this->releases;
+	}
+
+	/**
+	 * Retrieve the installed release.
+	 *
+	 * @since 0.3.0
+	 *
+	 * @return Release
+	 */
+	public function get_installed_release(): Release {
+		return $this->get_release( $this->get_version() );
 	}
 
 	/**
