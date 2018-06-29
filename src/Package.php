@@ -107,6 +107,22 @@ abstract class Package {
 	}
 
 	/**
+	 * Retrieve the latest release version.
+	 *
+	 * @since 0.3.0
+	 *
+	 * @throws InvalidReleaseVersion If the package doesn't have any releases.
+	 * @return string
+	 */
+	public function get_latest_release(): Release {
+		if ( $this->has_releases() ) {
+			return reset( $this->releases );
+		}
+
+		throw new InvalidReleaseVersion( 'Invalid release version.' );
+	}
+
+	/**
 	 * Whether the package is installed.
 	 *
 	 * @since 0.3.0

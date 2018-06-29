@@ -13,6 +13,7 @@ namespace SatisPress\Route;
 
 use function SatisPress\send_file;
 use SatisPress\Exception\ExceptionInterface;
+use SatisPress\Exception\InvalidReleaseVersion;
 use SatisPress\Package;
 use SatisPress\PackageManager;
 use SatisPress\ReleaseManager;
@@ -93,20 +94,16 @@ class Download implements RouteInterface {
 	 * @since 0.3.0
 	 *
 	 * @param Package $package Package object.
-	 * @param string  $version Optional. Version of the package to send. Defaults to the current version.
+	 * @param string  $version Version of the package to send.
 	 */
-	protected function send_package( Package $package, string $version = null ) {
-		if ( null === $version ) {
-			$version = '';
+	protected function send_package( Package $package, string $version ) {
+		if ( 'latest' === $version ) {
+			$version = $package->get_latest_release()->get_version();
 		}
 
-		$releases = $package->get_releases();
-		if ( ! isset( $releases[ $version ] ) ) {
-			$this->send_404();
-		}
-
-		$release = $package->get_release( $version );
-		if ( empty( $release ) ) {
+		try {
+			$release = $package->get_release( $version );
+		} catch ( InvalidReleaseVersion $e ) {
 			$this->send_404();
 		}
 
