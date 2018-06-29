@@ -12,6 +12,7 @@ declare ( strict_types = 1 );
 namespace SatisPress\Provider;
 
 use Cedaro\WP\Plugin\AbstractHookProvider;
+use SatisPress\Capabilities;
 use SatisPress\Storage\Local;
 
 /**
@@ -30,8 +31,11 @@ class Activation extends AbstractHookProvider {
 	}
 
 	/**
-	 * Set a flag during activation to flush rewrite rules after plugin rewrite
-	 * rules have been registered.
+	 * Activate the plugin.
+	 *
+	 * - Sets a flag to flush rewrite rules after plugin rewrite rules have been
+	 *   registered.
+	 * - Registers capabilities for the admin role.
 	 *
 	 * @see \SatisPress\Provider\RewriteRules::maybe_flush_rewrite_rules()
 	 *
@@ -39,5 +43,6 @@ class Activation extends AbstractHookProvider {
 	 */
 	public function activate() {
 		update_option( 'satispress_flush_rewrite_rules', 'yes' );
+		Capabilities::register();
 	}
 }

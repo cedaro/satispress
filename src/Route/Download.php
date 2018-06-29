@@ -12,11 +12,13 @@ declare ( strict_types = 1 );
 namespace SatisPress\Route;
 
 use function SatisPress\send_file;
+use SatisPress\Capabilities;
 use SatisPress\Exception\ExceptionInterface;
 use SatisPress\Package;
 use SatisPress\PackageManager;
 use SatisPress\ReleaseManager;
 use SatisPress\HTTP\Request;
+use WP_Http as HTTP;
 
 /**
  * Class to handle download requests.
@@ -64,6 +66,10 @@ class Download implements RouteInterface {
 	public function handle_request( Request $request ) {
 		require_once ABSPATH . 'wp-admin/includes/plugin.php';
 
+		if ( ! current_user_can( Capabilities::DOWNLOAD_PACKAGES ) ) {
+			$this->send_403();
+		}
+
 		$slug = sanitize_key( $request['slug'] );
 		if ( empty( $slug ) ) {
 			$this->send_404();
@@ -81,7 +87,14 @@ class Download implements RouteInterface {
 			$this->send_404();
 		}
 
-		$this->send_package( $packages[ $slug ], $version );
+		$package = $packages[ $slug ];
+
+		// Ensure the user has access to download the package.
+		if ( ! current_user_can( Capabilities::DOWNLOAD_PACKAGE, $package->get_slug() ) ) {
+			$this->send_403();
+		}
+
+		$this->send_package( $package, $version );
 		exit;
 	}
 
@@ -131,13 +144,37 @@ class Download implements RouteInterface {
 	}
 
 	/**
-	 * Send a 404 response.
+	 * Send a forbidden response.
+	 *
+	 * @since 0.3.0
+	 */
+	protected function send_403() {
+		$this->send_error_response(
+			esc_html__( 'Sorry, you are not allowed to download this file.', 'satispress' ),
+			HTTP::NOT_FOUND
+		);
+	}
+
+	/**
+	 * Send a not found response.
 	 *
 	 * @since 0.3.0
 	 */
 	protected function send_404() {
-		status_header( 404 );
+		$this->send_error_response(
+			esc_html__( 'Package does not exist.', 'satispress' ),
+			HTTP::NOT_FOUND
+		);
+	}
+
+	/**
+	 * Send a response.
+	 *
+	 * @since 0.3.0
+	 */
+	protected function send_error_response( $message, $status ) {
+		status_header( $status );
 		nocache_headers();
-		wp_die( esc_html__( 'Package does not exist.', 'satispress' ) );
+		wp_die( $message );
 	}
 }

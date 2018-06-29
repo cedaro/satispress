@@ -14,6 +14,7 @@ namespace SatisPress\Provider;
 use const SatisPress\VERSION;
 use Cedaro\WP\Plugin\AbstractHookProvider;
 use SatisPress\Exception\ExceptionInterface;
+use SatisPress\Capabilities;
 use SatisPress\Htaccess;
 use SatisPress\PackageManager;
 use SatisPress\ReleaseManager;
@@ -96,6 +97,7 @@ class Upgrade extends AbstractHookProvider {
 		$saved_version = get_option( self::VERSION_OPTION_NAME, '0' );
 
 		if ( version_compare( $saved_version, VERSION, '<' ) ) {
+			Capabilities::register();
 			$this->cache_packages();
 			$this->setup_storage();
 		}

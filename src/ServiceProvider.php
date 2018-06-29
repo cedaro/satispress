@@ -99,6 +99,10 @@ class ServiceProvider implements ServiceProviderInterface {
 			return new Provider\Authentication( $container['authentication.servers'] );
 		};
 
+		$container['hooks.capabilities'] = function( $container ) {
+			return new Provider\Capabilities();
+		};
+
 		$container['hooks.custom_vendor'] = function( $container ) {
 			return new Provider\CustomVendor();
 		};
