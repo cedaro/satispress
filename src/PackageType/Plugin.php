@@ -219,6 +219,7 @@ class Plugin extends Package {
 	 */
 	protected function get_data( string $prop ): string {
 		if ( empty( $this->data ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
 			$this->data = get_plugin_data( $this->get_file(), false, false );
 		}
 
