@@ -52,12 +52,63 @@ class PackageArchiver extends AbstractHookProvider {
 			add_filter( 'upgrader_pre_install', [ $this, 'archive_source_before_update' ], 10, 2 );
 		}
 
+		add_action( 'add_option_satispress_plugins', [ $this, 'archive_on_option_add' ], 10, 2 );
+		add_action( 'add_option_satispress_themes', [ $this, 'archive_on_option_add' ], 10, 2 );
+		add_action( 'update_option_satispress_plugins', [ $this, 'archive_on_option_update' ], 10, 3 );
+		add_action( 'update_option_satispress_themes', [ $this, 'archive_on_option_update' ], 10, 3 );
 		add_filter( 'pre_set_site_transient_update_plugins', [ $this, 'archive_updates' ], 9999 );
 		add_filter( 'pre_set_site_transient_update_themes', [ $this, 'archive_updates' ], 9999 );
 
 		// Delete the 'satispress_packages' transient.
 		add_action( 'upgrader_process_complete', [ $this, 'flush_packages_cache' ] );
 		add_action( 'set_site_transient_update_plugins', [ $this, 'flush_packages_cache' ] );
+		add_action( 'add_option_satispress_plugins', [ $this, 'flush_packages_cache' ] );
+		add_action( 'add_option_satispress_themes', [ $this, 'flush_packages_cache' ] );
+		add_action( 'update_option_satispress_plugins', [ $this, 'flush_packages_cache' ] );
+		add_action( 'update_option_satispress_themes', [ $this, 'flush_packages_cache' ] );
+	}
+
+	/**
+	 * Archive packages when they're added to the whitelist.
+	 *
+	 * Archiving packages when they're whitelisted helps ensure a checksum can
+	 * be included in packages.json.
+	 *
+	 * @since 0.3.0
+	 *
+	 * @param string $option_name Option name.
+	 * @param array $value        Value.
+	 */
+	public function archive_on_option_add( string $option_name, $value ) {
+		if ( empty( $value ) || ! is_array( $value ) ) {
+			return;
+		}
+
+		$type = 'satispress_plugins' === $option_name ? 'plugin' : 'theme';
+		$this->archive_packages( $value, $type );
+	}
+
+	/**
+	 * Archive packages when they're added to the whitelist.
+	 *
+	 * Archiving packages when they're whitelisted helps ensure a checksum can
+	 * be included in packages.json.
+	 *
+	 * @since 0.3.0
+	 *
+	 * @param array $old_value    Old value.
+	 * @param array $value        New value.
+	 * @param string $option_name Option name.
+	 */
+	public function archive_on_option_update( $old_value, $value, string $option_name ) {
+		$slugs = array_diff( (array) $value, (array) $old_value );
+
+		if ( empty( $slugs ) ) {
+			return;
+		}
+
+		$type = 'satispress_plugins' === $option_name ? 'plugin' : 'theme';
+		$this->archive_packages( $slugs, $type );
 	}
 
 	/**
@@ -118,14 +169,9 @@ class PackageArchiver extends AbstractHookProvider {
 			return $result;
 		}
 
-		$package_manager = $this->container->get( 'package.manager' );
-		$type            = isset( $data['plugin'] ) ? 'plugin' : 'theme';
-		$package         = $package_manager->get_package( $data[ $type ], $type );
-
-		if ( $package ) {
-			$release_manager = $this->container->get( 'release.manager' );
-			$release_manager->archive( $package->get_installed_release() );
-		}
+		$type  = isset( $data['plugin'] ) ? 'plugin' : 'theme';
+		$slugs = [ $data[ $type ] ];
+		$this->archive_packages( $slugs, $type );
 
 		return $result;
 	}
@@ -137,5 +183,40 @@ class PackageArchiver extends AbstractHookProvider {
 	 */
 	public function flush_packages_cache() {
 		delete_transient( 'satispress_packages' );
+	}
+
+	/**
+	 * Archive an list of packages.
+	 *
+	 * @since 0.3.0
+	 *
+	 * @param array $slugs Array of package slugs.
+	 * @param string $type Type of packages.
+	 */
+	protected function archive_packages( array $slugs, string $type ) {
+		foreach ( $slugs as $slug ) {
+			$this->archive_package( $slug, $type );
+		}
+	}
+
+	/**
+	 * Archive a package.
+	 *
+	 * @since 0.3.0
+	 *
+	 * @param string $slug Packge slug.
+	 * @param string $type Type of package.
+	 * @return Package
+	 */
+	protected function archive_package( string $slug, string $type ): Package {
+		$package_manager = $this->container->get( 'package.manager' );
+		$release_manager = $this->container->get( 'release.manager' );
+
+		$package = $package_manager->get_package( $slug, $type );
+		if ( $package ) {
+			$release_manager->archive( $package->get_installed_release() );
+		}
+
+		return $package;
 	}
 }
