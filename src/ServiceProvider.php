@@ -133,7 +133,9 @@ class ServiceProvider implements ServiceProviderInterface {
 
 		$container['hooks.upgrade'] = function( $container ) {
 			$locator = new ServiceLocator( $container, [
+				'package.manager',
 				'htaccess' => 'htaccess.handler',
+				'release.manager',
 				'storage',
 			] );
 

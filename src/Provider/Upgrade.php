@@ -65,11 +65,29 @@ class Upgrade extends AbstractHookProvider {
 		$saved_version = get_option( self::VERSION_OPTION_NAME, '0' );
 
 		if ( version_compare( $saved_version, VERSION, '<' ) ) {
+			$this->cache_packages();
 			$this->setup_storage();
 		}
 
 		if ( version_compare( $saved_version, VERSION, '<' ) ) {
 			update_option( self::VERSION_OPTION_NAME, VERSION );
+		}
+	}
+
+	/**
+	 * Cache existing packages.
+	 *
+	 * If any packages are already whitelisted before upgrading to 0.3.0, cache
+	 * them so checksums can be generated for packages.json.
+	 *
+	 * @since 0.3.0
+	 */
+	protected function cache_packages() {
+		$packages = $this->container->get( 'package.manager' )->get_packages();
+
+		foreach ( $packages as $package ) {
+			$release_manager = $this->container->get( 'release.manager' );
+			$release_manager->archive( $package->get_installed_release() );
 		}
 	}
 
@@ -81,7 +99,7 @@ class Upgrade extends AbstractHookProvider {
 	 *
 	 * @since 0.3.0
 	 */
-	public function setup_storage() {
+	protected function setup_storage() {
 		$storage       = $this->container->get( 'storage' );
 		$htaccess      = $this->container->get( 'htaccess' );
 		$upload_config = wp_upload_dir();

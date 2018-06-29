@@ -47,11 +47,6 @@ class PackageArchiver extends AbstractHookProvider {
 	 * @since 0.3.0
 	 */
 	public function register_hooks() {
-		// Cache the existing version of a plugin before it's updated.
-		if ( apply_filters( 'satispress_cache_packages_before_update', true ) ) {
-			add_filter( 'upgrader_pre_install', [ $this, 'archive_source_before_update' ], 10, 2 );
-		}
-
 		add_action( 'add_option_satispress_plugins', [ $this, 'archive_on_option_add' ], 10, 2 );
 		add_action( 'add_option_satispress_themes', [ $this, 'archive_on_option_add' ], 10, 2 );
 		add_action( 'update_option_satispress_plugins', [ $this, 'archive_on_option_update' ], 10, 3 );
@@ -153,27 +148,6 @@ class PackageArchiver extends AbstractHookProvider {
 		}
 
 		return $value;
-	}
-
-	/**
-	 * Cache the current version of a plugin before it's udpated.
-	 *
-	 * @since 0.2.0
-	 *
-	 * @param bool  $result Whether the plugin update/install process should continue.
-	 * @param array $data   Extra data passed by the update/install process.
-	 * @return bool
-	 */
-	public function archive_source_before_update( bool $result, array $data ): bool {
-		if ( empty( $data['plugin'] ) && empty( $data['theme'] ) ) {
-			return $result;
-		}
-
-		$type  = isset( $data['plugin'] ) ? 'plugin' : 'theme';
-		$slugs = [ $data[ $type ] ];
-		$this->archive_packages( $slugs, $type );
-
-		return $result;
 	}
 
 	/**
