@@ -13,6 +13,7 @@ namespace SatisPress\Storage;
 
 use function SatisPress\send_file;
 use DirectoryIterator;
+use SatisPress\Exception\FileNotFound;
 use WP_Error;
 
 /**
@@ -46,17 +47,17 @@ class Local implements StorageInterface {
 	 *
 	 * @param string $algorithm Algorithm.
 	 * @param string $file      Relative file path.
-	 * @return string|null
+	 * @throws FileNotFound If the file doesn't exist.
+	 * @return string
 	 */
 	public function checksum( $algorithm, $file ): string {
 		$filename = $this->get_absolute_path( $file );
 
-		$checksum = null;
-		if ( file_exists( $filename ) ) {
-			$checksum = hash_file( $algorithm, $filename );
+		if ( ! file_exists( $filename ) ) {
+			throw FileNotFound::forInvalidChecksum( $file );
 		}
 
-		return $checksum;
+		return hash_file( $algorithm, $filename );
 	}
 
 	/**

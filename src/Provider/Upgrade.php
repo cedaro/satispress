@@ -14,6 +14,7 @@ namespace SatisPress\Provider;
 use const SatisPress\VERSION;
 use Cedaro\WP\Plugin\AbstractHookProvider;
 use Psr\Container\ContainerInterface;
+use SatisPress\Exception\ExceptionInterface;
 use SatisPress\Storage\Local;
 
 /**
@@ -86,8 +87,10 @@ class Upgrade extends AbstractHookProvider {
 		$packages = $this->container->get( 'package.manager' )->get_packages();
 
 		foreach ( $packages as $package ) {
-			$release_manager = $this->container->get( 'release.manager' );
-			$release_manager->archive( $package->get_installed_release() );
+			try {
+				$release_manager = $this->container->get( 'release.manager' );
+				$release_manager->archive( $package->get_installed_release() );
+			} catch ( ExceptionInterface $e ) { }
 		}
 	}
 

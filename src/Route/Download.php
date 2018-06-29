@@ -12,6 +12,7 @@ declare ( strict_types = 1 );
 namespace SatisPress\Route;
 
 use function SatisPress\send_file;
+use SatisPress\Exception\ExceptionInterface;
 use SatisPress\Package;
 use SatisPress\PackageManager;
 use SatisPress\ReleaseManager;
@@ -112,10 +113,12 @@ class Download implements RouteInterface {
 		// Archive the currently installed version if the artifact doesn't
 		// already exist.
 		if (
-			! $this->release_manager->exists( $release ) &&
-			$package->get_version() === $version
+			! $this->release_manager->exists( $release )
+			&& $package->get_version() === $version
 		) {
-			$this->release_manager->archive( $release );
+			try {
+				$this->release_manager->archive( $release );
+			} catch ( ExceptionInterface $e ) { }
 		}
 
 		// Send a 404 if the release isn't available.

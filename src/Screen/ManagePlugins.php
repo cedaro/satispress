@@ -60,7 +60,7 @@ class ManagePlugins extends AbstractHookProvider {
 
 		// phpcs:ignore WordPress.CSRF.NonceVerification.NoNonceVerification
 		$plugin  = $_POST['plugin_file'];
-		$plugins = (array) get_option( 'satispress_plugins' );
+		$plugins = (array) get_option( 'satispress_plugins', [] );
 
 		// Bail if the nonce can't be verified.
 		check_admin_referer( 'toggle-status_' . $plugin );
@@ -73,6 +73,7 @@ class ManagePlugins extends AbstractHookProvider {
 		}
 
 		$plugins = array_filter( array_unique( $plugins ) );
+		sort( $plugins );
 
 		update_option( 'satispress_plugins', $plugins );
 		wp_send_json_success();

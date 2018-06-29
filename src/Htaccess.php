@@ -88,7 +88,7 @@ class Htaccess {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @return bool True if hte file exists, false otherwise.
+	 * @return bool True if the file exists, false otherwise.
 	 */
 	public function file_exists(): bool {
 		return file_exists( $this->get_file() );

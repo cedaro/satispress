@@ -13,6 +13,7 @@ namespace SatisPress\Provider;
 
 use Cedaro\WP\Plugin\AbstractHookProvider;
 use Psr\Container\ContainerInterface;
+use SatisPress\Exception\ExceptionInterface;
 use SatisPress\Package;
 use SatisPress\PackageManager;
 use SatisPress\Release;
@@ -144,7 +145,9 @@ class PackageArchiver extends AbstractHookProvider {
 				$update_data['package']
 			);
 
-			$this->container->get( 'release.manager' )->archive( $release );
+			try {
+				$this->container->get( 'release.manager' )->archive( $release );
+			} catch( ExceptionInterface $e ) { }
 		}
 
 		return $value;
@@ -186,10 +189,10 @@ class PackageArchiver extends AbstractHookProvider {
 		$package_manager = $this->container->get( 'package.manager' );
 		$release_manager = $this->container->get( 'release.manager' );
 
-		$package = $package_manager->get_package( $slug, $type );
-		if ( $package ) {
+		try {
+			$package = $package_manager->get_package( $slug, $type );
 			$release_manager->archive( $package->get_installed_release() );
-		}
+		} catch( ExceptionInterface $e ) { }
 
 		return $package;
 	}

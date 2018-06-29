@@ -11,6 +11,8 @@ declare ( strict_types = 1 );
 
 namespace SatisPress\Route;
 
+use SatisPress\Exception\ExceptionInterface;
+use SatisPress\Exception\FileNotFound;
 use SatisPress\Package;
 use SatisPress\PackageManager;
 use SatisPress\ReleaseManager;
@@ -103,32 +105,34 @@ class Composer implements RouteInterface {
 	 * Prepare a package for response.
 	 *
 	 * @param Package $package Package instance.
-	 * @return WP_REST_Response
+	 * @return array
 	 */
-	public function prepare_item_for_response( $package ) {
+	public function prepare_item_for_response( Package $package ): array {
 		$item = [];
 
 		foreach ( $package->get_releases() as $release ) {
-			$item[ $release->get_version() ] = [
-				'name'               => $package->get_package_name(),
-				'version'            => $release->get_version(),
-				'version_normalized' => $this->version_parser->normalize( $release->get_version() ),
-				'dist'               => [
-					'type'   => 'zip',
-					'url'    => $release->get_download_url(),
-					'shasum' => $this->release_manager->checksum( 'sha1', $release ),
-				],
-				'require'            => [
-					'composer/installers' => '^1.0',
-				],
-				'type'               => $package->get_type(),
-				'authors'            => [
-					'name'     => $package->get_author(),
-					'homepage' => esc_url( $package->get_author_uri() ),
-				],
-				'description'        => $package->get_description(),
-				'homepage'           => $package->get_homepage(),
-			];
+			try {
+				$item[ $release->get_version() ] = [
+					'name'               => $package->get_package_name(),
+					'version'            => $release->get_version(),
+					'version_normalized' => $this->version_parser->normalize( $release->get_version() ),
+					'dist'               => [
+						'type'   => 'zip',
+						'url'    => $release->get_download_url(),
+						'shasum' => $this->release_manager->checksum( 'sha1', $release ),
+					],
+					'require'            => [
+						'composer/installers' => '^1.0',
+					],
+					'type'               => $package->get_type(),
+					'authors'            => [
+						'name'     => $package->get_author(),
+						'homepage' => esc_url( $package->get_author_uri() ),
+					],
+					'description'        => $package->get_description(),
+					'homepage'           => $package->get_homepage(),
+				];
+			} catch ( FileNotFound $e ) { }
 		}
 
 		return $item;

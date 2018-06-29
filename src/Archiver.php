@@ -16,6 +16,8 @@ declare ( strict_types = 1 );
 namespace SatisPress;
 
 use PclZip;
+use SatisPress\Exception\FileDownloadFailed;
+use SatisPress\Exception\FileOperationFailed;
 use WP_Error;
 
 /**
@@ -30,7 +32,9 @@ class Archiver {
 	 * @since 0.3.0
 	 *
 	 * @param Release $release Release instance.
-	 * @return string|WP_Error Absolute path to the artifact or an error on failure.
+	 * @throws FileOperationFailed If a temporary working directory can't be created.
+	 * @throws FileOperationFailed If zip creation fails.
+	 * @return string Absolute path to the artifact or an error on failure.
 	 */
 	public function archive_from_source( Release $release ) {
 		$excludes = apply_filters( 'satispress_archive_excludes', [
@@ -57,7 +61,7 @@ class Archiver {
 		$filename = $this->get_absolute_path( $release->get_file() );
 
 		if ( ! wp_mkdir_p( dirname( $filename ) ) ) {
-			return new WP_Error( 'mkdir_failed', esc_html__( 'Unable to create temporary directory.', 'satispress' ) );
+			throw new FileOperationFailed( 'Unable to create temporary directory.' );
 		}
 
 		$zip = new PclZip( $filename );
@@ -68,7 +72,7 @@ class Archiver {
 		);
 
 		if ( 0 === $contents ) {
-			return new WP_Error( 'pclzip_create_failed', esc_html__( 'Unable to create archive.', 'satispress' ) );
+			throw new FileOperationFailed( 'Unable to create zip file.' );
 		}
 
 		return $filename;
@@ -80,7 +84,10 @@ class Archiver {
 	 * @since 0.3.0
 	 *
 	 * @param Release $release Release instance.
-	 * @return string|WP_Error Absolute path to the artifact or an error on failure.
+	 * @throws FileDownloadFailed  If the artifact can't be downloaded.
+	 * @throws FileOperationFailed If a temporary working directory can't be created.
+	 * @throws FileOperationFailed If a temporary artifact can't be renamed.
+	 * @return string Absolute path to the artifact or an error on failure.
 	 */
 	public function archive_from_url( Release $release ) {
 		include_once ABSPATH . 'wp-admin/includes/file.php';
@@ -89,15 +96,15 @@ class Archiver {
 		$tmpfname = download_url( $release->get_source_url() );
 
 		if ( is_wp_error( $tmpfname ) ) {
-			return $tmpfname;
+			throw new FileDownloadFailed( 'Artifact download failed.' );
 		}
 
 		if ( ! wp_mkdir_p( dirname( $filename ) ) ) {
-			return new WP_Error( 'mkdir_failed', esc_html__( 'Unable to create temporary directory.', 'satispress' ) );
+			throw new FileOperationFailed( 'Unable to create temporary directory.' );
 		}
 
 		if ( ! rename( $tmpfname, $filename ) ) {
-			return new WP_Error( 'file_rename_failed', esc_html__( 'Unable to rename temporary artifact.', 'satispress' ) );
+			throw new FileOperationFailed( 'Unable to rename temporary artifact.' );
 		}
 
 		return $filename;

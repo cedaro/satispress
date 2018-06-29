@@ -12,6 +12,7 @@ declare ( strict_types = 1 );
 namespace SatisPress;
 
 use Composer\Semver\VersionParser;
+use SatisPress\Exception\InvalidPackageType;
 
 /**
  * Simple Factory for creating specific Composer package objects.
@@ -44,17 +45,16 @@ final class PackageFactory {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @throws \Exception If package type not known.
-	 *
 	 * @param string $package_type Package type.
 	 * @param string $slug         Package slug.
+	 * @throws InvalidPackageType If package type not known.
 	 * @return Package Package object.
 	 */
 	public function create( string $package_type, string $slug ): Package {
 		$class_name = 'SatisPress\PackageType\\' . ucfirst( $package_type );
 
 		if ( ! class_exists( $class_name ) ) {
-			throw new \Exception( 'Package type not found' );
+			throw new InvalidPackageType( 'Package type not found' );
 		}
 
 		$package = new $class_name( $slug );

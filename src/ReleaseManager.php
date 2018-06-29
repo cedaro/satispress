@@ -11,6 +11,8 @@ declare ( strict_types = 1 );
 
 namespace SatisPress;
 
+use SatisPress\Exception\FileOperationFailed;
+use SatisPress\Exception\InvalidReleaseSource;
 use SatisPress\Storage\StorageInterface;
 use WP_Error;
 
@@ -75,6 +77,9 @@ class ReleaseManager {
 	 * @since 0.3.0
 	 *
 	 * @param Release $release Release instance.
+	 * @throws InvalidReleaseSource If a source URL is not available or the
+	 *                              version doesn't match the currently installed version.
+	 * @throws FileOperationFailed  If the release artifact can't be moved to storage.
 	 * @return Release
 	 */
 	public function archive( Release $release ): Release {
@@ -88,15 +93,11 @@ class ReleaseManager {
 		} elseif ( $release->get_version() === $release->get_package()->get_version() ) {
 			$filename = $this->archiver->archive_from_source( $release );
 		} else {
-			return new WP_Error( 'package_source_unavailable', esc_html__( 'Unable to archive release; source could not be determined.', 'satispress' ) );
-		}
-
-		if ( is_wp_error( $filename ) ) {
-			return $filename;
+			throw new InvalidReleaseSource( 'Unable create release artifact; source could not be determined.' );
 		}
 
 		if ( ! $this->storage->move( $filename, $release->get_file_path() ) ) {
-			return new WP_Error( 'file_move_failed', esc_html__( 'Unable to move release to storage.', 'satispress' ) );
+			throw new FileOperationFailed( 'Unable to move release artifact to storage.' );
 		}
 
 		return $release;

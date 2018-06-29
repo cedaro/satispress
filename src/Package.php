@@ -60,16 +60,14 @@ abstract class Package {
 	 * @since 0.3.0
 	 *
 	 * @param string $version Version string.
-	 * @return Release|null
+	 * @return Release
 	 */
-	public function get_release( $version ) {
-		$release = null;
-
-		if ( isset( $this->releases[ $version ] ) ) {
-			$release = $this->releases[ $version ];
+	public function get_release( $version ): Release {
+		if ( ! isset( $this->releases[ $version ] ) ) {
+			throw new InvalidReleaseVersion( 'Invalid release version.' );
 		}
 
-		return $release;
+		return $this->releases[ $version ];
 	}
 
 	/**
@@ -77,16 +75,10 @@ abstract class Package {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @return Release|null
+	 * @return Release
 	 */
-	public function get_installed_release() {
-		$release = null;
-
-		if ( $this->is_installed() ) {
-			$release = $this->get_release( $this->get_version() );
-		}
-
-		return $release;
+	public function get_installed_release(): Release {
+		return $this->get_release( $this->get_version() );
 	}
 
 	/**

@@ -103,7 +103,7 @@ class PackageManager {
 		$themes  = apply_filters( 'satispress_themes', [] );
 
 		// @todo Implement these through a filter instead.
-		$options = (array) get_option( 'satispress_plugins' );
+		$options = (array) get_option( 'satispress_plugins', [] );
 		$plugins = array_filter( array_unique( array_merge( $plugins, $options ) ) );
 
 		$options = (array) get_option( 'satispress_themes', [] );

@@ -24,7 +24,7 @@ interface StorageInterface {
 	 *
 	 * @param string $algorithm Algorithm.
 	 * @param string $file      Relative file path.
-	 * @return string|null
+	 * @return string
 	 */
 	public function checksum( $algorithm, $file );
 
