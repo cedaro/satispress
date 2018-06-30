@@ -19,7 +19,7 @@ namespace SatisPress;
  *
  * @since 0.3.0
  */
-class Capabilities {
+final class Capabilities {
 	/**
 	 * Primitive capability needed to download packages.
 	 *
