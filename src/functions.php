@@ -130,7 +130,7 @@ function send_file( string $file ) {
 	@session_write_close();
 	if ( function_exists( 'apache_setenv' ) ) {
 		// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.runtime_configuration_apache_setenv
-		@apache_setenv( 'no-gzip', 1 );
+		@apache_setenv( 'no-gzip', '1' );
 	}
 
 	if ( get_magic_quotes_runtime() ) {
