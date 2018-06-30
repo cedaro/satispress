@@ -18,6 +18,7 @@ namespace SatisPress;
 use PclZip;
 use SatisPress\Exception\FileDownloadFailed;
 use SatisPress\Exception\FileOperationFailed;
+use SatisPress\PackageType\Plugin;
 use WP_Error;
 
 /**
@@ -49,13 +50,21 @@ class Archiver {
 			'tests',
 		], $release );
 
-		$package_directory = $release->get_package()->get_path();
+		$package           = $release->get_package();
+		$package_directory = $package->get_path();
+		$remove_path       = dirname( $package_directory );
 
 		$files = scandir( $package_directory );
 		$files = array_diff( $files, $excludes );
 
 		foreach ( $files as $index => $file ) {
 			$files[ $index ] = $package_directory . '/' . $file;
+		}
+
+		// Single-file plugins should only include the main plugin file.
+		if ( $package instanceof Plugin && false === strpos( $package->get_basename(), '/' ) ) {
+			$files       = [ $package->get_file() ];
+			$remove_path = $package_directory;
 		}
 
 		$filename = $this->get_absolute_path( $release->get_file() );
@@ -68,7 +77,7 @@ class Archiver {
 
 		$contents = $zip->create(
 			$files,
-			PCLZIP_OPT_REMOVE_PATH, dirname( $package_directory )
+			PCLZIP_OPT_REMOVE_PATH, $remove_path
 		);
 
 		if ( 0 === $contents ) {
