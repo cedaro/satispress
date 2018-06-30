@@ -26,6 +26,13 @@ use SatisPress\HTTP\Request;
  */
 class Download implements RouteInterface {
 	/**
+	 * Latest version.
+	 *
+	 * @var string
+	 */
+	const LATEST_VERSION = 'latest';
+
+	/**
 	 * Package manager.
 	 *
 	 * @var PackageManager
@@ -97,7 +104,7 @@ class Download implements RouteInterface {
 	 * @param string  $version Version of the package to send.
 	 */
 	protected function send_package( Package $package, string $version ) {
-		if ( 'latest' === $version ) {
+		if ( self::LATEST_VERSION === $version ) {
 			$version = $package->get_latest_release()->get_version();
 		}
 
