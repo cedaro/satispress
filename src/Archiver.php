@@ -19,7 +19,6 @@ use PclZip;
 use SatisPress\Exception\FileDownloadFailed;
 use SatisPress\Exception\FileOperationFailed;
 use SatisPress\PackageType\Plugin;
-use WP_Error;
 
 /**
  * Archiver class.
@@ -105,7 +104,7 @@ class Archiver {
 		$tmpfname = download_url( $release->get_source_url() );
 
 		if ( is_wp_error( $tmpfname ) ) {
-			throw new FileDownloadFailed( 'Artifact download failed.' );
+			throw FileDownloadFailed::forFileName( $filename );
 		}
 
 		if ( ! wp_mkdir_p( dirname( $filename ) ) ) {
