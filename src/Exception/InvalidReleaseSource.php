@@ -11,11 +11,33 @@ declare ( strict_types = 1 );
 
 namespace SatisPress\Exception;
 
+use SatisPress\Release;
+
 /**
  * Invalid release source exception class.
  *
  * @since 0.3.0
  */
 class InvalidReleaseSource extends \LogicException implements ExceptionInterface {
+	/**
+	 * Invalid release source.
+	 *
+	 * @since 0.3.0.
+	 *
+	 * @param Release    $release  Release instance.
+	 * @param int        $code     Optional. The Exception code.
+	 * @param \Throwable $previous Optional. The previous throwable used for the exception chaining.
+	 * @return InvalidReleaseSource
+	 */
+	public static function forRelease(
+		Release $release,
+		$code = null,
+		\Throwable $previous = null
+	): InvalidReleaseSource {
+		$name = $release->get_package()->get_package_name();
 
+		$message = "Unable to create release artifact for $name; source could not be determined.";
+
+		return new static( $message, $code, $previous );
+	}
 }
