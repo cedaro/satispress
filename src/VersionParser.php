@@ -17,7 +17,7 @@ namespace SatisPress;
  * @package SatisPress
  * @since 0.3.0
  */
-interface VersionParserInterface {
+interface VersionParser {
 	/**
 	 * Normalizes a version string to be able to perform comparisons on it.
 	 *

@@ -17,7 +17,7 @@ namespace SatisPress;
  * @package SatisPress
  * @since 0.3.0
  */
-final class ComposerVersionParser implements VersionParserInterface {
+final class ComposerVersionParser implements VersionParser {
 	/**
 	 * Version parser instance.
 	 *

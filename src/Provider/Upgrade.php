@@ -19,7 +19,7 @@ use SatisPress\Htaccess;
 use SatisPress\PackageManager;
 use SatisPress\ReleaseManager;
 use SatisPress\Storage\Local;
-use SatisPress\Storage\StorageInterface;
+use SatisPress\Storage\Storage;
 
 /**
  * Class for upgrade routines.
@@ -58,7 +58,7 @@ class Upgrade extends AbstractHookProvider {
 	/**
 	 * Storage service.
 	 *
-	 * @var StorageInterface
+	 * @var Storage
 	 */
 	protected $storage;
 
@@ -67,12 +67,12 @@ class Upgrade extends AbstractHookProvider {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @param PackageManager   $package_manager Package manager.
-	 * @param ReleaseManager   $release_manager Release manager.
-	 * @param StorageInterface $storage         Storage service.
-	 * @param Htaccess         $htaccess        Htaccess handler.
+	 * @param PackageManager $package_manager Package manager.
+	 * @param ReleaseManager $release_manager Release manager.
+	 * @param Storage        $storage         Storage service.
+	 * @param Htaccess       $htaccess        Htaccess handler.
 	 */
-	public function __construct( PackageManager $package_manager, ReleaseManager $release_manager, StorageInterface $storage, Htaccess $htaccess ) {
+	public function __construct( PackageManager $package_manager, ReleaseManager $release_manager, Storage $storage, Htaccess $htaccess ) {
 		$this->htaccess        = $htaccess;
 		$this->package_manager = $package_manager;
 		$this->release_manager = $release_manager;

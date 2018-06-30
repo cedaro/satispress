@@ -26,7 +26,7 @@ use WP_Http as HTTP;
  *
  * @since 0.3.0
  */
-class Download implements RouteInterface {
+class Download implements Route {
 	/**
 	 * Latest version.
 	 *

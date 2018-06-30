@@ -16,7 +16,7 @@ namespace SatisPress\Storage;
  *
  * @since 0.3.0
  */
-interface StorageInterface {
+interface Storage {
 	/**
 	 * Retrieve the hash value of the contents of a file.
 	 *

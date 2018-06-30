@@ -13,7 +13,7 @@ namespace SatisPress;
 
 use SatisPress\Exception\FileOperationFailed;
 use SatisPress\Exception\InvalidReleaseSource;
-use SatisPress\Storage\StorageInterface;
+use SatisPress\Storage\Storage;
 use WP_Error;
 
 /**
@@ -32,7 +32,7 @@ class ReleaseManager {
 	/**
 	 * Storage.
 	 *
-	 * @var StorageInterface
+	 * @var Storage
 	 */
 	protected $storage;
 
@@ -41,10 +41,10 @@ class ReleaseManager {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @param StorageInterface $storage  Storage service.
-	 * @param Archiver         $archiver Archiver.
+	 * @param Storage  $storage  Storage service.
+	 * @param Archiver $archiver Archiver.
 	 */
-	public function __construct( StorageInterface $storage, Archiver $archiver ) {
+	public function __construct( Storage $storage, Archiver $archiver ) {
 		$this->archiver = $archiver;
 		$this->storage  = $storage;
 	}

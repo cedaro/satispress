@@ -19,7 +19,7 @@ use SatisPress\HTTP\Request;
  * @package SatisPress
  * @since 0.3.0
  */
-interface RouteInterface {
+interface Route {
 	/**
 	 * Handle a request.
 	 *

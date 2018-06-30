@@ -22,7 +22,7 @@ use WP_Http as HTTP;
  *
  * @since 0.3.0
  */
-class Local implements StorageInterface {
+class Local implements Storage {
 	/**
 	 * Base directory.
 	 *
@@ -175,7 +175,7 @@ class Local implements StorageInterface {
 	 * @param string $directory Absolute path.
 	 * @return $this
 	 */
-	public function set_base_directory( $directory ): StorageInterface {
+	public function set_base_directory( $directory ): Storage {
 		$this->base_directory = rtrim( $directory, '/' ) . '/';
 		return $this;
 	}
