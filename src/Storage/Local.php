@@ -55,7 +55,7 @@ class Local implements StorageInterface {
 		$filename = $this->get_absolute_path( $file );
 
 		if ( ! file_exists( $filename ) ) {
-			throw FileNotFound::forInvalidChecksum( $file );
+			throw FileNotFound::forInvalidChecksum( $filename );
 		}
 
 		return hash_file( $algorithm, $filename );
