@@ -21,6 +21,7 @@ use Pimple\ServiceProviderInterface;
 use Pimple\Psr11\ServiceLocator;
 use SatisPress\Authentication;
 use SatisPress\HTTP\Request;
+use SatisPress\Integration;
 use SatisPress\Provider;
 use SatisPress\Screen;
 use SatisPress\Storage;
@@ -170,6 +171,10 @@ class ServiceProvider implements ServiceProviderInterface {
 			return new PackageManager(
 				$container['package.factory']
 			);
+		};
+
+		$container['plugin.members'] = function( $container ) {
+			return new Integration\Members();
 		};
 
 		$container['release.manager'] = function( $container ) {

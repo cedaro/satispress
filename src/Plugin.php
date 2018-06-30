@@ -52,6 +52,11 @@ class Plugin extends WPPlugin implements Composable {
 				->register_hooks( $container->get( 'screen.settings' ) );
 		}
 
+		if ( function_exists( 'members_plugin' ) ) {
+			$this
+				->register_hooks( $container->get( 'plugin.members' ) );
+		}
+
 		/**
 		 * Finished composing the object graph in SatisPress.
 		 *
