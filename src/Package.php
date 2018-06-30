@@ -44,6 +44,17 @@ abstract class Package {
 	}
 
 	/**
+	 * Whether the package has any releases.
+	 *
+	 * @since 0.3.0
+	 *
+	 * @return boolean
+	 */
+	public function has_releases(): bool {
+		return ! empty( $this->releases );
+	}
+
+	/**
 	 * Add a release.
 	 *
 	 * @since 0.3.0
@@ -74,6 +85,17 @@ abstract class Package {
 	}
 
 	/**
+	 * Retrieve releases.
+	 *
+	 * @since 0.3.0
+	 *
+	 * @return array
+	 */
+	public function get_releases(): array {
+		return $this->releases;
+	}
+
+	/**
 	 * Retrieve the installed release.
 	 *
 	 * @since 0.3.0
@@ -85,25 +107,19 @@ abstract class Package {
 	}
 
 	/**
-	 * Whether the package has any releases.
+	 * Retrieve the latest release version.
 	 *
 	 * @since 0.3.0
 	 *
-	 * @return boolean
+	 * @throws InvalidReleaseVersion If the package doesn't have any releases.
+	 * @return string
 	 */
-	public function has_releases(): bool {
-		return ! empty( $this->releases );
-	}
+	public function get_latest_release(): Release {
+		if ( $this->has_releases() ) {
+			return reset( $this->releases );
+		}
 
-	/**
-	 * Retrieve releases.
-	 *
-	 * @since 0.3.0
-	 *
-	 * @return array
-	 */
-	public function get_releases(): array {
-		return $this->releases;
+		throw new InvalidReleaseVersion( 'Invalid release version.' );
 	}
 
 	/**
