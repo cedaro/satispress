@@ -18,7 +18,7 @@ namespace SatisPress\Exception;
  */
 class InvalidReleaseVersion extends \LogicException implements ExceptionInterface {
 	/**
-	 * Invalid release version string.
+	 * Create an exception for an invalid release version string.
 	 *
 	 * @since 0.3.0.
 	 *
@@ -31,16 +31,16 @@ class InvalidReleaseVersion extends \LogicException implements ExceptionInterfac
 	public static function fromVersion(
 		string $version,
 		string $package_name,
-		$code = null,
+		int $code = null,
 		\Throwable $previous = null
 	): InvalidReleaseVersion {
-		$message = "Invalid release version for $package_name: $version";
+		$message = "Invalid release version for {$package_name}: {$version}";
 
 		return new static( $message, $code, $previous );
 	}
 
 	/**
-	 * Package has no releases.
+	 * Create an exception for a package that has no releases.
 	 *
 	 * @since 0.3.0.
 	 *
@@ -51,10 +51,10 @@ class InvalidReleaseVersion extends \LogicException implements ExceptionInterfac
 	 */
 	public static function hasNoReleases(
 		string $package_name,
-		$code = null,
+		int $code = null,
 		\Throwable $previous = null
 	): InvalidReleaseVersion {
-		$message = "Package $package_name has no releases.";
+		$message = "Package {$package_name} has no releases.";
 
 		return new static( $message, $code, $previous );
 	}

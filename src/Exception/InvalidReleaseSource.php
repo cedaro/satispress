@@ -20,7 +20,7 @@ use SatisPress\Release;
  */
 class InvalidReleaseSource extends \LogicException implements ExceptionInterface {
 	/**
-	 * Invalid release source.
+	 * Create an exception for an invalid release source.
 	 *
 	 * @since 0.3.0.
 	 *
@@ -31,12 +31,12 @@ class InvalidReleaseSource extends \LogicException implements ExceptionInterface
 	 */
 	public static function forRelease(
 		Release $release,
-		$code = null,
+		int $code = null,
 		\Throwable $previous = null
 	): InvalidReleaseSource {
 		$name = $release->get_package()->get_package_name();
 
-		$message = "Unable to create release artifact for $name; source could not be determined.";
+		$message = "Unable to create release artifact for {$name}; source could not be determined.";
 
 		return new static( $message, $code, $previous );
 	}

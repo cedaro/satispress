@@ -18,7 +18,7 @@ namespace SatisPress\Exception;
  */
 class FileDownloadFailed extends \RuntimeException implements ExceptionInterface {
 	/**
-	 * Artifact download failed.
+	 * Create an exception for artifact download failure.
 	 *
 	 * @since 0.3.0.
 	 *
@@ -29,10 +29,10 @@ class FileDownloadFailed extends \RuntimeException implements ExceptionInterface
 	 */
 	public static function forFileName(
 		string $filename,
-		$code = null,
+		int $code = null,
 		\Throwable $previous = null
 	): FileDownloadFailed {
-		$message = "Artifact download failed for file $filename.";
+		$message = "Artifact download failed for file {$filename}.";
 
 		return new static( $message, $code, $previous );
 	}

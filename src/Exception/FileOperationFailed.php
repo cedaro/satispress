@@ -18,7 +18,7 @@ namespace SatisPress\Exception;
  */
 class FileOperationFailed extends \RuntimeException implements ExceptionInterface {
 	/**
-	 * Unable to move release artifact to storage.
+	 * Create an exception for being unable to move a release artifact to storage.
 	 *
 	 * @since 0.3.0.
 	 *
@@ -31,7 +31,7 @@ class FileOperationFailed extends \RuntimeException implements ExceptionInterfac
 	public static function unableToMoveReleaseArtifactToStorage(
 		string $filename,
 		string $destination,
-		$code = null,
+		int $code = null,
 		\Throwable $previous = null
 	): FileOperationFailed {
 		$message = "Unable to move release artifact {$filename} to storage: {$destination}.";
@@ -40,7 +40,7 @@ class FileOperationFailed extends \RuntimeException implements ExceptionInterfac
 	}
 
 	/**
-	 * Unable to create temporary directory.
+	 * Create an exception for being unable to create a temporary directory.
 	 *
 	 * @since 0.3.0.
 	 *
@@ -51,7 +51,7 @@ class FileOperationFailed extends \RuntimeException implements ExceptionInterfac
 	 */
 	public static function unableToCreateTemporaryDirectory(
 		string $filename,
-		$code = null,
+		int $code = null,
 		\Throwable $previous = null
 	): FileOperationFailed {
 		$directory = dirname( $filename );
@@ -61,7 +61,7 @@ class FileOperationFailed extends \RuntimeException implements ExceptionInterfac
 	}
 
 	/**
-	 * Unable to create zip file
+	 * Create an exception for being unable to create a zip file.
 	 *
 	 * @since 0.3.0.
 	 *
@@ -72,7 +72,7 @@ class FileOperationFailed extends \RuntimeException implements ExceptionInterfac
 	 */
 	public static function unableToCreateZipFile(
 		string $filename,
-		$code = null,
+		int $code = null,
 		\Throwable $previous = null
 	): FileOperationFailed {
 		$message = "Unable to create zip file for {$filename}.";
@@ -81,7 +81,7 @@ class FileOperationFailed extends \RuntimeException implements ExceptionInterfac
 	}
 
 	/**
-	 * Unable to rename temporary artifact.
+	 * Create an exception for being unable to rename a temporary artifact.
 	 *
 	 * @since 0.3.0.
 	 *
@@ -94,7 +94,7 @@ class FileOperationFailed extends \RuntimeException implements ExceptionInterfac
 	public static function unableToRenameTemporaryArtifact(
 		string $filename,
 		string $tmpfname,
-		$code = null,
+		int $code = null,
 		\Throwable $previous = null
 	): FileOperationFailed {
 		$message = "Unable to rename temporary artifact {$tmpfname} to {$filename}.";
