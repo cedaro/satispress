@@ -101,7 +101,7 @@ class Local implements StorageInterface {
 		}
 
 		$iterator = new DirectoryIterator( $directory );
-		if ( count( $iterator ) < 1 ) {
+		if ( iterator_count( $iterator ) < 1 ) {
 			return [];
 		}
 
