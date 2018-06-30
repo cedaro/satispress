@@ -14,7 +14,7 @@ namespace SatisPress\Authentication;
 use WP_Error;
 
 /**
- * Authentcation server interface.
+ * Authentication server interface.
  *
  * @since 0.3.0
  */
