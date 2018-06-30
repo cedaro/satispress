@@ -96,9 +96,13 @@ class Composer implements RouteInterface {
 			$packages = $this->package_manager->get_packages();
 
 			foreach ( $packages as $slug => $package ) {
-				if ( $package->has_releases() ) {
-					$items[ $package->get_package_name() ] = $this->prepare_item_for_response( $package );
+				if ( ! $package->has_releases() ) {
+					continue;
 				}
+
+				try {
+					$items[ $package->get_package_name() ] = $this->prepare_item_for_response( $package );
+				} catch ( FileNotFound $e ) { }
 			}
 
 			set_transient( 'satispress_packages', $items, HOUR_IN_SECONDS * 12 );
@@ -117,28 +121,26 @@ class Composer implements RouteInterface {
 		$item = [];
 
 		foreach ( $package->get_releases() as $release ) {
-			try {
-				$item[ $release->get_version() ] = [
-					'name'               => $package->get_package_name(),
-					'version'            => $release->get_version(),
-					'version_normalized' => $this->version_parser->normalize( $release->get_version() ),
-					'dist'               => [
-						'type'   => 'zip',
-						'url'    => $release->get_download_url(),
-						'shasum' => $this->release_manager->checksum( 'sha1', $release ),
-					],
-					'require'            => [
-						'composer/installers' => '^1.0',
-					],
-					'type'               => $package->get_type(),
-					'authors'            => [
-						'name'     => $package->get_author(),
-						'homepage' => esc_url( $package->get_author_uri() ),
-					],
-					'description'        => $package->get_description(),
-					'homepage'           => $package->get_homepage(),
-				];
-			} catch ( FileNotFound $e ) { }
+			$item[ $release->get_version() ] = [
+				'name'               => $package->get_package_name(),
+				'version'            => $release->get_version(),
+				'version_normalized' => $this->version_parser->normalize( $release->get_version() ),
+				'dist'               => [
+					'type'   => 'zip',
+					'url'    => $release->get_download_url(),
+					'shasum' => $this->release_manager->checksum( 'sha1', $release ),
+				],
+				'require'            => [
+					'composer/installers' => '^1.0',
+				],
+				'type'               => $package->get_type(),
+				'authors'            => [
+					'name'     => $package->get_author(),
+					'homepage' => esc_url( $package->get_author_uri() ),
+				],
+				'description'        => $package->get_description(),
+				'homepage'           => $package->get_homepage(),
+			];
 		}
 
 		return $item;
