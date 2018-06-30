@@ -98,7 +98,7 @@ class ReleaseManager {
 		}
 
 		if ( ! $this->storage->move( $filename, $release->get_file_path() ) ) {
-			throw new FileOperationFailed( 'Unable to move release artifact to storage.' );
+			throw FileOperationFailed::unableToMoveReleaseArtifactToStorage( $filename, $release->get_file_path() );
 		}
 
 		return $release;

@@ -69,7 +69,7 @@ class Archiver {
 		$filename = $this->get_absolute_path( $release->get_file() );
 
 		if ( ! wp_mkdir_p( dirname( $filename ) ) ) {
-			throw new FileOperationFailed( 'Unable to create temporary directory.' );
+			throw FileOperationFailed::unableToCreateTemporaryDirectory( $filename );
 		}
 
 		$zip = new PclZip( $filename );
@@ -80,7 +80,7 @@ class Archiver {
 		);
 
 		if ( 0 === $contents ) {
-			throw new FileOperationFailed( 'Unable to create zip file.' );
+			throw FileOperationFailed::unableToCreateZipFile( $filename );
 		}
 
 		return $filename;
@@ -108,11 +108,11 @@ class Archiver {
 		}
 
 		if ( ! wp_mkdir_p( dirname( $filename ) ) ) {
-			throw new FileOperationFailed( 'Unable to create temporary directory.' );
+			throw FileOperationFailed::unableToCreateTemporaryDirectory( $filename );
 		}
 
 		if ( ! rename( $tmpfname, $filename ) ) {
-			throw new FileOperationFailed( 'Unable to rename temporary artifact.' );
+			throw FileOperationFailed::unableToRenameTemporaryArtifact( $filename, $tmpfname );
 		}
 
 		return $filename;
