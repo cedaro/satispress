@@ -17,7 +17,15 @@ namespace SatisPress\Exception;
  * @since 0.3.0
  */
 class FileNotFound extends \RuntimeException implements ExceptionInterface {
-	public static function forInvalidChecksum( $file, $code = null, \Exception $previous = null ) {
+	/**
+	 * Create an exception for invalid checksum operations.
+	 *
+	 * @param string     $file     The filename that couldn't be found.
+	 * @param integer    $code     The exception code.
+	 * @param \Throwable $previous Previous exception.
+	 * @return FileNotFound
+	 */
+	public static function forInvalidChecksum( string $file, int $code = 0, \Throwable $previous = null ): FileNotFound {
 		$message = sprintf(
 			'Cannot compute a checksum for an unknown file at %s',
 			$file
