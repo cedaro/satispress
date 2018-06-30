@@ -38,6 +38,7 @@ class Plugin extends WPPlugin implements Composable {
 		// Register hook providers.
 		$this
 			->register_hooks( $container->get( 'hooks.i18n' ) )
+			->register_hooks( $container->get( 'hooks.capabilities' ) )
 			->register_hooks( $container->get( 'hooks.rewrite_rules' ) )
 			->register_hooks( $container->get( 'hooks.custom_vendor' ) )
 			->register_hooks( $container->get( 'hooks.request_handler' ) )
@@ -49,6 +50,11 @@ class Plugin extends WPPlugin implements Composable {
 				->register_hooks( $container->get( 'hooks.admin_assets' ) )
 				->register_hooks( $container->get( 'screen.manage_plugins' ) )
 				->register_hooks( $container->get( 'screen.settings' ) );
+		}
+
+		if ( function_exists( 'members_plugin' ) ) {
+			$this
+				->register_hooks( $container->get( 'plugin.members' ) );
 		}
 
 		/**

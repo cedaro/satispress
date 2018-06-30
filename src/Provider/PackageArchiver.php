@@ -171,7 +171,7 @@ class PackageArchiver extends AbstractHookProvider {
 	}
 
 	/**
-	 * Archive n list of packages.
+	 * Archive a list of packages.
 	 *
 	 * @since 0.3.0
 	 *

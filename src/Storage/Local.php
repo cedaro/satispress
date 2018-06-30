@@ -15,6 +15,7 @@ use function SatisPress\send_file;
 use DirectoryIterator;
 use SatisPress\Exception\FileNotFound;
 use WP_Error;
+use WP_Http as HTTP;
 
 /**
  * Local storage adapter class.
@@ -150,7 +151,7 @@ class Local implements StorageInterface {
 		$filename = $this->get_absolute_path( $file );
 
 		if ( ! send_file( $filename ) ) {
-			wp_die( esc_html__( 'File not found.', 'satispress' ), 404 );
+			wp_die( esc_html__( 'File not found.', 'satispress' ), HTTP::NOT_FOUND );
 		}
 		exit;
 	}

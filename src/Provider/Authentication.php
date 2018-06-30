@@ -66,6 +66,11 @@ class Authentication extends AbstractHookProvider {
 			add_filter( 'determine_current_user', [ $server, 'authenticate' ] );
 			add_filter( 'rest_authentication_errors', [ $server, 'get_authentication_errors' ] );
 		}
+
+		// Allow cookie authentication to work for download requests.
+		if ( 0 === strpos( $this->get_request_path(), '/satispress' ) ) {
+			remove_filter( 'rest_authentication_errors', 'rest_cookie_check_errors', 100 );
+		}
 	}
 
 	/**

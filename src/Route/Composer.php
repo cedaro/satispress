@@ -13,11 +13,13 @@ namespace SatisPress\Route;
 
 use SatisPress\Exception\ExceptionInterface;
 use SatisPress\Exception\FileNotFound;
+use SatisPress\Capabilities;
 use SatisPress\Package;
 use SatisPress\PackageManager;
 use SatisPress\ReleaseManager;
 use SatisPress\VersionParserInterface;
 use SatisPress\HTTP\Request;
+use WP_Http as HTTP;
 
 /**
  * Class for rendering packages.json for Composer.
@@ -69,6 +71,10 @@ class Composer implements RouteInterface {
 	 * @param Request $request HTTP request instance.
 	 */
 	public function handle_request( Request $request ) {
+		if ( ! current_user_can( Capabilities::VIEW_PACKAGES ) ) {
+			$this->send_403();
+		}
+
 		header( 'Content-Type: application/json; charset=' . get_option( 'blog_charset' ) );
 		$items = $this->get_items();
 		echo wp_json_encode( [ 'packages' => $items ] );
@@ -136,5 +142,16 @@ class Composer implements RouteInterface {
 		}
 
 		return $item;
+	}
+
+	/**
+	 * Send a forbidden response.
+	 *
+	 * @since 0.3.0
+	 */
+	protected function send_403() {
+		status_header( HTTP::FORBIDDEN );
+		nocache_headers();
+		wp_die( esc_html__( 'Sorry, you are not allowed to view this resource.', 'satispress' ) );
 	}
 }
