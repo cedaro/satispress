@@ -19,7 +19,7 @@ use WP_Error;
  *
  * @since 0.3.0
  */
-abstract class AbstractServer {
+abstract class AbstractServer implements Server {
 	/**
 	 * Errors that occurred during authentication.
 	 *

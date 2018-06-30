@@ -13,6 +13,7 @@ namespace SatisPress\Provider;
 
 use Cedaro\WP\Plugin\AbstractHookProvider;
 use Pimple\ServiceIterator;
+use SatisPress\Authentication\Server;
 
 /**
  * Authentication provider class.
@@ -63,6 +64,10 @@ class Authentication extends AbstractHookProvider {
 		}
 
 		foreach ( $this->servers as $server ) {
+			if ( ! $server instanceof Server ) {
+				throw new \LogicException( 'Authentication servers must implement \SatisPress\Authentication\Server.' );
+			}
+
 			add_filter( 'determine_current_user', [ $server, 'authenticate' ] );
 			add_filter( 'rest_authentication_errors', [ $server, 'get_authentication_errors' ] );
 		}
