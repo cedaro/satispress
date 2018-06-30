@@ -11,7 +11,7 @@ declare ( strict_types = 1 );
 
 namespace SatisPress;
 
-use Cedaro\WP\Plugin\Plugin as WPPlugin;
+use Cedaro\WP\Plugin\Plugin as BasePlugin;
 use Cedaro\WP\Plugin\Provider\I18n;
 
 /**
@@ -19,7 +19,7 @@ use Cedaro\WP\Plugin\Provider\I18n;
  *
  * @since 0.3.0
  */
-class Plugin extends WPPlugin implements Composable {
+class Plugin extends BasePlugin implements Composable {
 	/**
 	 * Compose the object graph.
 	 *
