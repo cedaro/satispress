@@ -13,6 +13,8 @@ namespace SatisPress;
 
 use Composer\Semver\VersionParser;
 use SatisPress\Exception\InvalidPackageType;
+use SatisPress\PackageType\Plugin;
+use SatisPress\PackageType\Theme;
 
 /**
  * Simple Factory for creating specific Composer package objects.
@@ -110,13 +112,13 @@ final class PackageFactory {
 	protected function get_package_update( Package $package ) {
 		$release = null;
 
-		if ( 'plugin' === $package->get_type() ) {
+		if ( $package instanceof Plugin ) {
 			$updates = get_site_transient( 'update_plugins' );
 			if ( ! empty( $updates->response[ $package->get_basename() ]->package ) ) {
 				$update  = $updates->response[ $package->get_basename() ];
 				$release = new Release( $package, $update->new_version, $update->package );
 			}
-		} elseif ( 'theme' === $package->get_type() ) {
+		} elseif ( $package instanceof Theme ) {
 			$updates = get_site_transient( 'update_themes' );
 			if ( ! empty( $updates->response[ $package->get_slug() ]['package'] ) ) {
 				$update  = $updates->response[ $package->get_slug() ];
