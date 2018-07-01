@@ -13,6 +13,7 @@ namespace SatisPress\Provider;
 
 use Cedaro\WP\Plugin\AbstractHookProvider;
 use Psr\Container\ContainerInterface;
+use SatisPress\Exception\HTTPException;
 use SatisPress\HTTP\Request;
 use SatisPress\Route\Route;
 use WP_REST_Server;
@@ -78,10 +79,35 @@ class RequestHandler extends AbstractHookProvider {
 			$this->request->set_url_params( $wp->query_vars['satispress_params'] );
 		}
 
-		if ( $this->check_authentication() ) {
-			$this
-				->get_route_controller( $route )
-				->handle_request( $this->request );
+		try {
+			if ( $this->check_authentication() ) {
+				$this
+					->get_route_controller( $route )
+					->handle_request( $this->request );
+			}
+		} catch ( HTTPException $e ) {
+			$message = $e->getMessage();
+
+			// Show extra exception data to administrators or when in debugging mode.
+			if (
+				current_user_can( 'manage_options' )
+				|| defined( 'WP_DEBUG' ) && true === WP_DEBUG
+			) {
+				$data = $e->getData();
+				$data['file'] = $e->getFile();
+				$data['line'] = $e->getLine();
+
+				$message .= '<br>';
+				foreach( $data as $key => $value ) {
+					$message .= sprintf(
+						'<br><strong>%1$s</strong>: %2$s',
+						esc_html( ucwords( $key ) ),
+						esc_html( $value )
+					);
+				}
+			}
+
+			wp_die( wp_kses_post( $message ), $e->getStatusCode() );
 		}
 		exit;
 	}
