@@ -205,4 +205,41 @@ class HttpException extends \Exception implements ExceptionInterface {
 	public function getStatusCode() {
 		return $this->status_code;
 	}
+
+	/**
+	 * Display the exception message and stop the request.
+	 *
+	 * @since 0.3.0
+	 */
+	public function displayMessage() {
+		$message = $this->getMessage();
+
+		if ( $this->can_show_extra_data() ) {
+			$data = $this->getData();
+			$data['file'] = $this->getFile();
+			$data['line'] = $this->getLine();
+
+			$message .= '<br>';
+			foreach( $data as $key => $value ) {
+				$message .= sprintf(
+					'<br><strong>%1$s:</strong> %2$s',
+					esc_html( ucwords( $key ) ),
+					esc_html( $value )
+				);
+			}
+		}
+
+		wp_die( wp_kses_post( $message ), $this->getStatusCode() );
+	}
+
+	/**
+	 * Whether extra data should be displayed.
+	 *
+	 * @since 0.3.0
+	 *
+	 * @return boolean
+	 */
+	protected function can_show_extra_data() {
+		return current_user_can( 'manage_options' ) || defined( 'WP_DEBUG' ) && true === WP_DEBUG;
+	}
 }

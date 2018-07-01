@@ -86,28 +86,7 @@ class RequestHandler extends AbstractHookProvider {
 					->handle_request( $this->request );
 			}
 		} catch ( HTTPException $e ) {
-			$message = $e->getMessage();
-
-			// Show extra exception data to administrators or when in debugging mode.
-			if (
-				current_user_can( 'manage_options' )
-				|| defined( 'WP_DEBUG' ) && true === WP_DEBUG
-			) {
-				$data = $e->getData();
-				$data['file'] = $e->getFile();
-				$data['line'] = $e->getLine();
-
-				$message .= '<br>';
-				foreach( $data as $key => $value ) {
-					$message .= sprintf(
-						'<br><strong>%1$s</strong>: %2$s',
-						esc_html( ucwords( $key ) ),
-						esc_html( $value )
-					);
-				}
-			}
-
-			wp_die( wp_kses_post( $message ), $e->getStatusCode() );
+			$e->displayMessage();
 		}
 		exit;
 	}
