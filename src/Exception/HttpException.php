@@ -2,10 +2,6 @@
 /**
  * HTTP exception.
  *
- * HTTP exceptions are public-facing, so the messages are translated and should
- * not reveal any sensitive information. Additional information can be attached
- * for debugging.
- *
  * @package SatisPress
  * @license GPL-2.0-or-later
  * @since 0.3.0
@@ -60,7 +56,7 @@ class HttpException extends \Exception implements ExceptionInterface {
 	) {
 		$this->data        = $data;
 		$this->status_code = $status_code;
-		$message           = $message ?: esc_html( 'Internal Server Error', 'satispress' );
+		$message           = $message ?: 'Internal Server Error';
 
 		parent::__construct( $message, $code, $previous );
 	}
@@ -80,7 +76,7 @@ class HttpException extends \Exception implements ExceptionInterface {
 		int $code = 0,
 		Throwable $previous = null
 	): HTTPException {
-		$message = esc_html__( 'Sorry, you are not allowed to view this resource.', 'satispress' );
+		$message = 'Sorry, you are not allowed to view this resource.';
 
 		return new static( $message, HTTP::FORBIDDEN, $data, $code, $previous );
 	}
@@ -103,7 +99,7 @@ class HttpException extends \Exception implements ExceptionInterface {
 		Throwable $previous = null
 	): HTTPException {
 		$data    = [ 'slug' => $slug ];
-		$message = esc_html__( 'Package does not exist.', 'satispress' );
+		$message = 'Package does not exist.';
 
 		return new static( $message, HTTP::NOT_FOUND, $data, $code, $previous );
 	}
@@ -126,7 +122,7 @@ class HttpException extends \Exception implements ExceptionInterface {
 		Throwable $previous = null
 	): HTTPException {
 		$data    = [ 'slug' => $package->get_slug() ];
-		$message = esc_html__( 'Sorry, you are not allowed to download this file.', 'satispress' );
+		$message = 'Sorry, you are not allowed to download this file.';
 
 		return new static( $message, HTTP::FORBIDDEN, $data, $code, $previous );
 	}
@@ -155,7 +151,7 @@ class HttpException extends \Exception implements ExceptionInterface {
 			'version' => $version
 		];
 
-		$message = esc_html__( 'Package version does not exist.', 'satispress' );
+		$message = 'Package version does not exist.';
 
 		return new static( $message, HTTP::NOT_FOUND, $data, $code, $previous );
 	}
@@ -183,7 +179,7 @@ class HttpException extends \Exception implements ExceptionInterface {
 			'version' => $release->get_version(),
 		];
 
-		$message = esc_html__( 'Package artifact is missing.', 'satispress' );
+		$message = 'Package artifact is missing.';
 
 		return new static( $message, HTTP::NOT_FOUND, $data, $code, $previous );
 	}
