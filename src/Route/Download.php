@@ -93,7 +93,7 @@ class Download implements Route {
 
 		// Send a 404 response if the package doesn't exist.
 		if ( ! isset( $packages[ $slug ] ) ) {
-			throw HTTPException::forUknownPackage( $slug );
+			throw HTTPException::forUnknownPackage( $slug );
 		}
 
 		$package = $packages[ $slug ];

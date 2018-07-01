@@ -96,7 +96,7 @@ class HttpException extends \Exception implements ExceptionInterface {
 	 * @param Throwable $previous Optional. The previous throwable used for the exception chaining.
 	 * @return HTTPException
 	 */
-	public static function forUknownPackage(
+	public static function forUnknownPackage(
 		string $slug,
 		array $data = null,
 		int $code = 0,
