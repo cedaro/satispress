@@ -22,7 +22,8 @@ use SatisPress\Plugin;
  */
 function plugin(): Plugin {
 	static $instance;
-	return $instance ?? new Plugin();
+	$instance = $instance ?: new Plugin();
+	return $instance;
 }
 
 /**
