@@ -11,6 +11,8 @@ declare ( strict_types = 1 );
 
 namespace SatisPress\Storage;
 
+use SatisPress\HTTP\Response;
+
 /**
  * Storage interface.
  *
@@ -73,6 +75,7 @@ interface Storage {
 	 * @since 0.3.0
 	 *
 	 * @param string $file Relative file path.
+	 * @return Response
 	 */
-	public function send( $file );
+	public function send( string $file ): Response;
 }

@@ -12,6 +12,7 @@ declare ( strict_types = 1 );
 namespace SatisPress\Route;
 
 use SatisPress\HTTP\Request;
+use SatisPress\HTTP\Response;
 
 /**
  * Route interface.
@@ -26,6 +27,7 @@ interface Route {
 	 * @since 0.3.0
 	 *
 	 * @param Request $request HTTP request.
+	 * @return Response
 	 */
-	public function handle_request( Request $request );
+	public function handle( Request $request ): Response;
 }
