@@ -11,6 +11,8 @@ declare ( strict_types = 1 );
 
 namespace SatisPress\HTTP\ResponseBody;
 
+use SatisPress\Exception\InvalidFileName;
+
 /**
  * File body handler class.
  *
@@ -30,8 +32,14 @@ class FileBody implements ResponseBody {
 	 * @since 0.3.0
 	 *
 	 * @param string $filename Absolute path to the file to stream.
+	 * @throws InvalidFileName If the file name fails validation.
 	 */
-	public function __construct( $filename ) {
+	public function __construct( string $filename ) {
+		$result = validate_file( $filename );
+		if ( 0 !== $result ) {
+			throw InvalidFileName::withValidationCode( $filename, $result );
+		}
+
 		$this->filename = $filename;
 	}
 
@@ -62,6 +70,7 @@ class FileBody implements ResponseBody {
 			$buffer = fread( $handle, $chunk_size );
 			// phpcs:ignore WordPress.XSS.EscapeOutput.OutputNotEscaped
 			echo $buffer;
+			// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
 			@ob_flush();
 			flush();
 		}
