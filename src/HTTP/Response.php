@@ -193,9 +193,9 @@ class Response {
 		$response = rest_ensure_response( $response );
 
 		if ( is_wp_error( $response ) ) {
-			$response = $this->error_to_response( $response );
+			$response = self::error_to_response( $response );
 		} elseif ( $response->is_error() ) {
-			$response = $this->error_to_response( $response->as_error() );
+			$response = self::error_to_response( $response->as_error() );
 		}
 
 		return new static(
