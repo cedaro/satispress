@@ -11,7 +11,6 @@ declare ( strict_types = 1 );
 
 namespace SatisPress\Route;
 
-use function SatisPress\send_file;
 use SatisPress\Capabilities;
 use SatisPress\Exception\ExceptionInterface;
 use SatisPress\Exception\HTTPException;
@@ -20,6 +19,7 @@ use SatisPress\Package;
 use SatisPress\PackageManager;
 use SatisPress\ReleaseManager;
 use SatisPress\HTTP\Request;
+use SatisPress\HTTP\Response;
 use WP_Http as HTTP;
 
 /**
@@ -71,8 +71,9 @@ class Download implements Route {
 	 * @since 0.3.0
 	 *
 	 * @param Request $request HTTP request instance.
+	 * @return Response
 	 */
-	public function handle_request( Request $request ) {
+	public function handle( Request $request ): Response {
 		require_once ABSPATH . 'wp-admin/includes/plugin.php';
 
 		if ( ! current_user_can( Capabilities::DOWNLOAD_PACKAGES ) ) {
@@ -103,8 +104,7 @@ class Download implements Route {
 			throw HTTPException::forForbiddenPackage( $package );
 		}
 
-		$this->send_package( $package, $version );
-		exit;
+		return $this->send_package( $package, $version );
 	}
 
 	/**
@@ -116,8 +116,9 @@ class Download implements Route {
 	 *
 	 * @param Package $package Package object.
 	 * @param string  $version Version of the package to send.
+	 * @return Response
 	 */
-	protected function send_package( Package $package, string $version ) {
+	protected function send_package( Package $package, string $version ): Response {
 		if ( self::LATEST_VERSION === $version ) {
 			$version = $package->get_latest_release()->get_version();
 		}
@@ -144,7 +145,6 @@ class Download implements Route {
 			throw HTTPException::forMissingRelease( $release );
 		}
 
-		$this->release_manager->send( $release );
-		exit;
+		return $this->release_manager->send( $release );
 	}
 }

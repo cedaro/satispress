@@ -13,6 +13,7 @@ namespace SatisPress;
 
 use SatisPress\Exception\FileOperationFailed;
 use SatisPress\Exception\InvalidReleaseSource;
+use SatisPress\HTTP\Response;
 use SatisPress\Storage\Storage;
 use WP_Error;
 
@@ -132,9 +133,10 @@ class ReleaseManager {
 	 * @since 0.3.0
 	 *
 	 * @param Release $release Release instance.
+	 * @return Response
 	 */
-	public function send( Release $release ) {
+	public function send( Release $release ): Response {
 		do_action( 'satispress_send_release', $release );
-		$this->storage->send( $release->get_file_path() );
+		return $this->storage->send( $release->get_file_path() );
 	}
 }

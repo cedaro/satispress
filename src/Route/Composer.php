@@ -16,10 +16,13 @@ use SatisPress\Exception\ExceptionInterface;
 use SatisPress\Exception\FileNotFound;
 use SatisPress\Exception\HTTPException;
 use SatisPress\HTTP\Request;
+use SatisPress\HTTP\Response;
+use SatisPress\HTTP\ResponseBody\JsonBody;
 use SatisPress\Package;
 use SatisPress\PackageManager;
 use SatisPress\ReleaseManager;
 use SatisPress\VersionParser;
+use WP_Http as HTTP;
 
 /**
  * Class for rendering packages.json for Composer.
@@ -69,16 +72,18 @@ class Composer implements Route {
 	 * @since 0.3.0
 	 *
 	 * @param Request $request HTTP request instance.
+	 * @return Response
 	 */
-	public function handle_request( Request $request ) {
+	public function handle( Request $request ): Response {
 		if ( ! current_user_can( Capabilities::VIEW_PACKAGES ) ) {
 			throw HTTPException::forForbiddenResource();
 		}
 
-		header( 'Content-Type: application/json; charset=' . get_option( 'blog_charset' ) );
-		$items = $this->get_items();
-		echo wp_json_encode( [ 'packages' => $items ] );
-		exit;
+		return new Response(
+			new JsonBody( [ 'packages' => $this->get_items() ] ),
+			HTTP::OK,
+			[ 'Content-Type' => 'application/json; charset=' . get_option( 'blog_charset' ) ]
+		);
 	}
 
 	/**

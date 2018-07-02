@@ -11,9 +11,9 @@ declare ( strict_types = 1 );
 
 namespace SatisPress\Storage;
 
-use function SatisPress\send_file;
 use DirectoryIterator;
 use SatisPress\Exception\FileNotFound;
+use SatisPress\HTTP\Response;
 use WP_Error;
 use WP_Http as HTTP;
 
@@ -146,14 +146,11 @@ class Local implements Storage {
 	 * @since 0.3.0
 	 *
 	 * @param string $file Relative file path.
+	 * @return Response
 	 */
-	public function send( $file ) {
+	public function send( string $file ): Response {
 		$filename = $this->get_absolute_path( $file );
-
-		if ( ! send_file( $filename ) ) {
-			wp_die( esc_html__( 'File not found.', 'satispress' ), HTTP::NOT_FOUND );
-		}
-		exit;
+		return Response::for_file( $filename );
 	}
 
 	/**
