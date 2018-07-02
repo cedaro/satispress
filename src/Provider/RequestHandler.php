@@ -13,6 +13,7 @@ namespace SatisPress\Provider;
 
 use Cedaro\WP\Plugin\AbstractHookProvider;
 use Psr\Container\ContainerInterface;
+use SatisPress\Exception\HTTPException;
 use SatisPress\HTTP\Request;
 use SatisPress\Route\Route;
 use WP_REST_Server;
@@ -78,10 +79,14 @@ class RequestHandler extends AbstractHookProvider {
 			$this->request->set_url_params( $wp->query_vars['satispress_params'] );
 		}
 
-		if ( $this->check_authentication() ) {
-			$this
-				->get_route_controller( $route )
-				->handle_request( $this->request );
+		try {
+			if ( $this->check_authentication() ) {
+				$this
+					->get_route_controller( $route )
+					->handle_request( $this->request );
+			}
+		} catch ( HTTPException $e ) {
+			$e->displayMessage();
 		}
 		exit;
 	}

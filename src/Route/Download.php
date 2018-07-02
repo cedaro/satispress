@@ -14,6 +14,7 @@ namespace SatisPress\Route;
 use function SatisPress\send_file;
 use SatisPress\Capabilities;
 use SatisPress\Exception\ExceptionInterface;
+use SatisPress\Exception\HTTPException;
 use SatisPress\Exception\InvalidReleaseVersion;
 use SatisPress\Package;
 use SatisPress\PackageManager;
@@ -75,12 +76,12 @@ class Download implements Route {
 		require_once ABSPATH . 'wp-admin/includes/plugin.php';
 
 		if ( ! current_user_can( Capabilities::DOWNLOAD_PACKAGES ) ) {
-			$this->send_403();
+			throw HTTPException::forForbiddenResource();
 		}
 
 		$slug = sanitize_key( $request['slug'] );
 		if ( empty( $slug ) ) {
-			$this->send_404();
+			throw HTTPException::forUnknownPackage( $slug );
 		}
 
 		$version = '';
@@ -92,14 +93,14 @@ class Download implements Route {
 
 		// Send a 404 response if the package doesn't exist.
 		if ( ! isset( $packages[ $slug ] ) ) {
-			$this->send_404();
+			throw HTTPException::forUnknownPackage( $slug );
 		}
 
 		$package = $packages[ $slug ];
 
 		// Ensure the user has access to download the package.
 		if ( ! current_user_can( Capabilities::DOWNLOAD_PACKAGE, $package->get_slug() ) ) {
-			$this->send_403();
+			throw HTTPException::forForbiddenPackage( $package );
 		}
 
 		$this->send_package( $package, $version );
@@ -124,7 +125,7 @@ class Download implements Route {
 		try {
 			$release = $package->get_release( $version );
 		} catch ( InvalidReleaseVersion $e ) {
-			$this->send_404();
+			throw HTTPException::forInvalidRelease( $package, $version );
 		}
 
 		// Archive the currently installed version if the artifact doesn't
@@ -140,45 +141,10 @@ class Download implements Route {
 
 		// Send a 404 if the release isn't available.
 		if ( ! $this->release_manager->exists( $release ) ) {
-			$this->send_404();
+			throw HTTPException::forMissingRelease( $release );
 		}
 
 		$this->release_manager->send( $release );
 		exit;
-	}
-
-	/**
-	 * Send a forbidden response.
-	 *
-	 * @since 0.3.0
-	 */
-	protected function send_403() {
-		$this->send_error_response(
-			esc_html__( 'Sorry, you are not allowed to download this file.', 'satispress' ),
-			HTTP::NOT_FOUND
-		);
-	}
-
-	/**
-	 * Send a not found response.
-	 *
-	 * @since 0.3.0
-	 */
-	protected function send_404() {
-		$this->send_error_response(
-			esc_html__( 'Package does not exist.', 'satispress' ),
-			HTTP::NOT_FOUND
-		);
-	}
-
-	/**
-	 * Send a response.
-	 *
-	 * @since 0.3.0
-	 */
-	protected function send_error_response( $message, $status ) {
-		status_header( $status );
-		nocache_headers();
-		wp_die( $message );
 	}
 }
