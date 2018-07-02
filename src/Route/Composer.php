@@ -72,6 +72,7 @@ class Composer implements Route {
 	 * @since 0.3.0
 	 *
 	 * @param Request $request HTTP request instance.
+	 * @throws HTTPException If the user doesn't have permission to view packages.
 	 * @return Response
 	 */
 	public function handle( Request $request ): Response {
@@ -107,7 +108,10 @@ class Composer implements Route {
 
 				try {
 					$items[ $package->get_package_name() ] = $this->prepare_item_for_response( $package );
-				} catch ( FileNotFound $e ) { }
+				// phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch
+				} catch ( FileNotFound $e ) {
+					// Continue to allow valid items to be served.
+				}
 			}
 
 			set_transient( 'satispress_packages', $items, HOUR_IN_SECONDS * 12 );

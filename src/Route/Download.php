@@ -71,6 +71,8 @@ class Download implements Route {
 	 * @since 0.3.0
 	 *
 	 * @param Request $request HTTP request instance.
+	 * @throws HTTPException For invalid parameters or the user doesn't have
+	 *                       permission to download the requested file.
 	 * @return Response
 	 */
 	public function handle( Request $request ): Response {
@@ -116,6 +118,7 @@ class Download implements Route {
 	 *
 	 * @param Package $package Package object.
 	 * @param string  $version Version of the package to send.
+	 * @throws HTTPException For invalid or missing releases.
 	 * @return Response
 	 */
 	protected function send_package( Package $package, string $version ): Response {

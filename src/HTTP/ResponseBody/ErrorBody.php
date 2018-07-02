@@ -38,10 +38,11 @@ class ErrorBody implements ResponseBody {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @param string $message Error message.
+	 * @param string $message     Error message.
+	 * @param int    $status_code Optional. HTTP status code.
 	 */
 	public function __construct( string $message, int $status_code = HTTP::INTERNAL_SERVER_ERROR ) {
-		$this->message = $message;
+		$this->message     = $message;
 		$this->status_code = $status_code;
 	}
 

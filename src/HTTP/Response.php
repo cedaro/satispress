@@ -51,9 +51,9 @@ class Response {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @param ResponseBody $data    Message body.
-	 * @param int         $status  HTTP status code.
-	 * @param array       $headers HTTP headers.
+	 * @param ResponseBody $body        Message body.
+	 * @param int          $status_code HTTP status code.
+	 * @param array        $headers     HTTP headers.
 	 */
 	public function __construct( ResponseBody $body, int $status_code = HTTP::OK, array $headers = [] ) {
 		$this->body = $body;
@@ -122,7 +122,7 @@ class Response {
 	}
 
 	/**
-	 * Create a response for to stream a file.
+	 * Create a response to stream a file.
 	 *
 	 * @since 0.3.0
 	 *

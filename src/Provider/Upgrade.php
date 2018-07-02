@@ -121,7 +121,9 @@ class Upgrade extends AbstractHookProvider {
 		foreach ( $packages as $package ) {
 			try {
 				$this->release_manager->archive( $package->get_installed_release() );
-			} catch ( ExceptionInterface $e ) { }
+			} catch ( ExceptionInterface $e ) {
+				// noop.
+			}
 		}
 	}
 

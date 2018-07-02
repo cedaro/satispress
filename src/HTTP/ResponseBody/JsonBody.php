@@ -39,8 +39,6 @@ class JsonBody implements ResponseBody {
 	 * Emit the data as a JSON-serialized string.
 	 *
 	 * @since 0.3.0
-	 *
-	 * @return string
 	 */
 	public function emit() {
 		echo wp_json_encode( $this->data );

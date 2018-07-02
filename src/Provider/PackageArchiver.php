@@ -155,7 +155,10 @@ class PackageArchiver extends AbstractHookProvider {
 
 			try {
 				$this->release_manager->archive( $release );
-			} catch( ExceptionInterface $e ) { }
+			// phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch
+			} catch ( ExceptionInterface $e ) {
+				// Continue processing updates.
+			}
 		}
 
 		return $value;
@@ -175,7 +178,7 @@ class PackageArchiver extends AbstractHookProvider {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @param array $slugs Array of package slugs.
+	 * @param array  $slugs Array of package slugs.
 	 * @param string $type Type of packages.
 	 */
 	protected function archive_packages( array $slugs, string $type ) {
@@ -197,7 +200,9 @@ class PackageArchiver extends AbstractHookProvider {
 		try {
 			$package = $this->package_manager->get_package( $slug, $type );
 			$this->release_manager->archive( $package->get_installed_release() );
-		} catch( ExceptionInterface $e ) { }
+		} catch ( ExceptionInterface $e ) {
+			// noop.
+		}
 
 		return $package;
 	}

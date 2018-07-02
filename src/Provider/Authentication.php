@@ -57,6 +57,8 @@ class Authentication extends AbstractHookProvider {
 	 * a SatisPress route.
 	 *
 	 * @since 0.3.0
+	 *
+	 * @throws \LogicException If a registered server doesn't implement the server interface.
 	 */
 	public function register_authentication_servers() {
 		if ( ! $this->is_satispress_request() ) {

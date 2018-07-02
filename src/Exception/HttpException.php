@@ -66,7 +66,7 @@ class HttpException extends \Exception implements ExceptionInterface {
 	): HTTPException {
 		$user_id     = get_current_user_id();
 		$request_uri = $_SERVER['REQUEST_URI'];
-		$message = "Forbidden resource requested; User: {$user_id}; URI: {$request_uri}";
+		$message     = "Forbidden resource requested; User: {$user_id}; URI: {$request_uri}";
 
 		return new static( $message, HTTP::FORBIDDEN, $code, $previous );
 	}
@@ -148,7 +148,6 @@ class HttpException extends \Exception implements ExceptionInterface {
 	 */
 	public static function forMissingRelease(
 		Release $release,
-		array $data = null,
 		int $code = 0,
 		Throwable $previous = null
 	): HTTPException {
