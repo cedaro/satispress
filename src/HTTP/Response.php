@@ -111,8 +111,13 @@ class Response {
 	 * @since 0.3.0
 	 *
 	 * @param int $status_code HTTP status.
+	 * @throws \InvalidArgumentException If the status code is not between 100 and 599.
 	 */
 	public function set_status( int $status_code ) {
+		if ( $status_code < 100 || $status_code > 599 ) {
+			throw new \InvalidArgumentException( "Invalid status code '${status_code}'." );
+		}
+
 		$this->status_code = $status_code;
 	}
 
