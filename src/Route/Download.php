@@ -135,9 +135,7 @@ class Download implements Route {
 			! $this->release_manager->exists( $release )
 			&& $package->get_version() === $version
 		) {
-			try {
-				$this->release_manager->archive( $release );
-			} catch ( ExceptionInterface $e ) { }
+			$this->release_manager->archive( $release );
 		}
 
 		// Send a 404 if the release isn't available.
