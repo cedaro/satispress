@@ -36,6 +36,20 @@ class PackageManager {
 	}
 
 	/**
+	 * Whether a package has been whitelisted.
+	 *
+	 * @since 0.3.0
+	 *
+	 * @param string $slug Package slug.
+	 * @param string $type Package type.
+	 * @return bool
+	 */
+	public function has_package( string $slug, string $type ): bool {
+		$whitelist = $this->get_whitelist();
+		return in_array( $slug, $whitelist[ $type ], true );
+	}
+
+	/**
 	 * Retrieve a package by its slug and type.
 	 *
 	 * @since 0.2.0

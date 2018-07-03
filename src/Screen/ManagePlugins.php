@@ -124,19 +124,16 @@ class ManagePlugins extends AbstractHookProvider {
 			return;
 		}
 
-		$packages = $this->package_manager->get_packages();
-		$plugins  = get_option( 'satispress_plugins' );
-		$plugin   = $this->package_manager->get_package( $plugin_file, 'plugin' );
-
-		printf( '<input type="checkbox" value="%1$s"%2$s%3$s class="satispress-status">',
+		printf(
+			'<input type="checkbox" value="%1$s"%2$s class="satispress-status">',
 			esc_attr( $plugin_file ),
-			\checked( isset( $packages[ $plugin->get_slug() ] ), true, false ),
-			\disabled( ! isset( $packages[ $plugin->get_slug() ] ) || in_array( $plugin_file, $plugins, true ), false, false )
+			\checked( $this->package_manager->has_package( $plugin_file, 'plugin' ), true, false )
 		);
 
 		echo '<span class="spinner"></span>';
 
-		printf( '<input type="hidden" value="%s" class="satispress-status-nonce">',
+		printf(
+			'<input type="hidden" value="%s" class="satispress-status-nonce">',
 			esc_attr( wp_create_nonce( 'toggle-status_' . $plugin_file ) )
 		);
 	}

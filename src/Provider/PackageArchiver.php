@@ -129,6 +129,8 @@ class PackageArchiver extends AbstractHookProvider {
 			return $value;
 		}
 
+		$manager = $this->package_manager;
+
 		// The $id will be a theme slug or the plugin file.
 		foreach ( $value->response as $id => $update_data ) {
 			// Bail if a URL isn't available.
@@ -139,21 +141,23 @@ class PackageArchiver extends AbstractHookProvider {
 			// Plugin data is stored as an object. Coerce to an array.
 			$update_data = (array) $update_data;
 
-			$type    = isset( $update_data['plugin'] ) ? 'plugin' : 'theme';
-			$package = $this->package_manager->get_package( $update_data[ $type ], $type );
+			$type = isset( $update_data['plugin'] ) ? 'plugin' : 'theme';
+			$slug = $update_data[ $type ];
 
 			// Bail if the package isn't whitelisted.
-			if ( empty( $package ) ) {
+			if ( ! $manager->has_package( $slug, $type ) ) {
 				continue;
 			}
 
-			$release = new Release(
-				$package,
-				$update_data['new_version'],
-				$update_data['package']
-			);
-
 			try {
+				$package = $manager->get_package( $slug, $type );
+
+				$release = new Release(
+					$package,
+					$update_data['new_version'],
+					$update_data['package']
+				);
+
 				$this->release_manager->archive( $release );
 			// phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch
 			} catch ( ExceptionInterface $e ) {
