@@ -33,7 +33,7 @@ function plugin(): Plugin {
  *
  * @param string $class Class name.
  */
-function autoloader_classmap( $class ) {
+function autoloader_classmap( string $class ) {
 	$class_map = array(
 		'PclZip' => ABSPATH . 'wp-admin/includes/class-pclzip.php',
 	);

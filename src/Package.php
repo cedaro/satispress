@@ -76,7 +76,7 @@ abstract class Package {
 	 * @throws InvalidReleaseVersion If the version is invalid.
 	 * @return Release
 	 */
-	public function get_release( $version ): Release {
+	public function get_release( string $version ): Release {
 		if ( ! isset( $this->releases[ $version ] ) ) {
 			throw new InvalidReleaseVersion( 'Invalid release version.' );
 		}

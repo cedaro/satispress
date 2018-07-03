@@ -35,9 +35,9 @@ class Archiver {
 	 * @param Release $release Release instance.
 	 * @throws FileOperationFailed If a temporary working directory can't be created.
 	 * @throws FileOperationFailed If zip creation fails.
-	 * @return string Absolute path to the artifact or an error on failure.
+	 * @return string Absolute path to the artifact.
 	 */
-	public function archive_from_source( Release $release ) {
+	public function archive_from_source( Release $release ): string {
 		$excludes = apply_filters( 'satispress_archive_excludes', [
 			'.',
 			'..',
@@ -96,9 +96,9 @@ class Archiver {
 	 * @throws FileDownloadFailed  If the artifact can't be downloaded.
 	 * @throws FileOperationFailed If a temporary working directory can't be created.
 	 * @throws FileOperationFailed If a temporary artifact can't be renamed.
-	 * @return string Absolute path to the artifact or an error on failure.
+	 * @return string Absolute path to the artifact.
 	 */
-	public function archive_from_url( Release $release ) {
+	public function archive_from_url( Release $release ): string {
 		include_once ABSPATH . 'wp-admin/includes/file.php';
 
 		$filename = $this->get_absolute_path( $release->get_file() );
@@ -124,10 +124,10 @@ class Archiver {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @param string $path Relative path.
+	 * @param string $path Optional. Relative path.
 	 * @return string
 	 */
-	protected function get_absolute_path( $path = '' ): string {
+	protected function get_absolute_path( string $path = '' ): string {
 		return get_temp_dir() . 'satispress/' . ltrim( $path, '/' );
 	}
 }

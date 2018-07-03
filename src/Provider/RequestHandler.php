@@ -17,6 +17,7 @@ use SatisPress\Exception\HTTPException;
 use SatisPress\HTTP\Request;
 use SatisPress\HTTP\Response;
 use SatisPress\Route\Route;
+use WP;
 use WP_REST_Response;
 use WP_REST_Server;
 
@@ -69,7 +70,7 @@ class RequestHandler extends AbstractHookProvider {
 	 *
 	 * @param WP $wp Main WP instance.
 	 */
-	public function dispatch( $wp ) {
+	public function dispatch( WP $wp ) {
 		if ( empty( $wp->query_vars['satispress_route'] ) ) {
 			return;
 		}
@@ -168,7 +169,7 @@ class RequestHandler extends AbstractHookProvider {
 	 * @param string $route Route identifier.
 	 * @return Route
 	 */
-	protected function get_route_controller( $route ): Route {
+	protected function get_route_controller( string $route ): Route {
 		return $this->controllers->get( $route );
 	}
 

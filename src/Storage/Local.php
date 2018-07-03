@@ -37,7 +37,7 @@ class Local implements Storage {
 	 *
 	 * @param string $base_directory Base storage directory.
 	 */
-	public function __construct( $base_directory ) {
+	public function __construct( string $base_directory ) {
 		$this->set_base_directory( $base_directory );
 	}
 
@@ -51,7 +51,7 @@ class Local implements Storage {
 	 * @throws FileNotFound If the file doesn't exist.
 	 * @return string
 	 */
-	public function checksum( $algorithm, $file ): string {
+	public function checksum( string $algorithm, string $file ): string {
 		$filename = $this->get_absolute_path( $file );
 
 		if ( ! file_exists( $filename ) ) {
@@ -69,7 +69,7 @@ class Local implements Storage {
 	 * @param string $file Relative file path.
 	 * @return boolean
 	 */
-	public function delete( $file ): bool {
+	public function delete( string $file ): bool {
 		return unlink( $this->get_absolute_path( $file ) );
 	}
 
@@ -81,7 +81,7 @@ class Local implements Storage {
 	 * @param string $file Relative file path.
 	 * @return boolean
 	 */
-	public function exists( $file ): bool {
+	public function exists( string $file ): bool {
 		$filename = $this->get_absolute_path( $file );
 		return file_exists( $filename );
 	}
@@ -94,7 +94,7 @@ class Local implements Storage {
 	 * @param string $path Relative path.
 	 * @return array Array of relative file paths.
 	 */
-	public function list_files( $path ): array {
+	public function list_files( string $path ): array {
 		$directory = $this->get_absolute_path( $path );
 		if ( ! file_exists( $directory ) ) {
 			return [];
@@ -126,7 +126,7 @@ class Local implements Storage {
 	 * @param string $destination Relative destination path; includes the file name.
 	 * @return boolean
 	 */
-	public function move( $source, $destination ): bool {
+	public function move( string $source, string $destination ): bool {
 		$filename = $this->get_absolute_path( $destination );
 
 		if ( ! wp_mkdir_p( dirname( $filename ) ) ) {
@@ -172,7 +172,7 @@ class Local implements Storage {
 	 * @param string $directory Absolute path.
 	 * @return $this
 	 */
-	public function set_base_directory( $directory ): Storage {
+	public function set_base_directory( string $directory ): Storage {
 		$this->base_directory = rtrim( $directory, '/' ) . '/';
 		return $this;
 	}
@@ -185,7 +185,7 @@ class Local implements Storage {
 	 * @param string $path Relative path.
 	 * @return string
 	 */
-	public function get_absolute_path( $path = '' ): string {
+	public function get_absolute_path( string $path = '' ): string {
 		return $this->get_base_directory() . ltrim( $path, '/' );
 	}
 }

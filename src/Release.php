@@ -131,7 +131,7 @@ class Release {
 	 * @param string $url URL to a zip archive.
 	 * @return $this
 	 */
-	public function set_source_url( $url ): Release {
+	public function set_source_url( string $url ): Release {
 		$this->source_url = $url;
 		return $this;
 	}

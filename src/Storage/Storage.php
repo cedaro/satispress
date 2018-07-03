@@ -28,7 +28,7 @@ interface Storage {
 	 * @param string $file      Relative file path.
 	 * @return string
 	 */
-	public function checksum( $algorithm, $file ): string;
+	public function checksum( string $algorithm, string $file ): string;
 
 	/**
 	 * Delete a file.
@@ -38,7 +38,7 @@ interface Storage {
 	 * @param string $file Relative file path.
 	 * @return boolean
 	 */
-	public function delete( $file ): bool;
+	public function delete( string $file ): bool;
 
 	/**
 	 * Whether a file exists.
@@ -48,7 +48,7 @@ interface Storage {
 	 * @param string $file Relative file path.
 	 * @return boolean
 	 */
-	public function exists( $file ): bool;
+	public function exists( string $file ): bool;
 
 	/**
 	 * List files.
@@ -58,7 +58,7 @@ interface Storage {
 	 * @param string $path Relative path.
 	 * @return array Array of relative file paths.
 	 */
-	public function list_files( $path ): array;
+	public function list_files( string $path ): array;
 
 	/**
 	 * Move a file.
@@ -67,7 +67,7 @@ interface Storage {
 	 * @param string $destination Relative destination path; includes the file name.
 	 * @return boolean
 	 */
-	public function move( $source, $destination ): bool;
+	public function move( string $source, string $destination ): bool;
 
 	/**
 	 * Send a file for client download.

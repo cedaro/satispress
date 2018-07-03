@@ -12,6 +12,7 @@ declare ( strict_types = 1 );
 namespace SatisPress\Provider;
 
 use Cedaro\WP\Plugin\AbstractHookProvider;
+use WP_Rewrite;
 
 /**
  * Class to register rewrite rules.
@@ -39,7 +40,7 @@ class RewriteRules extends AbstractHookProvider {
 	 * @param array $vars List of query variables.
 	 * @return array
 	 */
-	public function register_query_vars( $vars ) {
+	public function register_query_vars( array $vars ): array {
 		$vars[] = 'satispress_params';
 		$vars[] = 'satispress_route';
 		return $vars;
@@ -76,7 +77,7 @@ class RewriteRules extends AbstractHookProvider {
 	 *
 	 * @param WP_Rewrite $wp_rewrite WP rewrite API.
 	 */
-	public function register_external_rewrite_rules( $wp_rewrite ) {
+	public function register_external_rewrite_rules( WP_Rewrite $wp_rewrite ) {
 		$wp_rewrite->add_external_rule(
 			'satispress/packages.json$',
 			'index.php?satispress_route=composer'

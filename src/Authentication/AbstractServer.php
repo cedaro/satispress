@@ -102,7 +102,7 @@ abstract class AbstractServer implements Server {
 	 *
 	 * @return string
 	 */
-	protected function get_current_url() {
+	protected function get_current_url(): string {
 		$request_uri = $_SERVER['REQUEST_URI'];
 
 		$wp_base = get_home_url( null, '/', 'relative' );
