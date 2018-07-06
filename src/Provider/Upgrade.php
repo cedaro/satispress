@@ -98,8 +98,8 @@ class Upgrade extends AbstractHookProvider {
 
 		if ( version_compare( $saved_version, VERSION, '<' ) ) {
 			Capabilities::register();
-			$this->cache_packages();
 			$this->setup_storage();
+			$this->cache_packages();
 		}
 
 		if ( version_compare( $saved_version, VERSION, '<' ) ) {
