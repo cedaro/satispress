@@ -17,5 +17,25 @@ namespace SatisPress\Exception;
  * @since 0.3.0
  */
 class InvalidPackageType extends \LogicException implements ExceptionInterface {
+	/**
+	 * Create an exception for an invalid package type.
+	 *
+	 * @since 0.3.0.
+	 *
+	 * @param string     $package_type Package type.
+	 * @param string     $class_name   Class name.
+	 * @param int        $code         Optional. The Exception code.
+	 * @param \Throwable $previous     Optional. The previous throwable used for the exception chaining.
+	 * @return InvalidPackageType
+	 */
+	public static function forPackageType(
+		string $package_type,
+		string $class_name,
+		int $code = 0,
+		\Throwable $previous = null
+	): InvalidPackageType {
+		$message = "Package type {$package_type} not known. Class {$class_name} not found.";
 
+		return new static( $message, $code, $previous );
+	}
 }

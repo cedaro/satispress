@@ -94,11 +94,11 @@ class ReleaseManager {
 		} elseif ( $release->get_version() === $release->get_package()->get_version() ) {
 			$filename = $this->archiver->archive_from_source( $release );
 		} else {
-			throw new InvalidReleaseSource( 'Unable create release artifact; source could not be determined.' );
+			throw InvalidReleaseSource::forRelease( $release );
 		}
 
 		if ( ! $this->storage->move( $filename, $release->get_file_path() ) ) {
-			throw new FileOperationFailed( 'Unable to move release artifact to storage.' );
+			throw FileOperationFailed::unableToMoveReleaseArtifactToStorage( $filename, $release->get_file_path() );
 		}
 
 		return $release;

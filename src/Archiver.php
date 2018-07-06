@@ -19,7 +19,6 @@ use PclZip;
 use SatisPress\Exception\FileDownloadFailed;
 use SatisPress\Exception\FileOperationFailed;
 use SatisPress\PackageType\Plugin;
-use WP_Error;
 
 /**
  * Archiver class.
@@ -70,7 +69,7 @@ class Archiver {
 		$filename = $this->get_absolute_path( $release->get_file() );
 
 		if ( ! wp_mkdir_p( dirname( $filename ) ) ) {
-			throw new FileOperationFailed( 'Unable to create temporary directory.' );
+			throw FileOperationFailed::unableToCreateTemporaryDirectory( $filename );
 		}
 
 		$zip = new PclZip( $filename );
@@ -81,7 +80,7 @@ class Archiver {
 		);
 
 		if ( 0 === $contents ) {
-			throw new FileOperationFailed( 'Unable to create zip file.' );
+			throw FileOperationFailed::unableToCreateZipFile( $filename );
 		}
 
 		return $filename;
@@ -105,15 +104,15 @@ class Archiver {
 		$tmpfname = download_url( $release->get_source_url() );
 
 		if ( is_wp_error( $tmpfname ) ) {
-			throw new FileDownloadFailed( 'Artifact download failed.' );
+			throw FileDownloadFailed::forFileName( $filename );
 		}
 
 		if ( ! wp_mkdir_p( dirname( $filename ) ) ) {
-			throw new FileOperationFailed( 'Unable to create temporary directory.' );
+			throw FileOperationFailed::unableToCreateTemporaryDirectory( $filename );
 		}
 
 		if ( ! rename( $tmpfname, $filename ) ) {
-			throw new FileOperationFailed( 'Unable to rename temporary artifact.' );
+			throw FileOperationFailed::unableToRenameTemporaryArtifact( $filename, $tmpfname );
 		}
 
 		return $filename;

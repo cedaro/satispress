@@ -20,16 +20,17 @@ class FileNotFound extends \RuntimeException implements ExceptionInterface {
 	/**
 	 * Create an exception for invalid checksum operations.
 	 *
-	 * @param string     $file     The filename that couldn't be found.
-	 * @param integer    $code     The exception code.
-	 * @param \Throwable $previous Previous exception.
+	 * @param string     $filename The filename that couldn't be found.
+	 * @param int        $code     Optional. The Exception code.
+	 * @param \Throwable $previous Optional. The previous throwable used for the exception chaining.
 	 * @return FileNotFound
 	 */
-	public static function forInvalidChecksum( string $file, int $code = 0, \Throwable $previous = null ): FileNotFound {
-		$message = sprintf(
-			'Cannot compute a checksum for an unknown file at %s',
-			$file
-		);
+	public static function forInvalidChecksum(
+		string $filename,
+		int $code = 0,
+		\Throwable $previous = null
+	): FileNotFound {
+		$message = "Cannot compute a checksum for an unknown file at {$filename}.";
 
 		return new static( $message, $code, $previous );
 	}

@@ -31,7 +31,7 @@ class InvalidFileName extends \InvalidArgumentException implements ExceptionInte
 	public static function withValidationCode(
 		string $filename,
 		int $validation_code,
-		int $code = null,
+		int $code = 0,
 		\Throwable $previous = null
 	): FileDownloadFailed {
 		$message = "File name '{$filename}' ";

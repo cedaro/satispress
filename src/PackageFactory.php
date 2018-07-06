@@ -56,7 +56,7 @@ final class PackageFactory {
 		$class_name = 'SatisPress\PackageType\\' . ucfirst( $package_type );
 
 		if ( ! class_exists( $class_name ) ) {
-			throw new InvalidPackageType( 'Package type not found' );
+			throw InvalidPackageType::forPackageType( $package_type, $class_name );
 		}
 
 		$package = new $class_name( $slug );

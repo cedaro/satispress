@@ -78,7 +78,7 @@ abstract class Package {
 	 */
 	public function get_release( string $version ): Release {
 		if ( ! isset( $this->releases[ $version ] ) ) {
-			throw new InvalidReleaseVersion( 'Invalid release version.' );
+			throw InvalidReleaseVersion::fromVersion( $version, $this->get_package_name() );
 		}
 
 		return $this->releases[ $version ];
@@ -119,7 +119,7 @@ abstract class Package {
 			return reset( $this->releases );
 		}
 
-		throw new InvalidReleaseVersion( 'Invalid release version.' );
+		throw InvalidReleaseVersion::hasNoReleases( $this->get_package_name() );
 	}
 
 	/**
