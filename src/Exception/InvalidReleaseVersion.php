@@ -31,7 +31,7 @@ class InvalidReleaseVersion extends \LogicException implements ExceptionInterfac
 	public static function fromVersion(
 		string $version,
 		string $package_name,
-		int $code = null,
+		int $code = 0,
 		\Throwable $previous = null
 	): InvalidReleaseVersion {
 		$message = "Invalid release version for {$package_name}: {$version}";
@@ -51,7 +51,7 @@ class InvalidReleaseVersion extends \LogicException implements ExceptionInterfac
 	 */
 	public static function hasNoReleases(
 		string $package_name,
-		int $code = null,
+		int $code = 0,
 		\Throwable $previous = null
 	): InvalidReleaseVersion {
 		$message = "Package {$package_name} has no releases.";

@@ -29,7 +29,7 @@ class FileDownloadFailed extends \RuntimeException implements ExceptionInterface
 	 */
 	public static function forFileName(
 		string $filename,
-		int $code = null,
+		int $code = 0,
 		\Throwable $previous = null
 	): FileDownloadFailed {
 		$message = "Artifact download failed for file {$filename}.";

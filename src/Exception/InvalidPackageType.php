@@ -31,7 +31,7 @@ class InvalidPackageType extends \LogicException implements ExceptionInterface {
 	public static function forPackageType(
 		string $package_type,
 		string $class_name,
-		int $code = null,
+		int $code = 0,
 		\Throwable $previous = null
 	): InvalidPackageType {
 		$message = "Package type {$package_type} not known. Class {$class_name} not found.";

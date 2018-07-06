@@ -31,7 +31,7 @@ class InvalidReleaseSource extends \LogicException implements ExceptionInterface
 	 */
 	public static function forRelease(
 		Release $release,
-		int $code = null,
+		int $code = 0,
 		\Throwable $previous = null
 	): InvalidReleaseSource {
 		$name = $release->get_package()->get_package_name();

@@ -31,7 +31,7 @@ class FileOperationFailed extends \RuntimeException implements ExceptionInterfac
 	public static function unableToMoveReleaseArtifactToStorage(
 		string $filename,
 		string $destination,
-		int $code = null,
+		int $code = 0,
 		\Throwable $previous = null
 	): FileOperationFailed {
 		$message = "Unable to move release artifact {$filename} to storage: {$destination}.";
@@ -51,7 +51,7 @@ class FileOperationFailed extends \RuntimeException implements ExceptionInterfac
 	 */
 	public static function unableToCreateTemporaryDirectory(
 		string $filename,
-		int $code = null,
+		int $code = 0,
 		\Throwable $previous = null
 	): FileOperationFailed {
 		$directory = dirname( $filename );
@@ -72,7 +72,7 @@ class FileOperationFailed extends \RuntimeException implements ExceptionInterfac
 	 */
 	public static function unableToCreateZipFile(
 		string $filename,
-		int $code = null,
+		int $code = 0,
 		\Throwable $previous = null
 	): FileOperationFailed {
 		$message = "Unable to create zip file for {$filename}.";
@@ -94,7 +94,7 @@ class FileOperationFailed extends \RuntimeException implements ExceptionInterfac
 	public static function unableToRenameTemporaryArtifact(
 		string $filename,
 		string $tmpfname,
-		int $code = null,
+		int $code = 0,
 		\Throwable $previous = null
 	): FileOperationFailed {
 		$message = "Unable to rename temporary artifact {$tmpfname} to {$filename}.";
