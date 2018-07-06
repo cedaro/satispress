@@ -1,6 +1,6 @@
-# SatisPress
+# SatisPress Documentation
 
-A WordPress plugin that can generate a Composer repository from installed plugins and themes.
+Generate a Composer repository from installed WordPress plugins and themes.
 
 ## Why a WordPress Installation?
 
@@ -8,10 +8,14 @@ Many plugins and themes don't have public repositories, so managing them with Co
 
 The whitelisted packages are exposed via an automatically generated `packages.json` for inclusion as a Composer repository in a project's `composer.json` or even your own `satis.json`.
 
-## Documentation
+## Table of Contents
 
-For installation notes, and information about usage, security and more, see the [Documentation](docs/Index.md).
-
-## Credits
-
-Created by [Brady Vercher](https://www.blazersix.com/) and supported by [Gary Jones](https://gamajo.com).
+1. [Installation](Installation.md)
+1. Managing SatisPress
+	1. [Whitelisting Plugins and Themes](Whitelisting.md)
+	1. [Settings](Settings.md)
+	1. [Packages](Packages.md)
+	1. [Security](Security.md)
+1. [Requiring SatisPress Packages](Requiring.md) 
+1. [Integrations](Integrations.md)
+1. [Troubleshooting](Troubleshooting.md)
