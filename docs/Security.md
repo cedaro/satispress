@@ -28,7 +28,6 @@ In other words, __don't use your admin credentials to access SatisPress__.
 
 Third-party authentication providers that hook into the `determine_current_user` filter and take care to account for multiple authentication schemes should work with SatisPress.
 
-
 ## Protecting Package Artifacts
 
 We've taken several measures to attempt to ensure package artifacts are protected. Most of these approaches are used by several top backup and eCommerce plugins on the market:

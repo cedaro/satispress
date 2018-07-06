@@ -6,8 +6,8 @@ Requires PHP 7.0 or later.
 
 ## Zip
 
-1. Download the [latest release](https://github.com/blazersix/satispress/archive/master.zip) from GitHub.
-2. Go to the _Plugins &rarr; Add New_ screen in your WordPress admin panel and click the __Upload__ tab at the top.
+1. Download the [latest release](https://github.com/blazersix/satispress/releases/latest) from GitHub.
+2. Go to the _Plugins &rarr; Add New_ screen in your WordPress admin panel and click the __Upload Plugin__ button at the top.
 3. Upload the zipped archive.
 4. Click the __Activate Plugin__ link after installation completes.
 
