@@ -225,7 +225,7 @@ class BasePackage implements \ArrayAccess, Package {
 	}
 
 	/**
-	 * Retrieve the latest release version.
+	 * Retrieve the latest release.
 	 *
 	 * @since 0.3.0
 	 *
