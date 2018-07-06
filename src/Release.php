@@ -48,9 +48,9 @@ class Release {
 	 * @param string  $source_url Optional. Release source URL.
 	 */
 	public function __construct( Package $package, string $version, string $source_url = '' ) {
-		$this->package = $package;
-		$this->version = $version;
-		$this->set_source_url( $source_url );
+		$this->package    = $package;
+		$this->version    = $version;
+		$this->source_url = $source_url;
 	}
 
 	/**
@@ -121,19 +121,6 @@ class Release {
 	 */
 	public function get_source_url(): string {
 		return $this->source_url;
-	}
-
-	/**
-	 * Set the source URL for a release.
-	 *
-	 * @since 0.3.0
-	 *
-	 * @param string $url URL to a zip archive.
-	 * @return $this
-	 */
-	public function set_source_url( string $url ): Release {
-		$this->source_url = $url;
-		return $this;
 	}
 
 	/**

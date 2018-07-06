@@ -13,7 +13,7 @@ namespace SatisPress\Screen;
 
 use Cedaro\WP\Plugin\AbstractHookProvider;
 use function SatisPress\get_packages_permalink;
-use SatisPress\PackageManager;
+use SatisPress\Repository\PackageRepository;
 
 /**
  * Settings screen provider class.
@@ -22,19 +22,20 @@ use SatisPress\PackageManager;
  */
 class Settings extends AbstractHookProvider {
 	/**
-	 * Package manager.
+	 * Package repository.
 	 *
-	 * @var PackageManager
+	 * @var PackageRepository
 	 */
-	protected $package_manager;
+	protected $repository;
 
 	/**
-	 * Initialise SatisPress object.
+	 * Create the setting screen.
 	 *
-	 * @param PackageManager $package_manager Package manager.
+	 * @param PackageRepository $repository Package repository.
+	 * @param PackageRepository $themes     Installed themes repository.
 	 */
-	public function __construct( PackageManager $package_manager ) {
-		$this->package_manager = $package_manager;
+	public function __construct( PackageRepository $repository ) {
+		$this->repository = $repository;
 	}
 
 	/**
@@ -182,8 +183,8 @@ class Settings extends AbstractHookProvider {
 	 * @since 0.2.0
 	 */
 	public function render_screen() {
-		$permalink = get_packages_permalink();
-		$packages  = $this->package_manager->get_packages();
+		$permalink  = get_packages_permalink();
+		$repository = $this->repository;
 		include $this->plugin->get_path( 'views/screen-settings.php' );
 	}
 

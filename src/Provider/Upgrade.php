@@ -16,8 +16,8 @@ use Cedaro\WP\Plugin\AbstractHookProvider;
 use SatisPress\Exception\ExceptionInterface;
 use SatisPress\Capabilities;
 use SatisPress\Htaccess;
-use SatisPress\PackageManager;
 use SatisPress\ReleaseManager;
+use SatisPress\Repository\PackageRepository;
 use SatisPress\Storage\Local;
 use SatisPress\Storage\Storage;
 
@@ -42,18 +42,18 @@ class Upgrade extends AbstractHookProvider {
 	protected $htaccess;
 
 	/**
-	 * Package manager.
-	 *
-	 * @var PackageManager
-	 */
-	protected $package_manager;
-
-	/**
 	 * Release manager.
 	 *
 	 * @var ReleaseManager
 	 */
 	protected $release_manager;
+
+	/**
+	 * Package repository.
+	 *
+	 * @var PackageRepository
+	 */
+	protected $repository;
 
 	/**
 	 * Storage service.
@@ -67,14 +67,14 @@ class Upgrade extends AbstractHookProvider {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @param PackageManager $package_manager Package manager.
-	 * @param ReleaseManager $release_manager Release manager.
-	 * @param Storage        $storage         Storage service.
-	 * @param Htaccess       $htaccess        Htaccess handler.
+	 * @param PackageRepository $repository      Package repository.
+	 * @param ReleaseManager    $release_manager Release manager.
+	 * @param Storage           $storage         Storage service.
+	 * @param Htaccess          $htaccess        Htaccess handler.
 	 */
-	public function __construct( PackageManager $package_manager, ReleaseManager $release_manager, Storage $storage, Htaccess $htaccess ) {
+	public function __construct( PackageRepository $repository, ReleaseManager $release_manager, Storage $storage, Htaccess $htaccess ) {
 		$this->htaccess        = $htaccess;
-		$this->package_manager = $package_manager;
+		$this->repository      = $repository;
 		$this->release_manager = $release_manager;
 		$this->storage         = $storage;
 	}
@@ -116,9 +116,7 @@ class Upgrade extends AbstractHookProvider {
 	 * @since 0.3.0
 	 */
 	protected function cache_packages() {
-		$packages = $this->package_manager->get_packages();
-
-		foreach ( $packages as $package ) {
+		foreach ( $this->repository->all() as $package ) {
 			try {
 				$this->release_manager->archive( $package->get_installed_release() );
 			} catch ( ExceptionInterface $e ) {

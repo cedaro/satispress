@@ -12,7 +12,7 @@ declare ( strict_types = 1 );
 namespace SatisPress\Screen;
 
 use Cedaro\WP\Plugin\AbstractHookProvider;
-use SatisPress\PackageManager;
+use SatisPress\Repository\PackageRepository;
 
 /**
  * Manage Plugins screen provider class.
@@ -21,19 +21,19 @@ use SatisPress\PackageManager;
  */
 class ManagePlugins extends AbstractHookProvider {
 	/**
-	 * Package manager.
+	 * SatisPress repository.
 	 *
-	 * @var PackageManager
+	 * @var PackageRepository
 	 */
-	protected $package_manager;
+	protected $repository;
 
 	/**
-	 * Initialise SatisPress object.
+	 * Create the Manage Plugins screen provider.
 	 *
-	 * @param PackageManager $package_manager Package manager.
+	 * @param PackageRepository $repository SatisPress repository.
 	 */
-	public function __construct( PackageManager $package_manager ) {
-		$this->package_manager = $package_manager;
+	public function __construct( PackageRepository $repository ) {
+		$this->repository = $repository;
 	}
 
 	/**
@@ -127,7 +127,7 @@ class ManagePlugins extends AbstractHookProvider {
 		printf(
 			'<input type="checkbox" value="%1$s"%2$s class="satispress-status">',
 			esc_attr( $plugin_file ),
-			\checked( $this->package_manager->has_package( $plugin_file, 'plugin' ), true, false )
+			\checked( $this->repository->contains( [ 'slug' => $plugin_file ] ), true, false )
 		);
 
 		echo '<span class="spinner"></span>';

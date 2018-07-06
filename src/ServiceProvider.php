@@ -23,6 +23,7 @@ use SatisPress\Authentication;
 use SatisPress\HTTP\Request;
 use SatisPress\Integration;
 use SatisPress\Provider;
+use SatisPress\Repository;
 use SatisPress\Screen;
 use SatisPress\Storage;
 
@@ -118,7 +119,8 @@ class ServiceProvider implements ServiceProviderInterface {
 
 		$container['hooks.package_archiver'] = function( $container ) {
 			return new Provider\PackageArchiver(
-				$container['package.manager'],
+				$container['repository.installed'],
+				$container['repository.satispress'],
 				$container['release.manager']
 			);
 		};
@@ -136,7 +138,7 @@ class ServiceProvider implements ServiceProviderInterface {
 
 		$container['hooks.upgrade'] = function( $container ) {
 			return new Provider\Upgrade(
-				$container['package.manager'],
+				$container['repository.satispress'],
 				$container['release.manager'],
 				$container['storage'],
 				$container['htaccess.handler']
@@ -167,12 +169,6 @@ class ServiceProvider implements ServiceProviderInterface {
 			);
 		};
 
-		$container['package.manager'] = function( $container ) {
-			return new PackageManager(
-				$container['package.factory']
-			);
-		};
-
 		$container['plugin.members'] = function( $container ) {
 			return new Integration\Members();
 		};
@@ -184,9 +180,41 @@ class ServiceProvider implements ServiceProviderInterface {
 			);
 		};
 
+		$container['repository.installed'] = function( $container ) {
+			return new Repository\MultiRepository( [
+				$container['repository.plugins'],
+				$container['repository.themes'],
+			] );
+		};
+
+		$container['repository.plugins'] = function( $container ) {
+			return new Repository\CachedRepository(
+				new Repository\InstalledPlugins(
+					$container['package.factory']
+				)
+			);
+		};
+
+		$container['repository.themes'] = function( $container ) {
+			return new Repository\CachedRepository(
+				new Repository\InstalledThemes(
+					$container['package.factory']
+				)
+			);
+		};
+
+		$container['repository.satispress'] = function( $container ) {
+			return new Repository\SatisPress(
+				$container['repository.installed']
+			);
+		};
+
 		$container['route.composer'] = function( $container ) {
 			return new Route\Composer(
-				$container['package.manager'],
+				new Repository\Composer(
+					$container['repository.satispress'],
+					$container['package.factory']
+				),
 				$container['release.manager'],
 				$container['version.parser']
 			);
@@ -194,7 +222,7 @@ class ServiceProvider implements ServiceProviderInterface {
 
 		$container['route.download'] = function( $container ) {
 			return new Route\Download(
-				$container['package.manager'],
+				$container['repository.satispress'],
 				$container['release.manager']
 			);
 		};
@@ -207,11 +235,11 @@ class ServiceProvider implements ServiceProviderInterface {
 		};
 
 		$container['screen.manage_plugins'] = function( $container ) {
-			return new Screen\ManagePlugins( $container['package.manager'] );
+			return new Screen\ManagePlugins( $container['repository.satispress'] );
 		};
 
 		$container['screen.settings'] = function( $container ) {
-			return new Screen\Settings( $container['package.manager'] );
+			return new Screen\Settings( $container['repository.satispress'] );
 		};
 
 		$container['storage'] = function( $container ) {

@@ -15,11 +15,11 @@ use SatisPress\Capabilities;
 use SatisPress\Exception\ExceptionInterface;
 use SatisPress\Exception\HTTPException;
 use SatisPress\Exception\InvalidReleaseVersion;
-use SatisPress\Package;
-use SatisPress\PackageManager;
-use SatisPress\ReleaseManager;
 use SatisPress\HTTP\Request;
 use SatisPress\HTTP\Response;
+use SatisPress\Package;
+use SatisPress\ReleaseManager;
+use SatisPress\Repository\PackageRepository;
 use WP_Http as HTTP;
 
 /**
@@ -36,13 +36,6 @@ class Download implements Route {
 	const LATEST_VERSION = 'latest';
 
 	/**
-	 * Package manager.
-	 *
-	 * @var PackageManager
-	 */
-	protected $package_manager;
-
-	/**
 	 * Release manager.
 	 *
 	 * @var ReleaseManager
@@ -50,15 +43,22 @@ class Download implements Route {
 	protected $release_manager;
 
 	/**
+	 * Package repository.
+	 *
+	 * @var PackageRepository
+	 */
+	protected $repository;
+
+	/**
 	 * Constructor.
 	 *
 	 * @since 0.3.0
 	 *
-	 * @param PackageManager $package_manager Package manager.
-	 * @param ReleaseManager $release_manager Release manager.
+	 * @param PackageRepository $repository      Package repository.
+	 * @param ReleaseManager    $release_manager Release manager.
 	 */
-	public function __construct( PackageManager $package_manager, ReleaseManager $release_manager ) {
-		$this->package_manager = $package_manager;
+	public function __construct( PackageRepository $repository, ReleaseManager $release_manager ) {
+		$this->repository      = $repository;
 		$this->release_manager = $release_manager;
 	}
 
@@ -92,14 +92,12 @@ class Download implements Route {
 			$version = preg_replace( '/[^0-9a-z.-]+/i', '', $request['version'] );
 		}
 
-		$packages = $this->package_manager->get_packages();
+		$package = $this->repository->first_where( [ 'slug' => $slug ] );
 
 		// Send a 404 response if the package doesn't exist.
-		if ( ! isset( $packages[ $slug ] ) ) {
+		if ( ! $package instanceof Package ) {
 			throw HTTPException::forUnknownPackage( $slug );
 		}
-
-		$package = $packages[ $slug ];
 
 		// Ensure the user has access to download the package.
 		if ( ! current_user_can( Capabilities::DOWNLOAD_PACKAGE, $package->get_slug() ) ) {
@@ -136,7 +134,7 @@ class Download implements Route {
 		// already exist.
 		if (
 			! $this->release_manager->exists( $release )
-			&& $package->get_version() === $version
+			&& $package->get_installed_version() === $version
 		) {
 			$this->release_manager->archive( $release );
 		}
