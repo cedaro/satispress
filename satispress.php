@@ -19,7 +19,7 @@
  * Domain Path: /languages
  * GitHub Plugin URI: blazersix/satispress
  * Release Asset: true
- * Requires PHP: 5.6
+ * Requires PHP: 7.0
  */
 
 declare ( strict_types = 1 );
