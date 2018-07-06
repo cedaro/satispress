@@ -16,7 +16,7 @@ foreach ( $repository->all() as $package ) :
 	<table class="satispress-package widefat">
 		<thead>
 		<tr>
-			<th colspan="2"><?php echo esc_html( $package->get_package_name() ); ?></th>
+			<th colspan="2"><?php echo esc_html( $package->get_name() ); ?></th>
 		</tr>
 		</thead>
 		<tbody>
@@ -49,10 +49,8 @@ foreach ( $repository->all() as $package ) :
 				<?php
 				if ( $package->has_releases() ) {
 					$versions = array_map( function( $release ) {
-						$is_installed = $release->get_version() === $release->get_package()->get_installed_version();
-
 						return sprintf(
-							$is_installed ? '<a href="%1$s"><strong>%2$s</strong></a>' : '<a href="%1$s">%2$s</a>',
+							'<a href="%1$s">%2$s</a>',
 							esc_url( $release->get_download_url() ),
 							esc_html( $release->get_version() )
 						);

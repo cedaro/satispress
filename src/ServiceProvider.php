@@ -239,7 +239,12 @@ class ServiceProvider implements ServiceProviderInterface {
 		};
 
 		$container['screen.settings'] = function( $container ) {
-			return new Screen\Settings( $container['repository.satispress'] );
+			return new Screen\Settings(
+				new Repository\Composer(
+					$container['repository.satispress'],
+					$container['package.factory']
+				)
+			);
 		};
 
 		$container['storage'] = function( $container ) {
