@@ -52,6 +52,9 @@ class ErrorBody implements ResponseBody {
 	 * @since 0.3.0
 	 */
 	public function emit() {
-		wp_die( $this->message, $this->status_code );
+		wp_die(
+			wp_kses_data( $this->message ),
+			absint( $this->status_code )
+		);
 	}
 }

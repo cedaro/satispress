@@ -14,9 +14,9 @@ namespace SatisPress\Provider;
 use Cedaro\WP\Plugin\AbstractHookProvider;
 use SatisPress\Exception\ExceptionInterface;
 use SatisPress\Package;
-use SatisPress\PackageManager;
 use SatisPress\Release;
 use SatisPress\ReleaseManager;
+use SatisPress\Repository\PackageRepository;
 
 /**
  * Package archiver class.
@@ -24,12 +24,13 @@ use SatisPress\ReleaseManager;
  * @since 0.3.0
  */
 class PackageArchiver extends AbstractHookProvider {
+
 	/**
-	 * Package manager.
+	 * Installed packages repository.
 	 *
-	 * @var PackageManager
+	 * @var PackageRepository
 	 */
-	protected $package_manager;
+	protected $packages;
 
 	/**
 	 * Release manager.
@@ -39,16 +40,25 @@ class PackageArchiver extends AbstractHookProvider {
 	protected $release_manager;
 
 	/**
+	 * Whitelisted packages repository.
+	 *
+	 * @var PackageRepository
+	 */
+	protected $whitelisted_packages;
+
+	/**
 	 * Constructor.
 	 *
 	 * @since 0.3.0
 	 *
-	 * @param PackageManager $package_manager Package manager.
-	 * @param ReleaseManager $release_manager Release manager.
+	 * @param PackageRepository $packages             Installed packages repository.
+	 * @param PackageRepository $whitelisted_packages Whitelisted packages repository.
+	 * @param ReleaseManager    $release_manager      Release manager.
 	 */
-	public function __construct( PackageManager $package_manager, ReleaseManager $release_manager ) {
-		$this->package_manager = $package_manager;
-		$this->release_manager = $release_manager;
+	public function __construct( PackageRepository $packages, PackageRepository $whitelisted_packages, ReleaseManager $release_manager ) {
+		$this->packages             = $packages;
+		$this->whitelisted_packages = $whitelisted_packages;
+		$this->release_manager      = $release_manager;
 	}
 
 	/**
@@ -129,8 +139,6 @@ class PackageArchiver extends AbstractHookProvider {
 			return $value;
 		}
 
-		$manager = $this->package_manager;
-
 		// The $id will be a theme slug or the plugin file.
 		foreach ( $value->response as $id => $update_data ) {
 			// Bail if a URL isn't available.
@@ -144,13 +152,18 @@ class PackageArchiver extends AbstractHookProvider {
 			$type = isset( $update_data['plugin'] ) ? 'plugin' : 'theme';
 			$slug = $update_data[ $type ];
 
+			$args = [
+				'slug' => $slug,
+				'type' => $type,
+			];
+
 			// Bail if the package isn't whitelisted.
-			if ( ! $manager->has_package( $slug, $type ) ) {
+			if ( ! $this->whitelisted_packages->contains( $args ) ) {
 				continue;
 			}
 
 			try {
-				$package = $manager->get_package( $slug, $type );
+				$package = $this->packages->first_where( $args );
 
 				$release = new Release(
 					$package,
@@ -183,7 +196,7 @@ class PackageArchiver extends AbstractHookProvider {
 	 * @since 0.3.0
 	 *
 	 * @param array  $slugs Array of package slugs.
-	 * @param string $type Type of packages.
+	 * @param string $type  Type of packages.
 	 */
 	protected function archive_packages( array $slugs, string $type ) {
 		foreach ( $slugs as $slug ) {
@@ -202,8 +215,13 @@ class PackageArchiver extends AbstractHookProvider {
 	 */
 	protected function archive_package( string $slug, string $type ): Package {
 		try {
-			$package = $this->package_manager->get_package( $slug, $type );
+			$package = $this->packages->first_where( [
+				'slug' => $slug,
+				'type' => $type,
+			] );
+
 			$this->release_manager->archive( $package->get_installed_release() );
+		// phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch
 		} catch ( ExceptionInterface $e ) {
 			// noop.
 		}

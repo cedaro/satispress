@@ -1,6 +1,6 @@
 <?php
 /**
- * PackageFactory class
+ * Package factory.
  *
  * @package SatisPress
  * @license GPL-2.0-or-later
@@ -11,13 +11,20 @@ declare ( strict_types = 1 );
 
 namespace SatisPress;
 
-use Composer\Semver\VersionParser;
 use SatisPress\Exception\InvalidPackageType;
+use SatisPress\PackageFactory;
+use SatisPress\PackageType\BasePackage;
+use SatisPress\PackageType\Composer;
+use SatisPress\PackageType\ComposerBuilder;
+use SatisPress\PackageType\PackageBuilder;
 use SatisPress\PackageType\Plugin;
+use SatisPress\PackageType\PluginBuilder;
 use SatisPress\PackageType\Theme;
+use SatisPress\PackageType\ThemeBuilder;
+use SatisPress\ReleaseManager;
 
 /**
- * Simple Factory for creating specific Composer package objects.
+ * Factory for creating package builders.
  *
  * @since 0.3.0
  */
@@ -41,91 +48,23 @@ final class PackageFactory {
 	}
 
 	/**
-	 * Create a Composer package object.
-	 *
-	 * Typical objects returned are Plugin and Theme.
+	 * Create a package builder.
 	 *
 	 * @since 0.3.0
 	 *
 	 * @param string $package_type Package type.
-	 * @param string $slug         Package slug.
-	 * @throws InvalidPackageType If package type not known.
-	 * @return Package Package object.
+	 * @return Package Package builder instance.
 	 */
-	public function create( string $package_type, string $slug ): Package {
-		$class_name = 'SatisPress\PackageType\\' . ucfirst( $package_type );
-
-		if ( ! class_exists( $class_name ) ) {
-			throw InvalidPackageType::forPackageType( $package_type, $class_name );
+	public function create( string $package_type ): PackageBuilder {
+		switch ( $package_type ) {
+			case 'composer':
+				return new ComposerBuilder( new BasePackage() );
+			case 'plugin':
+				return new PluginBuilder( new Plugin(), $this->release_manager );
+			case 'theme':
+				return new ThemeBuilder( new Theme(), $this->release_manager );
 		}
 
-		$package = new $class_name( $slug );
-		$package = $this->add_releases( $package );
-
-		return $package;
-	}
-
-	/**
-	 * Add releases to a package.
-	 *
-	 * @since 0.3.0
-	 *
-	 * @param Package $package Package instance.
-	 * @return Package
-	 */
-	protected function add_releases( Package $package ): Package {
-		$releases = $this->release_manager->all( $package );
-
-		if ( $package->is_installed() ) {
-			// Add the installed version in case it hasn't been cached yet.
-			$installed_version = $package->get_version();
-			if ( ! isset( $releases[ $installed_version ] ) ) {
-				$releases[ $installed_version ] = new Release( $package, $installed_version );
-			}
-
-			// Add a pending update if one is available.
-			$update = $this->get_package_update( $package );
-			if ( ! empty( $update ) && ( $update instanceof Release ) ) {
-				$releases[ $update->get_version() ] = $update;
-			}
-		}
-
-		uasort( $releases, function( $a, $b ) {
-			return version_compare( $b->get_version(), $a->get_version() );
-		} );
-
-		foreach ( $releases as $release ) {
-			$package->add_release( $release );
-		}
-
-		return $package;
-	}
-
-	/**
-	 * Retrieve a package update.
-	 *
-	 * @since 0.3.0
-	 *
-	 * @param Package $package Package instance.
-	 * @return Release
-	 */
-	protected function get_package_update( Package $package ) {
-		$release = null;
-
-		if ( $package instanceof Plugin ) {
-			$updates = get_site_transient( 'update_plugins' );
-			if ( ! empty( $updates->response[ $package->get_basename() ]->package ) ) {
-				$update  = $updates->response[ $package->get_basename() ];
-				$release = new Release( $package, $update->new_version, $update->package );
-			}
-		} elseif ( $package instanceof Theme ) {
-			$updates = get_site_transient( 'update_themes' );
-			if ( ! empty( $updates->response[ $package->get_slug() ]['package'] ) ) {
-				$update  = $updates->response[ $package->get_slug() ];
-				$release = new Release( $package, $update['new_version'], $update['package'] );
-			}
-		}
-
-		return $release;
+		return new PackageBuilder( new BasePackage() );
 	}
 }

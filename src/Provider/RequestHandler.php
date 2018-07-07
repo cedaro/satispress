@@ -69,6 +69,7 @@ class RequestHandler extends AbstractHookProvider {
 	 * @since 0.3.0
 	 *
 	 * @param WP $wp Main WP instance.
+	 * @throws \Exception If an exception is caught and debug mode is enabled.
 	 */
 	public function dispatch( WP $wp ) {
 		if ( empty( $wp->query_vars['satispress_route'] ) ) {

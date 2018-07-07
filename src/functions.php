@@ -118,3 +118,20 @@ function get_packages_permalink( array $args = null ): string {
 
 	return $url;
 }
+
+/**
+ * Whether a plugin identifier is the main plugin file.
+ *
+ * Plugins can be identified by their plugin file (relative path to the main
+ * plugin file from the root plugin directory) or their slug.
+ *
+ * This doesn't validate whether or not the plugin actually exists.
+ *
+ * @since 0.3.0
+ *
+ * @param string $plugin_file Plugin slug or relative path to the main plugin file.
+ * @return boolean
+ */
+function is_plugin_file( $plugin_file ) {
+	return '.php' === substr( $plugin_file, -4 );
+}

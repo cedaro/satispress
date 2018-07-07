@@ -1,10 +1,10 @@
 <?php
 /**
- * Package abstract class
+ * Package interface.
  *
  * @package SatisPress
  * @license GPL-2.0-or-later
- * @since 0.2.0
+ * @since 0.3.0
  */
 
 declare ( strict_types = 1 );
@@ -14,34 +14,82 @@ namespace SatisPress;
 use SatisPress\Exception\InvalidReleaseVersion;
 
 /**
- * Abstract Composer package class.
+ * Package interface.
  *
- * Extended by child classes like Plugin and Theme.
- *
- * @since 0.2.0
+ * @since 0.3.0
  */
-abstract class Package {
+interface Package {
 	/**
-	 * Releases.
+	 * Retrieve the author.
 	 *
-	 * @var array
-	 */
-	protected $releases = [];
-
-	/**
-	 * Retrieve the package name.
-	 *
-	 * Includes the vendor prefix.
-	 *
-	 * @since 0.2.0
+	 * @since 0.3.0
 	 *
 	 * @return string
 	 */
-	public function get_package_name(): string {
-		$vendor = apply_filters( 'satispress_vendor', 'satispress' );
+	public function get_author(): string;
 
-		return $vendor . '/' . $this->get_slug();
-	}
+	/**
+	 * Retrieve the author URL.
+	 *
+	 * @since 0.3.0
+	 *
+	 * @return string
+	 */
+	public function get_author_url(): string;
+
+	/**
+	 * Retrieve the description.
+	 *
+	 * @since 0.3.0
+	 *
+	 * @return string
+	 */
+	public function get_description(): string;
+
+	/**
+	 * Retrieve the homepage URL.
+	 *
+	 * @since 0.3.0
+	 *
+	 * @return string
+	 */
+	public function get_homepage(): string;
+
+	/**
+	 * Retrieve the name.
+	 *
+	 * @since 0.3.0
+	 *
+	 * @return string
+	 */
+	public function get_name(): string;
+
+	/**
+	 * Retrieve the slug.
+	 *
+	 * @since 0.3.0
+	 *
+	 * @return string
+	 */
+	public function get_slug(): string;
+
+	/**
+	 * Retrieve the package type.
+	 *
+	 * @since 0.3.0
+	 *
+	 * @return string
+	 */
+	public function get_type(): string;
+
+	/**
+	 * Whether the package is installed.
+	 *
+	 * @since 0.3.0
+	 *
+	 * @return boolean
+	 */
+	public function is_installed(): bool;
 
 	/**
 	 * Whether the package has any releases.
@@ -50,22 +98,7 @@ abstract class Package {
 	 *
 	 * @return boolean
 	 */
-	public function has_releases(): bool {
-		return ! empty( $this->releases );
-	}
-
-	/**
-	 * Add a release.
-	 *
-	 * @since 0.3.0
-	 *
-	 * @param Release $release Release instance.
-	 * @return $this
-	 */
-	public function add_release( Release $release ) {
-		$this->releases[ $release->get_version() ] = $release;
-		return $this;
-	}
+	public function has_releases(): bool;
 
 	/**
 	 * Retrieve a release by version.
@@ -76,139 +109,34 @@ abstract class Package {
 	 * @throws InvalidReleaseVersion If the version is invalid.
 	 * @return Release
 	 */
-	public function get_release( string $version ): Release {
-		if ( ! isset( $this->releases[ $version ] ) ) {
-			throw InvalidReleaseVersion::fromVersion( $version, $this->get_package_name() );
-		}
-
-		return $this->releases[ $version ];
-	}
+	public function get_release( string $version ): Release;
 
 	/**
 	 * Retrieve releases.
 	 *
 	 * @since 0.3.0
 	 *
-	 * @return array
+	 * @return Release[]
 	 */
-	public function get_releases(): array {
-		return $this->releases;
-	}
+	public function get_releases(): array;
 
 	/**
-	 * Retrieve the installed release.
+	 * Retrieve the latest release.
 	 *
 	 * @since 0.3.0
 	 *
+	 * @throws InvalidReleaseVersion If the package doesn't have any releases.
 	 * @return Release
 	 */
-	public function get_installed_release(): Release {
-		return $this->get_release( $this->get_version() );
-	}
+	public function get_latest_release(): Release;
 
 	/**
-	 * Retrieve the latest release version.
+	 * Retrieve the version for the latest release.
 	 *
 	 * @since 0.3.0
 	 *
 	 * @throws InvalidReleaseVersion If the package doesn't have any releases.
 	 * @return string
 	 */
-	public function get_latest_release(): Release {
-		if ( $this->has_releases() ) {
-			return reset( $this->releases );
-		}
-
-		throw InvalidReleaseVersion::hasNoReleases( $this->get_package_name() );
-	}
-
-	/**
-	 * Whether the package is installed.
-	 *
-	 * @since 0.3.0
-	 *
-	 * @return boolean
-	 */
-	abstract public function is_installed(): bool;
-
-	/**
-	 * Retrieve the package author.
-	 *
-	 * @since 0.3.0
-	 *
-	 * @return string
-	 */
-	abstract public function get_author(): string;
-
-	/**
-	 * Retrieve the package author's URL.
-	 *
-	 * @since 0.3.0
-	 *
-	 * @return string
-	 */
-	abstract public function get_author_uri(): string;
-
-	/**
-	 * Retrieve the package description.
-	 *
-	 * @since 0.3.0
-	 *
-	 * @return string
-	 */
-	abstract public function get_description(): string;
-
-	/**
-	 * Retrieve the package homepage.
-	 *
-	 * @since 0.3.0
-	 *
-	 * @return string
-	 */
-	abstract public function get_homepage(): string;
-
-	/**
-	 * Retrieve the package name.
-	 *
-	 * @since 0.3.0
-	 *
-	 * @return string
-	 */
-	abstract public function get_name(): string;
-
-	/**
-	 * Retrieve the path to the package.
-	 *
-	 * @since 0.3.0
-	 *
-	 * @return string
-	 */
-	abstract public function get_path(): string;
-
-	/**
-	 * Retrieve the package slug.
-	 *
-	 * @since 0.2.0
-	 *
-	 * @return string
-	 */
-	abstract public function get_slug(): string;
-
-	/**
-	 * Retrieve the type of Composer package.
-	 *
-	 * @since 0.3.0
-	 *
-	 * @return string
-	 */
-	abstract public function get_type(): string;
-
-	/**
-	 * Retrieve the package version.
-	 *
-	 * @since 0.3.0
-	 *
-	 * @return string
-	 */
-	abstract public function get_version(): string;
+	public function get_latest_version(): string;
 }

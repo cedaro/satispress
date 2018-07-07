@@ -38,8 +38,6 @@ class Archiver {
 	 */
 	public function archive_from_source( Release $release ): string {
 		$excludes = apply_filters( 'satispress_archive_excludes', [
-			'.',
-			'..',
 			'.DS_Store',
 			'.git',
 			'coverage',
@@ -49,21 +47,12 @@ class Archiver {
 			'tests',
 		], $release );
 
-		$package           = $release->get_package();
-		$package_directory = $package->get_path();
-		$remove_path       = dirname( $package_directory );
+		$package     = $release->get_package();
+		$remove_path = dirname( $package->get_directory() );
+		$files       = $package->get_files();
 
-		$files = scandir( $package_directory );
-		$files = array_diff( $files, $excludes );
-
-		foreach ( $files as $index => $file ) {
-			$files[ $index ] = $package_directory . '/' . $file;
-		}
-
-		// Single-file plugins should only include the main plugin file.
-		if ( $package instanceof Plugin && false === strpos( $package->get_basename(), '/' ) ) {
-			$files       = [ $package->get_file() ];
-			$remove_path = $package_directory;
+		if ( $package instanceof Plugin && $package->is_single_file() ) {
+			$remove_path = $package->get_directory();
 		}
 
 		$filename = $this->get_absolute_path( $release->get_file() );

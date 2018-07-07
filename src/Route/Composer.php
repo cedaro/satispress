@@ -19,8 +19,8 @@ use SatisPress\HTTP\Request;
 use SatisPress\HTTP\Response;
 use SatisPress\HTTP\ResponseBody\JsonBody;
 use SatisPress\Package;
-use SatisPress\PackageManager;
 use SatisPress\ReleaseManager;
+use SatisPress\Repository\PackageRepository;
 use SatisPress\VersionParser;
 use WP_Http as HTTP;
 
@@ -31,11 +31,11 @@ use WP_Http as HTTP;
  */
 class Composer implements Route {
 	/**
-	 * Package manager.
+	 * Package repository.
 	 *
-	 * @var PackageManager
+	 * @var PackageRepository
 	 */
-	protected $package_manager;
+	protected $repository;
 
 	/**
 	 * Release manager.
@@ -56,12 +56,12 @@ class Composer implements Route {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @param PackageManager $package_manager Package manager.
-	 * @param ReleaseManager $release_manager Release manager.
-	 * @param VersionParser  $version_parser  Version parser.
+	 * @param PackageRepository $repository      Package repository.
+	 * @param ReleaseManager    $release_manager Release manager.
+	 * @param VersionParser     $version_parser  Version parser.
 	 */
-	public function __construct( PackageManager $package_manager, ReleaseManager $release_manager, VersionParser $version_parser ) {
-		$this->package_manager = $package_manager;
+	public function __construct( PackageRepository $repository, ReleaseManager $release_manager, VersionParser $version_parser ) {
+		$this->repository      = $repository;
 		$this->release_manager = $release_manager;
 		$this->version_parser  = $version_parser;
 	}
@@ -98,16 +98,15 @@ class Composer implements Route {
 		$items = get_transient( 'satispress_packages' );
 
 		if ( ! $items ) {
-			$items    = [];
-			$packages = $this->package_manager->get_packages();
+			$items = [];
 
-			foreach ( $packages as $slug => $package ) {
+			foreach ( $this->repository->all() as $slug => $package ) {
 				if ( ! $package->has_releases() ) {
 					continue;
 				}
 
 				try {
-					$items[ $package->get_package_name() ] = $this->prepare_item_for_response( $package );
+					$items[ $package->get_name() ] = $this->prepare_item_for_response( $package );
 				// phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch
 				} catch ( FileNotFound $e ) {
 					// Continue to allow valid items to be served.
@@ -131,7 +130,7 @@ class Composer implements Route {
 
 		foreach ( $package->get_releases() as $release ) {
 			$item[ $release->get_version() ] = [
-				'name'               => $package->get_package_name(),
+				'name'               => $package->get_name(),
 				'version'            => $release->get_version(),
 				'version_normalized' => $this->version_parser->normalize( $release->get_version() ),
 				'dist'               => [
@@ -145,7 +144,7 @@ class Composer implements Route {
 				'type'               => $package->get_type(),
 				'authors'            => [
 					'name'     => $package->get_author(),
-					'homepage' => esc_url( $package->get_author_uri() ),
+					'homepage' => esc_url( $package->get_author_url() ),
 				],
 				'description'        => $package->get_description(),
 				'homepage'           => $package->get_homepage(),
