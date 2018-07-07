@@ -40,25 +40,25 @@ class PackageArchiver extends AbstractHookProvider {
 	protected $release_manager;
 
 	/**
-	 * SatisPress repository.
+	 * Whitelisted packages repository.
 	 *
 	 * @var PackageRepository
 	 */
-	protected $satispress;
+	protected $whitelisted_packages;
 
 	/**
 	 * Constructor.
 	 *
 	 * @since 0.3.0
 	 *
-	 * @param PackageRepository $packages        Installed packages repository.
-	 * @param PackageRepository $satispress      SatisPress repository.
-	 * @param ReleaseManager    $release_manager Release manager.
+	 * @param PackageRepository $packages             Installed packages repository.
+	 * @param PackageRepository $whitelisted_packages Whitelisted packages repository.
+	 * @param ReleaseManager    $release_manager      Release manager.
 	 */
-	public function __construct( PackageRepository $packages, PackageRepository $satispress, ReleaseManager $release_manager ) {
-		$this->packages        = $packages;
-		$this->satispress      = $satispress;
-		$this->release_manager = $release_manager;
+	public function __construct( PackageRepository $packages, PackageRepository $whitelisted_packages, ReleaseManager $release_manager ) {
+		$this->packages             = $packages;
+		$this->whitelisted_packages = $whitelisted_packages;
+		$this->release_manager      = $release_manager;
 	}
 
 	/**
@@ -158,7 +158,7 @@ class PackageArchiver extends AbstractHookProvider {
 			];
 
 			// Bail if the package isn't whitelisted.
-			if ( ! $this->satispress->contains( $args ) ) {
+			if ( ! $this->whitelisted_packages->contains( $args ) ) {
 				continue;
 			}
 

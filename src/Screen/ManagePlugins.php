@@ -21,7 +21,7 @@ use SatisPress\Repository\PackageRepository;
  */
 class ManagePlugins extends AbstractHookProvider {
 	/**
-	 * SatisPress repository.
+	 * Whitelisted packages repository.
 	 *
 	 * @var PackageRepository
 	 */
@@ -30,7 +30,7 @@ class ManagePlugins extends AbstractHookProvider {
 	/**
 	 * Create the Manage Plugins screen provider.
 	 *
-	 * @param PackageRepository $repository SatisPress repository.
+	 * @param PackageRepository $repository Whitelisted packages repository.
 	 */
 	public function __construct( PackageRepository $repository ) {
 		$this->repository = $repository;

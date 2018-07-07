@@ -1,6 +1,6 @@
 <?php
 /**
- * SatisPress repository.
+ * Whitelisted packages repository.
  *
  * @package SatisPress
  * @license GPL-2.0-or-later
@@ -12,11 +12,11 @@ declare ( strict_types = 1 );
 namespace SatisPress\Repository;
 
 /**
- * SatisPress repository class.
+ * Whitelisted packages repository class.
  *
  * @since 0.3.0
  */
-class SatisPress extends AbstractRepository implements PackageRepository {
+class Whitelist extends AbstractRepository implements PackageRepository {
 	/**
 	 * Installed packages repository.
 	 *
@@ -25,7 +25,7 @@ class SatisPress extends AbstractRepository implements PackageRepository {
 	protected $packages;
 
 	/**
-	 * Create the SatisPress repository.
+	 * Create the repository.
 	 *
 	 * @since 0.3.0
 	 *

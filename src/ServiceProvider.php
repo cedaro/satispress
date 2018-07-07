@@ -120,7 +120,7 @@ class ServiceProvider implements ServiceProviderInterface {
 		$container['hooks.package_archiver'] = function( $container ) {
 			return new Provider\PackageArchiver(
 				$container['repository.installed'],
-				$container['repository.satispress'],
+				$container['repository.whitelist'],
 				$container['release.manager']
 			);
 		};
@@ -138,7 +138,7 @@ class ServiceProvider implements ServiceProviderInterface {
 
 		$container['hooks.upgrade'] = function( $container ) {
 			return new Provider\Upgrade(
-				$container['repository.satispress'],
+				$container['repository.whitelist'],
 				$container['release.manager'],
 				$container['storage'],
 				$container['htaccess.handler']
@@ -203,8 +203,8 @@ class ServiceProvider implements ServiceProviderInterface {
 			);
 		};
 
-		$container['repository.satispress'] = function( $container ) {
-			return new Repository\SatisPress(
+		$container['repository.whitelist'] = function( $container ) {
+			return new Repository\Whitelist(
 				$container['repository.installed']
 			);
 		};
@@ -212,7 +212,7 @@ class ServiceProvider implements ServiceProviderInterface {
 		$container['route.composer'] = function( $container ) {
 			return new Route\Composer(
 				new Repository\Composer(
-					$container['repository.satispress'],
+					$container['repository.whitelist'],
 					$container['package.factory']
 				),
 				$container['release.manager'],
@@ -222,7 +222,7 @@ class ServiceProvider implements ServiceProviderInterface {
 
 		$container['route.download'] = function( $container ) {
 			return new Route\Download(
-				$container['repository.satispress'],
+				$container['repository.whitelist'],
 				$container['release.manager']
 			);
 		};
@@ -235,13 +235,13 @@ class ServiceProvider implements ServiceProviderInterface {
 		};
 
 		$container['screen.manage_plugins'] = function( $container ) {
-			return new Screen\ManagePlugins( $container['repository.satispress'] );
+			return new Screen\ManagePlugins( $container['repository.whitelist'] );
 		};
 
 		$container['screen.settings'] = function( $container ) {
 			return new Screen\Settings(
 				new Repository\Composer(
-					$container['repository.satispress'],
+					$container['repository.whitelist'],
 					$container['package.factory']
 				)
 			);
