@@ -49,7 +49,7 @@ abstract class AbstractRepository {
 			$matched    = 0;
 
 			foreach ( $args as $key => $value ) {
-				if ( $item[ $key ] && $value == $item[ $key ] ) {
+				if ( $item[ $key ] && $value === $item[ $key ] ) {
 					$matched++;
 				}
 			}

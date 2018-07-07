@@ -47,7 +47,10 @@ class SatisPress extends AbstractRepository implements PackageRepository {
 
 		foreach ( $this->get_whitelist() as $type => $slugs ) {
 			foreach ( $slugs as $slug ) {
-				$package = $this->packages->first_where( [ 'slug' => $slug, 'type' => $type ] );
+				$package = $this->packages->first_where( [
+					'slug' => $slug,
+					'type' => $type,
+				] );
 
 				if ( $package ) {
 					$packages[ $package->get_slug() ] = $package;

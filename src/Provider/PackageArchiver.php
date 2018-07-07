@@ -152,13 +152,18 @@ class PackageArchiver extends AbstractHookProvider {
 			$type = isset( $update_data['plugin'] ) ? 'plugin' : 'theme';
 			$slug = $update_data[ $type ];
 
+			$args = [
+				'slug' => $slug,
+				'type' => $type,
+			];
+
 			// Bail if the package isn't whitelisted.
-			if ( ! $this->satispress->contains( [ 'slug' => $slug, 'type' => $type ] ) ) {
+			if ( ! $this->satispress->contains( $args ) ) {
 				continue;
 			}
 
 			try {
-				$package = $this->packages->first_where( [ 'slug' => $slug, 'type' => $type ] );
+				$package = $this->packages->first_where( $args );
 
 				$release = new Release(
 					$package,
@@ -210,8 +215,13 @@ class PackageArchiver extends AbstractHookProvider {
 	 */
 	protected function archive_package( string $slug, string $type ): Package {
 		try {
-			$package = $this->packages->first_where( [ 'slug' => $slug, 'type' => $type ] );
+			$package = $this->packages->first_where( [
+				'slug' => $slug,
+				'type' => $type,
+			] );
+
 			$this->release_manager->archive( $package->get_installed_release() );
+		// phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch
 		} catch ( ExceptionInterface $e ) {
 			// noop.
 		}

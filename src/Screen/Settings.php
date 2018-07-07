@@ -32,7 +32,6 @@ class Settings extends AbstractHookProvider {
 	 * Create the setting screen.
 	 *
 	 * @param PackageRepository $repository Package repository.
-	 * @param PackageRepository $themes     Installed themes repository.
 	 */
 	public function __construct( PackageRepository $repository ) {
 		$this->repository = $repository;

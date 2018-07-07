@@ -94,7 +94,6 @@ class BasePackage implements \ArrayAccess, Package {
 	 */
 	public function __set( string $name, $value ) {
 		// Don't allow undefined properties to be set.
-		return;
 	}
 
 	/**
@@ -293,7 +292,7 @@ class BasePackage implements \ArrayAccess, Package {
 	 * @param array  $value Property value.
 	 */
 	public function offsetSet( $name, $value ) {
-		return;
+		// Prevent properties from being modified.
 	}
 
 	/**
@@ -304,6 +303,6 @@ class BasePackage implements \ArrayAccess, Package {
 	 * @param string $name Property name.
 	 */
 	public function offsetUnset( $name ) {
-		return;
+		// Prevent properties from being modified.
 	}
 }

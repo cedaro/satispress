@@ -46,7 +46,7 @@ class Composer extends AbstractRepository implements PackageRepository {
 	 */
 	public function __construct( PackageRepository $packages, PackageFactory $factory ) {
 		$this->packages = $packages;
-		$this->factory = $factory;
+		$this->factory  = $factory;
 	}
 
 	/**
@@ -64,7 +64,7 @@ class Composer extends AbstractRepository implements PackageRepository {
 		foreach ( $this->packages->all() as $slug => $package ) {
 			$packages[ $slug ] = $this->factory->create( 'composer' )
 				->with_package( $package )
-				->build();;
+				->build();
 		}
 
 		return $packages;
