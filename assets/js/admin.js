@@ -124,8 +124,7 @@
 		},
 
 		isSelected: function() {
-			var version = this.model.get( 'version' );
-			return this.selection.length > 0 && version === this.selection.first().get( 'version' );
+			return this.selection.length > 0 && this.model === this.selection.first();
 		},
 
 		updateSelectedClass: function() {

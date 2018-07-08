@@ -139,4 +139,14 @@ interface Package {
 	 * @return string
 	 */
 	public function get_latest_version(): string;
+
+	/**
+	 * Retrieve a link to download the latest release.
+	 *
+	 * @since 0.3.0
+	 *
+	 * @throws InvalidReleaseVersion If the package doesn't have any releases.
+	 * @return string
+	 */
+	public function get_latest_download_url(): string;
 }

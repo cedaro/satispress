@@ -11,6 +11,13 @@ declare ( strict_types = 1 );
 
 namespace SatisPress;
 
+$allowed_tags = [
+	'a'  => [
+		'href' => true,
+	],
+	'em' => [],
+];
+
 foreach ( $packages as $package ) :
 	?>
 	<table class="satispress-package widefat">
@@ -57,6 +64,14 @@ foreach ( $packages as $package ) :
 						);
 					}, $package->get_releases() );
 
+					// Prepend the latest release.
+					array_unshift( $versions, sprintf(
+						'<a href="%1$s" data-version="%2$s" class="button satispress-release">%3$s</a>',
+						esc_url( $package->get_latest_download_url() ),
+						esc_attr( $package->get_latest_release()->get_version() ),
+						esc_html_x( 'Latest', 'latest version', 'satispress' )
+					) );
+
 					echo wp_kses(
 						implode( ' ', array_filter( $versions ) ),
 						[
@@ -77,39 +92,10 @@ foreach ( $packages as $package ) :
 		</tr>
 		</tbody>
 	</table>
-
-	<script type="text/html" id="tmpl-satispress-release-actions">
-		<table>
-			<tr>
-				<td><?php esc_html_e( 'Download URL', 'satispress' ); ?></td>
-				<td><input type="text" value="{{ data.download_url }}" class="regular-text" readonly></td>
-			</tr>
-			<tr>
-				<td><?php esc_html_e( 'Require', 'satispress' ); ?></td>
-				<td><input type="text" value='"{{ data.name }}": "{{ data.version }}"' class="regular-text" readonly></td>
-			</tr>
-			<tr>
-				<td colspan="2">
-					<a href="{{ data.download_url }}" class="button button-primary">
-						<?php
-						/* translators: %s: version number */
-						printf( esc_html__( 'Download %s', 'satispress' ), '{{ data.version }}' );
-						?>
-					</a>
-				</td>
-			</tr>
-		</table>
-	</script>
 	<?php
 endforeach;
 
-if ( empty( $packages ) ) {
-	$allowed_tags = [
-		'a'  => [
-			'href' => true,
-		],
-		'em' => [],
-	];
+if ( empty( $packages ) ) :
 	?>
 	<div class="satispress-card">
 		<h3><?php esc_html_e( 'Whitelisting Packages', 'satispress' ); ?></h3>
@@ -149,4 +135,29 @@ if ( empty( $packages ) ) {
 		</p>
 	</div>
 	<?php
-}
+else :
+	?>
+	<script type="text/html" id="tmpl-satispress-release-actions">
+		<table>
+			<tr>
+				<td><?php esc_html_e( 'Download URL', 'satispress' ); ?></td>
+				<td><input type="text" value="{{ data.download_url }}" class="regular-text" readonly></td>
+			</tr>
+			<tr>
+				<td><?php esc_html_e( 'Require', 'satispress' ); ?></td>
+				<td><input type="text" value='"{{ data.name }}": "{{ data.version }}"' class="regular-text" readonly></td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<a href="{{ data.download_url }}" class="button button-primary">
+						<?php
+						/* translators: %s: version number */
+						printf( esc_html__( 'Download %s', 'satispress' ), '{{ data.version }}' );
+						?>
+					</a>
+				</td>
+			</tr>
+		</table>
+	</script>
+	<?php
+endif;

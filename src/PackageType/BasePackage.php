@@ -252,6 +252,20 @@ class BasePackage implements \ArrayAccess, Package {
 	}
 
 	/**
+	 * Retrieve a link to download the latest release.
+	 *
+	 * @since 0.3.0
+	 *
+	 * @throws InvalidReleaseVersion If the package doesn't have any releases.
+	 * @return string
+	 */
+	public function get_latest_download_url(): string {
+		$url = $this->get_latest_release()->get_download_url();
+		$url = substr( $url, 0, strrpos( $url, '/' ) );
+		return $url . '/latest';
+	}
+
+	/**
 	 * Whether a property exists.
 	 *
 	 * Checks for an accessor method rather than the actual property.
