@@ -1,51 +1,169 @@
-/*global wp:false */
+/* global wp:false */
 
-(function( window, $, undefined ) {
+(function( window, $, _, Backbone, wp, undefined ) {
 	'use strict';
 
-	jQuery(function( $ ) {
-		var $tabs = $( '.nav-tab-wrapper .nav-tab' ),
-			$panels = $( '.satispress-tab-panel' ),
-			updateTabs;
+	var $tabs = $( '.nav-tab-wrapper .nav-tab' ),
+		$panels = $( '.satispress-tab-panel' ),
+		updateTabs;
 
-		updateTabs = function() {
-			var hash = window.location.hash;
+	updateTabs = function() {
+		var hash = window.location.hash;
 
-			$tabs.removeClass( 'nav-tab-active' ).filter( '[href="' + hash + '"]' ).addClass( 'nav-tab-active' );
-			$panels.removeClass( 'is-active' ).filter( hash ).addClass( 'is-active' );
+		$tabs.removeClass( 'nav-tab-active' ).filter( '[href="' + hash + '"]' ).addClass( 'nav-tab-active' );
+		$panels.removeClass( 'is-active' ).filter( hash ).addClass( 'is-active' );
 
-			if ( $tabs.filter( '.nav-tab-active' ).length < 1 ) {
-				var href = $tabs.eq( 0 ).addClass( 'nav-tab-active' ).attr( 'href' );
-				$panels.removeClass( 'is-active' ).filter( href ).addClass( 'is-active' );
-			}
-		};
+		if ( $tabs.filter( '.nav-tab-active' ).length < 1 ) {
+			var href = $tabs.eq( 0 ).addClass( 'nav-tab-active' ).attr( 'href' );
+			$panels.removeClass( 'is-active' ).filter( href ).addClass( 'is-active' );
+		}
+	};
 
-		updateTabs();
-		$( window ).on( 'hashchange', updateTabs );
+	updateTabs();
+	$( window ).on( 'hashchange', updateTabs );
 
-		// Scroll back to the top when a tab panel is reloaded or submitted.
-		setTimeout(function() {
-			if ( location.hash ) {
-				window.scrollTo( 0, 1 );
-			}
-		}, 1 );
+	// Scroll back to the top when a tab panel is reloaded or submitted.
+	setTimeout(function() {
+		if ( location.hash ) {
+			window.scrollTo( 0, 1 );
+		}
+	}, 1 );
 
-		// Handle the checkbox for toggling plugins.
-		$( '.satispress-status' ).on( 'change', function() {
-			var $checkbox = $( this ),
-				$spinner = $( this ).siblings( '.spinner' ).css( 'visibility', 'visible' );
+	// Handle the checkbox for toggling plugins.
+	$( '.satispress-status' ).on( 'change', function() {
+		var $checkbox = $( this ),
+			$spinner = $( this ).siblings( '.spinner' ).addClass( 'is-active' );
 
-			wp.ajax.post( 'satispress_toggle_plugin', {
-				plugin_file: $checkbox.val(),
-				status: $checkbox.prop( 'checked' ),
-				_wpnonce: $checkbox.siblings( '.satispress-status-nonce' ).val()
-			}).done(function() {
-				setTimeout( function() {
-					$spinner.css( 'visibility', 'hidden' );
-				}, 300);
-			}).fail(function() {
-				$spinner.hide( 'visibility', 'hidden' );
-			});
+		wp.ajax.post( 'satispress_toggle_plugin', {
+			plugin_file: $checkbox.val(),
+			status: $checkbox.prop( 'checked' ),
+			_wpnonce: $checkbox.siblings( '.satispress-status-nonce' ).val()
+		}).done(function() {
+			setTimeout( function() {
+				$spinner.removeClass( 'is-active' );
+			}, 300);
+		}).fail(function() {
+			$spinner.removeClass( 'is-active' );
 		});
 	});
-})( this, jQuery );
+
+	/**
+	 * ========================================================================
+	 * Package Panels
+	 * ========================================================================
+	 */
+
+	var PackagePanel = wp.Backbone.View.extend({
+		initialize: function( options ) {
+			this.model = options.model;
+			this.selection = options.selection;
+		},
+
+		render: function() {
+			var model = this.model,
+				selection = this.selection;
+
+			this.$( '.satispress-release' ).each(function() {
+				new ReleaseButton({
+					el: this,
+					selection: selection
+				}).render();
+			});
+
+			this.views.add( '.satispress-releases', [
+				new ReleaseActions({
+					package: this.model,
+					selection: this.selection
+				})
+			]);
+
+			return this;
+		}
+	});
+
+	var ReleaseButton = wp.Backbone.View.extend({
+		events: {
+			'click': 'click'
+		},
+
+		initialize: function( options ) {
+			this.model = new Backbone.Model();
+			this.selection = options.selection;
+
+			this.listenTo( this.selection, 'add remove reset', this.updateSelectedClass );
+		},
+
+		render: function() {
+			this.model.set({
+				download_url: this.$el.attr( 'href' ),
+				version: this.$el.data( 'version' )
+			});
+
+			this.updateSelectedClass();
+
+			return this;
+		},
+
+		click: function( e ) {
+			var version = this.model.get( 'version' );
+
+			e.preventDefault();
+
+			if ( this.selection.length > 0 && version === this.selection.first().get( 'version' ) ) {
+				this.selection.remove( this.model );
+			} else {
+				this.selection.reset( this.model );
+			}
+		},
+
+		updateSelectedClass: function() {
+			var version = this.model.get( 'version' );
+			var isSelected = this.selection.length > 0 && version === this.selection.first().get( 'version' );
+			this.$el.toggleClass( 'active', isSelected );
+		}
+	});
+
+	var ReleaseActions = wp.Backbone.View.extend({
+		tagName: 'div',
+		className: 'satispress-release-actions',
+		template: wp.template( 'satispress-release-actions' ),
+
+		events: {
+			'click input': 'selectTextField'
+		},
+
+		initialize: function( options ) {
+			this.package = options.package;
+			this.selection = options.selection;
+			this.listenTo( this.selection, 'add change remove reset', this.render );
+		},
+
+		render: function() {
+			var data;
+
+			if ( this.selection.length ) {
+				data = _.extend( this.selection.first().toJSON(), this.package.toJSON() );
+				this.$el.html( this.template( data ) ).show();
+			} else {
+				this.$el.hide();
+			}
+
+			return this;
+		},
+
+		selectTextField: function( e ) {
+			e.target.select();
+		}
+	});
+
+	$( '.satispress-package' ).each(function() {
+		new PackagePanel({
+			el: this,
+			model: new Backbone.Model({
+				name: $( this ).find( 'thead th' ).text()
+			}),
+			selection: new Backbone.Collection([])
+		}).render();
+	});
+
+})( this, jQuery, _, Backbone, wp );

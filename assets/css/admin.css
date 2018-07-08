@@ -30,6 +30,10 @@
 	margin-top: 20px;
 }
 
+.satispress-package thead th {
+	color: #000;
+}
+
 .satispress-package tbody th {
 	width: 150px;
 }
@@ -53,4 +57,21 @@
 	max-width: 620px;
 	padding: 0.7em 2em 1em;
 	position: relative;
+}
+
+.satispress-release.button {
+	line-height: 22px;
+	height: 24px;
+	padding-left: 6px;
+	padding-right: 6px;
+}
+
+.satispress-release-actions {
+	background: #f9f9f9;
+	border: 1px solid #dedede;
+	margin-top: 1em;
+}
+
+.satispress-release-actions input {
+	background: #fff;
 }
