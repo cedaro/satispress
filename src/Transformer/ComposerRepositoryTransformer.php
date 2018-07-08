@@ -62,8 +62,6 @@ class ComposerRepositoryTransformer implements PackageRepositoryTransformer {
 		$items = [];
 
 		foreach ( $repository->all() as $slug => $package ) {
-			// @todo Transform the package into a Composer package?
-
 			if ( ! $package->has_releases() ) {
 				continue;
 			}
