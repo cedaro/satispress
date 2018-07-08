@@ -166,6 +166,19 @@ class PackageBuilder {
 	}
 
 	/**
+	 * Remove a release.
+	 *
+	 * @since 0.3.0
+	 *
+	 * @param string $version Version.
+	 * @return $this
+	 */
+	public function remove_release( string $version ): self {
+		unset( $this->releases[ $version ] );
+		return $this;
+	}
+
+	/**
 	 * Set properties from an existing package.
 	 *
 	 * @since 0.3.0
