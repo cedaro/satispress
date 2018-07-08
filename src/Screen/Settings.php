@@ -182,8 +182,8 @@ class Settings extends AbstractHookProvider {
 	 * @since 0.2.0
 	 */
 	public function render_screen() {
-		$permalink  = get_packages_permalink();
-		$repository = $this->repository;
+		$permalink = get_packages_permalink();
+		$packages  = $this->repository->all();
 		include $this->plugin->get_path( 'views/screen-settings.php' );
 	}
 
@@ -193,7 +193,15 @@ class Settings extends AbstractHookProvider {
 	 * @since 0.2.0
 	 */
 	public function render_section_security_description() {
-		esc_html_e( 'Packges are secured using HTTP Basic Authentication by default. Valid credentials are a WP username and password.', 'satispress' );
+		printf(
+			'<p>%s</p>',
+			esc_html_e( 'Packages are secured using HTTP Basic Authentication by default. Valid credentials are a WordPress username and password.', 'satispress' )
+		);
+
+		printf(
+			'<p><a href="https://github.com/blazersix/satispress/blob/develop/docs/Security.md"><em>%s</em></a></p>',
+			esc_html__( 'Read more about securing your SatisPress repository.', 'satispress' )
+		);
 	}
 
 	/**
@@ -202,7 +210,10 @@ class Settings extends AbstractHookProvider {
 	 * @since 0.2.0
 	 */
 	public function render_section_themes_description() {
-		esc_html_e( 'Choose themes to make available in your SatisPress repository.', 'satispress' );
+		printf(
+			'<p>%s</p>',
+			esc_html__( 'Choose themes to make available in your SatisPress repository.', 'satispress' )
+		);
 	}
 
 	/**

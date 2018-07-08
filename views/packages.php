@@ -11,7 +11,7 @@ declare ( strict_types = 1 );
 
 namespace SatisPress;
 
-foreach ( $repository->all() as $package ) :
+foreach ( $packages as $package ) :
 	?>
 	<table class="satispress-package widefat">
 		<thead>
@@ -69,3 +69,51 @@ foreach ( $repository->all() as $package ) :
 	</table>
 	<?php
 endforeach;
+
+if ( empty( $packages ) ) {
+	$allowed_tags = [
+		'a'  => [
+			'href' => true,
+		],
+		'em' => [],
+	];
+	?>
+	<div class="satispress-card">
+		<h3><?php esc_html_e( 'Whitelisting Packages', 'satispress' ); ?></h3>
+		<p>
+			<?php esc_html_e( 'Plugins and themes need to be whitelisted to make them available as Composer packages.', 'satispress' ); ?>
+		</p>
+		<p>
+			<a href="https://github.com/blazersix/satispress/blob/develop/docs/Whitelisting.md"><em><?php esc_html_e( 'Read more about whitelisting plugins and themes.', 'satispress' ); ?></em></a>
+		</p>
+
+		<h4><?php esc_html_e( 'Plugins', 'satispress' ); ?></h4>
+		<p>
+			<?php
+			echo wp_kses(
+				sprintf(
+					/* translators: %s: Plugins screen URL */
+					__( 'Plugins can be whitelisted by visiting the <a href="%s"><em>Plugins &rarr; Installed Plugins</em></a> screen and toggling the checkbox for each plugin in the "SatisPress" column.', 'satispress' ),
+					esc_url( self_admin_url( 'plugins.php' ) )
+				),
+				$allowed_tags
+			);
+			?>
+		</p>
+
+		<h4><?php esc_html_e( 'Themes', 'satispress' ); ?></h4>
+		<p>
+			<?php
+			echo wp_kses(
+				sprintf(
+					/* translators: %s: SatisPress settings screen URL */
+					__( 'Themes can be toggled on the <a href="%s"><em>Settings &rarr; SatisPress</em></a> screen.', 'satispress' ),
+					esc_url( self_admin_url( 'options-general.php?page=satispress#satispress-settings' ) )
+				),
+				$allowed_tags
+			);
+			?>
+		</p>
+	</div>
+	<?php
+}

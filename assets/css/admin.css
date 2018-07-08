@@ -44,3 +44,13 @@
 .satispress-repository-snippet code {
 	background: transparent;
 }
+
+.satispress-card {
+	background: #fff;
+	border: 1px solid #e5e5e5;
+	box-shadow: 0 1px 1px rgba(0,0,0,0.04);
+	margin-top: 20px;
+	max-width: 620px;
+	padding: 0.7em 2em 1em;
+	position: relative;
+}
