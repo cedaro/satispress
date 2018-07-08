@@ -95,32 +95,26 @@ class Composer implements Route {
 	 * @return array
 	 */
 	public function get_items(): array {
-		$items = get_transient( 'satispress_packages' );
+		$items = [];
 
-		if ( ! $items ) {
-			$items = [];
+		foreach ( $this->repository->all() as $slug => $package ) {
+			if ( ! $package->has_releases() ) {
+				continue;
+			}
 
-			foreach ( $this->repository->all() as $slug => $package ) {
-				if ( ! $package->has_releases() ) {
+			try {
+				$item = $this->prepare_item_for_response( $package );
+
+				// Skip if there aren't any viewable releases.
+				if ( empty( $item ) ) {
 					continue;
 				}
 
-				try {
-					$item = $this->prepare_item_for_response( $package );
-
-					// Skip if there aren't any viewable releases.
-					if ( empty( $item ) ) {
-						continue;
-					}
-
-					$items[ $package->get_name() ] = $item;
-				// phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch
-				} catch ( FileNotFound $e ) {
-					// Continue to allow valid items to be served.
-				}
+				$items[ $package->get_name() ] = $item;
+			// phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch
+			} catch ( FileNotFound $e ) {
+				// Continue to allow valid items to be served.
 			}
-
-			set_transient( 'satispress_packages', $items, HOUR_IN_SECONDS * 12 );
 		}
 
 		return $items;

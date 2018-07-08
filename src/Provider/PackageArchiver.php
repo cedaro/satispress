@@ -73,14 +73,6 @@ class PackageArchiver extends AbstractHookProvider {
 		add_action( 'update_option_satispress_themes', [ $this, 'archive_on_option_update' ], 10, 3 );
 		add_filter( 'pre_set_site_transient_update_plugins', [ $this, 'archive_updates' ], 9999 );
 		add_filter( 'pre_set_site_transient_update_themes', [ $this, 'archive_updates' ], 9999 );
-
-		// Delete the 'satispress_packages' transient.
-		add_action( 'upgrader_process_complete', [ $this, 'flush_packages_cache' ] );
-		add_action( 'set_site_transient_update_plugins', [ $this, 'flush_packages_cache' ] );
-		add_action( 'add_option_satispress_plugins', [ $this, 'flush_packages_cache' ] );
-		add_action( 'add_option_satispress_themes', [ $this, 'flush_packages_cache' ] );
-		add_action( 'update_option_satispress_plugins', [ $this, 'flush_packages_cache' ] );
-		add_action( 'update_option_satispress_themes', [ $this, 'flush_packages_cache' ] );
 	}
 
 	/**
@@ -179,15 +171,6 @@ class PackageArchiver extends AbstractHookProvider {
 		}
 
 		return $value;
-	}
-
-	/**
-	 * Flush the packages.json cache.
-	 *
-	 * @since 0.2.0
-	 */
-	public function flush_packages_cache() {
-		delete_transient( 'satispress_packages' );
 	}
 
 	/**
