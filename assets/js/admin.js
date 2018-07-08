@@ -94,10 +94,19 @@
 		},
 
 		render: function() {
+			var $button = $( '<button/>', {
+				'aria-expanded': false,
+				'class': this.$el.attr( 'class' ),
+				'text': this.$el.text()
+			});
+
 			this.model.set({
 				download_url: this.$el.attr( 'href' ),
 				version: this.$el.data( 'version' )
 			});
+
+			this.$el.replaceWith( $button );
+			this.setElement( $button );
 
 			this.updateSelectedClass();
 
@@ -105,21 +114,26 @@
 		},
 
 		click: function( e ) {
-			var version = this.model.get( 'version' );
-
 			e.preventDefault();
 
-			if ( this.selection.length > 0 && version === this.selection.first().get( 'version' ) ) {
+			if ( this.isSelected() ) {
 				this.selection.remove( this.model );
 			} else {
 				this.selection.reset( this.model );
 			}
 		},
 
-		updateSelectedClass: function() {
+		isSelected: function() {
 			var version = this.model.get( 'version' );
-			var isSelected = this.selection.length > 0 && version === this.selection.first().get( 'version' );
-			this.$el.toggleClass( 'active', isSelected );
+			return this.selection.length > 0 && version === this.selection.first().get( 'version' );
+		},
+
+		updateSelectedClass: function() {
+			var isSelected = this.isSelected();
+
+			this.$el
+				.toggleClass( 'active', isSelected )
+				.attr( 'aria-expanded', isSelected );
 		}
 	});
 
