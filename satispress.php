@@ -49,6 +49,8 @@ if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
 // Autoload mapped classes.
 spl_autoload_register( __NAMESPACE__ . '\autoloader_classmap' );
 
+// Load the WordPress plugin administration API.
+include_once ABSPATH . 'wp-admin/includes/plugin.php';
 
 // Create a container and register a service provider.
 $container = new Container();

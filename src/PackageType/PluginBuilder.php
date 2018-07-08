@@ -46,8 +46,6 @@ final class PluginBuilder extends InstalledPackageBuilder {
 		$directory = '.' === dirname( $plugin_file ) ? '' : dirname( $plugin_file );
 
 		if ( empty( $plugin_data ) ) {
-			include_once ABSPATH . 'wp-admin/includes/plugin.php';
-
 			$plugin_data = get_plugin_data( path_join( WP_PLUGIN_DIR, $plugin_file ) );
 		}
 

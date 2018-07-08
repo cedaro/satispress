@@ -76,8 +76,6 @@ class Download implements Route {
 	 * @return Response
 	 */
 	public function handle( Request $request ): Response {
-		require_once ABSPATH . 'wp-admin/includes/plugin.php';
-
 		if ( ! current_user_can( Capabilities::DOWNLOAD_PACKAGES ) ) {
 			throw HTTPException::forForbiddenResource();
 		}
