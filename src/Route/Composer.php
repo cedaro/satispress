@@ -106,7 +106,14 @@ class Composer implements Route {
 				}
 
 				try {
-					$items[ $package->get_name() ] = $this->prepare_item_for_response( $package );
+					$item = $this->prepare_item_for_response( $package );
+
+					// Skip if there aren't any viewable releases.
+					if ( empty( $item ) ) {
+						continue;
+					}
+
+					$items[ $package->get_name() ] = $item;
 				// phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch
 				} catch ( FileNotFound $e ) {
 					// Continue to allow valid items to be served.
@@ -129,6 +136,11 @@ class Composer implements Route {
 		$item = [];
 
 		foreach ( $package->get_releases() as $release ) {
+			// Skip if the current user can't view this release.
+			if ( ! current_user_can( Capabilities::VIEW_PACKAGE, $package, $release ) ) {
+				continue;
+			}
+
 			$item[ $release->get_version() ] = [
 				'name'               => $package->get_name(),
 				'version'            => $release->get_version(),

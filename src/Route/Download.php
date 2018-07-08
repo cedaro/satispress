@@ -99,11 +99,6 @@ class Download implements Route {
 			throw HTTPException::forUnknownPackage( $slug );
 		}
 
-		// Ensure the user has access to download the package.
-		if ( ! current_user_can( Capabilities::DOWNLOAD_PACKAGE, $package->get_slug() ) ) {
-			throw HTTPException::forForbiddenPackage( $package );
-		}
-
 		return $this->send_package( $package, $version );
 	}
 
@@ -128,6 +123,11 @@ class Download implements Route {
 			$release = $package->get_release( $version );
 		} catch ( InvalidReleaseVersion $e ) {
 			throw HTTPException::forInvalidRelease( $package, $version );
+		}
+
+		// Ensure the user has access to download the release.
+		if ( ! current_user_can( Capabilities::DOWNLOAD_PACKAGE, $package, $release ) ) {
+			throw HTTPException::forForbiddenPackage( $package );
 		}
 
 		// Archive the currently installed version if the artifact doesn't
