@@ -68,3 +68,26 @@
 		</div>
 	</td>
 </script>
+
+<script type="text/html" id="tmpl-satispress-release-actions">
+	<table>
+		<tr>
+			<td><?php esc_html_e( 'Download URL', 'satispress' ); ?></td>
+			<td><input type="text" value="{{ data.download_url }}" class="regular-text" readonly></td>
+		</tr>
+		<tr>
+			<td><?php esc_html_e( 'Require', 'satispress' ); ?></td>
+			<td><input type="text" value='"{{ data.name }}": "{{ data.version }}"' class="regular-text" readonly></td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<a href="{{ data.download_url }}" class="button button-primary">
+					<?php
+					/* translators: %s: version number */
+					printf( esc_html__( 'Download %s', 'satispress' ), '{{ data.version }}' );
+					?>
+				</a>
+			</td>
+		</tr>
+	</table>
+</script>
