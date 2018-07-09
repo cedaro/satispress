@@ -62,6 +62,6 @@ class UnauthorizedServer extends AbstractServer {
 			wp_kses_data( $error->get_error_message() ),
 			esc_html__( 'Authentication Required', 'satispress' ),
 			[ 'response' => HTTP::UNAUTHORIZED ]
-		);
+		); // WPCS: XSS OK.
 	}
 }

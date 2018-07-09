@@ -29,7 +29,7 @@ class EditUser extends AbstractHookProvider {
 	 * @since 0.3.0
 	 */
 	public function register_hooks() {
-		$user_id = empty( $_GET['user_id'] ) ? get_current_user_id() : (int) $_GET['user_id'];
+		$user_id = get_edited_user_id();
 
 		// Only load the screen for users that can view or download packages.
 		if (
