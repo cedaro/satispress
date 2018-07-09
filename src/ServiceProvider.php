@@ -26,6 +26,7 @@ use SatisPress\Provider;
 use SatisPress\Repository;
 use SatisPress\Screen;
 use SatisPress\Storage;
+use SatisPress\Transformer\ComposerRepositoryTransformer;
 
 /**
  * Plugin service provider class.
@@ -215,8 +216,7 @@ class ServiceProvider implements ServiceProviderInterface {
 					$container['repository.whitelist'],
 					$container['package.factory']
 				),
-				$container['release.manager'],
-				$container['version.parser']
+				$container['transformer.composer_repository']
 			);
 		};
 
@@ -249,6 +249,13 @@ class ServiceProvider implements ServiceProviderInterface {
 
 		$container['storage'] = function( $container ) {
 			return new Storage\Local( $container['cache.path'] );
+		};
+
+		$container['transformer.composer_repository'] = function( $container ) {
+			return new ComposerRepositoryTransformer(
+				$container['release.manager'],
+				$container['version.parser']
+			);
 		};
 
 		$container['version.parser'] = function( $container ) {
