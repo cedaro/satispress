@@ -98,6 +98,10 @@ class ServiceProvider implements ServiceProviderInterface {
 			return new Provider\AdminAssets();
 		};
 
+		$container['hooks.ajax'] = function( $container ) {
+			return new Provider\AJAX();
+		};
+
 		$container['hooks.authentication'] = function( $container ) {
 			return new Provider\Authentication( $container['authentication.servers'] );
 		};

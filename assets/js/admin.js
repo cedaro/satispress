@@ -47,6 +47,32 @@
 		});
 	});
 
+	function toggleDropdown( $dropdown, isOpen ) {
+		return $dropdown
+			.toggleClass( 'is-open', isOpen )
+			.attr( 'aria-expanded', isOpen );
+	}
+
+	$( document )
+		.on( 'click', '.satispress-dropdown-toggle', function( e ) {
+			var $group = $( e.target ).closest( '.satispress-dropdown-group' ),
+				isOpen = $group.hasClass( 'is-open' );
+
+			e.preventDefault();
+
+			toggleDropdown( $group, ! isOpen );
+		})
+		.on( 'click', function( e ) {
+			var $button = $( e.target ).closest( 'button' ),
+				$group = $( e.target ).closest( '.satispress-dropdown-group' );
+
+			if ( ! $button.hasClass( 'satispress-dropdown-toggle' ) ) {
+				toggleDropdown( $( 'satispress-dropdown-group' ), false );
+			} else {
+				toggleDropdown( $( '.satispress-dropdown-group' ).not( $group ), false );
+			}
+		});
+
 	/**
 	 * ========================================================================
 	 * Package Panels
