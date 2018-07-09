@@ -56,6 +56,14 @@ class AdminAssets extends AbstractHookProvider {
 			],
 		] );
 
+		wp_register_script(
+			'satispress-package-settings',
+			$this->plugin->get_url( 'assets/js/package-settings.js' ),
+			[ 'wp-backbone', 'wp-util' ],
+			'20180708',
+			true
+		);
+
 		wp_register_style(
 			'satispress-admin',
 			$this->plugin->get_url( 'assets/css/admin.css' )

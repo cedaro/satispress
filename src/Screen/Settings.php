@@ -86,6 +86,7 @@ class Settings extends AbstractHookProvider {
 	public function enqueue_assets() {
 		wp_enqueue_script( 'satispress-admin' );
 		wp_enqueue_style( 'satispress-admin' );
+		wp_enqueue_script( 'satispress-package-settings' );
 
 		$api_keys = ApiKey::find_for_user( wp_get_current_user() );
 
