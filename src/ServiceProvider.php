@@ -238,6 +238,10 @@ class ServiceProvider implements ServiceProviderInterface {
 			] );
 		};
 
+		$container['screen.edit_user'] = function( $container ) {
+			return new Screen\EditUser();
+		};
+
 		$container['screen.manage_plugins'] = function( $container ) {
 			return new Screen\ManagePlugins( $container['repository.whitelist'] );
 		};

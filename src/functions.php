@@ -120,6 +120,18 @@ function get_packages_permalink( array $args = null ): string {
 }
 
 /**
+ * Retrieve ID for the user being edited.
+ *
+ * @since 0.3.0
+ *
+ * @return int
+ */
+function get_edited_user_id(): int {
+	// phpcs:ignore WordPress.CSRF.NonceVerification.NoNonceVerification
+	return empty( $_GET['user_id'] ) ? get_current_user_id() : (int) $_GET['user_id'];
+}
+
+/**
  * Whether a plugin identifier is the main plugin file.
  *
  * Plugins can be identified by their plugin file (relative path to the main

@@ -280,19 +280,4 @@ class Settings extends AbstractHookProvider {
 
 		return isset( $option[ $key ] ) ? $option[ $key ] : $default;
 	}
-
-	/**
-	 * Retrieve the contents of a view.
-	 *
-	 * @since 0.2.0
-	 *
-	 * @param string $file View filename.
-	 * @return string View output.
-	 */
-	protected function get_view( string $file ): string {
-		ob_start();
-		include $this->plugin->get_path( 'views/' . $file );
-
-		return ob_get_clean();
-	}
 }
