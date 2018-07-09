@@ -46,10 +46,17 @@ class ServiceProvider implements ServiceProviderInterface {
 
 		$container['authentication.servers'] = function( $container ) {
 			$servers = apply_filters( 'satispress_authentication_servers', [
+				20  => 'authentication.basic.api_key',
 				100 => 'authentication.unauthorized',
 			] );
 
 			return new ServiceIterator( $container, $servers );
+		};
+
+		$container['authentication.basic.api_key'] = function( $container ) {
+			return new Authentication\BasicApiKey\Server(
+				$container['http.request']
+			);
 		};
 
 		$container['authentication.unauthorized'] = function( $container ) {
