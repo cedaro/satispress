@@ -125,9 +125,9 @@ class Settings extends AbstractHookProvider {
 		);
 
 		add_settings_section(
-			'security',
-			__( 'Security', 'satispress' ),
-			[ $this, 'render_section_security_description' ],
+			'access',
+			esc_html__( 'Access', 'satispress' ),
+			[ $this, 'render_section_access_description' ],
 			'satispress'
 		);
 
@@ -203,11 +203,11 @@ class Settings extends AbstractHookProvider {
 	}
 
 	/**
-	 * Display the security section description.
+	 * Display the access section description.
 	 *
 	 * @since 0.2.0
 	 */
-	public function render_section_security_description() {
+	public function render_section_access_description() {
 		printf(
 			'<p>%s</p>',
 			esc_html__( 'API Keys are used to access your SatisPress repository and download packages. Your personal API keys appear below or you can create keys for other users by editing their accounts.', 'satispress' )
