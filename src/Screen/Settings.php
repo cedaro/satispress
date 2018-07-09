@@ -57,8 +57,8 @@ class Settings extends AbstractHookProvider {
 	 */
 	public function add_menu_item() {
 		$screen_hook = add_options_page(
-			__( 'SatisPress', 'satispress' ),
-			__( 'SatisPress', 'satispress' ),
+			esc_html__( 'SatisPress', 'satispress' ),
+			esc_html__( 'SatisPress', 'satispress' ),
 			'manage_options',
 			'satispress',
 			[ $this, 'render_screen' ]
@@ -119,7 +119,7 @@ class Settings extends AbstractHookProvider {
 	public function add_sections() {
 		add_settings_section(
 			'default',
-			__( 'General', 'satispress' ),
+			esc_html__( 'General', 'satispress' ),
 			'__return_null',
 			'satispress'
 		);
@@ -133,7 +133,7 @@ class Settings extends AbstractHookProvider {
 
 		add_settings_section(
 			'themes',
-			__( 'Themes', 'satispress' ),
+			esc_html__( 'Themes', 'satispress' ),
 			[ $this, 'render_section_themes_description' ],
 			'satispress'
 		);
@@ -147,7 +147,7 @@ class Settings extends AbstractHookProvider {
 	public function add_settings() {
 		add_settings_field(
 			'vendor',
-			'<label for="satispress-vendor">' . __( 'Vendor', 'satispress' ) . '</label>',
+			'<label for="satispress-vendor">' . esc_html__( 'Vendor', 'satispress' ) . '</label>',
 			[ $this, 'render_field_vendor' ],
 			'satispress',
 			'default'
@@ -155,7 +155,7 @@ class Settings extends AbstractHookProvider {
 
 		add_settings_field(
 			'themes',
-			__( 'Themes', 'satispress' ),
+			esc_html__( 'Themes', 'satispress' ),
 			[ $this, 'render_field_themes' ],
 			'satispress',
 			'themes'
