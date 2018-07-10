@@ -40,6 +40,7 @@ class Plugin extends BasePlugin implements Composable {
 			->register_hooks( $container->get( 'hooks.i18n' ) )
 			->register_hooks( $container->get( 'hooks.capabilities' ) )
 			->register_hooks( $container->get( 'hooks.rewrite_rules' ) )
+			->register_hooks( $container->get( 'hooks.ajax.api_key' ) )
 			->register_hooks( $container->get( 'hooks.custom_vendor' ) )
 			->register_hooks( $container->get( 'hooks.request_handler' ) )
 			->register_hooks( $container->get( 'hooks.package_archiver' ) );
@@ -48,6 +49,7 @@ class Plugin extends BasePlugin implements Composable {
 			$this
 				->register_hooks( $container->get( 'hooks.upgrade' ) )
 				->register_hooks( $container->get( 'hooks.admin_assets' ) )
+				->register_hooks( $container->get( 'screen.edit_user' ) )
 				->register_hooks( $container->get( 'screen.manage_plugins' ) )
 				->register_hooks( $container->get( 'screen.settings' ) );
 		}

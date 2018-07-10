@@ -13,6 +13,7 @@ namespace SatisPress\Screen;
 
 use Cedaro\WP\Plugin\AbstractHookProvider;
 use function SatisPress\get_packages_permalink;
+use SatisPress\Authentication\ApiKey\ApiKeyRepository;
 use SatisPress\Repository\PackageRepository;
 
 /**
@@ -22,19 +23,28 @@ use SatisPress\Repository\PackageRepository;
  */
 class Settings extends AbstractHookProvider {
 	/**
+	 * API Key repository.
+	 *
+	 * @var ApiKeyRepository
+	 */
+	protected $api_keys;
+
+	/**
 	 * Package repository.
 	 *
 	 * @var PackageRepository
 	 */
-	protected $repository;
+	protected $packages;
 
 	/**
 	 * Create the setting screen.
 	 *
-	 * @param PackageRepository $repository Package repository.
+	 * @param PackageRepository $packages Package repository.
+	 * @param ApiKeyRepository  $api_keys API Key repository.
 	 */
-	public function __construct( PackageRepository $repository ) {
-		$this->repository = $repository;
+	public function __construct( PackageRepository $packages, ApiKeyRepository $api_keys ) {
+		$this->api_keys = $api_keys;
+		$this->packages = $packages;
 	}
 
 	/**
@@ -56,8 +66,8 @@ class Settings extends AbstractHookProvider {
 	 */
 	public function add_menu_item() {
 		$screen_hook = add_options_page(
-			__( 'SatisPress', 'satispress' ),
-			__( 'SatisPress', 'satispress' ),
+			esc_html__( 'SatisPress', 'satispress' ),
+			esc_html__( 'SatisPress', 'satispress' ),
 			'manage_options',
 			'satispress',
 			[ $this, 'render_screen' ]
@@ -85,6 +95,19 @@ class Settings extends AbstractHookProvider {
 	public function enqueue_assets() {
 		wp_enqueue_script( 'satispress-admin' );
 		wp_enqueue_style( 'satispress-admin' );
+		wp_enqueue_script( 'satispress-package-settings' );
+
+		$api_keys = $this->api_keys->find_for_user( wp_get_current_user() );
+
+		$items = array_map( function( $api_key ) {
+			return $api_key->to_array();
+		}, $api_keys );
+
+		wp_enqueue_script( 'satispress-api-keys' );
+		wp_localize_script( 'satispress-api-keys', '_satispressApiKeysData', [
+			'items'  => $items,
+			'userId' => get_current_user_id(),
+		] );
 	}
 
 	/**
@@ -105,21 +128,21 @@ class Settings extends AbstractHookProvider {
 	public function add_sections() {
 		add_settings_section(
 			'default',
-			__( 'General', 'satispress' ),
+			esc_html__( 'General', 'satispress' ),
 			'__return_null',
 			'satispress'
 		);
 
 		add_settings_section(
-			'security',
-			__( 'Security', 'satispress' ),
-			[ $this, 'render_section_security_description' ],
+			'access',
+			esc_html__( 'Access', 'satispress' ),
+			[ $this, 'render_section_access_description' ],
 			'satispress'
 		);
 
 		add_settings_section(
 			'themes',
-			__( 'Themes', 'satispress' ),
+			esc_html__( 'Themes', 'satispress' ),
 			[ $this, 'render_section_themes_description' ],
 			'satispress'
 		);
@@ -133,7 +156,7 @@ class Settings extends AbstractHookProvider {
 	public function add_settings() {
 		add_settings_field(
 			'vendor',
-			'<label for="satispress-vendor">' . __( 'Vendor', 'satispress' ) . '</label>',
+			'<label for="satispress-vendor">' . esc_html__( 'Vendor', 'satispress' ) . '</label>',
 			[ $this, 'render_field_vendor' ],
 			'satispress',
 			'default'
@@ -141,7 +164,7 @@ class Settings extends AbstractHookProvider {
 
 		add_settings_field(
 			'themes',
-			__( 'Themes', 'satispress' ),
+			esc_html__( 'Themes', 'satispress' ),
 			[ $this, 'render_field_themes' ],
 			'satispress',
 			'themes'
@@ -183,20 +206,23 @@ class Settings extends AbstractHookProvider {
 	 */
 	public function render_screen() {
 		$permalink = get_packages_permalink();
-		$packages  = $this->repository->all();
+		$packages  = $this->packages->all();
 		include $this->plugin->get_path( 'views/screen-settings.php' );
+		include $this->plugin->get_path( 'views/templates.php' );
 	}
 
 	/**
-	 * Display the security section description.
+	 * Display the access section description.
 	 *
 	 * @since 0.2.0
 	 */
-	public function render_section_security_description() {
+	public function render_section_access_description() {
 		printf(
 			'<p>%s</p>',
-			esc_html_e( 'Packages are secured using HTTP Basic Authentication by default. Valid credentials are a WordPress username and password.', 'satispress' )
+			esc_html__( 'API Keys are used to access your SatisPress repository and download packages. Your personal API keys appear below or you can create keys for other users by editing their accounts.', 'satispress' )
 		);
+
+		echo '<div id="satispress-api-key-manager"></div>';
 
 		printf(
 			'<p><a href="https://github.com/blazersix/satispress/blob/develop/docs/Security.md" target="_blank" rel="noopener noreferer"><em>%s</em></a></p>',
@@ -263,20 +289,5 @@ class Settings extends AbstractHookProvider {
 		$option = get_option( 'satispress' );
 
 		return isset( $option[ $key ] ) ? $option[ $key ] : $default;
-	}
-
-	/**
-	 * Retrieve the contents of a view.
-	 *
-	 * @since 0.2.0
-	 *
-	 * @param string $file View filename.
-	 * @return string View output.
-	 */
-	protected function get_view( string $file ): string {
-		ob_start();
-		include $this->plugin->get_path( 'views/' . $file );
-
-		return ob_get_clean();
 	}
 }

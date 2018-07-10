@@ -19,6 +19,7 @@ use Pimple\Container as PimpleContainer;
 use Pimple\ServiceIterator;
 use Pimple\ServiceProviderInterface;
 use Pimple\Psr11\ServiceLocator;
+use SatisPress\Authentication\ApiKey;
 use SatisPress\Authentication;
 use SatisPress\HTTP\Request;
 use SatisPress\Integration;
@@ -40,22 +41,33 @@ class ServiceProvider implements ServiceProviderInterface {
 	 * @param PimpleContainer $container Container instance.
 	 */
 	public function register( PimpleContainer $container ) {
+		$container['api_key.factory'] = function( $container ) {
+			return new ApiKey\Factory();
+		};
+
+		$container['api_key.repository'] = function( $container ) {
+			return new ApiKey\Repository(
+				$container['api_key.factory']
+			);
+		};
+
 		$container['archiver'] = function( $container ) {
 			return new Archiver();
 		};
 
 		$container['authentication.servers'] = function( $container ) {
 			$servers = apply_filters( 'satispress_authentication_servers', [
-				20  => 'authentication.basic',
+				20  => 'authentication.api_key',
 				100 => 'authentication.unauthorized',
 			] );
 
 			return new ServiceIterator( $container, $servers );
 		};
 
-		$container['authentication.basic'] = function( $container ) {
-			return new Authentication\Basic\Server(
-				$container['http.request']
+		$container['authentication.api_key'] = function( $container ) {
+			return new ApiKey\Server(
+				$container['http.request'],
+				$container['api_key.repository']
 			);
 		};
 
@@ -96,6 +108,13 @@ class ServiceProvider implements ServiceProviderInterface {
 
 		$container['hooks.admin_assets'] = function( $container ) {
 			return new Provider\AdminAssets();
+		};
+
+		$container['hooks.ajax.api_key'] = function( $container ) {
+			return new Provider\ApiKeyAjax(
+				$container['api_key.factory'],
+				$container['api_key.repository']
+			);
 		};
 
 		$container['hooks.authentication'] = function( $container ) {
@@ -234,6 +253,12 @@ class ServiceProvider implements ServiceProviderInterface {
 			] );
 		};
 
+		$container['screen.edit_user'] = function( $container ) {
+			return new Screen\EditUser(
+				$container['api_key.repository']
+			);
+		};
+
 		$container['screen.manage_plugins'] = function( $container ) {
 			return new Screen\ManagePlugins( $container['repository.whitelist'] );
 		};
@@ -243,7 +268,8 @@ class ServiceProvider implements ServiceProviderInterface {
 				new Repository\Composer(
 					$container['repository.whitelist'],
 					$container['package.factory']
-				)
+				),
+				$container['api_key.repository']
 			);
 		};
 
