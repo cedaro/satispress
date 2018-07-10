@@ -17,9 +17,10 @@
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: satispress
  * Domain Path: /languages
+ * Requires PHP: 7.0
+ * Network: true
  * GitHub Plugin URI: blazersix/satispress
  * Release Asset: true
- * Requires PHP: 7.0
  */
 
 declare ( strict_types = 1 );

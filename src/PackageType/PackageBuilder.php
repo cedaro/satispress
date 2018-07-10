@@ -48,7 +48,6 @@ class PackageBuilder {
 	 * @since 0.3.0
 	 *
 	 * @param Package $package Package instance to build.
-	 *
 	 */
 	public function __construct( Package $package ) {
 		$this->package = $package;

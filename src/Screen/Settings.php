@@ -55,7 +55,12 @@ class Settings extends AbstractHookProvider {
 	 * @since 0.3.0
 	 */
 	public function register_hooks() {
-		add_action( 'admin_menu', [ $this, 'add_menu_item' ] );
+		if ( is_multisite() ) {
+			add_action( 'network_admin_menu', [ $this, 'add_menu_item' ] );
+		} else {
+			add_action( 'admin_menu', [ $this, 'add_menu_item' ] );
+		}
+
 		add_action( 'admin_init', [ $this, 'register_settings' ] );
 		add_action( 'admin_init', [ $this, 'add_sections' ] );
 		add_action( 'admin_init', [ $this, 'add_settings' ] );
@@ -67,7 +72,13 @@ class Settings extends AbstractHookProvider {
 	 * @since 0.2.0
 	 */
 	public function add_menu_item() {
-		$screen_hook = add_options_page(
+		$parent_slug = 'options-general.php';
+		if ( is_network_admin() ) {
+			$parent_slug = 'settings.php';
+		}
+
+		$page_hook = add_submenu_page(
+			$parent_slug,
 			esc_html__( 'SatisPress', 'satispress' ),
 			esc_html__( 'SatisPress', 'satispress' ),
 			'manage_options',
@@ -75,17 +86,15 @@ class Settings extends AbstractHookProvider {
 			[ $this, 'render_screen' ]
 		);
 
-		add_action( 'load-' . $screen_hook, [ $this, 'setup_screen' ] );
+		add_action( 'load-' . $page_hook, [ $this, 'load_screen' ] );
 	}
 
 	/**
 	 * Set up the screen.
 	 *
-	 * @since 0.2.0
-	 * @todo Add help tabs.
+	 * @since 0.3.0
 	 */
-	public function setup_screen() {
-		$screen = get_current_screen();
+	public function load_screen() {
 		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_assets' ] );
 	}
 
@@ -102,7 +111,7 @@ class Settings extends AbstractHookProvider {
 		$api_keys = $this->api_keys->find_for_user( wp_get_current_user() );
 
 		$items = array_map( function( ApiKey $api_key ) {
-			$data = $api_key->to_array();
+			$data                   = $api_key->to_array();
 			$data['user_edit_link'] = esc_url( get_edit_user_link( $api_key->get_user()->ID ) );
 
 			return $data;
@@ -210,7 +219,7 @@ class Settings extends AbstractHookProvider {
 	 * @since 0.2.0
 	 */
 	public function render_screen() {
-		$permalink = get_packages_permalink();
+		$permalink = esc_url( get_packages_permalink() );
 		$packages  = $this->packages->all();
 		include $this->plugin->get_path( 'views/screen-settings.php' );
 		include $this->plugin->get_path( 'views/templates.php' );

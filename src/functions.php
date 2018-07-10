@@ -109,7 +109,7 @@ function get_packages_permalink( array $args = null ): string {
 	} else {
 		// Leave off the packages.json if 'base' arg is true.
 		$suffix = isset( $args['base'] ) && $args['base'] ? '' : 'packages.json';
-		$url    = sprintf( home_url( '/satispress/%s' ), $suffix );
+		$url    = sprintf( network_home_url( '/satispress/%s' ), $suffix );
 	}
 
 	return $url;

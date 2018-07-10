@@ -55,7 +55,7 @@ abstract class AbstractRepository {
 		$args_count = count( $args );
 
 		foreach ( $this->all() as $item ) {
-			$matched    = 0;
+			$matched = 0;
 
 			foreach ( $args as $key => $value ) {
 				if ( $item[ $key ] && $value === $item[ $key ] ) {

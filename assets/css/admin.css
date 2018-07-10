@@ -123,7 +123,9 @@
 }
 
 .screen-profile .satispress-api-key-table .column-user,
-.screen-user-edit .satispress-api-key-table .column-user {
+.screen-user-edit .satispress-api-key-table .column-user,
+.network-admin.profile-php .satispress-api-key-table .column-user,
+.network-admin.user-edit-php .satispress-api-key-table .column-user {
 	display: none;
 }
 

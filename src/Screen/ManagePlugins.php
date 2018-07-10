@@ -42,9 +42,14 @@ class ManagePlugins extends AbstractHookProvider {
 	 * @since 0.3.0
 	 */
 	public function register_hooks() {
+		if ( is_multisite() ) {
+			add_filter( 'manage_plugins-network_columns', [ $this, 'register_columns' ] );
+		} else {
+			add_filter( 'manage_plugins_columns', [ $this, 'register_columns' ] );
+		}
+
 		add_action( 'wp_ajax_satispress_toggle_plugin', [ $this, 'ajax_toggle_plugin_status' ] );
 		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_assets' ] );
-		add_filter( 'manage_plugins_columns', [ $this, 'register_columns' ] );
 		add_action( 'manage_plugins_custom_column', [ $this, 'display_columns' ], 10, 2 );
 	}
 
