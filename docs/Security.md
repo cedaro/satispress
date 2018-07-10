@@ -31,6 +31,12 @@ $ curl https://example.com/satispress/packages.json \
    -u aUEZYqq6pXlMjdg8swe0rQgMCZAPJNaR:satispress
 ```
 
+### Revoking Keys
+
+API Keys can be revoked in case they are compromised or if you need to remove access for a specific client.
+
+![Screenshot demonstrating how to revoke an API Key](images/revoke-api-keys.png)
+
 ## Basic Authentication Security
 
 __HTTPS / TLS should always be enabled when using Basic authentication.__ Basic authentication is not secure over plain HTTP since it requires sending credentials in clear text with every request.
