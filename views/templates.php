@@ -54,7 +54,7 @@
 	<td class="column-actions">
 		<div class="satispress-dropdown-group">
 			<button type="button" class="satispress-dropdown-toggle">
-				<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+				<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" role="img">
 					<path d="M5 10c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2zm12-2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-7 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
 					<title><?php esc_html_e( 'Toggle dropdown', 'satispress' ); ?></title>
 				</svg>
