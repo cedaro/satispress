@@ -13,6 +13,7 @@ namespace SatisPress\Authentication\BasicApiKey;
 
 use SatisPress\Authentication\AbstractServer;
 use SatisPress\Authentication\ApiKey;
+use SatisPress\WP_Error\HTTPError;
 use WP_Error;
 use WP_Http as HTTP;
 use WP_User;
@@ -57,12 +58,7 @@ class Server extends AbstractServer {
 
 		// Bail if an API Key wasn't provided.
 		if ( empty( $api_key_id ) ) {
-			$this->auth_status = new WP_Error(
-				'invalid_request',
-				esc_html__( 'Missing authorization header.', 'satispress' ),
-				[ 'status' => HTTP::UNAUTHORIZED ]
-			);
-
+			$this->auth_status = HTTPError::missingAuthorizationHeader();
 			return false;
 		}
 
@@ -70,25 +66,15 @@ class Server extends AbstractServer {
 
 		// Bail if the API Key doesn't exist.
 		if ( empty( $api_key ) ) {
-			$this->auth_status = new WP_Error(
-				'invalid_credentials',
-				esc_html__( 'Invalid credentials.', 'satispress' ),
-				[ 'status' => HTTP::UNAUTHORIZED ]
-			);
-
+			$this->auth_status = HTTPError::invalidCredentials();
 			return false;
 		}
 
 		$user = $api_key->get_user();
 
 		// Bail if the user couldn't be determined.
-		if ( ! $user || is_wp_error( $user ) || ! $user->exists() ) {
-			$this->auth_status = new WP_Error(
-				'invalid_credentials',
-				esc_html__( 'Invalid credentials.', 'satispress' ),
-				[ 'status' => HTTP::UNAUTHORIZED ]
-			);
-
+		if ( ! $this->validate_user( $user ) ) {
+			$this->auth_status = HTTPError::invalidCredentials();
 			return false;
 		}
 
@@ -133,5 +119,17 @@ class Server extends AbstractServer {
 
 		$api_key['last_used'] = time();
 		$api_key->save();
+	}
+
+	/**
+	 * Whether a user is valid.
+	 *
+	 * @since 0.3.0
+	 *
+	 * @param mixed $user WordPress user instance.
+	 * @return boolean
+	 */
+	protected function validate_user( $user ): bool {
+		return ! empty( $user ) && ! is_wp_error( $user ) && $user->exists();
 	}
 }
