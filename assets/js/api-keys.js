@@ -104,7 +104,8 @@
 		template: wp.template( 'satispress-api-key-table-row' ),
 
 		events: {
-			'click .js-revoke': 'revoke'
+			'click .js-revoke': 'revoke',
+			'click input': 'selectField'
 		},
 
 		initialize: function( options ) {
@@ -131,6 +132,10 @@
 			if ( window.confirm( settings.l10n.aysDeleteApiKey ) ) {
 				this.controller.deleteApiKey( this.model );
 			}
+		},
+
+		selectField: function( e ) {
+			e.target.select();
 		}
 	});
 

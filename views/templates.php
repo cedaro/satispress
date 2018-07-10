@@ -47,7 +47,7 @@
 	<th scope="row">{{ data.name }}</th>
 	<th scope="row">{{ data.user }}</th>
 	<td class="column-token">
-		<input type="text" class="regular-text" value="{{ data.token }}" onclick="this.select();" readonly>
+		<input type="text" class="regular-text" value="{{ data.token }}" readonly>
 	</td>
 	<td class="column-last-used">{{ data.last_used }}</td>
 	<td class="column-created">{{ data.created }}</td>
