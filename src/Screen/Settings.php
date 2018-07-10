@@ -12,8 +12,8 @@ declare ( strict_types = 1 );
 namespace SatisPress\Screen;
 
 use Cedaro\WP\Plugin\AbstractHookProvider;
-use SatisPress\Authentication\ApiKey\ApiKey;
 use function SatisPress\get_packages_permalink;
+use SatisPress\Authentication\ApiKey\ApiKey;
 use SatisPress\Authentication\ApiKey\ApiKeyRepository;
 use SatisPress\Repository\PackageRepository;
 use WP_Theme;
@@ -102,7 +102,10 @@ class Settings extends AbstractHookProvider {
 		$api_keys = $this->api_keys->find_for_user( wp_get_current_user() );
 
 		$items = array_map( function( ApiKey $api_key ) {
-			return $api_key->to_array();
+			$data = $api_key->to_array();
+			$data['user_edit_link'] = esc_url( get_edit_user_link( $api_key->get_user()->ID ) );
+
+			return $data;
 		}, $api_keys );
 
 		wp_enqueue_script( 'satispress-api-keys' );

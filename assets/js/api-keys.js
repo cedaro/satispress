@@ -46,7 +46,9 @@
 			last_used: '',
 			name: '',
 			token: '',
-			user: null
+			user: null,
+			user_edit_link: '',
+			user_login: ''
 		}
 	});
 
@@ -117,7 +119,9 @@
 		},
 
 		render: function() {
-			this.$el.html( this.template( this.model.toJSON() ) );
+			var data = this.model.toJSON();
+			data.last_used = data.last_used || '—';
+			this.$el.html( this.template( data ) );
 
 			return this;
 		},
@@ -143,7 +147,7 @@
 		events: {
 			'click button': 'createApiKey',
 			'input input': 'toggleButtonState',
-			'input keyup': 'routeKeyPress'
+			'keydown input': 'routeKeyPress'
 		},
 
 		initialize: function( options ) {

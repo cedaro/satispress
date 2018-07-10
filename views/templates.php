@@ -15,7 +15,7 @@ declare( strict_types = 1 );
 		<thead>
 			<tr>
 				<th><?php esc_html_e( 'Name', 'satispress' ); ?></th>
-				<th><?php esc_html_e( 'User', 'satispress' ); ?></th>
+				<th class="column-user"><?php esc_html_e( 'User', 'satispress' ); ?></th>
 				<th><?php esc_html_e( 'API Key', 'satispress' ); ?></th>
 				<th><?php esc_html_e( 'Last Used', 'satispress' ); ?></th>
 				<th><?php esc_html_e( 'Created', 'satispress' ); ?></th>
@@ -46,7 +46,13 @@ declare( strict_types = 1 );
 
 <script type="text/html" id="tmpl-satispress-api-key-table-row">
 	<th scope="row">{{ data.name }}</th>
-	<th scope="row">{{ data.user }}</th>
+	<td class="column-user">
+		<# if ( data.user_edit_link ) { #>
+			<a href="{{ data.user_edit_link }}">{{ data.user_login }}</a>
+		<# } else { #>
+			{{ data.user_login }}
+		<# } #>
+	</td>
 	<td class="column-token">
 		<input type="text" class="regular-text" value="{{ data.token }}" readonly>
 	</td>

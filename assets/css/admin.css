@@ -122,6 +122,11 @@
 	max-width: 282px;
 }
 
+.screen-profile .satispress-api-key-table .column-user,
+.screen-user-edit .satispress-api-key-table .column-user {
+	display: none;
+}
+
 
 /* Dropdown Group
 ----------------------------------------------------------------------------- */

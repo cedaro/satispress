@@ -135,11 +135,12 @@ final class ApiKey implements ArrayAccess {
 	 */
 	public function to_array(): array {
 		return [
-			'name'      => $this['name'] ?? '',
-			'user'      => $this->get_user()->ID,
-			'token'     => $this->get_token(),
-			'last_used' => $this->get_date( 'last_used' ),
-			'created'   => $this->get_date( 'created' ),
+			'created'    => $this->get_date( 'created' ),
+			'last_used'  => $this->get_date( 'last_used' ),
+			'name'       => $this->get_name(),
+			'token'      => $this->get_token(),
+			'user'       => $this->get_user()->ID,
+			'user_login' => $this->get_user()->user_login,
 		];
 	}
 

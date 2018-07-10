@@ -87,7 +87,10 @@ class ApiKeyAjax extends AbstractHookProvider {
 
 		$this->repository->save( $api_key );
 
-		wp_send_json_success( $api_key->to_array() );
+		$data                   = $api_key->to_array();
+		$data['user_edit_link'] = esc_url( get_edit_user_link( $api_key->get_user()->ID ) );
+
+		wp_send_json_success( $data );
 	}
 
 	/**
