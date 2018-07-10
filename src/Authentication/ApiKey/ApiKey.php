@@ -25,7 +25,7 @@ final class ApiKey implements ArrayAccess {
 	/**
 	 * API key length.
 	 *
-	 * @var integer
+	 * @var int
 	 */
 	const TOKEN_LENGTH = 32;
 
@@ -34,21 +34,21 @@ final class ApiKey implements ArrayAccess {
 	 *
 	 * @var array
 	 */
-	protected $data;
+	private $data;
 
 	/**
 	 * API key token.
 	 *
 	 * @var string
 	 */
-	protected $token;
+	private $token;
 
 	/**
 	 * User associated with the API key.
 	 *
 	 * @var WP_User
 	 */
-	protected $user;
+	private $user;
 
 	/**
 	 * Initialize an API key.
@@ -57,12 +57,12 @@ final class ApiKey implements ArrayAccess {
 	 *
 	 * @param WP_User $user  WordPress user.
 	 * @param string  $token API key token.
-	 * @param array   $data  Additional data associated with the key.
+	 * @param array   $data  Optional. Additional data associated with the key.
 	 */
-	public function __construct( WP_User $user, string $token, array $data = [] ) {
+	public function __construct( WP_User $user, string $token, array $data = null ) {
 		$this->user  = $user;
 		$this->token = $token;
-		$this->data  = $data;
+		$this->data  = $data ?? [];
 	}
 
 	/**
@@ -152,7 +152,7 @@ final class ApiKey implements ArrayAccess {
 	 * @param string $format    Optional. Date format.
 	 * @return string
 	 */
-	protected function format_date( int $timestamp, string $format = null ) {
+	private function format_date( int $timestamp, string $format = null ): string {
 		$format      = $format ?: get_option( 'date_format' );
 		$timezone_id = get_option( 'timezone_string' );
 		$datetime    = new DateTime();
@@ -186,7 +186,7 @@ final class ApiKey implements ArrayAccess {
 	 * @param string $name Field name.
 	 * @return bool
 	 */
-	public function offsetExists( $name ) {
+	public function offsetExists( $name ): bool {
 		return isset( $this->data[ $name ] );
 	}
 
@@ -202,7 +202,7 @@ final class ApiKey implements ArrayAccess {
 		$method = "get_{$name}";
 
 		if ( method_exists( $this, $method ) ) {
-			return call_user_func( [ $this, $method ] );
+			return $this->$method();
 		}
 
 		if ( isset( $this->data[ $name ] ) ) {
@@ -245,10 +245,10 @@ final class ApiKey implements ArrayAccess {
 	 * @since 0.3.0
 	 *
 	 * @param string $name Field name.
-	 * @return boolean
+	 * @return bool
 	 */
-	protected function is_protected_field( $name ) {
+	private function is_protected_field( $name ): bool {
 		$protected = [ 'created', 'created_by' ];
-		return in_array( $name, $protected, true );
+		return \in_array( $name, $protected, true );
 	}
 }

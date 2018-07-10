@@ -35,12 +35,15 @@ class InstalledPackageBuilder extends PackageBuilder {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @param Package        $package         Package instance to build.
-	 * @param ReleaseManager $release_manager Release manager.
+	 * @param InstalledPackage $package         Package instance to build.
+	 * @param ReleaseManager   $release_manager Release manager.
 	 */
-	public function __construct( Package $package, ReleaseManager $release_manager ) {
-		$this->package         = $package;
-		$this->class           = new ReflectionClass( $package );
+	public function __construct( InstalledPackage $package, ReleaseManager $release_manager ) {
+		$this->package = $package;
+		try {
+			$this->class = new ReflectionClass( $package );
+		} catch ( \ReflectionException $e ) {
+		}
 		$this->release_manager = $release_manager;
 	}
 
@@ -61,11 +64,11 @@ class InstalledPackageBuilder extends PackageBuilder {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @param boolean $is_installed Whether the package is installed.
+	 * @param bool $is_installed Whether the package is installed.
 	 * @return $this
 	 */
 	public function set_installed( bool $is_installed ): self {
-		return $this->set( 'is_installed', (bool) $is_installed );
+		return $this->set( 'is_installed', $is_installed );
 	}
 
 	/**
@@ -104,12 +107,12 @@ class InstalledPackageBuilder extends PackageBuilder {
 
 			// Add a pending update if one is available.
 			$update = $this->get_package_update( $this->package );
-			if ( ! empty( $update ) && ( $update instanceof Release ) ) {
+			if ( $update instanceof Release ) {
 				$releases[ $update->get_version() ] = $update;
 			}
 		}
 
-		uasort( $releases, function( $a, $b ) {
+		uasort( $releases, function( Release $a, Release $b ) {
 			return version_compare( $b->get_version(), $a->get_version() );
 		} );
 
@@ -147,7 +150,7 @@ class InstalledPackageBuilder extends PackageBuilder {
 	 * @since 0.3.0
 	 *
 	 * @param Package $package Package instance.
-	 * @return Release
+	 * @return null|Release
 	 */
 	protected function get_package_update( Package $package ) {
 		$release = null;

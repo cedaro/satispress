@@ -87,7 +87,7 @@ interface Package {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function is_installed(): bool;
 
@@ -96,7 +96,7 @@ interface Package {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function has_releases(): bool;
 

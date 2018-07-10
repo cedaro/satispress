@@ -29,7 +29,7 @@ class ErrorBody implements ResponseBody {
 	/**
 	 * HTTP status code.
 	 *
-	 * @var integer
+	 * @var int
 	 */
 	protected $status_code;
 

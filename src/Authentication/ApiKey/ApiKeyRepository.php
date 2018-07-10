@@ -54,6 +54,7 @@ interface ApiKeyRepository {
 	 * @since 0.3.0
 	 *
 	 * @param ApiKey $api_key API Key.
+	 * @return ApiKey API Key.
 	 */
 	public function save( ApiKey $api_key ): ApiKey;
 }

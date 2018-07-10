@@ -12,7 +12,6 @@ declare ( strict_types = 1 );
 namespace SatisPress;
 
 use Cedaro\WP\Plugin\Plugin as BasePlugin;
-use Cedaro\WP\Plugin\Provider\I18n;
 
 /**
  * Main plugin class - composition root.
@@ -54,7 +53,7 @@ class Plugin extends BasePlugin implements Composable {
 				->register_hooks( $container->get( 'screen.settings' ) );
 		}
 
-		if ( function_exists( 'members_plugin' ) ) {
+		if ( \function_exists( 'members_plugin' ) ) {
 			$this
 				->register_hooks( $container->get( 'plugin.members' ) );
 		}

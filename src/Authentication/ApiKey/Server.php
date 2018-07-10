@@ -13,10 +13,9 @@ namespace SatisPress\Authentication\ApiKey;
 
 use SatisPress\Authentication\AbstractServer;
 use SatisPress\HTTP\Request;
-use SatisPress\WP_Error\HTTPError;
+use SatisPress\WP_Error\HttpError;
 use WP_Error;
 use WP_Http as HTTP;
-use WP_User;
 
 /**
  * API Key authentication server class.
@@ -49,8 +48,8 @@ class Server extends AbstractServer {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @param integer|bool $user_id Current user ID or false if unknown.
-	 * @return integer|bool A user on success, or false on failure.
+	 * @param int|bool $user_id Current user ID or false if unknown.
+	 * @return int|bool A user on success, or false on failure.
 	 */
 	public function authenticate( $user_id ) {
 		if ( ! empty( $user_id ) || ! $this->should_attempt ) {
@@ -78,15 +77,15 @@ class Server extends AbstractServer {
 
 		// Bail if an API Key wasn't provided.
 		if ( empty( $api_key_id ) ) {
-			$this->auth_status = HTTPError::missingAuthorizationHeader();
+			$this->auth_status = HttpError::missingAuthorizationHeader();
 			return false;
 		}
 
 		$api_key = $this->repository->find_by_token( $api_key_id );
 
 		// Bail if the API Key doesn't exist.
-		if ( empty( $api_key ) ) {
-			$this->auth_status = HTTPError::invalidCredentials();
+		if ( null === $api_key ) {
+			$this->auth_status = HttpError::invalidCredentials();
 			return false;
 		}
 
@@ -94,7 +93,7 @@ class Server extends AbstractServer {
 
 		// Bail if the user couldn't be determined.
 		if ( ! $this->validate_user( $user ) ) {
-			$this->auth_status = HTTPError::invalidCredentials();
+			$this->auth_status = HttpError::invalidCredentials();
 			return false;
 		}
 
@@ -147,7 +146,7 @@ class Server extends AbstractServer {
 	 * @since 0.3.0
 	 *
 	 * @param mixed $user WordPress user instance.
-	 * @return boolean
+	 * @return bool
 	 */
 	protected function validate_user( $user ): bool {
 		return ! empty( $user ) && ! is_wp_error( $user ) && $user->exists();

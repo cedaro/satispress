@@ -69,7 +69,7 @@ interface InstalledPackage extends Package {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function is_update_available(): bool;
 }

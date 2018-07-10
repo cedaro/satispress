@@ -14,8 +14,6 @@ namespace SatisPress\Storage;
 use DirectoryIterator;
 use SatisPress\Exception\FileNotFound;
 use SatisPress\HTTP\Response;
-use WP_Error;
-use WP_Http as HTTP;
 
 /**
  * Local storage adapter class.
@@ -67,7 +65,7 @@ class Local implements Storage {
 	 * @since 0.3.0
 	 *
 	 * @param string $file Relative file path.
-	 * @return boolean
+	 * @return bool
 	 */
 	public function delete( string $file ): bool {
 		return unlink( $this->get_absolute_path( $file ) );
@@ -79,7 +77,7 @@ class Local implements Storage {
 	 * @since 0.3.0
 	 *
 	 * @param string $file Relative file path.
-	 * @return boolean
+	 * @return bool
 	 */
 	public function exists( string $file ): bool {
 		$filename = $this->get_absolute_path( $file );
@@ -124,12 +122,12 @@ class Local implements Storage {
 	 *
 	 * @param string $source      Absolute path to a file on the local file system.
 	 * @param string $destination Relative destination path; includes the file name.
-	 * @return boolean
+	 * @return bool
 	 */
 	public function move( string $source, string $destination ): bool {
 		$filename = $this->get_absolute_path( $destination );
 
-		if ( ! wp_mkdir_p( dirname( $filename ) ) ) {
+		if ( ! wp_mkdir_p( \dirname( $filename ) ) ) {
 			return false;
 		}
 

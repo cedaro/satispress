@@ -15,7 +15,6 @@ use SatisPress\Exception\FileOperationFailed;
 use SatisPress\Exception\InvalidReleaseSource;
 use SatisPress\HTTP\Response;
 use SatisPress\Storage\Storage;
-use WP_Error;
 
 /**
  * Release manager class.
@@ -56,17 +55,14 @@ class ReleaseManager {
 	 * @since 0.3.0
 	 *
 	 * @param Package $package Package instance.
-	 * @return array
+	 * @return Release[]
 	 */
 	public function all( Package $package ): array {
 		$releases = [];
 
-		$files = $this->storage->list_files( $package->get_slug() );
-
-		foreach ( $files as $filename ) {
+		foreach ( $this->storage->list_files( $package->get_slug() ) as $filename ) {
 			$version              = str_replace( $package->get_slug() . '-', '', basename( $filename, '.zip' ) );
-			$release              = new Release( $package, $version );
-			$releases[ $version ] = $release;
+			$releases[ $version ] = new Release( $package, $version );
 		}
 
 		return $releases;
@@ -121,7 +117,7 @@ class ReleaseManager {
 	 * Whether an artifact exists for a given release.
 	 *
 	 * @param Release $release Release instance.
-	 * @return boolean
+	 * @return bool
 	 */
 	public function exists( Release $release ): bool {
 		return $this->storage->exists( $release->get_file_path() );

@@ -23,9 +23,9 @@ abstract class AbstractServer implements Server {
 	/**
 	 * Errors that occurred during authentication.
 	 *
-	 * @var WP_Error|null|boolean True if succeeded, WP_Error if errored, null if not HMAC.
+	 * @var WP_Error|null|bool True if succeeded, WP_Error if errored, null if not HMAC.
 	 */
-	protected $auth_status = null;
+	protected $auth_status;
 
 	/**
 	 * Server request.
@@ -59,8 +59,8 @@ abstract class AbstractServer implements Server {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @param integer|bool $user_id Current user ID or false if unknown.
-	 * @return integer|bool A user on success, or false on failure.
+	 * @param int|bool $user_id Current user ID or false if unknown.
+	 * @return int|bool A user on success, or false on failure.
 	 */
 	abstract public function authenticate( $user_id );
 
@@ -79,10 +79,10 @@ abstract class AbstractServer implements Server {
 	 * @since 0.3.0
 	 *
 	 * @param WP_Error|mixed $value Error from another authentication handler, null if we should handle it, or another value if not.
-	 * @return WP_Error|boolean|null
+	 * @return WP_Error|bool|null
 	 */
 	public function get_authentication_errors( $value ) {
-		if ( is_user_logged_in() || null !== $value ) {
+		if ( null !== $value || is_user_logged_in() ) {
 			return $value;
 		}
 
@@ -106,8 +106,8 @@ abstract class AbstractServer implements Server {
 		$request_uri = $_SERVER['REQUEST_URI'];
 
 		$wp_base = get_home_url( null, '/', 'relative' );
-		if ( substr( $request_uri, 0, strlen( $wp_base ) ) === $wp_base ) {
-			$request_uri = substr( $request_uri, strlen( $wp_base ) );
+		if ( 0 === strpos( $request_uri, $wp_base ) ) {
+			$request_uri = substr( $request_uri, \strlen( $wp_base ) );
 		}
 
 		return get_home_url( null, $request_uri );

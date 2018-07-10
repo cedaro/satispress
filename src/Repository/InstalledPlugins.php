@@ -11,6 +11,7 @@ declare ( strict_types = 1 );
 
 namespace SatisPress\Repository;
 
+use SatisPress\Package;
 use SatisPress\PackageFactory;
 use SatisPress\PackageType\Plugin;
 
@@ -43,7 +44,7 @@ class InstalledPlugins extends AbstractRepository implements PackageRepository {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @return array
+	 * @return Package[]
 	 */
 	public function all(): array {
 		$items = [];
@@ -66,7 +67,7 @@ class InstalledPlugins extends AbstractRepository implements PackageRepository {
 	 *
 	 * @param string $plugin_file Relative path to a plugin file.
 	 * @param array  $plugin_data Plugin data.
-	 * @return Theme
+	 * @return Plugin|Package
 	 */
 	protected function build( string $plugin_file, array $plugin_data ): Plugin {
 		return $this->factory->create( 'plugin' )

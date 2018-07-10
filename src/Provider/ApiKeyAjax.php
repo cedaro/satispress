@@ -14,7 +14,6 @@ namespace SatisPress\Provider;
 use Cedaro\WP\Plugin\AbstractHookProvider;
 use SatisPress\Authentication\ApiKey\Factory;
 use SatisPress\Authentication\ApiKey\ApiKeyRepository;
-use WP_User;
 
 /**
  * API Key AJAX hook provider class.
@@ -32,7 +31,7 @@ class ApiKeyAjax extends AbstractHookProvider {
 	/**
 	 * API Key repository.
 	 *
-	 * @var Repository
+	 * @var ApiKeyRepository
 	 */
 	protected $repository;
 
@@ -109,7 +108,7 @@ class ApiKeyAjax extends AbstractHookProvider {
 		$api_key = $this->repository->find_by_token( $token );
 
 		if (
-			empty( $api_key )
+			null === $api_key
 			|| ! current_user_can( 'edit_user', $api_key->get_user()->ID )
 		) {
 			wp_send_json_error( [

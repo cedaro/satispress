@@ -12,15 +12,13 @@ declare ( strict_types = 1 );
 namespace SatisPress\Route;
 
 use SatisPress\Capabilities;
-use SatisPress\Exception\ExceptionInterface;
-use SatisPress\Exception\HTTPException;
+use SatisPress\Exception\HttpException;
 use SatisPress\Exception\InvalidReleaseVersion;
 use SatisPress\HTTP\Request;
 use SatisPress\HTTP\Response;
 use SatisPress\Package;
 use SatisPress\ReleaseManager;
 use SatisPress\Repository\PackageRepository;
-use WP_Http as HTTP;
 
 /**
  * Class to handle download requests.
@@ -77,12 +75,12 @@ class Download implements Route {
 	 */
 	public function handle( Request $request ): Response {
 		if ( ! current_user_can( Capabilities::DOWNLOAD_PACKAGES ) ) {
-			throw HTTPException::forForbiddenResource();
+			throw HttpException::forForbiddenResource();
 		}
 
 		$slug = sanitize_key( $request['slug'] );
 		if ( empty( $slug ) ) {
-			throw HTTPException::forUnknownPackage( $slug );
+			throw HttpException::forUnknownPackage( $slug );
 		}
 
 		$version = '';
@@ -94,7 +92,7 @@ class Download implements Route {
 
 		// Send a 404 response if the package doesn't exist.
 		if ( ! $package instanceof Package ) {
-			throw HTTPException::forUnknownPackage( $slug );
+			throw HttpException::forUnknownPackage( $slug );
 		}
 
 		return $this->send_package( $package, $version );
@@ -120,12 +118,12 @@ class Download implements Route {
 		try {
 			$release = $package->get_release( $version );
 		} catch ( InvalidReleaseVersion $e ) {
-			throw HTTPException::forInvalidRelease( $package, $version );
+			throw HttpException::forInvalidRelease( $package, $version );
 		}
 
 		// Ensure the user has access to download the release.
 		if ( ! current_user_can( Capabilities::DOWNLOAD_PACKAGE, $package, $release ) ) {
-			throw HTTPException::forForbiddenPackage( $package );
+			throw HttpException::forForbiddenPackage( $package );
 		}
 
 		// Archive the currently installed version if the artifact doesn't
@@ -139,7 +137,7 @@ class Download implements Route {
 
 		// Send a 404 if the release isn't available.
 		if ( ! $this->release_manager->exists( $release ) ) {
-			throw HTTPException::forMissingRelease( $release );
+			throw HttpException::forMissingRelease( $release );
 		}
 
 		return $this->release_manager->send( $release );

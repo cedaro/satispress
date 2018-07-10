@@ -23,7 +23,7 @@ final class ComposerVersionParser implements VersionParser {
 	 *
 	 * @var \Composer\Semver\VersionParser
 	 */
-	protected $parser;
+	private $parser;
 
 	/**
 	 * Initialize the version parser.

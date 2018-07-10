@@ -11,11 +11,12 @@ declare ( strict_types = 1 );
 
 namespace SatisPress\HTTP;
 
-use SatisPress\Exception\HTTPException;
+use SatisPress\Exception\HttpException;
 use SatisPress\HTTP\ResponseBody\ErrorBody;
 use SatisPress\HTTP\ResponseBody\FileBody;
 use SatisPress\HTTP\ResponseBody\JsonBody;
 use SatisPress\HTTP\ResponseBody\ResponseBody;
+use WP_Error;
 use WP_Http as HTTP;
 use WP_REST_Response;
 
@@ -129,7 +130,7 @@ class Response {
 	 * @param string $filename Absolute path to the file to stream.
 	 * @return Response
 	 */
-	public static function for_file( string $filename ) {
+	public static function for_file( string $filename ): Response {
 		$headers = [
 			'Robots'                    => 'none',
 			'Content-Type'              => 'application/force-download',
@@ -164,7 +165,7 @@ class Response {
 	public static function from_exception( \Exception $e ): Response {
 		$status_code = 500;
 
-		if ( $e instanceof HTTPException ) {
+		if ( $e instanceof HttpException ) {
 			$status_code = $e->getStatusCode();
 		}
 
@@ -215,23 +216,23 @@ class Response {
 	 * @param  WP_Error $error Error object.
 	 * @return WP_REST_Response
 	 */
-	protected function error_to_response( WP_Error $error ) {
+	protected static function error_to_response( WP_Error $error ): WP_REST_Response {
 		$error_data = $error->get_error_data();
 
 		$status = 500;
-		if ( is_array( $error_data ) && ! empty( $error_data['status'] ) ) {
+		if ( \is_array( $error_data ) && ! empty( $error_data['status'] ) ) {
 			$status = $error_data['status'];
 		}
 
-		$errors = array();
+		$errors = [];
 
 		foreach ( (array) $error->errors as $code => $messages ) {
 			foreach ( (array) $messages as $message ) {
-				$errors[] = array(
+				$errors[] = [
 					'code'    => $code,
 					'message' => $message,
 					'data'    => $error->get_error_data( $code ),
-				);
+				];
 			}
 		}
 

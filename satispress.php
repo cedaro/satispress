@@ -26,11 +26,8 @@ declare ( strict_types = 1 );
 
 namespace SatisPress;
 
-use SatisPress\Container;
-use SatisPress\ServiceProvider;
-
 // Exit if accessed directly.
-if ( ! defined( 'ABSPATH' ) ) {
+if ( ! \defined( 'ABSPATH' ) ) {
 	exit;
 }
 

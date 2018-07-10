@@ -11,17 +11,13 @@ declare ( strict_types = 1 );
 
 namespace SatisPress;
 
-use SatisPress\Exception\InvalidPackageType;
-use SatisPress\PackageFactory;
 use SatisPress\PackageType\BasePackage;
-use SatisPress\PackageType\Composer;
 use SatisPress\PackageType\ComposerBuilder;
 use SatisPress\PackageType\PackageBuilder;
 use SatisPress\PackageType\Plugin;
 use SatisPress\PackageType\PluginBuilder;
 use SatisPress\PackageType\Theme;
 use SatisPress\PackageType\ThemeBuilder;
-use SatisPress\ReleaseManager;
 
 /**
  * Factory for creating package builders.
@@ -34,7 +30,7 @@ final class PackageFactory {
 	 *
 	 * @var ReleaseManager
 	 */
-	protected $release_manager;
+	private $release_manager;
 
 	/**
 	 * Constructor.
@@ -53,7 +49,7 @@ final class PackageFactory {
 	 * @since 0.3.0
 	 *
 	 * @param string $package_type Package type.
-	 * @return Package Package builder instance.
+	 * @return ComposerBuilder|PluginBuilder|ThemeBuilder|PackageBuilder Package builder instance.
 	 */
 	public function create( string $package_type ): PackageBuilder {
 		switch ( $package_type ) {

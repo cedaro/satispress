@@ -13,7 +13,6 @@ namespace SatisPress\Provider;
 
 use Cedaro\WP\Plugin\AbstractHookProvider;
 use SatisPress\Capabilities;
-use SatisPress\Storage\Local;
 
 /**
  * Class to activate the plugin.

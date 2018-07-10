@@ -95,7 +95,7 @@ class Repository implements ApiKeyRepository {
 				continue;
 			}
 
-			$token  = substr( $meta_key, strlen( static::META_PREFIX ) );
+			$token  = substr( $meta_key, \strlen( static::META_PREFIX ) );
 			$data   = maybe_unserialize( $values[0] );
 			$keys[] = $this->factory->create( $user, $data, $token );
 		}
@@ -123,6 +123,7 @@ class Repository implements ApiKeyRepository {
 	 * @since 0.3.0
 	 *
 	 * @param ApiKey $api_key API Key.
+	 * @return ApiKey API Key.
 	 */
 	public function save( ApiKey $api_key ): ApiKey {
 		update_user_meta(

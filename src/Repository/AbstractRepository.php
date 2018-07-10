@@ -12,6 +12,7 @@ declare ( strict_types = 1 );
 namespace SatisPress\Repository;
 
 use function SatisPress\is_plugin_file;
+use SatisPress\Package;
 
 /**
  * Abstract repository class.
@@ -20,12 +21,21 @@ use function SatisPress\is_plugin_file;
  */
 abstract class AbstractRepository {
 	/**
+	 * Retrieve all packages.
+	 *
+	 * @since 0.3.0
+	 *
+	 * @return Package[]
+	 */
+	abstract public function all(): array;
+
+	/**
 	 * Whether an item with the supplied criteria exists.
 	 *
 	 * @since 0.3.0
 	 *
 	 * @param array $args Map of key/value pairs.
-	 * @return boolean
+	 * @return bool
 	 */
 	public function contains( array $args ): bool {
 		return ! empty( $this->where( $args ) );
@@ -45,7 +55,6 @@ abstract class AbstractRepository {
 		$args_count = count( $args );
 
 		foreach ( $this->all() as $item ) {
-			$attributes = (array) $item;
 			$matched    = 0;
 
 			foreach ( $args as $key => $value ) {
@@ -68,7 +77,7 @@ abstract class AbstractRepository {
 	 * @since 0.3.0
 	 *
 	 * @param array $args Map of key/value pairs.
-	 * @return Package:null
+	 * @return Package|null
 	 */
 	public function first_where( array $args ) {
 		$items = $this->where( $args );
@@ -83,7 +92,7 @@ abstract class AbstractRepository {
 	 * @param array $args List of key/value pairs.
 	 * @return array
 	 */
-	protected function parse_args( array $args ) {
+	protected function parse_args( array $args ): array {
 		// If a plugin file is passed as the slug value, convert it to a
 		// basename argument.
 		if ( isset( $args['slug'] ) && is_plugin_file( $args['slug'] ) ) {

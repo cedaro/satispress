@@ -48,7 +48,7 @@ class Archiver {
 		], $release );
 
 		$package     = $release->get_package();
-		$remove_path = dirname( $package->get_directory() );
+		$remove_path = \dirname( $package->get_directory() );
 		$files       = $package->get_files();
 
 		if ( $package instanceof Plugin && $package->is_single_file() ) {
@@ -57,7 +57,7 @@ class Archiver {
 
 		$filename = $this->get_absolute_path( $release->get_file() );
 
-		if ( ! wp_mkdir_p( dirname( $filename ) ) ) {
+		if ( ! wp_mkdir_p( \dirname( $filename ) ) ) {
 			throw FileOperationFailed::unableToCreateTemporaryDirectory( $filename );
 		}
 
@@ -96,7 +96,7 @@ class Archiver {
 			throw FileDownloadFailed::forFileName( $filename );
 		}
 
-		if ( ! wp_mkdir_p( dirname( $filename ) ) ) {
+		if ( ! wp_mkdir_p( \dirname( $filename ) ) ) {
 			throw FileOperationFailed::unableToCreateTemporaryDirectory( $filename );
 		}
 

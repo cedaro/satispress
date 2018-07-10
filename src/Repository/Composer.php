@@ -11,6 +11,7 @@ declare ( strict_types = 1 );
 
 namespace SatisPress\Repository;
 
+use SatisPress\Package;
 use SatisPress\PackageFactory;
 
 /**
@@ -56,7 +57,7 @@ class Composer extends AbstractRepository implements PackageRepository {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @return array
+	 * @return Package[]
 	 */
 	public function all(): array {
 		$packages = [];

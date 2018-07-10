@@ -11,8 +11,6 @@ declare ( strict_types = 1 );
 
 namespace SatisPress;
 
-use function SatisPress\generate_random_string;
-use function SatisPress\get_authorization_header;
 use Cedaro\WP\Plugin\Provider\I18n;
 use Composer\Semver\VersionParser;
 use Pimple\Container as PimpleContainer;
@@ -41,7 +39,7 @@ class ServiceProvider implements ServiceProviderInterface {
 	 * @param PimpleContainer $container Container instance.
 	 */
 	public function register( PimpleContainer $container ) {
-		$container['api_key.factory'] = function( $container ) {
+		$container['api_key.factory'] = function() {
 			return new ApiKey\Factory();
 		};
 
@@ -51,7 +49,7 @@ class ServiceProvider implements ServiceProviderInterface {
 			);
 		};
 
-		$container['archiver'] = function( $container ) {
+		$container['archiver'] = function() {
 			return new Archiver();
 		};
 
@@ -77,7 +75,7 @@ class ServiceProvider implements ServiceProviderInterface {
 			);
 		};
 
-		$container['cache.directory'] = function( $container ) {
+		$container['cache.directory'] = function() {
 			$directory = get_option( 'satispress_cache_directory' );
 
 			if ( ! empty( $directory ) ) {
@@ -92,7 +90,7 @@ class ServiceProvider implements ServiceProviderInterface {
 		};
 
 		$container['cache.path'] = function( $container ) {
-			if ( defined( 'SATISPRESS_CACHE_PATH' ) ) {
+			if ( \defined( 'SATISPRESS_CACHE_PATH' ) ) {
 				return SATISPRESS_CACHE_PATH;
 			}
 
@@ -102,11 +100,11 @@ class ServiceProvider implements ServiceProviderInterface {
 			return (string) apply_filters( 'satispress_cache_path', $path );
 		};
 
-		$container['hooks.activation'] = function( $container ) {
+		$container['hooks.activation'] = function() {
 			return new Provider\Activation();
 		};
 
-		$container['hooks.admin_assets'] = function( $container ) {
+		$container['hooks.admin_assets'] = function() {
 			return new Provider\AdminAssets();
 		};
 
@@ -121,19 +119,19 @@ class ServiceProvider implements ServiceProviderInterface {
 			return new Provider\Authentication( $container['authentication.servers'] );
 		};
 
-		$container['hooks.capabilities'] = function( $container ) {
+		$container['hooks.capabilities'] = function() {
 			return new Provider\Capabilities();
 		};
 
-		$container['hooks.custom_vendor'] = function( $container ) {
+		$container['hooks.custom_vendor'] = function() {
 			return new Provider\CustomVendor();
 		};
 
-		$container['hooks.deactivation'] = function( $container ) {
+		$container['hooks.deactivation'] = function() {
 			return new Provider\Deactivation();
 		};
 
-		$container['hooks.i18n'] = function( $container ) {
+		$container['hooks.i18n'] = function() {
 			return new I18n();
 		};
 
@@ -152,7 +150,7 @@ class ServiceProvider implements ServiceProviderInterface {
 			);
 		};
 
-		$container['hooks.rewrite_rules'] = function( $container ) {
+		$container['hooks.rewrite_rules'] = function() {
 			return new Provider\RewriteRules();
 		};
 
@@ -169,7 +167,7 @@ class ServiceProvider implements ServiceProviderInterface {
 			return new Htaccess( $container['cache.path'] );
 		};
 
-		$container['http.request'] = function( $container ) {
+		$container['http.request'] = function() {
 			$request = new Request( $_SERVER['REQUEST_METHOD'] );
 
 			$request->set_query_params( wp_unslash( $_GET ) );
@@ -177,7 +175,7 @@ class ServiceProvider implements ServiceProviderInterface {
 
 			if ( isset( $_SERVER['PHP_AUTH_USER'] ) ) {
 				$request->set_header( 'PHP_AUTH_USER', $_SERVER['PHP_AUTH_USER'] );
-				$request->set_header( 'PHP_AUTH_PW', isset( $_SERVER['PHP_AUTH_PW'] ) ? $_SERVER['PHP_AUTH_PW'] : null );
+				$request->set_header( 'PHP_AUTH_PW', $_SERVER[ 'PHP_AUTH_PW' ] ?? null );
 			}
 
 			return $request;
@@ -189,7 +187,7 @@ class ServiceProvider implements ServiceProviderInterface {
 			);
 		};
 
-		$container['plugin.members'] = function( $container ) {
+		$container['plugin.members'] = function() {
 			return new Integration\Members();
 		};
 
@@ -284,7 +282,7 @@ class ServiceProvider implements ServiceProviderInterface {
 			);
 		};
 
-		$container['version.parser'] = function( $container ) {
+		$container['version.parser'] = function() {
 			return new ComposerVersionParser( new VersionParser() );
 		};
 	}

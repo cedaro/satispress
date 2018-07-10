@@ -11,8 +11,6 @@ declare ( strict_types = 1 );
 
 namespace SatisPress\PackageType;
 
-use SatisPress\InstalledPackage;
-
 /**
  * Theme package class.
  *

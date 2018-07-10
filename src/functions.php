@@ -11,8 +11,6 @@ declare ( strict_types = 1 );
 
 namespace SatisPress;
 
-use SatisPress\Plugin;
-
 /**
  * Retrieve the main plugin instance.
  *
@@ -34,9 +32,9 @@ function plugin(): Plugin {
  * @param string $class Class name.
  */
 function autoloader_classmap( string $class ) {
-	$class_map = array(
+	$class_map = [
 		'PclZip' => ABSPATH . 'wp-admin/includes/class-pclzip.php',
-	);
+	];
 
 	if ( isset( $class_map[ $class ] ) ) {
 		require_once $class_map[ $class ];
@@ -48,16 +46,16 @@ function autoloader_classmap( string $class ) {
  *
  * @since 0.3.0
  *
- * @param integer $length Length of the string to generate.
+ * @param int $length Length of the string to generate.
  * @return string
  */
 function generate_random_string( int $length = 12 ): string {
 	$chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
 	$str = '';
-	$max = strlen( $chars ) - 1;
+	$max = \strlen( $chars ) - 1;
 	for ( $i = 0; $i < $length; $i++ ) {
-		$str .= substr( $chars, random_int( 0, $max ), 1 );
+		$str .= $chars[ random_int( 0, $max ) ];
 	}
 
 	return $str;
@@ -80,11 +78,9 @@ function get_authorization_header() {
 		return stripslashes( $_SERVER['HTTP_AUTHORIZATION'] );
 	}
 
-	if ( function_exists( 'getallheaders' ) ) {
-		$headers = getallheaders();
-
+	if ( \function_exists( 'getallheaders' ) ) {
 		// Check for the authorization header case-insensitively.
-		foreach ( $headers as $key => $value ) {
+		foreach ( getallheaders() as $key => $value ) {
 			if ( 'authorization' === strtolower( $key ) ) {
 				return $value;
 			}
@@ -142,7 +138,7 @@ function get_edited_user_id(): int {
  * @since 0.3.0
  *
  * @param string $plugin_file Plugin slug or relative path to the main plugin file.
- * @return boolean
+ * @return bool
  */
 function is_plugin_file( $plugin_file ) {
 	return '.php' === substr( $plugin_file, -4 );

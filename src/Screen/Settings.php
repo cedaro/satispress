@@ -12,9 +12,11 @@ declare ( strict_types = 1 );
 namespace SatisPress\Screen;
 
 use Cedaro\WP\Plugin\AbstractHookProvider;
+use SatisPress\Authentication\ApiKey\ApiKey;
 use function SatisPress\get_packages_permalink;
 use SatisPress\Authentication\ApiKey\ApiKeyRepository;
 use SatisPress\Repository\PackageRepository;
+use WP_Theme;
 
 /**
  * Settings screen provider class.
@@ -99,7 +101,7 @@ class Settings extends AbstractHookProvider {
 
 		$api_keys = $this->api_keys->find_for_user( wp_get_current_user() );
 
-		$items = array_map( function( $api_key ) {
+		$items = array_map( function( ApiKey $api_key ) {
 			return $api_key->to_array();
 		}, $api_keys );
 
@@ -265,12 +267,12 @@ class Settings extends AbstractHookProvider {
 	public function render_field_themes() {
 		$value = get_option( 'satispress_themes', [] );
 
-		$themes = wp_get_themes();
-		foreach ( $themes as $slug => $theme ) {
+		foreach ( wp_get_themes() as $slug => $theme ) {
+			/** @var WP_Theme $theme */
 			printf(
 				'<label><input type="checkbox" name="satispress_themes[]" value="%1$s"%2$s> %3$s</label><br />',
 				esc_attr( $slug ),
-				checked( in_array( $slug, $value, true ), true, false ),
+				checked( \in_array( $slug, $value, true ), true, false ),
 				esc_html( $theme->get( 'Name' ) )
 			);
 		}
@@ -288,6 +290,6 @@ class Settings extends AbstractHookProvider {
 	protected function get_setting( string $key, $default = null ) {
 		$option = get_option( 'satispress' );
 
-		return isset( $option[ $key ] ) ? $option[ $key ] : $default;
+		return $option[ $key ] ?? $default;
 	}
 }

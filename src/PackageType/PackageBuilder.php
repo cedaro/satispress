@@ -48,10 +48,14 @@ class PackageBuilder {
 	 * @since 0.3.0
 	 *
 	 * @param Package $package Package instance to build.
+	 *
 	 */
 	public function __construct( Package $package ) {
 		$this->package = $package;
-		$this->class   = new ReflectionClass( $package );
+		try {
+			$this->class = new ReflectionClass( $package );
+		} catch ( \ReflectionException $e ) {
+		}
 	}
 
 	/**
@@ -75,7 +79,6 @@ class PackageBuilder {
 	 * @return $this
 	 */
 	public function set_author( string $author ): self {
-		$this->author = $author;
 		return $this->set( 'author', $author );
 	}
 
@@ -213,8 +216,9 @@ class PackageBuilder {
 	 *
 	 * @param string $name  Property name.
 	 * @param mixed  $value Property value.
+	 * @return $this
 	 */
-	protected function set( $name, $value ) {
+	protected function set( $name, $value ): self {
 		$property = $this->class->getProperty( $name );
 		$property->setAccessible( true );
 		$property->setValue( $this->package, $value );

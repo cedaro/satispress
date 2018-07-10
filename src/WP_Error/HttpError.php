@@ -19,15 +19,15 @@ use WP_Http as HTTP;
  *
  * @since 0.3.0
  */
-class HTTPError extends WP_Error {
+class HttpError extends WP_Error {
 	/**
 	 * Create an error for requests that require authentication.
 	 *
 	 * @since 0.3.0
 	 *
-	 * @return HTTPError
+	 * @return HttpError
 	 */
-	public static function authenticationRequired() {
+	public static function authenticationRequired(): HttpError {
 		return new static(
 			'invalid_credentials',
 			esc_html__( 'Authentication is required for this resource.', 'satispress' ),
@@ -40,9 +40,9 @@ class HTTPError extends WP_Error {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @return HTTPError
+	 * @return HttpError
 	 */
-	public static function invalidCredentials() {
+	public static function invalidCredentials(): HttpError {
 		return new static(
 			'invalid_credentials',
 			esc_html__( 'Invalid credentials.', 'satispress' ),
@@ -55,9 +55,9 @@ class HTTPError extends WP_Error {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @return HTTPError
+	 * @return HttpError
 	 */
-	public static function missingAuthorizationHeader() {
+	public static function missingAuthorizationHeader(): HttpError {
 		return new static(
 			'invalid_request',
 			esc_html__( 'Missing authorization header.', 'satispress' ),
