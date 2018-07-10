@@ -11,9 +11,7 @@ declare ( strict_types = 1 );
 
 namespace SatisPress\PackageType;
 
-use SatisPress\Exception\InvalidReleaseVersion;
 use SatisPress\InstalledPackage;
-use SatisPress\Package;
 use SatisPress\Release;
 
 /**
@@ -28,13 +26,6 @@ abstract class AbstractInstalledPackage extends BasePackage implements Installed
 	 * @var string
 	 */
 	protected $directory;
-
-	/**
-	 * Whether the package is installed.
-	 *
-	 * @var boolean
-	 */
-	protected $is_installed = false;
 
 	/**
 	 * Installed version.
@@ -64,9 +55,8 @@ abstract class AbstractInstalledPackage extends BasePackage implements Installed
 	 */
 	public function get_files( array $excludes = [] ): array {
 		$directory = $this->get_directory();
-		$files     = scandir( $directory );
-		$files     = array_diff( $files, $excludes, [ '.', '..' ] );
-		$files     = array_values( $files );
+		$files     = scandir( $directory, SCANDIR_SORT_NONE );
+		$files     = array_values( array_diff( $files, $excludes, [ '.', '..' ] ) );
 
 		return array_map( function( $file ) {
 			return $this->get_path( $file );
@@ -117,7 +107,7 @@ abstract class AbstractInstalledPackage extends BasePackage implements Installed
 	 *
 	 * @since 0.3.0
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function is_update_available(): bool {
 		return $this->is_installed() && version_compare( $this->get_installed_version(), $this->get_latest_version(), '<' );

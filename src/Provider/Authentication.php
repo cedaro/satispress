@@ -85,14 +85,16 @@ class Authentication extends AbstractHookProvider {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	protected function is_satispress_request(): bool {
 		$request_path = $this->get_request_path();
 
 		if ( ! empty( $_GET['satispress_route'] ) ) {
 			return true;
-		} elseif ( 0 === strpos( $request_path, '/satispress' ) ) {
+		}
+
+		if ( 0 === strpos( $request_path, '/satispress' ) ) {
 			return true;
 		}
 
@@ -110,8 +112,8 @@ class Authentication extends AbstractHookProvider {
 		$request_path = wp_parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH );
 
 		$wp_base = get_home_url( null, '/', 'relative' );
-		if ( substr( $request_path, 0, strlen( $wp_base ) ) === $wp_base ) {
-			$request_path = substr( $request_path, strlen( $wp_base ) );
+		if ( 0 === strpos( $request_path, $wp_base ) ) {
+			$request_path = substr( $request_path, \strlen( $wp_base ) );
 		}
 
 		return '/' . ltrim( $request_path, '/' );

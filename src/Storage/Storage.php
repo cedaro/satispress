@@ -36,7 +36,7 @@ interface Storage {
 	 * @since 0.3.0
 	 *
 	 * @param string $file Relative file path.
-	 * @return boolean
+	 * @return bool
 	 */
 	public function delete( string $file ): bool;
 
@@ -46,7 +46,7 @@ interface Storage {
 	 * @since 0.3.0
 	 *
 	 * @param string $file Relative file path.
-	 * @return boolean
+	 * @return bool
 	 */
 	public function exists( string $file ): bool;
 
@@ -65,7 +65,7 @@ interface Storage {
 	 *
 	 * @param string $source      Absolute path to a file on the local file system.
 	 * @param string $destination Relative destination path; includes the file name.
-	 * @return boolean
+	 * @return bool
 	 */
 	public function move( string $source, string $destination ): bool;
 

@@ -11,6 +11,8 @@ declare ( strict_types = 1 );
 
 namespace SatisPress\Repository;
 
+use SatisPress\Package;
+
 /**
  * Whitelisted packages repository class.
  *
@@ -40,17 +42,14 @@ class Whitelist extends AbstractRepository implements PackageRepository {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @return array
+	 * @return Package[]
 	 */
 	public function all(): array {
 		$packages = [];
 
 		foreach ( $this->get_whitelist() as $type => $slugs ) {
 			foreach ( $slugs as $slug ) {
-				$package = $this->packages->first_where( [
-					'slug' => $slug,
-					'type' => $type,
-				] );
+				$package = $this->packages->first_where( compact( 'slug', 'type' ) );
 
 				if ( $package ) {
 					$packages[ $package->get_slug() ] = $package;
@@ -78,12 +77,10 @@ class Whitelist extends AbstractRepository implements PackageRepository {
 	 */
 	protected function get_whitelist(): array {
 		$options = (array) get_option( 'satispress_plugins', [] );
-		$plugins = apply_filters( 'satispress_plugins', $options );
-		$plugins = array_filter( array_unique( $plugins ) );
+		$plugins = array_filter( array_unique( apply_filters( 'satispress_plugins', $options ) ) );
 
 		$options = (array) get_option( 'satispress_themes', [] );
-		$themes  = apply_filters( 'satispress_themes', $options );
-		$themes  = array_filter( array_unique( $themes ) );
+		$themes  = array_filter( array_unique( apply_filters( 'satispress_themes', $options ) ) );
 
 		return [
 			'plugin' => $plugins,

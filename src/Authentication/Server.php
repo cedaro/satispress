@@ -24,8 +24,8 @@ interface Server {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @param integer|bool $user_id Current user ID or false if unknown.
-	 * @return integer|bool A user on success, or false on failure.
+	 * @param int|bool $user_id Current user ID or false if unknown.
+	 * @return int|bool A user on success, or false on failure.
 	 */
 	public function authenticate( $user_id );
 
@@ -35,7 +35,7 @@ interface Server {
 	 * @since 0.3.0
 	 *
 	 * @param WP_Error|mixed $value Error from another authentication handler, null if we should handle it, or another value if not.
-	 * @return WP_Error|boolean|null
+	 * @return WP_Error|bool|null
 	 */
 	public function get_authentication_errors( $value );
 }

@@ -55,9 +55,6 @@ class FileBody implements ResponseBody {
 	public function emit() {
 		$this->configure_environment();
 
-		$buffer     = '';
-		$chunk_size = 1024 * 1024;
-
 		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fopen
 		$handle = fopen( $this->filename, 'rb' );
 		if ( false === $handle ) {
@@ -66,6 +63,7 @@ class FileBody implements ResponseBody {
 		}
 
 		while ( ! feof( $handle ) ) {
+			$chunk_size = 1024 * 1024;
 			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fread
 			$buffer = fread( $handle, $chunk_size );
 			// phpcs:ignore WordPress.XSS.EscapeOutput.OutputNotEscaped
@@ -87,7 +85,7 @@ class FileBody implements ResponseBody {
 	protected function configure_environment() {
 		// phpcs:disable Generic.PHP.NoSilencedErrors.Discouraged
 		@session_write_close();
-		if ( function_exists( 'apache_setenv' ) ) {
+		if ( \function_exists( 'apache_setenv' ) ) {
 			// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.runtime_configuration_apache_setenv
 			@apache_setenv( 'no-gzip', '1' );
 		}

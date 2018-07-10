@@ -34,7 +34,7 @@ class InvalidReleaseSource extends \LogicException implements ExceptionInterface
 		int $code = 0,
 		\Throwable $previous = null
 	): InvalidReleaseSource {
-		$name = $release->get_package()->get_package_name();
+		$name = $release->get_package()->get_name();
 
 		$message = "Unable to create release artifact for {$name}; source could not be determined.";
 

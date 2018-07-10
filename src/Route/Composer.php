@@ -12,13 +12,10 @@ declare ( strict_types = 1 );
 namespace SatisPress\Route;
 
 use SatisPress\Capabilities;
-use SatisPress\Exception\ExceptionInterface;
-use SatisPress\Exception\FileNotFound;
-use SatisPress\Exception\HTTPException;
+use SatisPress\Exception\HttpException;
 use SatisPress\HTTP\Request;
 use SatisPress\HTTP\Response;
 use SatisPress\HTTP\ResponseBody\JsonBody;
-use SatisPress\Package;
 use SatisPress\Repository\PackageRepository;
 use SatisPress\Transformer\PackageRepositoryTransformer;
 use WP_Http as HTTP;
@@ -67,7 +64,7 @@ class Composer implements Route {
 	 */
 	public function handle( Request $request ): Response {
 		if ( ! current_user_can( Capabilities::VIEW_PACKAGES ) ) {
-			throw HTTPException::forForbiddenResource();
+			throw HttpException::forForbiddenResource();
 		}
 
 		return new Response(

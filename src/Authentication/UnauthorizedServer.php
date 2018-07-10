@@ -13,7 +13,7 @@ declare ( strict_types = 1 );
 
 namespace SatisPress\Authentication;
 
-use SatisPress\WP_Error\HTTPError;
+use SatisPress\WP_Error\HttpError;
 use WP_Error;
 use WP_Http as HTTP;
 
@@ -28,8 +28,8 @@ class UnauthorizedServer extends AbstractServer {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @param integer|bool $user_id Current user ID or false if unknown.
-	 * @return integer|bool A user ID on success, or false on failure.
+	 * @param int|bool $user_id Current user ID or false if unknown.
+	 * @return int|bool A user ID on success, or false on failure.
 	 */
 	public function authenticate( $user_id ) {
 		if ( ! empty( $user_id ) || ! $this->should_attempt ) {
@@ -37,7 +37,7 @@ class UnauthorizedServer extends AbstractServer {
 		}
 
 		$this->should_attempt = false;
-		$this->auth_status    = HTTPError::authenticationRequired();
+		$this->auth_status    = HttpError::authenticationRequired();
 
 		return false;
 	}
@@ -50,8 +50,6 @@ class UnauthorizedServer extends AbstractServer {
 	 * @param WP_Error $error Error object.
 	 */
 	protected function handle_error( WP_Error $error ) {
-		$error_data = $error->get_error_data();
-
 		header( 'WWW-Authenticate: Basic realm="SatisPress"' );
 
 		wp_die(

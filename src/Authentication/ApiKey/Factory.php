@@ -13,7 +13,6 @@ namespace SatisPress\Authentication\ApiKey;
 
 use function SatisPress\generate_random_string;
 use WP_User;
-use WP_User_Query;
 
 /**
  * API Key factory class.
@@ -31,7 +30,9 @@ final class Factory {
 	 * @param string  $token Optional. API Key token.
 	 * @return ApiKey
 	 */
-	public function create( WP_User $user, array $data = [], string $token = null ): ApiKey {
+	public function create( WP_User $user, array $data = null, string $token = null ): ApiKey {
+		$data = $data ?? [];
+
 		if ( ! isset( $data['created'] ) ) {
 			$data['created'] = time();
 		}
@@ -50,7 +51,7 @@ final class Factory {
 	 *
 	 * @return string
 	 */
-	protected static function generate_token(): string {
-		return generate_random_string( ApiKey::TOKEN_LENGTH, false );
+	private static function generate_token(): string {
+		return generate_random_string( ApiKey::TOKEN_LENGTH );
 	}
 }

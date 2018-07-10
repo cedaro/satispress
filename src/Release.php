@@ -61,7 +61,7 @@ class Release {
 	 * @param array $args Query parameters to add to the URL.
 	 * @return string
 	 */
-	public function get_download_url( $args = [] ): string {
+	public function get_download_url( array $args = [] ): string {
 		$url = sprintf(
 			'/satispress/%s/%s',
 			$this->get_package()->get_slug(),

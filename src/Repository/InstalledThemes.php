@@ -11,6 +11,7 @@ declare ( strict_types = 1 );
 
 namespace SatisPress\Repository;
 
+use SatisPress\Package;
 use SatisPress\PackageFactory;
 use SatisPress\PackageType\Theme;
 use WP_Theme;
@@ -44,14 +45,13 @@ class InstalledThemes extends AbstractRepository implements PackageRepository {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @return array
+	 * @return Package[]
 	 */
 	public function all(): array {
 		$items = [];
 
 		foreach ( wp_get_themes() as $slug => $theme ) {
-			$package        = $this->build( $slug, $theme );
-			$items[ $slug ] = $package;
+			$items[ $slug ] = $this->build( $slug, $theme );
 		}
 
 		return $items;
@@ -64,7 +64,7 @@ class InstalledThemes extends AbstractRepository implements PackageRepository {
 	 *
 	 * @param string   $slug  Theme slug.
 	 * @param WP_Theme $theme WP theme instance.
-	 * @return Theme
+	 * @return Theme|Package
 	 */
 	protected function build( string $slug, WP_Theme $theme ): Theme {
 		return $this->factory->create( 'theme' )

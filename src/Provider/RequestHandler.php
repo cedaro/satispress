@@ -13,12 +13,10 @@ namespace SatisPress\Provider;
 
 use Cedaro\WP\Plugin\AbstractHookProvider;
 use Psr\Container\ContainerInterface;
-use SatisPress\Exception\HTTPException;
 use SatisPress\HTTP\Request;
 use SatisPress\HTTP\Response;
 use SatisPress\Route\Route;
 use WP;
-use WP_REST_Response;
 use WP_REST_Server;
 
 /**
@@ -134,8 +132,8 @@ class RequestHandler extends AbstractHookProvider {
 	 *
 	 * @see WP_REST_Server::send_header()
 	 *
-	 * @param string         $name  Header name.
-	 * @param string|boolean $value Header value.
+	 * @param string      $name  Header name.
+	 * @param string|bool $value Header value.
 	 */
 	protected function send_header( string $name, $value ) {
 		/*
@@ -179,9 +177,9 @@ class RequestHandler extends AbstractHookProvider {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
-	protected function is_debug_mode() {
-		return defined( 'WP_DEBUG' ) && true === WP_DEBUG;
+	protected function is_debug_mode(): bool {
+		return \defined( 'WP_DEBUG' ) && true === WP_DEBUG;
 	}
 }

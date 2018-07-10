@@ -25,7 +25,7 @@ class HttpException extends \Exception implements ExceptionInterface {
 	/**
 	 * HTTP status code.
 	 *
-	 * @var integer
+	 * @var int
 	 */
 	protected $status_code;
 
@@ -35,8 +35,8 @@ class HttpException extends \Exception implements ExceptionInterface {
 	 * @since 0.3.0
 	 *
 	 * @param string    $message     Message.
-	 * @param integer   $status_code Optional. HTTP status code. Defaults to 500.
-	 * @param integer   $code        Exception code.
+	 * @param int       $status_code Optional. HTTP status code. Defaults to 500.
+	 * @param int       $code        Exception code.
 	 * @param Throwable $previous    Previous exception.
 	 */
 	public function __construct(
@@ -63,7 +63,7 @@ class HttpException extends \Exception implements ExceptionInterface {
 	public static function forForbiddenResource(
 		int $code = 0,
 		Throwable $previous = null
-	): HTTPException {
+	): HttpException {
 		$user_id     = get_current_user_id();
 		$request_uri = $_SERVER['REQUEST_URI'];
 		$message     = "Forbidden resource requested; User: {$user_id}; URI: {$request_uri}";
@@ -85,7 +85,7 @@ class HttpException extends \Exception implements ExceptionInterface {
 		string $slug,
 		int $code = 0,
 		Throwable $previous = null
-	): HTTPException {
+	): HttpException {
 		$message = "Package does not exist; Package: {$slug}";
 
 		return new static( $message, HTTP::NOT_FOUND, $code, $previous );
@@ -105,7 +105,7 @@ class HttpException extends \Exception implements ExceptionInterface {
 		Package $package,
 		int $code = 0,
 		Throwable $previous = null
-	): HTTPException {
+	): HttpException {
 		$user_id = get_current_user_id();
 		$slug    = $package->get_slug();
 		$message = "Forbidden package requested; Package: {$slug}; User: {$user_id}";
@@ -129,7 +129,7 @@ class HttpException extends \Exception implements ExceptionInterface {
 		string $version,
 		int $code = 0,
 		Throwable $previous = null
-	): HTTPException {
+	): HttpException {
 		$name    = $package->get_name();
 		$message = "An artifact for {$name} {$version} does not exist.";
 
@@ -150,7 +150,7 @@ class HttpException extends \Exception implements ExceptionInterface {
 		Release $release,
 		int $code = 0,
 		Throwable $previous = null
-	): HTTPException {
+	): HttpException {
 		$name    = $release->get_package()->get_name();
 		$version = $release->get_version();
 		$file    = $release->get_file();
@@ -164,9 +164,9 @@ class HttpException extends \Exception implements ExceptionInterface {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @return integer
+	 * @return int
 	 */
-	public function getStatusCode() {
+	public function getStatusCode(): int {
 		return $this->status_code;
 	}
 }

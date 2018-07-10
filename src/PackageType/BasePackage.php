@@ -59,7 +59,7 @@ class BasePackage implements \ArrayAccess, Package {
 	/**
 	 * Whether the package is installed.
 	 *
-	 * @var boolean
+	 * @var bool
 	 */
 	protected $is_installed = false;
 
@@ -178,7 +178,7 @@ class BasePackage implements \ArrayAccess, Package {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function is_installed(): bool {
 		return $this->is_installed;
@@ -189,7 +189,7 @@ class BasePackage implements \ArrayAccess, Package {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public function has_releases(): bool {
 		return ! empty( $this->releases );
@@ -206,7 +206,7 @@ class BasePackage implements \ArrayAccess, Package {
 	 */
 	public function get_release( string $version ): Release {
 		if ( ! isset( $this->releases[ $version ] ) ) {
-			throw InvalidReleaseVersion::fromVersion( $version, $this->get_package_name() );
+			throw InvalidReleaseVersion::fromVersion( $version, $this->get_name() );
 		}
 
 		return $this->releases[ $version ];
@@ -229,14 +229,14 @@ class BasePackage implements \ArrayAccess, Package {
 	 * @since 0.3.0
 	 *
 	 * @throws InvalidReleaseVersion If the package doesn't have any releases.
-	 * @return string
+	 * @return Release
 	 */
 	public function get_latest_release(): Release {
 		if ( $this->has_releases() ) {
 			return reset( $this->releases );
 		}
 
-		throw InvalidReleaseVersion::hasNoReleases( $this->get_package_name() );
+		throw InvalidReleaseVersion::hasNoReleases( $this->get_name() );
 	}
 
 	/**
@@ -273,7 +273,7 @@ class BasePackage implements \ArrayAccess, Package {
 	 * @since 0.3.0
 	 *
 	 * @param string $name Property name.
-	 * @return boolean
+	 * @return bool
 	 */
 	public function offsetExists( $name ): bool {
 		return method_exists( $this, "get_{$name}" );
@@ -285,7 +285,7 @@ class BasePackage implements \ArrayAccess, Package {
 	 * @since 0.3.0
 	 *
 	 * @param string $name Property name.
-	 * @return array
+	 * @return mixed
 	 */
 	public function offsetGet( $name ) {
 		$method = "get_{$name}";
@@ -294,7 +294,7 @@ class BasePackage implements \ArrayAccess, Package {
 			return null;
 		}
 
-		return call_user_func( [ $this, $method ] );
+		return $this->$method();
 	}
 
 	/**

@@ -12,6 +12,7 @@ declare ( strict_types = 1 );
 namespace SatisPress\Transformer;
 
 use SatisPress\Capabilities;
+use SatisPress\Exception\FileNotFound;
 use SatisPress\Package;
 use SatisPress\ReleaseManager;
 use SatisPress\Repository\PackageRepository;
@@ -58,7 +59,7 @@ class ComposerRepositoryTransformer implements PackageRepositoryTransformer {
 	 * @param PackageRepository $repository Package repository.
 	 * @return array
 	 */
-	public function transform( PackageRepository $repository ) {
+	public function transform( PackageRepository $repository ): array {
 		$items = [];
 
 		foreach ( $repository->all() as $slug => $package ) {
@@ -99,10 +100,12 @@ class ComposerRepositoryTransformer implements PackageRepositoryTransformer {
 				continue;
 			}
 
-			$item[ $release->get_version() ] = [
+			$version = $release->get_version();
+
+			$item[ $version ] = [
 				'name'               => $package->get_name(),
-				'version'            => $release->get_version(),
-				'version_normalized' => $this->version_parser->normalize( $release->get_version() ),
+				'version'            => $version,
+				'version_normalized' => $this->version_parser->normalize( $version ),
 				'dist'               => [
 					'type'   => 'zip',
 					'url'    => $release->get_download_url(),

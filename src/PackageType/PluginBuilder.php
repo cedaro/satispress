@@ -24,7 +24,7 @@ final class PluginBuilder extends InstalledPackageBuilder {
 	 * Set the plugin basename.
 	 *
 	 * @param string $basename Relative path from the main plugin directory.
-	 * @return string
+	 * @return PluginBuilder
 	 */
 	public function set_basename( string $basename ): self {
 		return $this->set( 'basename', $basename );
@@ -37,13 +37,13 @@ final class PluginBuilder extends InstalledPackageBuilder {
 	 *
 	 * @param string $plugin_file Relative path to the main plugin file.
 	 * @param array  $plugin_data Optional. Array of plugin data.
-	 * @return Plugin
+	 * @return PluginBuilder
 	 */
 	public function from_source( string $plugin_file, array $plugin_data = [] ): self {
 		$slug = $this->get_slug_from_plugin_file( $plugin_file );
 
 		// Account for single-file plugins.
-		$directory = '.' === dirname( $plugin_file ) ? '' : dirname( $plugin_file );
+		$directory = '.' === \dirname( $plugin_file ) ? '' : \dirname( $plugin_file );
 
 		if ( empty( $plugin_data ) ) {
 			$plugin_data = get_plugin_data( path_join( WP_PLUGIN_DIR, $plugin_file ) );
@@ -91,12 +91,12 @@ final class PluginBuilder extends InstalledPackageBuilder {
 	 *                            file from the plugins directory.
 	 * @return string
 	 */
-	protected function get_slug_from_plugin_file( $plugin_file ) {
+	protected function get_slug_from_plugin_file( $plugin_file ): string {
 		if ( ! is_plugin_file( $plugin_file ) ) {
 			return $plugin_file;
 		}
 
-		$slug = dirname( $plugin_file );
+		$slug = \dirname( $plugin_file );
 
 		// Account for single file plugins.
 		$slug = '.' === $slug ? basename( $plugin_file, '.php' ) : $slug;

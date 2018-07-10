@@ -54,7 +54,7 @@ class FileOperationFailed extends \RuntimeException implements ExceptionInterfac
 		int $code = 0,
 		\Throwable $previous = null
 	): FileOperationFailed {
-		$directory = dirname( $filename );
+		$directory = \dirname( $filename );
 		$message   = "Unable to create temporary directory: {$directory}.";
 
 		return new static( $message, $code, $previous );

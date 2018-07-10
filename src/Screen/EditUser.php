@@ -12,6 +12,7 @@ declare ( strict_types = 1 );
 namespace SatisPress\Screen;
 
 use Cedaro\WP\Plugin\AbstractHookProvider;
+use SatisPress\Authentication\ApiKey\ApiKey;
 use function SatisPress\get_edited_user_id;
 use SatisPress\Authentication\ApiKey\ApiKeyRepository;
 use SatisPress\Capabilities;
@@ -84,7 +85,7 @@ class EditUser extends AbstractHookProvider {
 		$user     = get_user_by( 'id', $user_id );
 		$api_keys = $this->api_keys->find_for_user( $user );
 
-		$items = array_map( function( $api_key ) {
+		$items = array_map( function( ApiKey $api_key ) {
 			return $api_key->to_array();
 		}, $api_keys );
 

@@ -7,6 +7,7 @@
  * @since 0.3.0
  */
 
+declare( strict_types = 1 );
 ?>
 
 <script type="text/html" id="tmpl-satispress-api-key-table">
@@ -72,12 +73,12 @@
 <script type="text/html" id="tmpl-satispress-release-actions">
 	<table>
 		<tr>
-			<td><?php esc_html_e( 'Download URL', 'satispress' ); ?></td>
-			<td><input type="text" value="{{ data.download_url }}" class="regular-text" readonly></td>
+			<td><label for="satispress-release-action-download-url-{{ data.name }}"><?php esc_html_e( 'Download URL', 'satispress' ); ?></label></td>
+			<td><input type="text" value="{{ data.download_url }}" class="regular-text" readonly="readonly" id="satispress-release-action-download-url-{{ data.name }}" /></td>
 		</tr>
 		<tr>
-			<td><?php esc_html_e( 'Require', 'satispress' ); ?></td>
-			<td><input type="text" value='"{{ data.name }}": "{{ data.version }}"' class="regular-text" readonly></td>
+			<td><label for="satispress-release-action-require-{{ data.name }}"><?php esc_html_e( 'Require', 'satispress' ); ?></label></td>
+			<td><input type="text" value='"{{ data.name }}": "{{ data.version }}"' class="regular-text" readonly="readonly" id="satispress-release-action-require-{{ data.name }}" /></td>
 		</tr>
 		<tr>
 			<td colspan="2">

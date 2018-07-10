@@ -11,6 +11,8 @@ declare ( strict_types = 1 );
 
 namespace SatisPress\Repository;
 
+use SatisPress\Package;
+
 /**
  * Cached repository class.
  *
@@ -20,14 +22,14 @@ class CachedRepository extends AbstractRepository implements PackageRepository {
 	/**
 	 * Whether the repository has been initialized.
 	 *
-	 * @var boolean
+	 * @var bool
 	 */
 	protected $initialized = false;
 
 	/**
 	 * Items in the repository.
 	 *
-	 * @var array
+	 * @var Package[]
 	 */
 	protected $items = [];
 
@@ -54,7 +56,7 @@ class CachedRepository extends AbstractRepository implements PackageRepository {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @return array
+	 * @return Package[]
 	 */
 	public function all(): array {
 		if ( $this->initialized ) {

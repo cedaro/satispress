@@ -55,7 +55,7 @@ foreach ( $packages as $package ) :
 			<td class="satispress-releases">
 				<?php
 				if ( $package->has_releases() ) {
-					$versions = array_map( function( $release ) use ( $package ) {
+					$versions = array_map( function( $release ) {
 						return sprintf(
 							'<a href="%1$s" data-version="%2$s" class="button satispress-release">%3$s</a>',
 							esc_url( $release->get_download_url() ),

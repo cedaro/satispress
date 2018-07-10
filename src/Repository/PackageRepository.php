@@ -11,8 +11,7 @@ declare ( strict_types = 1 );
 
 namespace SatisPress\Repository;
 
-use SatisPress\PackageMutableFactory;
-use SatisPress\Plugin;
+use SatisPress\Package;
 
 /**
  * Package repository interface.
@@ -25,7 +24,7 @@ interface PackageRepository {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @return array
+	 * @return Package[]
 	 */
 	public function all(): array;
 
@@ -35,7 +34,7 @@ interface PackageRepository {
 	 * @since 0.3.0
 	 *
 	 * @param array $args Map of key/value pairs.
-	 * @return boolean
+	 * @return bool
 	 */
 	public function contains( array $args ): bool;
 
@@ -55,7 +54,7 @@ interface PackageRepository {
 	 * @since 0.3.0
 	 *
 	 * @param array $args Map of key/value pairs.
-	 * @return Package:null
+	 * @return Package|null
 	 */
 	public function first_where( array $args );
 }

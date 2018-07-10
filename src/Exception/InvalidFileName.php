@@ -26,14 +26,14 @@ class InvalidFileName extends \InvalidArgumentException implements ExceptionInte
 	 * @param int        $validation_code Validation code returned from validate_file().
 	 * @param int        $code            Optional. The Exception code.
 	 * @param \Throwable $previous        Optional. The previous throwable used for the exception chaining.
-	 * @return FileDownloadFailed
+	 * @return InvalidFileName
 	 */
 	public static function withValidationCode(
 		string $filename,
 		int $validation_code,
 		int $code = 0,
 		\Throwable $previous = null
-	): FileDownloadFailed {
+	): InvalidFileName {
 		$message = "File name '{$filename}' ";
 
 		switch ( $validation_code ) {

@@ -56,7 +56,7 @@ class Htaccess {
 	 * @param array $rules List of rules to add.
 	 */
 	public function add_rules( array $rules ) {
-		$this->rules = array_merge( $this->rules, (array) $rules );
+		$this->rules = array_merge( $this->rules, $rules );
 	}
 
 	/**
