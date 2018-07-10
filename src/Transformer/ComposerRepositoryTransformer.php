@@ -67,19 +67,14 @@ class ComposerRepositoryTransformer implements PackageRepositoryTransformer {
 				continue;
 			}
 
-			try {
-				$item = $this->transform_item( $package );
+			$item = $this->transform_item( $package );
 
-				// Skip if there aren't any viewable releases.
-				if ( empty( $item ) ) {
-					continue;
-				}
-
-				$items[ $package->get_name() ] = $item;
-			// phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch
-			} catch ( FileNotFound $e ) {
-				// Continue to allow valid items to be served.
+			// Skip if there aren't any viewable releases.
+			if ( empty( $item ) ) {
+				continue;
 			}
+
+			$items[ $package->get_name() ] = $item;
 		}
 
 		return [ 'packages' => $items ];
@@ -102,26 +97,31 @@ class ComposerRepositoryTransformer implements PackageRepositoryTransformer {
 
 			$version = $release->get_version();
 
-			$item[ $version ] = [
-				'name'               => $package->get_name(),
-				'version'            => $version,
-				'version_normalized' => $this->version_parser->normalize( $version ),
-				'dist'               => [
-					'type'   => 'zip',
-					'url'    => $release->get_download_url(),
-					'shasum' => $this->release_manager->checksum( 'sha1', $release ),
-				],
-				'require'            => [
-					'composer/installers' => '^1.0',
-				],
-				'type'               => $package->get_type(),
-				'authors'            => [
-					'name'     => $package->get_author(),
-					'homepage' => esc_url( $package->get_author_url() ),
-				],
-				'description'        => $package->get_description(),
-				'homepage'           => $package->get_homepage(),
-			];
+			try {
+				$item[ $version ] = [
+					'name'               => $package->get_name(),
+					'version'            => $version,
+					'version_normalized' => $this->version_parser->normalize( $version ),
+					'dist'               => [
+						'type'   => 'zip',
+						'url'    => $release->get_download_url(),
+						'shasum' => $this->release_manager->checksum( 'sha1', $release ),
+					],
+					'require'            => [
+						'composer/installers' => '^1.0',
+					],
+					'type'               => $package->get_type(),
+					'authors'            => [
+						'name'     => $package->get_author(),
+						'homepage' => esc_url( $package->get_author_url() ),
+					],
+					'description'        => $package->get_description(),
+					'homepage'           => $package->get_homepage(),
+				];
+			// phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch
+			} catch ( FileNotFound $e ) {
+				// Continue to allow valid items to be served.
+			}
 		}
 
 		return $item;
