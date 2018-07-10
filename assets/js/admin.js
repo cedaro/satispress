@@ -67,7 +67,7 @@
 				$group = $( e.target ).closest( '.satispress-dropdown-group' );
 
 			if ( ! $button.hasClass( 'satispress-dropdown-toggle' ) ) {
-				toggleDropdown( $( 'satispress-dropdown-group' ), false );
+				toggleDropdown( $( '.satispress-dropdown-group' ), false );
 			} else {
 				toggleDropdown( $( '.satispress-dropdown-group' ).not( $group ), false );
 			}
