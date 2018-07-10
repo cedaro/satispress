@@ -118,6 +118,10 @@ class Upgrade extends AbstractHookProvider {
 	 */
 	protected function cache_packages() {
 		foreach ( $this->repository->all() as $package ) {
+			if ( ! $package->is_installed() ) {
+				continue;
+			}
+
 			try {
 				$this->release_manager->archive( $package->get_installed_release() );
 			// phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch

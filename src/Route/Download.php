@@ -129,7 +129,8 @@ class Download implements Route {
 		// Archive the currently installed version if the artifact doesn't
 		// already exist.
 		if (
-			! $this->release_manager->exists( $release )
+			$package->is_installed()
+			&& ! $this->release_manager->exists( $release )
 			&& $package->get_installed_version() === $version
 		) {
 			$this->release_manager->archive( $release );
