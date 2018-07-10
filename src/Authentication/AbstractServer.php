@@ -23,7 +23,8 @@ abstract class AbstractServer implements Server {
 	/**
 	 * Errors that occurred during authentication.
 	 *
-	 * @var WP_Error|null|bool True if succeeded, WP_Error if errored, null if not HMAC.
+	 * @var WP_Error|null|bool True if succeeded, WP_Error if errored, null if
+	 *                         not handled by this server.
 	 */
 	protected $auth_status;
 
@@ -78,7 +79,8 @@ abstract class AbstractServer implements Server {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @param WP_Error|mixed $value Error from another authentication handler, null if we should handle it, or another value if not.
+	 * @param WP_Error|mixed $value Error from another authentication handler,
+	 *                              null if we should handle it, or another value if not.
 	 * @return WP_Error|bool|null
 	 */
 	public function get_authentication_errors( $value ) {
