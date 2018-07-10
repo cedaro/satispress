@@ -157,6 +157,21 @@ final class ApiKey implements ArrayAccess {
 		$timezone_id = get_option( 'timezone_string' );
 		$datetime    = new DateTime();
 
+		// Handle manual offsets, like "UTC+2".
+		if ( empty( $timezone_id ) ) {
+			$offset = (int) get_option( 'gmt_offset', 0 );
+			if ( 0 <= $offset ) {
+				$formatted_offset = '+' . (string) $offset;
+			} else {
+				$formatted_offset = (string) $offset;
+			}
+			$timezone_id = str_replace(
+				[ '.25', '.5', '.75' ],
+				[ ':15', ':30', ':45' ],
+				$formatted_offset
+			);
+		}
+
 		$datetime->setTimezone( new DateTimeZone( $timezone_id ) );
 		$datetime->setTimestamp( $timestamp );
 
