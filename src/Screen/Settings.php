@@ -227,6 +227,12 @@ class Settings extends AbstractHookProvider {
 			esc_html__( 'API Keys are used to access your SatisPress repository and download packages. Your personal API keys appear below or you can create keys for other users by editing their accounts.', 'satispress' )
 		);
 
+		printf(
+			'<p>%s</p>',
+			/* translators: %s: <code>satispress</code> */
+			sprintf( esc_html__( 'The password for all API Keys is %s.', 'satispress' ), '<code>satispress</code>' )
+		);
+
 		echo '<div id="satispress-api-key-manager"></div>';
 
 		printf(
