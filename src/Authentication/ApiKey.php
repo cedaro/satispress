@@ -139,7 +139,7 @@ final class ApiKey implements ArrayAccess {
 	public function revoke() {
 		delete_user_meta(
 			$this->get_user()->ID,
-			$this->get_meta_key( $this->token )
+			static::get_meta_key( $this->token )
 		);
 	}
 
