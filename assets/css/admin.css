@@ -55,13 +55,21 @@
 	margin-top: 20px;
 }
 
+.satispress-package tbody th,
+.satispress-package tbody td {
+	word-break: break-all;
+}
+
 .satispress-package tbody th {
+	font-size: 13px;
 	width: 150px;
 }
 
 .satispress-release.button {
 	line-height: 22px;
 	height: 24px;
+	margin-bottom: 3px;
+	margin-top: 3px;
 	padding-left: 6px;
 	padding-right: 6px;
 }
@@ -74,6 +82,34 @@
 
 .satispress-release-actions input {
 	background: #fff;
+	max-width: 100%;
+	width: 35em;
+}
+
+.satispress-release-actions td,
+.satispress-release-actions th {
+	padding: 5px 10px;
+}
+
+.satispress-release-actions tbody th {
+	width: auto;
+}
+
+.satispress-release-actions tr:first-child td,
+.satispress-release-actions tr:first-child th {
+	padding-top: 8px;
+}
+
+.satispress-release-actions tr:last-child td,
+.satispress-release-actions tr:last-child th {
+	padding-bottom: 10px;
+}
+
+@media screen and ( max-width: 782px ) {
+	.satispress-release.button {
+		line-height: normal;
+		height: auto;
+	}
 }
 
 

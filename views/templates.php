@@ -79,11 +79,11 @@ declare( strict_types = 1 );
 <script type="text/html" id="tmpl-satispress-release-actions">
 	<table>
 		<tr>
-			<td><label for="satispress-release-action-download-url-{{ data.name }}"><?php esc_html_e( 'Download URL', 'satispress' ); ?></label></td>
+			<th scope="row"><label for="satispress-release-action-download-url-{{ data.name }}"><?php esc_html_e( 'Download URL', 'satispress' ); ?></label></th>
 			<td><input type="text" value="{{ data.download_url }}" class="regular-text" readonly="readonly" id="satispress-release-action-download-url-{{ data.name }}" /></td>
 		</tr>
 		<tr>
-			<td><label for="satispress-release-action-require-{{ data.name }}"><?php esc_html_e( 'Require', 'satispress' ); ?></label></td>
+			<th scope="row"><label for="satispress-release-action-require-{{ data.name }}"><?php esc_html_e( 'Require', 'satispress' ); ?></label></th>
 			<td><input type="text" value='"{{ data.name }}": "{{ data.version }}"' class="regular-text" readonly="readonly" id="satispress-release-action-require-{{ data.name }}" /></td>
 		</tr>
 		<tr>
