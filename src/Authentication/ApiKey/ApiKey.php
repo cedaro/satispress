@@ -1,6 +1,6 @@
 <?php
 /**
- * API key.
+ * API Key.
  *
  * @package SatisPress
  * @license GPL-2.0-or-later
@@ -9,41 +9,25 @@
 
 declare ( strict_types = 1 );
 
-namespace SatisPress\Authentication;
+namespace SatisPress\Authentication\ApiKey;
 
-use function SatisPress\generate_random_string;
 use ArrayAccess;
 use DateTime;
 use DateTimeZone;
 use WP_User;
-use WP_User_Query;
 
 /**
- * API key class.
+ * API Key class.
  *
  * @since 0.3.0
  */
 final class ApiKey implements ArrayAccess {
-	/**
-	 * Prefix for user meta keys.
-	 *
-	 * @var string
-	 */
-	const META_PREFIX = 'satispress_api_key.';
-
 	/**
 	 * API key length.
 	 *
 	 * @var integer
 	 */
 	const TOKEN_LENGTH = 32;
-
-	/**
-	 * String to prepend to API keys.
-	 *
-	 * @var string
-	 */
-	const TOKEN_PREFIX = '';
 
 	/**
 	 * API key data.
@@ -82,6 +66,34 @@ final class ApiKey implements ArrayAccess {
 	}
 
 	/**
+	 * Retrieve the data associated with the API key.
+	 *
+	 * @since 0.3.0
+	 *
+	 * @return array
+	 */
+	public function get_data(): array {
+		return $this->data;
+	}
+
+	/**
+	 * Retrieve and format a date field.
+	 *
+	 * @since 0.3.0
+	 *
+	 * @param string $name   Field name.
+	 * @param string $format Optional. Date format.
+	 * @return mixed
+	 */
+	public function get_date( string $name, string $format = null ) {
+		if ( empty( $this->data[ $name ] ) ) {
+			return '';
+		}
+
+		return $this->format_date( $this->data[ $name ], $format );
+	}
+
+	/**
 	 * Retrieve the API Key name.
 	 *
 	 * @since 0.3.0
@@ -115,52 +127,6 @@ final class ApiKey implements ArrayAccess {
 	}
 
 	/**
-	 * Retrieve and format a date field.
-	 *
-	 * @since 0.3.0
-	 *
-	 * @param string $name   Field name.
-	 * @param string $format Optional. Date format.
-	 * @return mixed
-	 */
-	public function get_date( string $name, string $format = null ) {
-		if ( empty( $this->data[ $name ] ) ) {
-			return '';
-		}
-
-		return $this->format_date( $this->data[ $name ], $format );
-	}
-
-	/**
-	 * Revoke the API key.
-	 *
-	 * @since 0.3.0
-	 */
-	public function revoke() {
-		delete_user_meta(
-			$this->get_user()->ID,
-			static::get_meta_key( $this->token )
-		);
-	}
-
-	/**
-	 * Save the API Key.
-	 *
-	 * @since 0.3.0
-	 *
-	 * @return $this
-	 */
-	public function save(): self {
-		update_user_meta(
-			$this->get_user()->ID,
-			static::get_meta_key( $this->token ),
-			$this->data
-		);
-
-		return $this;
-	}
-
-	/**
 	 * Convert the API Key to an array.
 	 *
 	 * @since 0.3.0
@@ -175,112 +141,6 @@ final class ApiKey implements ArrayAccess {
 			'last_used' => $this->get_date( 'last_used' ),
 			'created'   => $this->get_date( 'created' ),
 		];
-	}
-
-	/**
-	 * Create and save a new API key for a user.
-	 *
-	 * @since 0.3.0
-	 *
-	 * @param WP_User $user WordPress user.
-	 * @param array   $data Optional. Additional data associated with the API key.
-	 * @return ApiKey
-	 */
-	public static function create( WP_User $user, array $data = [] ): ApiKey {
-		if ( ! isset( $data['created'] ) ) {
-			$data['created'] = time();
-		}
-
-		$token = static::generate_token();
-
-		add_user_meta(
-			$user->ID,
-			static::get_meta_key( $token ),
-			$data
-		);
-
-		return new static( $user, $token, $data );
-	}
-
-	/**
-	 * Find an API key using its token.
-	 *
-	 * @since 0.3.0
-	 *
-	 * @param string $token API key token.
-	 * @return ApiKey|null
-	 */
-	public static function find_by_token( string $token ) {
-		$meta_key = static::get_meta_key( $token );
-
-		$query = new WP_User_Query( [
-			'number'      => 1,
-			'count_total' => false,
-			'meta_query'  => [ // WPCS: slow query OK.
-				[
-					'key'     => $meta_key,
-					'compare' => 'EXISTS',
-				],
-			],
-		] );
-
-		$users = $query->get_results();
-		if ( empty( $users ) ) {
-			return null;
-		}
-
-		$user = $users[0];
-		$data = get_user_meta( $user->ID, wp_slash( $meta_key ), true );
-
-		return new static( $user, $token, $data );
-	}
-
-	/**
-	 * Retrieve all API keys for a given user.
-	 *
-	 * @since 0.3.0
-	 *
-	 * @param WP_User $user WordPress user.
-	 * @return static[] List of API keys.
-	 */
-	public static function find_for_user( WP_User $user ) {
-		$meta = get_user_meta( $user->ID );
-		$keys = [];
-
-		foreach ( $meta as $meta_key => $values ) {
-			if ( 0 !== strpos( $meta_key, static::META_PREFIX ) ) {
-				continue;
-			}
-
-			$token  = substr( $meta_key, strlen( static::META_PREFIX ) );
-			$data   = maybe_unserialize( $values[0] );
-			$keys[] = new static( $user, $token, $data );
-		}
-
-		return $keys;
-	}
-
-	/**
-	 * Generate an API key token.
-	 *
-	 * @since 0.3.0
-	 *
-	 * @return string
-	 */
-	public static function generate_token(): string {
-		return static::TOKEN_PREFIX . generate_random_string( static::TOKEN_LENGTH - strlen( static::TOKEN_PREFIX ), false );
-	}
-
-	/**
-	 * Retrieve the meta key for saving API key data.
-	 *
-	 * @since 0.3.0
-	 *
-	 * @param string $token API key token.
-	 * @return string
-	 */
-	protected static function get_meta_key( string $token ): string {
-		return static::META_PREFIX . $token;
 	}
 
 	/**

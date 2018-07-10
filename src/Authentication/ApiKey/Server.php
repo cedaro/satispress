@@ -9,10 +9,10 @@
 
 declare ( strict_types = 1 );
 
-namespace SatisPress\Authentication\BasicApiKey;
+namespace SatisPress\Authentication\ApiKey;
 
 use SatisPress\Authentication\AbstractServer;
-use SatisPress\Authentication\ApiKey;
+use SatisPress\HTTP\Request;
 use SatisPress\WP_Error\HTTPError;
 use WP_Error;
 use WP_Http as HTTP;
@@ -24,6 +24,26 @@ use WP_User;
  * @since 0.3.0
  */
 class Server extends AbstractServer {
+	/**
+	 * API Key repository.
+	 *
+	 * @var ApiKeyRepository
+	 */
+	protected $repository;
+
+	/**
+	 * Constructor method.
+	 *
+	 * @since 0.3.0
+	 *
+	 * @param Request          $request    Request instance.
+	 * @param ApiKeyRepository $repository API Key repository.
+	 */
+	public function __construct( Request $request, ApiKeyRepository $repository ) {
+		$this->repository = $repository;
+		$this->request    = $request;
+	}
+
 	/**
 	 * Handle authentication.
 	 *
@@ -62,7 +82,7 @@ class Server extends AbstractServer {
 			return false;
 		}
 
-		$api_key = ApiKey::find_by_token( $api_key_id );
+		$api_key = $this->repository->find_by_token( $api_key_id );
 
 		// Bail if the API Key doesn't exist.
 		if ( empty( $api_key ) ) {
@@ -118,7 +138,7 @@ class Server extends AbstractServer {
 		}
 
 		$api_key['last_used'] = time();
-		$api_key->save();
+		$this->repository->save( $api_key );
 	}
 
 	/**

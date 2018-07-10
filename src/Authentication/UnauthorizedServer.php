@@ -37,7 +37,7 @@ class UnauthorizedServer extends AbstractServer {
 		}
 
 		$this->should_attempt = false;
-		$this->auth_status = HTTPError::authenticationRequired();
+		$this->auth_status    = HTTPError::authenticationRequired();
 
 		return false;
 	}

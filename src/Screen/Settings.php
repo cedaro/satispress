@@ -13,7 +13,7 @@ namespace SatisPress\Screen;
 
 use Cedaro\WP\Plugin\AbstractHookProvider;
 use function SatisPress\get_packages_permalink;
-use SatisPress\Authentication\ApiKey;
+use SatisPress\Authentication\ApiKey\ApiKeyRepository;
 use SatisPress\Repository\PackageRepository;
 
 /**
@@ -23,19 +23,28 @@ use SatisPress\Repository\PackageRepository;
  */
 class Settings extends AbstractHookProvider {
 	/**
+	 * API Key repository.
+	 *
+	 * @var ApiKeyRepository
+	 */
+	protected $api_keys;
+
+	/**
 	 * Package repository.
 	 *
 	 * @var PackageRepository
 	 */
-	protected $repository;
+	protected $packages;
 
 	/**
 	 * Create the setting screen.
 	 *
-	 * @param PackageRepository $repository Package repository.
+	 * @param PackageRepository $packages Package repository.
+	 * @param ApiKeyRepository  $api_keys API Key repository.
 	 */
-	public function __construct( PackageRepository $repository ) {
-		$this->repository = $repository;
+	public function __construct( PackageRepository $packages, ApiKeyRepository $api_keys ) {
+		$this->api_keys = $api_keys;
+		$this->packages = $packages;
 	}
 
 	/**
@@ -88,7 +97,7 @@ class Settings extends AbstractHookProvider {
 		wp_enqueue_style( 'satispress-admin' );
 		wp_enqueue_script( 'satispress-package-settings' );
 
-		$api_keys = ApiKey::find_for_user( wp_get_current_user() );
+		$api_keys = $this->api_keys->find_for_user( wp_get_current_user() );
 
 		$items = array_map( function( $api_key ) {
 			return $api_key->to_array();
@@ -197,7 +206,7 @@ class Settings extends AbstractHookProvider {
 	 */
 	public function render_screen() {
 		$permalink = get_packages_permalink();
-		$packages  = $this->repository->all();
+		$packages  = $this->packages->all();
 		include $this->plugin->get_path( 'views/screen-settings.php' );
 		include $this->plugin->get_path( 'views/templates.php' );
 	}

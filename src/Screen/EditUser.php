@@ -13,7 +13,7 @@ namespace SatisPress\Screen;
 
 use Cedaro\WP\Plugin\AbstractHookProvider;
 use function SatisPress\get_edited_user_id;
-use SatisPress\Authentication\ApiKey;
+use SatisPress\Authentication\ApiKey\ApiKeyRepository;
 use SatisPress\Capabilities;
 use WP_User;
 
@@ -23,6 +23,22 @@ use WP_User;
  * @since 0.3.0
  */
 class EditUser extends AbstractHookProvider {
+	/**
+	 * API Key repository.
+	 *
+	 * @var ApiKeyRepository
+	 */
+	protected $api_keys;
+
+	/**
+	 * Create the setting screen.
+	 *
+	 * @param ApiKeyRepository $api_keys API Key repository.
+	 */
+	public function __construct( ApiKeyRepository $api_keys ) {
+		$this->api_keys = $api_keys;
+	}
+
 	/**
 	 * Register hooks.
 	 *
@@ -66,7 +82,7 @@ class EditUser extends AbstractHookProvider {
 
 		$user_id  = get_edited_user_id();
 		$user     = get_user_by( 'id', $user_id );
-		$api_keys = ApiKey::find_for_user( $user );
+		$api_keys = $this->api_keys->find_for_user( $user );
 
 		$items = array_map( function( $api_key ) {
 			return $api_key->to_array();
