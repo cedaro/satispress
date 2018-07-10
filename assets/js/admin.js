@@ -54,7 +54,7 @@
 	}
 
 	$( document )
-		.on( 'click', '.satispress-dropdown-toggle', function( e ) {
+		.on( 'click.satispress', '.satispress-dropdown-toggle', function( e ) {
 			var $group = $( e.target ).closest( '.satispress-dropdown-group' ),
 				isOpen = $group.hasClass( 'is-open' );
 
@@ -62,7 +62,7 @@
 
 			toggleDropdown( $group, ! isOpen );
 		})
-		.on( 'click', function( e ) {
+		.on( 'click.satispress', function( e ) {
 			var $button = $( e.target ).closest( 'button' ),
 				$group = $( e.target ).closest( '.satispress-dropdown-group' );
 
