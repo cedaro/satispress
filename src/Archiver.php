@@ -49,7 +49,7 @@ class Archiver {
 
 		$package     = $release->get_package();
 		$remove_path = \dirname( $package->get_directory() );
-		$files       = $package->get_files();
+		$files       = $package->get_files( $excludes );
 
 		if ( $package instanceof Plugin && $package->is_single_file() ) {
 			$remove_path = $package->get_directory();
