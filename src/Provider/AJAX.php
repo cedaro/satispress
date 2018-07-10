@@ -20,7 +20,7 @@ use WP_User;
  *
  * @since 0.3.0
  */
-class AJAX extends AbstractHookProvider {
+class Ajax extends AbstractHookProvider {
 	/**
 	 * Register hooks.
 	 *

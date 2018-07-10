@@ -99,7 +99,7 @@ class ServiceProvider implements ServiceProviderInterface {
 		};
 
 		$container['hooks.ajax'] = function( $container ) {
-			return new Provider\AJAX();
+			return new Provider\Ajax();
 		};
 
 		$container['hooks.authentication'] = function( $container ) {
