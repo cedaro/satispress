@@ -10,23 +10,40 @@ Resources created by SatisPress are private by default and require authenticatio
 
 Only users registered in WordPress with the appropriate [capabilities](#capabilities) can access protected resources, which include package artifacts (plugin and theme zip files) and the `packages.json` endpoint.
 
-SatisPress ships with support for accessing protected resources with a registered user's credentials using ["Basic" HTTP Authentication](https://tools.ietf.org/html/rfc2617).
+SatisPress ships with support for accessing protected resources by using API Keys via ["Basic" HTTP Authentication](https://tools.ietf.org/html/rfc2617).
+
+## API Keys
+
+An API Key is a series of 32 randomly generated letters and numbers that look something like this:
+
+```
+aUEZYqq6pXlMjdg8swe0rQgMCZAPJNaR
+```
+
+API Keys are associated with the user they're created for and inherit the users' capabilities &mdash; a key doesn't provide access to protected resources if the user can't access those resources. API Keys are read-only and limited to accessing SatisPress resources, so if one where to become compromised, an attacker could only view and download whitelisted packages.
+
+To use an API Key with Basic authentication, the API Key should be provided as the username with a password of `satispress`:
+
+__Example Request__
+
+```shell
+$ curl https://example.com/satispress/packages.json \
+   -u aUEZYqq6pXlMjdg8swe0rQgMCZAPJNaR:satispress
+```
 
 ## Basic Authentication Security
 
-__HTTPS / TLS should always be enabled when using Basic authentication.__ Basic authentication is not secure over plain HTTP as it requires sending your username and password in clear text with every request.
+__HTTPS / TLS should always be enabled when using Basic authentication.__ Basic authentication is not secure over plain HTTP since it requires sending credentials in clear text with every request.
 
 Composer [requires HTTPS by default](https://getcomposer.org/doc/06-config.md#secure-http), so this generally shouldn't be a problem, but it's worth noting the security implications if you decide to use Basic authentication over plain HTTP.
 
-Also keep in mind that even with HTTPS enabled, the user credentials will most likely be stored in clear text at some point, whether it's an `auth.json` file or directly in URLs in `composer.json`.
+Also keep in mind that even with HTTPS enabled, the credentials will most likely be stored in clear text at some point, whether it's an `auth.json` file or directly in URLs in `composer.json`.
 
-Create one or more users with [limited capabilities](#capabilities) to access your SatisPress repository so if the username and password are compromised, your site won't be compromised as well.
-
-In other words, __don't use your admin credentials to access SatisPress__.
+_WordPress usernames and passwords will no longer work with the default authentication provider included in SatisPress versions after 0.2.3._
 
 ## Third-Party Authentication Providers
 
-Third-party authentication providers that hook into the `determine_current_user` filter and take care to account for multiple authentication schemes should work with SatisPress.
+Third-party authentication providers that hook into the `determine_current_user` filter and take care to account for multiple authentication schemes should also work with SatisPress.
 
 ## Protecting Package Artifacts
 
@@ -56,7 +73,7 @@ The meta capabilities are the ones that are checked at runtime. There's a mappin
 
 ## Disabling Authentication
 
-If you're using another authentication provider or really don't need authentication, you can disable the built-in Basic authentication server with a single-line filter:
+If you're using another authentication provider or really don't need authentication, you can disable the built-in server with a single-line filter:
 
 ```php
 <?php
