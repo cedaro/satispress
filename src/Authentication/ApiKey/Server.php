@@ -136,7 +136,7 @@ class Server extends AbstractServer {
 			return;
 		}
 
-		$api_key['last_used'] = time();
+		$api_key['last_used'] = $timestamp;
 		$this->repository->save( $api_key );
 	}
 
