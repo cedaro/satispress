@@ -19,3 +19,4 @@ Packages are exposed via a `packages.json` file for inclusion as a Composer repo
 1. [Using Composer](Composer.md) 
 1. [Integrations](Integrations.md)
 1. [Troubleshooting](Troubleshooting.md)
+1. [Alternatives](Alternatives.md)
