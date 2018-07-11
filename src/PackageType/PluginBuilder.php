@@ -11,8 +11,9 @@ declare ( strict_types = 1 );
 
 namespace SatisPress\PackageType;
 
-use function SatisPress\is_plugin_file;
 use SatisPress\Package;
+
+use function SatisPress\is_plugin_file;
 
 /**
  * Plugin builder class.

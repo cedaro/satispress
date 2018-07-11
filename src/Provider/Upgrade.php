@@ -11,7 +11,6 @@ declare ( strict_types = 1 );
 
 namespace SatisPress\Provider;
 
-use const SatisPress\VERSION;
 use Cedaro\WP\Plugin\AbstractHookProvider;
 use SatisPress\Exception\ExceptionInterface;
 use SatisPress\Capabilities;
@@ -20,6 +19,8 @@ use SatisPress\ReleaseManager;
 use SatisPress\Repository\PackageRepository;
 use SatisPress\Storage\Local;
 use SatisPress\Storage\Storage;
+
+use const SatisPress\VERSION;
 
 /**
  * Class for upgrade routines.

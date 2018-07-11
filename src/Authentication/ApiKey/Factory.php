@@ -11,8 +11,9 @@ declare ( strict_types = 1 );
 
 namespace SatisPress\Authentication\ApiKey;
 
-use function SatisPress\generate_random_string;
 use WP_User;
+
+use function SatisPress\generate_random_string;
 
 /**
  * API Key factory class.

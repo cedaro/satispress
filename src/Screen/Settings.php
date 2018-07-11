@@ -12,11 +12,12 @@ declare ( strict_types = 1 );
 namespace SatisPress\Screen;
 
 use Cedaro\WP\Plugin\AbstractHookProvider;
-use function SatisPress\get_packages_permalink;
 use SatisPress\Authentication\ApiKey\ApiKey;
 use SatisPress\Authentication\ApiKey\ApiKeyRepository;
 use SatisPress\Repository\PackageRepository;
 use WP_Theme;
+
+use function SatisPress\get_packages_permalink;
 
 /**
  * Settings screen provider class.

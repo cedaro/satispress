@@ -13,10 +13,11 @@ namespace SatisPress\Screen;
 
 use Cedaro\WP\Plugin\AbstractHookProvider;
 use SatisPress\Authentication\ApiKey\ApiKey;
-use function SatisPress\get_edited_user_id;
 use SatisPress\Authentication\ApiKey\ApiKeyRepository;
 use SatisPress\Capabilities;
 use WP_User;
+
+use function SatisPress\get_edited_user_id;
 
 /**
  * Edit Usser screen provider class.
