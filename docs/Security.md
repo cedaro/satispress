@@ -56,7 +56,7 @@ Third-party authentication providers that hook into the `determine_current_user`
 We've taken several measures to attempt to ensure package artifacts are protected. Most of these approaches are used by several top backup and eCommerce plugins on the market:
 
 * Package artifacts are cached in a randomly named directory to prevent easy discovery.
-* An `.htaccess` file is added to the cache directory to deny access to direct requests when Apache is in use.
+* An `.htaccess` file is added to the cache directory to deny access to direct requests on Apache servers.
 * Download requests can only be made by authenticated users.
 
 _If your site is running on NGINX, you may need to implement custom redirects to deny direct access to the cache directory._

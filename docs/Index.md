@@ -16,7 +16,12 @@ Packages are exposed via a `packages.json` file for inclusion as a Composer repo
 	1. [Settings](Settings.md)
 	1. [Packages](Packages.md)
 	1. [Security](Security.md)
-1. [Using Composer](Composer.md) 
+1. [Using Composer](Composer.md)
+1. Workflows
+	1. [Running SatisPress in Production](workflows/production.md)
+	1. [Central Package Server](workflows/central-server.md)
+	1. Continous Integration
+	1. Commercial Vendors
 1. [Integrations](Integrations.md)
 1. [Troubleshooting](Troubleshooting.md)
 1. [Alternatives](Alternatives.md)
