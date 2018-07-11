@@ -19,4 +19,4 @@ SatisPress is available on [Packagist](https://packagist.org/packages/blazersix/
 composer require blazersix/satispress
 ``` 
 
-[Back to Index](Index.md)
+[Back to Index](index.md)

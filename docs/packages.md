@@ -6,4 +6,4 @@ At _Settings &rarr; SatisPress &rarr; Packages_, you'll find a list of all of th
 
 You can click a version number to get an instant download of a zip file for that release.
 
-[Back to Index](Index.md)
+[Back to Index](index.md)

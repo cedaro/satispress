@@ -18,4 +18,4 @@ Themes can be toggled on the Settings screen at _Settings &rarr; SatisPress_.
 
 ![Screenshot of the SatisPress Settings page showing the whitelisting checkboxes for themes](images/themes.png)
 
-[Back to Index](Index.md)
+[Back to Index](index.md)

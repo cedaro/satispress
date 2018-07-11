@@ -16,4 +16,4 @@ To run a central package server, WordPress would be installed on a separate doma
 * Performance of the package server may become slow depending on the number of packages managed
 * Additional infrastructure that needs to be managed
 
-[Back to Index](../Index.md)
+[Back to Index](../index.md)

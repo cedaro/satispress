@@ -1,3 +1,3 @@
 # Continuous Integrations
 
-[Back to Index](../Index.md)
+[Back to Index](../index.md)

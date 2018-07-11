@@ -19,7 +19,7 @@ Once SatisPress is installed and configured you can include the SatisPress repos
 }
 ```
 
-_The `satispress` vendor name can be changed on the [Settings page](Settings.md)._
+_The `satispress` vendor name can be changed on the [Settings page](settings.md)._
 
 ## Installing Packages
 
@@ -81,4 +81,4 @@ The [Composer documentation explains the benefit](https://getcomposer.org/doc/ar
  
 > The main advantage of the `auth.json` file is that it can be gitignored so that every developer in your team can place their own credentials in there, which makes revocation of credentials much easier than if you all share the same.
 
-[Back to Index](Index.md)
+[Back to Index](index.md)

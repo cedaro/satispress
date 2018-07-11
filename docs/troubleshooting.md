@@ -22,4 +22,4 @@ An external rewrite rule should be automatically added to `.htaccess` to handle 
 
 `rewrite ^/satispress/packages.json$ /index.php last;`
 
-[Back to Index](Index.md)
+[Back to Index](index.md)

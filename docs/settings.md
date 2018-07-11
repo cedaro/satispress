@@ -12,10 +12,10 @@ The "Vendor" field allows this to be changed; a value of `mypremiumcode` would m
 
 ## Security
 
-See the document on [Security](Security.md) for more information.
+See the document on [Security](security.md) for more information.
 
 ## Themes
 
-See the document on [Whitelisting Plugins and Themes](Whitelisting.md) for more information.
+See the document on [Whitelisting Plugins and Themes](whitelisting.md) for more information.
 
-[Back to Index](Index.md)
+[Back to Index](index.md)

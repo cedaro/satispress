@@ -95,5 +95,5 @@ _Keep in mind that disabling authentication may make it easier for malicious act
 
 Securing the SatisPress repository should be possible using the same methods outlined in the [Satis documentation](https://getcomposer.org/doc/articles/handling-private-packages-with-satis.md#security).
 
-[Back to Index](Index.md)
+[Back to Index](index.md)
  

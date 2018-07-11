@@ -50,7 +50,7 @@ Oftentimes vendors only provide access to the latest release, so you're stuck if
 
 ## Documentation
 
-For installation notes, information about usage, security, and more, see the [documentation](docs/Index.md).
+For installation notes, information about usage, security, and more, see the [documentation](docs/index.md).
 
 ## Credits
 

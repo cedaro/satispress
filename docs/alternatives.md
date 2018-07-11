@@ -21,3 +21,5 @@ Some of Private Packagist's revenue is used to pay for Composer and Packagist.or
 ## Release Belt
 
 [Release Belt](https://github.com/Rarst/release-belt) is a Composer repository, which serves to quickly integrate third party non–Composer releases into Composer workflow.
+
+[Back to Index](index.md)

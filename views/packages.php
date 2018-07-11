@@ -103,7 +103,7 @@ if ( empty( $packages ) ) :
 			<?php esc_html_e( 'Plugins and themes need to be whitelisted to make them available as Composer packages.', 'satispress' ); ?>
 		</p>
 		<p>
-			<a href="https://github.com/blazersix/satispress/blob/develop/docs/Whitelisting.md" target="_blank" rel="noopener noreferer"><em><?php esc_html_e( 'Read more about whitelisting plugins and themes.', 'satispress' ); ?></em></a>
+			<a href="https://github.com/blazersix/satispress/blob/develop/docs/whitelisting.md" target="_blank" rel="noopener noreferer"><em><?php esc_html_e( 'Read more about whitelisting plugins and themes.', 'satispress' ); ?></em></a>
 		</p>
 
 		<h4><?php esc_html_e( 'Plugins', 'satispress' ); ?></h4>
