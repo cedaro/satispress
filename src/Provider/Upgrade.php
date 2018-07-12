@@ -123,7 +123,7 @@ class Upgrade extends AbstractHookProvider {
 			}
 
 			try {
-				$this->release_manager->archive( $package->get_installed_release() );
+				$this->release_manager->archive_installed_version( $package );
 			// phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch
 			} catch ( ExceptionInterface $e ) {
 				// noop.

@@ -198,7 +198,7 @@ class PackageArchiver extends AbstractHookProvider {
 			$package = $this->packages->first_where( compact( 'slug', 'type' ) );
 
 			if ( null !== $package && $package->is_installed() ) {
-				$this->release_manager->archive( $package->get_installed_release() );
+				$this->release_manager->archive_installed_version( $package );
 			}
 
 		// phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch
