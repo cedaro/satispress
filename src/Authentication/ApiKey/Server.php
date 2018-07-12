@@ -59,7 +59,7 @@ class Server extends AbstractServer {
 		$header = $this->request->get_header( 'authorization' );
 
 		// Bail if the authorization header doesn't exist.
-		if ( empty( $header ) || 0 !== stripos( $header, 'basic ' ) ) {
+		if ( null === $header || 0 !== stripos( $header, 'basic ' ) ) {
 			return $user_id;
 		}
 
@@ -76,7 +76,7 @@ class Server extends AbstractServer {
 		$api_key_id = $this->request->get_header( 'PHP_AUTH_USER' );
 
 		// Bail if an API Key wasn't provided.
-		if ( empty( $api_key_id ) ) {
+		if ( null === $api_key_id ) {
 			$this->auth_status = HttpError::missingAuthorizationHeader();
 			return false;
 		}
