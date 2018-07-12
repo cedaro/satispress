@@ -103,6 +103,18 @@ abstract class AbstractInstalledPackage extends BasePackage implements Installed
 	}
 
 	/**
+	 * Whether a given release is the currently installed version.
+	 *
+	 * @since 0.3.0
+	 *
+	 * @param Release $release Release.
+	 * @return bool
+	 */
+	public function is_installed_release( Release $release ): bool {
+		return version_compare( $release->get_version(), $this->get_installed_version(), '=' );
+	}
+
+	/**
 	 * Whether an update is available.
 	 *
 	 * @since 0.3.0
