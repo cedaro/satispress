@@ -40,6 +40,9 @@ class Archiver {
 	 * @return string Absolute path to the artifact.
 	 */
 	public function archive_from_source( InstalledPackage $package, string $version ): string {
+		$release     = $package->get_release( $version );
+		$remove_path = \dirname( $package->get_directory() );
+
 		$excludes = apply_filters( 'satispress_archive_excludes', [
 			'.DS_Store',
 			'.git',
@@ -50,9 +53,7 @@ class Archiver {
 			'tests',
 		], $release );
 
-		$release     = $package->get_release( $version );
-		$remove_path = \dirname( $package->get_directory() );
-		$files       = $package->get_files( $excludes );
+		$files = $package->get_files( $excludes );
 
 		if ( $package instanceof Plugin && $package->is_single_file() ) {
 			$remove_path = $package->get_directory();

@@ -15,6 +15,7 @@ use Cedaro\WP\Plugin\AbstractHookProvider;
 use SatisPress\Exception\ExceptionInterface;
 use SatisPress\Capabilities;
 use SatisPress\Htaccess;
+use SatisPress\InstalledPackage;
 use SatisPress\ReleaseManager;
 use SatisPress\Repository\PackageRepository;
 use SatisPress\Storage\Local;
@@ -118,12 +119,12 @@ class Upgrade extends AbstractHookProvider {
 	 */
 	protected function cache_packages() {
 		foreach ( $this->repository->all() as $package ) {
-			if ( ! $package->is_installed() ) {
+			if ( ! $package instanceof InstalledPackage || ! $package->is_installed() ) {
 				continue;
 			}
 
 			try {
-				$this->release_manager->archive_installed_version( $package );
+				$this->release_manager->archive( $package->get_installed_release() );
 			// phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch
 			} catch ( ExceptionInterface $e ) {
 				// noop.

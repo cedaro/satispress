@@ -12,13 +12,12 @@ declare ( strict_types = 1 );
 namespace SatisPress\Route;
 
 use SatisPress\Capabilities;
+use SatisPress\Exception\ExceptionInterface;
 use SatisPress\Exception\HttpException;
 use SatisPress\Exception\InvalidReleaseVersion;
 use SatisPress\HTTP\Request;
 use SatisPress\HTTP\Response;
-use SatisPress\InstalledPackage;
 use SatisPress\Package;
-use SatisPress\Release;
 use SatisPress\ReleaseManager;
 use SatisPress\Repository\PackageRepository;
 

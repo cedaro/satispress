@@ -89,7 +89,7 @@ class ReleaseManager {
 
 		if ( ! empty( $source_url ) ) {
 			$filename = $this->archiver->archive_from_url( $release );
-		} elseif ( $package->is_installed_release( $release ) ) {
+		} elseif ( $package instanceof InstalledPackage && $package->is_installed_release( $release ) ) {
 			$filename = $this->archiver->archive_from_source( $package, $release->get_version() );
 		} else {
 			throw InvalidReleaseSource::forRelease( $release );
@@ -100,18 +100,6 @@ class ReleaseManager {
 		}
 
 		return $release;
-	}
-
-	/**
-	 * Archive the installed version of a package.
-	 *
-	 * @since 0.3.0
-	 *
-	 * @param InstalledPackage $package Installed package.
-	 * @return Release
-	 */
-	public function archive_installed_version( InstalledPackage $package ): Release {
-		return $this->archive( $package->get_intalled_release() );
 	}
 
 	/**
