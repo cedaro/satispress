@@ -12,6 +12,7 @@ declare ( strict_types = 1 );
 namespace SatisPress\Screen;
 
 use Cedaro\WP\Plugin\AbstractHookProvider;
+use SatisPress\Capabilities;
 use SatisPress\Repository\PackageRepository;
 
 /**
@@ -70,6 +71,11 @@ class ManagePlugins extends AbstractHookProvider {
 		// Bail if the nonce can't be verified.
 		check_admin_referer( 'toggle-status_' . $plugin );
 
+		// Bail if the current user can't manage SatisPress options.
+		if ( ! current_user_can( Capabilities::MANAGE_OPTIONS ) ) {
+			wp_send_json_error();
+		}
+
 		$key = array_search( $plugin, $plugins, true );
 		if ( false !== $key ) {
 			unset( $plugins[ $key ] );
@@ -109,7 +115,9 @@ class ManagePlugins extends AbstractHookProvider {
 	 * @return array
 	 */
 	public function register_columns( array $columns ): array {
-		$columns['satispress'] = 'SatisPress';
+		if ( current_user_can( Capabilities::MANAGE_OPTIONS ) ) {
+			$columns['satispress'] = 'SatisPress';
+		}
 
 		return $columns;
 	}

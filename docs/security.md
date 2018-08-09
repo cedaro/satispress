@@ -63,17 +63,18 @@ _If your site is running on NGINX, you may need to implement custom redirects to
 
 ## Capabilities
 
-SatisPress introduces two new primitive capabilities:
+SatisPress introduces three new primitive capabilities:
 
 - `satispress_download_packages`
 - `satispress_view_packages`
+- `satispress_manage_options`
 
 And two new meta capabilities:
 
 - `satispress_download_package`
 - `satispress_view_package`
 
-The primitive capabilities are added to the administrator role by default during plugin activation and upgrade.
+The primitive capabilities are added to the administrator role by default during plugin installation and upgrade.
 
 The meta capabilities are the ones that are checked at runtime. There's a mapping between the primitive and meta capabilities in the Capabilities provider.
 

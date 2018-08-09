@@ -21,7 +21,7 @@ namespace SatisPress;
  */
 final class Capabilities {
 	/**
-	 * Primitive capability needed to download packages.
+	 * Primitive capability for downloading packages.
 	 *
 	 * @var string
 	 */
@@ -49,6 +49,13 @@ final class Capabilities {
 	const VIEW_PACKAGE = 'satispress_view_package';
 
 	/**
+	 * Primitive capability for managing options.
+	 *
+	 * @var string
+	 */
+	const MANAGE_OPTIONS = 'satispress_manage_options';
+
+	/**
 	 * Register capabilities.
 	 *
 	 * @since 0.3.0
@@ -57,5 +64,6 @@ final class Capabilities {
 		$wp_roles = wp_roles();
 		$wp_roles->add_cap( 'administrator', self::DOWNLOAD_PACKAGES );
 		$wp_roles->add_cap( 'administrator', self::VIEW_PACKAGES );
+		$wp_roles->add_cap( 'administrator', self::MANAGE_OPTIONS );
 	}
 }

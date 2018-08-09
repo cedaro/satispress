@@ -72,5 +72,13 @@ class Members extends AbstractHookProvider {
 				'group' => 'satispress',
 			]
 		);
+
+		members_register_cap(
+			Capabilities::MANAGE_OPTIONS,
+			[
+				'label' => esc_html__( 'Manage Options', 'satispress' ),
+				'group' => 'satispress',
+			]
+		);
 	}
 }

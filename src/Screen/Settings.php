@@ -14,6 +14,7 @@ namespace SatisPress\Screen;
 use Cedaro\WP\Plugin\AbstractHookProvider;
 use SatisPress\Authentication\ApiKey\ApiKey;
 use SatisPress\Authentication\ApiKey\ApiKeyRepository;
+use SatisPress\Capabilities;
 use SatisPress\Repository\PackageRepository;
 use WP_Theme;
 
@@ -82,7 +83,7 @@ class Settings extends AbstractHookProvider {
 			$parent_slug,
 			esc_html__( 'SatisPress', 'satispress' ),
 			esc_html__( 'SatisPress', 'satispress' ),
-			'manage_options',
+			Capabilities::MANAGE_OPTIONS,
 			'satispress',
 			[ $this, 'render_screen' ]
 		);
