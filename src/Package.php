@@ -149,4 +149,14 @@ interface Package {
 	 * @return string
 	 */
 	public function get_latest_download_url(): string;
+
+	/**
+	 * Whether a given release is the currently installed version.
+	 *
+	 * @since 0.3.0
+	 *
+	 * @param Release $release Release.
+	 * @return bool
+	 */
+	public function is_installed_release( Release $release ): bool;
 }

@@ -18,6 +18,7 @@ namespace SatisPress;
 use PclZip;
 use SatisPress\Exception\FileDownloadFailed;
 use SatisPress\Exception\FileOperationFailed;
+use SatisPress\Exception\InvalidReleaseVersion;
 use SatisPress\PackageType\Plugin;
 
 /**
@@ -31,12 +32,17 @@ class Archiver {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @param Release $release Release instance.
+	 * @param InstalledPackage $package Installed package instance.
+	 * @param string           $version Release version.
+	 * @throws InvalidReleaseVersion If the version is invalid.
 	 * @throws FileOperationFailed If a temporary working directory can't be created.
 	 * @throws FileOperationFailed If zip creation fails.
 	 * @return string Absolute path to the artifact.
 	 */
-	public function archive_from_source( Release $release ): string {
+	public function archive_from_source( InstalledPackage $package, string $version ): string {
+		$release     = $package->get_release( $version );
+		$remove_path = \dirname( $package->get_directory() );
+
 		$excludes = apply_filters( 'satispress_archive_excludes', [
 			'.DS_Store',
 			'.git',
@@ -47,9 +53,7 @@ class Archiver {
 			'tests',
 		], $release );
 
-		$package     = $release->get_package();
-		$remove_path = \dirname( $package->get_directory() );
-		$files       = $package->get_files( $excludes );
+		$files = $package->get_files( $excludes );
 
 		if ( $package instanceof Plugin && $package->is_single_file() ) {
 			$remove_path = $package->get_directory();

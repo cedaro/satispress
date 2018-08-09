@@ -12,6 +12,7 @@ declare ( strict_types = 1 );
 namespace SatisPress\Route;
 
 use SatisPress\Capabilities;
+use SatisPress\Exception\ExceptionInterface;
 use SatisPress\Exception\HttpException;
 use SatisPress\Exception\InvalidReleaseVersion;
 use SatisPress\HTTP\Request;
@@ -126,17 +127,11 @@ class Download implements Route {
 			throw HttpException::forForbiddenPackage( $package );
 		}
 
-		// Archive the currently installed version if the artifact doesn't
-		// already exist.
-		if (
-			! $this->release_manager->exists( $release )
-			&& $package->get_installed_version() === $version
-		) {
-			$this->release_manager->archive( $release );
-		}
-
-		// Send a 404 if the release isn't available.
-		if ( ! $this->release_manager->exists( $release ) ) {
+		try {
+			// Cache the release if an artifact doesn't already exist.
+			$release = $this->release_manager->archive( $release );
+		} catch ( ExceptionInterface $e ) {
+			// Send a 404 if the release isn't available.
 			throw HttpException::forMissingRelease( $release );
 		}
 

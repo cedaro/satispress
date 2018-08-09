@@ -266,6 +266,18 @@ class BasePackage implements \ArrayAccess, Package {
 	}
 
 	/**
+	 * Whether a given release is the currently installed version.
+	 *
+	 * @since 0.3.0
+	 *
+	 * @param Release $release Release.
+	 * @return bool
+	 */
+	public function is_installed_release( Release $release ): bool {
+		return false;
+	}
+
+	/**
 	 * Whether a property exists.
 	 *
 	 * Checks for an accessor method rather than the actual property.
