@@ -42,6 +42,5 @@ class Activation extends AbstractHookProvider {
 	 */
 	public function activate() {
 		update_option( 'satispress_flush_rewrite_rules', 'yes' );
-		Capabilities::register();
 	}
 }
