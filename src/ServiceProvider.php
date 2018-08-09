@@ -75,31 +75,6 @@ class ServiceProvider implements ServiceProviderInterface {
 			);
 		};
 
-		$container['cache.directory'] = function() {
-			$directory = get_option( 'satispress_cache_directory' );
-
-			if ( ! empty( $directory ) ) {
-				return $directory;
-			}
-
-			// Append a random string to help hide it from nosey visitors.
-			$directory = sprintf( 'satispress-%s', generate_random_string() );
-			update_option( 'satispress_cache_directory', $directory );
-
-			return $directory;
-		};
-
-		$container['cache.path'] = function( $container ) {
-			if ( \defined( 'SATISPRESS_CACHE_PATH' ) ) {
-				return SATISPRESS_CACHE_PATH;
-			}
-
-			$upload_config = wp_upload_dir();
-			$path          = trailingslashit( path_join( $upload_config['basedir'], $container['cache.directory'] ) );
-
-			return (string) apply_filters( 'satispress_cache_path', $path );
-		};
-
 		$container['hooks.activation'] = function() {
 			return new Provider\Activation();
 		};
@@ -158,13 +133,13 @@ class ServiceProvider implements ServiceProviderInterface {
 			return new Provider\Upgrade(
 				$container['repository.whitelist'],
 				$container['release.manager'],
-				$container['storage'],
+				$container['storage.packages'],
 				$container['htaccess.handler']
 			);
 		};
 
 		$container['htaccess.handler'] = function( $container ) {
-			return new Htaccess( $container['cache.path'] );
+			return new Htaccess( $container['storage.working_directory'] );
 		};
 
 		$container['http.request'] = function() {
@@ -193,7 +168,7 @@ class ServiceProvider implements ServiceProviderInterface {
 
 		$container['release.manager'] = function( $container ) {
 			return new ReleaseManager(
-				$container['storage'],
+				$container['storage.packages'],
 				$container['archiver']
 			);
 		};
@@ -271,8 +246,41 @@ class ServiceProvider implements ServiceProviderInterface {
 			);
 		};
 
-		$container['storage'] = function( $container ) {
-			return new Storage\Local( $container['cache.path'] );
+		$container['storage.packages'] = function( $container ) {
+			$path = path_join( $container['storage.working_directory'], 'packages/' );
+			return new Storage\Local( $path );
+		};
+
+		$container['storage.working_directory'] = function( $container ) {
+			if ( \defined( 'SATISPRESS_WORKING_DIRECTORY' ) ) {
+				return SATISPRESS_WORKING_DIRECTORY;
+			}
+
+			$upload_config = wp_upload_dir();
+			$path          = path_join( $upload_config['basedir'], $container['storage.working_directory_name'] );
+
+			return (string) trailingslashit( apply_filters( 'satispress_working_directory', $path ) );
+		};
+
+		$container['storage.working_directory_name'] = function() {
+			$directory = get_option( 'satispress_working_directory' );
+
+			if ( ! empty( $directory ) ) {
+				return $directory;
+			}
+
+			// Use old option name if it exists.
+			$directory = get_option( 'satispress_cache_directory' );
+			delete_option( 'satispress_cache_directory' );
+
+			if ( empty( $directory ) ) {
+				// Append a random string to help hide it from nosey visitors.
+				$directory = sprintf( 'satispress-%s', generate_random_string() );
+			}
+
+			update_option( 'satispress_working_directory', $directory );
+
+			return $directory;
 		};
 
 		$container['transformer.composer_repository'] = function( $container ) {

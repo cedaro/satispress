@@ -98,7 +98,7 @@ class Upgrade extends AbstractHookProvider {
 	public function maybe_upgrade() {
 		$saved_version = get_option( self::VERSION_OPTION_NAME, '0' );
 
-		if ( version_compare( $saved_version, VERSION, '<' ) ) {
+		if ( version_compare( $saved_version, '0.3.0-dev1', '<' ) ) {
 			Capabilities::register();
 			$this->setup_storage();
 			$this->cache_packages();
@@ -142,24 +142,69 @@ class Upgrade extends AbstractHookProvider {
 	 * @since 0.3.0
 	 */
 	protected function setup_storage() {
-		$upload_config = wp_upload_dir();
-
 		if ( ! $this->storage instanceof Local ) {
 			return;
 		}
 
-		// Rename the old /satispress directory if it exists.
-		// The new directory contains a random suffix.
-		$old_path = path_join( $upload_config['basedir'], 'satispress' );
-		if ( file_exists( $old_path ) ) {
-			rename( $old_path, $this->storage->get_base_directory() );
-		}
+		$base_directory = $this->storage->get_base_directory();
 
-		if ( ! wp_mkdir_p( $this->storage->get_base_directory() ) ) {
+		$this->rename_existing_directory( $base_directory );
+		$this->move_packages_into_subdirectory( $base_directory );
+
+		if ( ! wp_mkdir_p( $base_directory ) ) {
 			return;
 		}
 
 		$this->htaccess->add_rules( [ 'deny from all' ] );
 		$this->htaccess->save();
+	}
+
+	/**
+	 * Rename the old cache directory.
+	 *
+	 * The new directory contains a random suffix.
+	 *
+	 * @since 0.3.0
+	 *
+	 * @param string $directory New directory.
+	 */
+	protected function rename_existing_directory( $directory ) {
+		$upload_config = wp_upload_dir();
+		$old_path      = path_join( $upload_config['basedir'], 'satispress' );
+
+		if ( ! file_exists( $old_path ) ) {
+			return;
+		}
+
+		wp_mkdir_p( dirname( $directory ) );
+		rename( $old_path, $directory );
+	}
+
+	/**
+	 * Move packages into a subdirectory of the working directory.
+	 *
+	 * Prior to 0.3.0-dev1, packages were stored directly in the working
+	 * directory. Upgrade::rename_existing_directory() should handle most cases,
+	 * but this provides support for anyone that was running 0.3.0-dev.
+	 *
+	 * @since 0.3.0
+	 *
+	 * @param string $directory New directory.
+	 */
+	protected function move_packages_into_subdirectory( $directory ) {
+		if ( file_exists( $directory ) ) {
+			return;
+		}
+
+		$old_path = dirname( $directory );
+
+		// If a /satispress-XXXX working directory exists, but the /packages
+		// subdirectory doesn't, rename it to /satispress-XXXX/packages.
+		if ( file_exists( $old_path ) && 'satispress' === strtok( basename( $old_path ), '-' ) ) {
+			$tmpfname = dirname( $old_path ) . '/satispress-packages';
+			rename( $old_path, $tmpfname );
+			wp_mkdir_p( dirname( $directory ) );
+			rename( $tmpfname, $directory );
+		}
 	}
 }
