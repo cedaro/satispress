@@ -86,6 +86,18 @@ abstract class AbstractRepository {
 	}
 
 	/**
+	 * Apply a callback to a repository to filter items.
+	 *
+	 * @since 0.3.0
+	 *
+	 * @param callable $filter Filter callback.
+	 * @return PackageRepository
+	 */
+	public function with_filter( callable $callback ): PackageRepository {
+		return new FilteredRepository( $this, $callback );
+	}
+
+	/**
 	 * Parse arguments used for filtering a collection.
 	 *
 	 * @since 0.3.0

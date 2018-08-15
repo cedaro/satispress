@@ -21,6 +21,8 @@ use SatisPress\Authentication\ApiKey;
 use SatisPress\Authentication;
 use SatisPress\HTTP\Request;
 use SatisPress\Integration;
+use SatisPress\PackageType\Plugin;
+use SatisPress\PackageType\Theme;
 use SatisPress\Provider;
 use SatisPress\Repository;
 use SatisPress\Screen;
@@ -197,9 +199,45 @@ class ServiceProvider implements ServiceProviderInterface {
 		};
 
 		$container['repository.whitelist'] = function( $container ) {
-			return new Repository\Whitelist(
-				$container['repository.installed']
-			);
+			/**
+			 * Filter the list of whitelisted plugins.
+			 *
+			 * Plugins should be added to the whitelist by appending a plugin's
+			 * basename to the array. The basename is the main plugin file's
+			 * relative path from the root plugin directory.
+			 *
+			 * Example: plugin-name/plugin-name.php
+			 *
+			 * @since 0.3.0
+			 *
+			 * @param array $plugins Array of plugin basenames.
+			 */
+			$plugins = apply_filters( 'satispress_plugins', (array) get_option( 'satispress_plugins', [] ) );
+
+			/**
+			 * Filter the list of whitelisted themes.
+			 *
+			 * @since 0.3.0
+			 *
+			 * @param array $themes Array of theme slugs.
+			 */
+			$themes = apply_filters( 'satispress_themes', (array) get_option( 'satispress_themes', [] ) );
+
+			return $container['repository.installed']
+				->with_filter( function( $package ) use ( $plugins ) {
+					if ( ! $package instanceof Plugin ) {
+						return true;
+					}
+
+					return in_array( $package->get_basename(), $plugins, true );
+				} )
+				->with_filter( function( $package ) use ( $themes ) {
+					if ( ! $package instanceof Theme ) {
+						return true;
+					}
+
+					return in_array( $package->get_slug(), $themes, true );
+				} );
 		};
 
 		$container['route.composer'] = function( $container ) {
