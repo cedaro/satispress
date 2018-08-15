@@ -32,6 +32,13 @@ class ComposerRepositoryTransformer implements PackageRepositoryTransformer {
 	protected $release_manager;
 
 	/**
+	 * Composer package transformer.
+	 *
+	 * @var PackageTransformer.
+	 */
+	protected $composer_transformer;
+
+	/**
 	 * Version parser.
 	 *
 	 * @var VersionParser
@@ -43,12 +50,14 @@ class ComposerRepositoryTransformer implements PackageRepositoryTransformer {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @param ReleaseManager $release_manager Release manager.
-	 * @param VersionParser  $version_parser  Version parser.
+	 * @param PackageTransformer $composer_transformer Composer package transformer.
+	 * @param ReleaseManager     $release_manager      Release manager.
+	 * @param VersionParser      $version_parser       Version parser.
 	 */
-	public function __construct( ReleaseManager $release_manager, VersionParser $version_parser ) {
-		$this->release_manager = $release_manager;
-		$this->version_parser  = $version_parser;
+	public function __construct( PackageTransformer $composer_transformer, ReleaseManager $release_manager, VersionParser $version_parser ) {
+		$this->composer_transformer = $composer_transformer;
+		$this->release_manager      = $release_manager;
+		$this->version_parser       = $version_parser;
 	}
 
 	/**
@@ -67,7 +76,8 @@ class ComposerRepositoryTransformer implements PackageRepositoryTransformer {
 				continue;
 			}
 
-			$item = $this->transform_item( $package );
+			$package = $this->composer_transformer->transform( $package );
+			$item    = $this->transform_item( $package );
 
 			// Skip if there aren't any viewable releases.
 			if ( empty( $item ) ) {
@@ -87,7 +97,7 @@ class ComposerRepositoryTransformer implements PackageRepositoryTransformer {
 	 * @return array
 	 */
 	protected function transform_item( Package $package ): array {
-		$item = [];
+		$data = [];
 
 		foreach ( $package->get_releases() as $release ) {
 			// Skip if the current user can't view this release.
@@ -98,7 +108,7 @@ class ComposerRepositoryTransformer implements PackageRepositoryTransformer {
 			$version = $release->get_version();
 
 			try {
-				$item[ $version ] = [
+				$data[ $version ] = [
 					'name'               => $package->get_name(),
 					'version'            => $version,
 					'version_normalized' => $this->version_parser->normalize( $version ),
@@ -124,6 +134,6 @@ class ComposerRepositoryTransformer implements PackageRepositoryTransformer {
 			}
 		}
 
-		return $item;
+		return $data;
 	}
 }

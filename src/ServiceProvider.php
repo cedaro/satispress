@@ -27,6 +27,8 @@ use SatisPress\Provider;
 use SatisPress\Repository;
 use SatisPress\Screen;
 use SatisPress\Storage;
+use SatisPress\Transformer\ComposerPackageArrayTransformer;
+use SatisPress\Transformer\ComposerPackageTransformer;
 use SatisPress\Transformer\ComposerRepositoryTransformer;
 
 /**
@@ -242,10 +244,7 @@ class ServiceProvider implements ServiceProviderInterface {
 
 		$container['route.composer'] = function( $container ) {
 			return new Route\Composer(
-				new Repository\Composer(
-					$container['repository.whitelist'],
-					$container['package.factory']
-				),
+				$container['repository.whitelist'],
 				$container['transformer.composer_repository']
 			);
 		};
@@ -276,11 +275,9 @@ class ServiceProvider implements ServiceProviderInterface {
 
 		$container['screen.settings'] = function( $container ) {
 			return new Screen\Settings(
-				new Repository\Composer(
-					$container['repository.whitelist'],
-					$container['package.factory']
-				),
-				$container['api_key.repository']
+				$container['repository.whitelist'],
+				$container['api_key.repository'],
+				$container['transformer.composer_package']
 			);
 		};
 
@@ -321,8 +318,13 @@ class ServiceProvider implements ServiceProviderInterface {
 			return $directory;
 		};
 
+		$container['transformer.composer_package'] = function( $container ) {
+			return new ComposerPackageTransformer( $container['package.factory'] );
+		};
+
 		$container['transformer.composer_repository'] = function( $container ) {
 			return new ComposerRepositoryTransformer(
+				$container['transformer.composer_package'],
 				$container['release.manager'],
 				$container['version.parser']
 			);

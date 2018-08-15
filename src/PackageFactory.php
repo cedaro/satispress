@@ -12,7 +12,6 @@ declare ( strict_types = 1 );
 namespace SatisPress;
 
 use SatisPress\PackageType\BasePackage;
-use SatisPress\PackageType\ComposerBuilder;
 use SatisPress\PackageType\PackageBuilder;
 use SatisPress\PackageType\Plugin;
 use SatisPress\PackageType\PluginBuilder;
@@ -53,8 +52,6 @@ final class PackageFactory {
 	 */
 	public function create( string $package_type ): PackageBuilder {
 		switch ( $package_type ) {
-			case 'composer':
-				return new ComposerBuilder( new BasePackage() );
 			case 'plugin':
 				return new PluginBuilder( new Plugin(), $this->release_manager );
 			case 'theme':

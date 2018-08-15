@@ -16,6 +16,7 @@ use SatisPress\Authentication\ApiKey\ApiKey;
 use SatisPress\Authentication\ApiKey\ApiKeyRepository;
 use SatisPress\Capabilities;
 use SatisPress\Repository\PackageRepository;
+use SatisPress\Transformer\PackageTransformer;
 use WP_Theme;
 
 use function SatisPress\get_packages_permalink;
@@ -34,6 +35,13 @@ class Settings extends AbstractHookProvider {
 	protected $api_keys;
 
 	/**
+	 * Composer package transformer.
+	 *
+	 * @var PackageTransformer
+	 */
+	protected $composer_transformer;
+
+	/**
 	 * Package repository.
 	 *
 	 * @var PackageRepository
@@ -43,12 +51,14 @@ class Settings extends AbstractHookProvider {
 	/**
 	 * Create the setting screen.
 	 *
-	 * @param PackageRepository $packages Package repository.
-	 * @param ApiKeyRepository  $api_keys API Key repository.
+	 * @param PackageRepository  $packages            Package repository.
+	 * @param ApiKeyRepository   $api_keys            API Key repository.
+	 * @param PackageTransformer $composer_transformer Package transformer.
 	 */
-	public function __construct( PackageRepository $packages, ApiKeyRepository $api_keys ) {
-		$this->api_keys = $api_keys;
-		$this->packages = $packages;
+	public function __construct( PackageRepository $packages, ApiKeyRepository $api_keys, PackageTransformer $composer_transformer ) {
+		$this->api_keys             = $api_keys;
+		$this->packages             = $packages;
+		$this->composer_transformer = $composer_transformer;
 	}
 
 	/**
@@ -222,7 +232,7 @@ class Settings extends AbstractHookProvider {
 	 */
 	public function render_screen() {
 		$permalink = esc_url( get_packages_permalink() );
-		$packages  = $this->packages->all();
+		$packages  = array_map( [ $this->composer_transformer, 'transform' ], $this->packages->all() );
 		include $this->plugin->get_path( 'views/screen-settings.php' );
 		include $this->plugin->get_path( 'views/templates.php' );
 	}
