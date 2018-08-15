@@ -32,14 +32,18 @@ class Archiver {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @param InstalledPackage $package Installed package instance.
-	 * @param string           $version Release version.
+	 * @param Package $package Installed package instance.
+	 * @param string  $version Release version.
 	 * @throws InvalidReleaseVersion If the version is invalid.
 	 * @throws FileOperationFailed If a temporary working directory can't be created.
 	 * @throws FileOperationFailed If zip creation fails.
 	 * @return string Absolute path to the artifact.
 	 */
-	public function archive_from_source( InstalledPackage $package, string $version ): string {
+	public function archive_from_source( Package $package, string $version ): string {
+		if ( ! $package->is_installed() ) {
+			throw PackageNotInstalled::unableToArchiveFromSource( $package );
+		}
+
 		$release     = $package->get_release( $version );
 		$remove_path = \dirname( $package->get_directory() );
 

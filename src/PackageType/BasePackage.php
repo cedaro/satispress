@@ -12,6 +12,7 @@ declare ( strict_types = 1 );
 namespace SatisPress\PackageType;
 
 use SatisPress\Exception\InvalidReleaseVersion;
+use SatisPress\Exception\PackageNotInstalled;
 use SatisPress\Package;
 use SatisPress\Release;
 
@@ -50,6 +51,13 @@ class BasePackage implements \ArrayAccess, Package {
 	protected $description = '';
 
 	/**
+	 * Absolute path to the package directory.
+	 *
+	 * @var string
+	 */
+	protected $directory;
+
+	/**
 	 * Homepage URL.
 	 *
 	 * @var string
@@ -62,6 +70,13 @@ class BasePackage implements \ArrayAccess, Package {
 	 * @var bool
 	 */
 	protected $is_installed = false;
+
+	/**
+	 * Installed version.
+	 *
+	 * @var string
+	 */
+	protected $installed_version = '';
 
 	/**
 	 * Releases.
@@ -130,6 +145,39 @@ class BasePackage implements \ArrayAccess, Package {
 	}
 
 	/**
+	 * Retrieve the package directory.
+	 *
+	 * @since 0.3.0
+	 *
+	 * @return string
+	 */
+	public function get_directory(): string {
+		return $this->directory;
+	}
+
+	/**
+	 * Retrieve the list of files in the package.
+	 *
+	 * @since 0.3.0
+	 *
+	 * @param array $excludes Optional. Array of file names to exclude.
+	 * @return array
+	 */
+	public function get_files( array $excludes = [] ): array {
+		if ( ! $this->is_installed() ) {
+			throw PackageNotInstalled::forInvalidMethodCall( __FUNCTION__, $package );
+		}
+
+		$directory = $this->get_directory();
+		$files     = scandir( $directory, SCANDIR_SORT_NONE );
+		$files     = array_values( array_diff( $files, $excludes, [ '.', '..' ] ) );
+
+		return array_map( function( $file ) {
+			return $this->get_path( $file );
+		}, $files );
+	}
+
+	/**
 	 * Retrieve the homepage URL.
 	 *
 	 * @since 0.3.0
@@ -149,6 +197,18 @@ class BasePackage implements \ArrayAccess, Package {
 	 */
 	public function get_name(): string {
 		return $this->name;
+	}
+
+	/**
+	 * Retrieve the path to a file in the package.
+	 *
+	 * @since 0.3.0
+	 *
+	 * @param string $path Optional. Path relative to the package root.
+	 * @return string
+	 */
+	public function get_path( string $path = '' ): string {
+		return $this->directory . ltrim( $path, '/' );
 	}
 
 	/**
@@ -224,6 +284,64 @@ class BasePackage implements \ArrayAccess, Package {
 	}
 
 	/**
+	 * Retrieve the installed version.
+	 *
+	 * @since 0.3.0
+	 *
+	 * @return string
+	 */
+	public function get_installed_version(): string {
+		if ( ! $this->is_installed() ) {
+			throw PackageNotInstalled::forInvalidMethodCall( __FUNCTION__, $package );
+		}
+
+		return $this->installed_version;
+	}
+
+	/**
+	 * Retrieve the installed release.
+	 *
+	 * @since 0.3.0
+	 *
+	 * @return Release
+	 */
+	public function get_installed_release(): Release {
+		if ( ! $this->is_installed() ) {
+			throw PackageNotInstalled::forInvalidMethodCall( __FUNCTION__, $package );
+		}
+
+		return $this->get_release( $this->get_installed_version() );
+	}
+
+	/**
+	 * Whether a given release is the currently installed version.
+	 *
+	 * @since 0.3.0
+	 *
+	 * @param Release $release Release.
+	 * @return bool
+	 */
+	public function is_installed_release( Release $release ): bool {
+		if ( ! $this->is_installed() ) {
+			return false;
+		}
+
+		return version_compare( $release->get_version(), $this->get_installed_version(), '=' );
+	}
+
+	/**
+	 * Retrieve the version for the latest release.
+	 *
+	 * @since 0.3.0
+	 *
+	 * @throws InvalidReleaseVersion If the package doesn't have any releases.
+	 * @return string
+	 */
+	public function get_latest_version(): string {
+		return $this->get_latest_release()->get_version();
+	}
+
+	/**
 	 * Retrieve the latest release.
 	 *
 	 * @since 0.3.0
@@ -237,18 +355,6 @@ class BasePackage implements \ArrayAccess, Package {
 		}
 
 		throw InvalidReleaseVersion::hasNoReleases( $this->get_name() );
-	}
-
-	/**
-	 * Retrieve the version for the latest release.
-	 *
-	 * @since 0.3.0
-	 *
-	 * @throws InvalidReleaseVersion If the package doesn't have any releases.
-	 * @return string
-	 */
-	public function get_latest_version(): string {
-		return $this->get_latest_release()->get_version();
 	}
 
 	/**
@@ -266,15 +372,14 @@ class BasePackage implements \ArrayAccess, Package {
 	}
 
 	/**
-	 * Whether a given release is the currently installed version.
+	 * Whether an update is available.
 	 *
 	 * @since 0.3.0
 	 *
-	 * @param Release $release Release.
 	 * @return bool
 	 */
-	public function is_installed_release( Release $release ): bool {
-		return false;
+	public function is_update_available(): bool {
+		return $this->is_installed() && version_compare( $this->get_installed_version(), $this->get_latest_version(), '<' );
 	}
 
 	/**

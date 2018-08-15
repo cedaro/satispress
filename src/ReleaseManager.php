@@ -89,7 +89,7 @@ class ReleaseManager {
 
 		if ( ! empty( $source_url ) ) {
 			$filename = $this->archiver->archive_from_url( $release );
-		} elseif ( $package instanceof InstalledPackage && $package->is_installed_release( $release ) ) {
+		} elseif ( $package->is_installed() && $package->is_installed_release( $release ) ) {
 			$filename = $this->archiver->archive_from_source( $package, $release->get_version() );
 		} else {
 			throw InvalidReleaseSource::forRelease( $release );

@@ -20,7 +20,7 @@ use function SatisPress\is_plugin_file;
  *
  * @since 0.3.0
  */
-final class PluginBuilder extends InstalledPackageBuilder {
+final class PluginBuilder extends PackageBuilder {
 	/**
 	 * Set the plugin basename.
 	 *

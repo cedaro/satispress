@@ -58,6 +58,6 @@ final class PackageFactory {
 				return new ThemeBuilder( new Theme(), $this->release_manager );
 		}
 
-		return new PackageBuilder( new BasePackage() );
+		return new PackageBuilder( new BasePackage(), $this->release_manager );
 	}
 }

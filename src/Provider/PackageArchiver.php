@@ -13,7 +13,6 @@ namespace SatisPress\Provider;
 
 use Cedaro\WP\Plugin\AbstractHookProvider;
 use SatisPress\Exception\ExceptionInterface;
-use SatisPress\InstalledPackage;
 use SatisPress\Release;
 use SatisPress\ReleaseManager;
 use SatisPress\Repository\PackageRepository;
@@ -196,7 +195,7 @@ class PackageArchiver extends AbstractHookProvider {
 		try {
 			$package = $this->packages->first_where( compact( 'slug', 'type' ) );
 
-			if ( $package instanceof InstalledPackage && $package->is_installed() ) {
+			if ( $package->is_installed() ) {
 				$this->release_manager->archive( $package->get_installed_release() );
 			}
 

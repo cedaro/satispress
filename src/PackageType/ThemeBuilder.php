@@ -18,7 +18,7 @@ use WP_Theme;
  *
  * @since 0.3.0
  */
-final class ThemeBuilder extends InstalledPackageBuilder {
+final class ThemeBuilder extends PackageBuilder {
 	/**
 	 * Create a theme from source.
 	 *

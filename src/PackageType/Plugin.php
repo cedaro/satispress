@@ -16,7 +16,7 @@ namespace SatisPress\PackageType;
  *
  * @since 0.2.0
  */
-final class Plugin extends AbstractInstalledPackage {
+final class Plugin extends BasePackage {
 	/**
 	 * Plugin basename.
 	 *

@@ -16,6 +16,6 @@ namespace SatisPress\PackageType;
  *
  * @since 0.2.0
  */
-final class Theme extends AbstractInstalledPackage {
+final class Theme extends BasePackage {
 
 }
