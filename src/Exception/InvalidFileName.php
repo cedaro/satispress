@@ -16,7 +16,7 @@ namespace SatisPress\Exception;
  *
  * @since 0.3.0
  */
-class InvalidFileName extends \InvalidArgumentException implements ExceptionInterface {
+class InvalidFileName extends \InvalidArgumentException implements SatispressException {
 	/**
 	 * Create an exception for an invalid file name argument.
 	 *

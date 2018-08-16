@@ -16,7 +16,7 @@ namespace SatisPress\Exception;
  *
  * @since 0.3.0
  */
-class FileDownloadFailed extends \RuntimeException implements ExceptionInterface {
+class FileDownloadFailed extends \RuntimeException implements SatispressException {
 	/**
 	 * Create an exception for artifact download failure.
 	 *

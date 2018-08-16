@@ -16,7 +16,7 @@ namespace SatisPress\Exception;
  *
  * @since 0.3.0
  */
-class FileNotFound extends \RuntimeException implements ExceptionInterface {
+class FileNotFound extends \RuntimeException implements SatispressException {
 	/**
 	 * Create an exception for invalid checksum operations.
 	 *

@@ -16,7 +16,7 @@ namespace SatisPress\Exception;
  *
  * @since 0.3.0
  */
-class InvalidReleaseVersion extends \LogicException implements ExceptionInterface {
+class InvalidReleaseVersion extends \LogicException implements SatispressException {
 	/**
 	 * Create an exception for an invalid release version string.
 	 *

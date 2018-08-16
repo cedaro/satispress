@@ -16,6 +16,6 @@ namespace SatisPress\Exception;
  *
  * @since 0.3.0
  */
-interface ExceptionInterface {
+interface SatispressException {
 
 }

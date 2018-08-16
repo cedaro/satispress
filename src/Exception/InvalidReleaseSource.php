@@ -18,7 +18,7 @@ use SatisPress\Release;
  *
  * @since 0.3.0
  */
-class InvalidReleaseSource extends \LogicException implements ExceptionInterface {
+class InvalidReleaseSource extends \LogicException implements SatispressException {
 	/**
 	 * Create an exception for an invalid release source.
 	 *

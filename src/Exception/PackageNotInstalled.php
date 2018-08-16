@@ -18,7 +18,7 @@ use SatisPress\Package;
  *
  * @since 0.3.0
  */
-class PackageNotInstalled extends \RuntimeException implements ExceptionInterface {
+class PackageNotInstalled extends \RuntimeException implements SatispressException {
 	/**
 	 * Create an exception for an invalid method call.
 	 *

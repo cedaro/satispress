@@ -13,7 +13,7 @@ namespace SatisPress\Provider;
 
 use Cedaro\WP\Plugin\AbstractHookProvider;
 use Psr\Log\LoggerInterface;
-use SatisPress\Exception\ExceptionInterface;
+use SatisPress\Exception\SatispressException;
 use SatisPress\Release;
 use SatisPress\ReleaseManager;
 use SatisPress\Repository\PackageRepository;
@@ -174,7 +174,7 @@ class PackageArchiver extends AbstractHookProvider {
 				);
 
 				$this->release_manager->archive( $release );
-			} catch ( ExceptionInterface $e ) {
+			} catch ( SatispressException $e ) {
 				$this->logger->error( 'Error archiving update for {package}.', [
 					'exception' => $e,
 					'package'   => $package->get_name(),
@@ -216,7 +216,7 @@ class PackageArchiver extends AbstractHookProvider {
 				$this->release_manager->archive( $package->get_installed_release() );
 				$this->release_manager->archive( $package->get_latest_release() );
 			}
-		} catch ( ExceptionInterface $e ) {
+		} catch ( SatispressException $e ) {
 			$this->logger->error( 'Error archiving {package}.', [
 				'exception' => $e,
 				'package'   => $package->get_name(),

@@ -21,7 +21,7 @@ use WP_Http as HTTP;
  *
  * @since 0.3.0
  */
-class HttpException extends \Exception implements ExceptionInterface {
+class HttpException extends \Exception implements SatispressException {
 	/**
 	 * HTTP status code.
 	 *

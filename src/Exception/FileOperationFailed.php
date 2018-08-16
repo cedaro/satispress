@@ -16,7 +16,7 @@ namespace SatisPress\Exception;
  *
  * @since 0.3.0
  */
-class FileOperationFailed extends \RuntimeException implements ExceptionInterface {
+class FileOperationFailed extends \RuntimeException implements SatispressException {
 	/**
 	 * Create an exception for being unable to move a release artifact to storage.
 	 *
