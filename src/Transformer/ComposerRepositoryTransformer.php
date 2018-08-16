@@ -11,6 +11,7 @@ declare ( strict_types = 1 );
 
 namespace SatisPress\Transformer;
 
+use Psr\Log\LoggerInterface;
 use SatisPress\Capabilities;
 use SatisPress\Exception\FileNotFound;
 use SatisPress\Package;
@@ -39,6 +40,13 @@ class ComposerRepositoryTransformer implements PackageRepositoryTransformer {
 	protected $composer_transformer;
 
 	/**
+	 * Logger.
+	 *
+	 * @var LoggerInterface
+	 */
+	protected $logger;
+
+	/**
 	 * Version parser.
 	 *
 	 * @var VersionParser
@@ -53,11 +61,18 @@ class ComposerRepositoryTransformer implements PackageRepositoryTransformer {
 	 * @param PackageTransformer $composer_transformer Composer package transformer.
 	 * @param ReleaseManager     $release_manager      Release manager.
 	 * @param VersionParser      $version_parser       Version parser.
+	 * @param LoggerInterface    $logger               Logger.
 	 */
-	public function __construct( PackageTransformer $composer_transformer, ReleaseManager $release_manager, VersionParser $version_parser ) {
+	public function __construct(
+		PackageTransformer $composer_transformer,
+		ReleaseManager $release_manager,
+		VersionParser $version_parser,
+		LoggerInterface $logger
+	) {
 		$this->composer_transformer = $composer_transformer;
 		$this->release_manager      = $release_manager;
 		$this->version_parser       = $version_parser;
+		$this->logger               = $logger;
 	}
 
 	/**
@@ -128,9 +143,12 @@ class ComposerRepositoryTransformer implements PackageRepositoryTransformer {
 					'description'        => $package->get_description(),
 					'homepage'           => $package->get_homepage(),
 				];
-			// phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch
 			} catch ( FileNotFound $e ) {
-				// Continue to allow valid items to be served.
+				$this->logger->error( 'Package artifact could not be found for {package}:{version}.', [
+					'exception' => $e,
+					'package'   => $package->get_name(),
+					'version'   => $version,
+				] );
 			}
 		}
 

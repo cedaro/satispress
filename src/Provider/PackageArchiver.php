@@ -12,6 +12,7 @@ declare ( strict_types = 1 );
 namespace SatisPress\Provider;
 
 use Cedaro\WP\Plugin\AbstractHookProvider;
+use Psr\Log\LoggerInterface;
 use SatisPress\Exception\ExceptionInterface;
 use SatisPress\Release;
 use SatisPress\ReleaseManager;
@@ -23,6 +24,12 @@ use SatisPress\Repository\PackageRepository;
  * @since 0.3.0
  */
 class PackageArchiver extends AbstractHookProvider {
+	/**
+	 * Logger.
+	 *
+	 * @var LoggerInterface
+	 */
+	protected $logger;
 
 	/**
 	 * Installed packages repository.
@@ -53,11 +60,18 @@ class PackageArchiver extends AbstractHookProvider {
 	 * @param PackageRepository $packages             Installed packages repository.
 	 * @param PackageRepository $whitelisted_packages Whitelisted packages repository.
 	 * @param ReleaseManager    $release_manager      Release manager.
+	 * @param LoggerInterface   $logger               Logger.
 	 */
-	public function __construct( PackageRepository $packages, PackageRepository $whitelisted_packages, ReleaseManager $release_manager ) {
+	public function __construct(
+		PackageRepository $packages,
+		PackageRepository $whitelisted_packages,
+		ReleaseManager $release_manager,
+		LoggerInterface $logger
+	) {
 		$this->packages             = $packages;
 		$this->whitelisted_packages = $whitelisted_packages;
 		$this->release_manager      = $release_manager;
+		$this->logger               = $logger;
 	}
 
 	/**
@@ -160,9 +174,12 @@ class PackageArchiver extends AbstractHookProvider {
 				);
 
 				$this->release_manager->archive( $release );
-			// phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch
 			} catch ( ExceptionInterface $e ) {
-				// Continue processing updates.
+				$this->logger->error( 'Error archiving update for {package}.', [
+					'exception' => $e,
+					'package'   => $package->get_name(),
+					'version'   => $release->get_version(),
+				] );
 			}
 		}
 
@@ -199,10 +216,11 @@ class PackageArchiver extends AbstractHookProvider {
 				$this->release_manager->archive( $package->get_installed_release() );
 				$this->release_manager->archive( $package->get_latest_release() );
 			}
-
-		// phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch
 		} catch ( ExceptionInterface $e ) {
-			// noop.
+			$this->logger->error( 'Error archiving {package}.', [
+				'exception' => $e,
+				'package'   => $package->get_name(),
+			] );
 		}
 	}
 }

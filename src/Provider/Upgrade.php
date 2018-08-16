@@ -12,6 +12,7 @@ declare ( strict_types = 1 );
 namespace SatisPress\Provider;
 
 use Cedaro\WP\Plugin\AbstractHookProvider;
+use Psr\Log\LoggerInterface;
 use SatisPress\Exception\ExceptionInterface;
 use SatisPress\Capabilities;
 use SatisPress\Htaccess;
@@ -43,6 +44,13 @@ class Upgrade extends AbstractHookProvider {
 	protected $htaccess;
 
 	/**
+	 * Logger.
+	 *
+	 * @var LoggerInterface
+	 */
+	protected $logger;
+
+	/**
 	 * Release manager.
 	 *
 	 * @var ReleaseManager
@@ -72,8 +80,15 @@ class Upgrade extends AbstractHookProvider {
 	 * @param ReleaseManager    $release_manager Release manager.
 	 * @param Storage           $storage         Storage service.
 	 * @param Htaccess          $htaccess        Htaccess handler.
+	 * @param LoggerInterface   $logger          Logger.
 	 */
-	public function __construct( PackageRepository $repository, ReleaseManager $release_manager, Storage $storage, Htaccess $htaccess ) {
+	public function __construct(
+		PackageRepository $repository,
+		ReleaseManager $release_manager,
+		Storage $storage,
+		Htaccess $htaccess,
+		LoggerInterface $logger
+	) {
 		$this->htaccess        = $htaccess;
 		$this->repository      = $repository;
 		$this->release_manager = $release_manager;
@@ -125,9 +140,11 @@ class Upgrade extends AbstractHookProvider {
 			try {
 				$this->release_manager->archive( $package->get_installed_release() );
 				$this->release_manager->archive( $package->get_latest_release() );
-			// phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch
 			} catch ( ExceptionInterface $e ) {
-				// noop.
+				$this->logger->error( 'Error archiving {package} during upgrade.', [
+					'exception' => $e,
+					'package'   => $package->get_name(),
+				] );
 			}
 		}
 	}

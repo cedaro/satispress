@@ -54,8 +54,8 @@ class ServiceProvider implements ServiceProviderInterface {
 			);
 		};
 
-		$container['archiver'] = function() {
-			return new Archiver();
+		$container['archiver'] = function( $container ) {
+			return new Archiver( $container['logger'] );
 		};
 
 		$container['authentication.servers'] = function( $container ) {
@@ -119,7 +119,8 @@ class ServiceProvider implements ServiceProviderInterface {
 			return new Provider\PackageArchiver(
 				$container['repository.installed'],
 				$container['repository.whitelist'],
-				$container['release.manager']
+				$container['release.manager'],
+				$container['logger']
 			);
 		};
 
@@ -139,7 +140,8 @@ class ServiceProvider implements ServiceProviderInterface {
 				$container['repository.whitelist'],
 				$container['release.manager'],
 				$container['storage.packages'],
-				$container['htaccess.handler']
+				$container['htaccess.handler'],
+				$container['logger']
 			);
 		};
 
@@ -331,7 +333,8 @@ class ServiceProvider implements ServiceProviderInterface {
 			return new ComposerRepositoryTransformer(
 				$container['transformer.composer_package'],
 				$container['release.manager'],
-				$container['version.parser']
+				$container['version.parser'],
+				$container['logger']
 			);
 		};
 

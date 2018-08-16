@@ -16,6 +16,7 @@ declare ( strict_types = 1 );
 namespace SatisPress;
 
 use PclZip;
+use Psr\Log\LoggerInterface;
 use SatisPress\Exception\FileDownloadFailed;
 use SatisPress\Exception\FileOperationFailed;
 use SatisPress\Exception\InvalidReleaseVersion;
@@ -27,6 +28,22 @@ use SatisPress\PackageType\Plugin;
  * @since 0.3.0
  */
 class Archiver {
+	/**
+	 * Logger.
+	 *
+	 * @var LoggerInterface
+	 */
+	protected $logger;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param LoggerInterface $logger Logger.
+	 */
+	public function __construct( LoggerInterface $logger ) {
+		$this->logger = $logger;
+	}
+
 	/**
 	 * Create a package artifact from the installed source.
 	 *
@@ -80,6 +97,11 @@ class Archiver {
 			throw FileOperationFailed::unableToCreateZipFile( $filename );
 		}
 
+		$this->logger->info( 'Archived {package} {version} from source.', [
+			'package' => $package->get_name(),
+			'version' => $version,
+		] );
+
 		return $filename;
 	}
 
@@ -101,6 +123,11 @@ class Archiver {
 		$tmpfname = download_url( $release->get_source_url() );
 
 		if ( is_wp_error( $tmpfname ) ) {
+			$this->logger->error( 'Download failed.', [
+				'error' => $tmpfname,
+				'url'   => $release->get_source_url(),
+			] );
+
 			throw FileDownloadFailed::forFileName( $filename );
 		}
 
@@ -111,6 +138,11 @@ class Archiver {
 		if ( ! rename( $tmpfname, $filename ) ) {
 			throw FileOperationFailed::unableToRenameTemporaryArtifact( $filename, $tmpfname );
 		}
+
+		$this->logger->info( 'Archived {package} {version} from URL.', [
+			'package' => $release->get_package()->get_name(),
+			'version' => $release->get_version(),
+		] );
 
 		return $filename;
 	}
