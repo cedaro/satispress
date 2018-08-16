@@ -17,6 +17,7 @@ use Pimple\Container as PimpleContainer;
 use Pimple\ServiceIterator;
 use Pimple\ServiceProviderInterface;
 use Pimple\Psr11\ServiceLocator;
+use Psr\Log\NullLogger;
 use SatisPress\Authentication\ApiKey;
 use SatisPress\Authentication;
 use SatisPress\HTTP\Request;
@@ -158,6 +159,10 @@ class ServiceProvider implements ServiceProviderInterface {
 			}
 
 			return $request;
+		};
+
+		$container['logger'] = function( $container ) {
+			return new NullLogger();
 		};
 
 		$container['package.factory'] = function( $container ) {
