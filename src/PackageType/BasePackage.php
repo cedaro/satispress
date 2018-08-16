@@ -161,11 +161,12 @@ class BasePackage implements \ArrayAccess, Package {
 	 * @since 0.3.0
 	 *
 	 * @param array $excludes Optional. Array of file names to exclude.
+	 * @throws PackageNotInstalled If the package is not installed.
 	 * @return array
 	 */
 	public function get_files( array $excludes = [] ): array {
 		if ( ! $this->is_installed() ) {
-			throw PackageNotInstalled::forInvalidMethodCall( __FUNCTION__, $package );
+			throw PackageNotInstalled::forInvalidMethodCall( __FUNCTION__, $this );
 		}
 
 		$directory = $this->get_directory();
@@ -288,11 +289,12 @@ class BasePackage implements \ArrayAccess, Package {
 	 *
 	 * @since 0.3.0
 	 *
+	 * @throws PackageNotInstalled If the package is not installed.
 	 * @return string
 	 */
 	public function get_installed_version(): string {
 		if ( ! $this->is_installed() ) {
-			throw PackageNotInstalled::forInvalidMethodCall( __FUNCTION__, $package );
+			throw PackageNotInstalled::forInvalidMethodCall( __FUNCTION__, $this );
 		}
 
 		return $this->installed_version;
@@ -303,11 +305,12 @@ class BasePackage implements \ArrayAccess, Package {
 	 *
 	 * @since 0.3.0
 	 *
+	 * @throws PackageNotInstalled If the package is not installed.
 	 * @return Release
 	 */
 	public function get_installed_release(): Release {
 		if ( ! $this->is_installed() ) {
-			throw PackageNotInstalled::forInvalidMethodCall( __FUNCTION__, $package );
+			throw PackageNotInstalled::forInvalidMethodCall( __FUNCTION__, $this );
 		}
 
 		return $this->get_release( $this->get_installed_version() );

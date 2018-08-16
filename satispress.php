@@ -51,25 +51,23 @@ spl_autoload_register( __NAMESPACE__ . '\autoloader_classmap' );
 require_once ABSPATH . 'wp-admin/includes/plugin.php';
 
 // Create a container and register a service provider.
-$container = new Container();
-$container->register( new ServiceProvider() );
+$satispress_container = new Container();
+$satispress_container->register( new ServiceProvider() );
 
 // Initialize the plugin and inject the container.
-$plugin = plugin()
+$satispress = plugin()
 	->set_basename( plugin_basename( __FILE__ ) )
 	->set_directory( plugin_dir_path( __FILE__ ) )
 	->set_file( __DIR__ . '/satispress.php' )
 	->set_slug( 'satispress' )
 	->set_url( plugin_dir_url( __FILE__ ) )
-	->set_container( $container );
-
-$plugin
-	->register_hooks( $container->get( 'hooks.activation' ) )
-	->register_hooks( $container->get( 'hooks.deactivation' ) );
+	->set_container( $satispress_container )
+	->register_hooks( $satispress_container->get( 'hooks.activation' ) )
+	->register_hooks( $satispress_container->get( 'hooks.deactivation' ) );
 
 // Authentication handlers need to be registered early.
-add_action( 'plugins_loaded', function() use ( $plugin, $container ) {
-	$plugin->register_hooks( $container->get( 'hooks.authentication' ) );
+add_action( 'plugins_loaded', function() use ( $satispress, $satispress_container ) {
+	$satispress->register_hooks( $satispress_container->get( 'hooks.authentication' ) );
 }, 5 );
 
-add_action( 'plugins_loaded', [ $plugin, 'compose' ] );
+add_action( 'plugins_loaded', [ $satispress, 'compose' ] );

@@ -66,7 +66,9 @@ class AdminAssets extends AbstractHookProvider {
 
 		wp_register_style(
 			'satispress-admin',
-			$this->plugin->get_url( 'assets/css/admin.css' )
+			$this->plugin->get_url( 'assets/css/admin.css' ),
+			[],
+			'20180816'
 		);
 	}
 }

@@ -39,8 +39,8 @@ class Server extends AbstractServer {
 	 * @param ApiKeyRepository $repository API Key repository.
 	 */
 	public function __construct( Request $request, ApiKeyRepository $repository ) {
+		parent::__construct( $request );
 		$this->repository = $repository;
-		$this->request    = $request;
 	}
 
 	/**

@@ -62,7 +62,9 @@ class PackageBuilder {
 		$this->package = $package;
 		try {
 			$this->class = new ReflectionClass( $package );
+		// phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch
 		} catch ( \ReflectionException $e ) {
+			// noop.
 		}
 		$this->release_manager = $release_manager;
 	}

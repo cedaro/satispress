@@ -28,7 +28,6 @@ use SatisPress\Provider;
 use SatisPress\Repository;
 use SatisPress\Screen;
 use SatisPress\Storage;
-use SatisPress\Transformer\ComposerPackageArrayTransformer;
 use SatisPress\Transformer\ComposerPackageTransformer;
 use SatisPress\Transformer\ComposerRepositoryTransformer;
 
@@ -157,7 +156,7 @@ class ServiceProvider implements ServiceProviderInterface {
 
 			if ( isset( $_SERVER['PHP_AUTH_USER'] ) ) {
 				$request->set_header( 'PHP_AUTH_USER', $_SERVER['PHP_AUTH_USER'] );
-				$request->set_header( 'PHP_AUTH_PW', $_SERVER[ 'PHP_AUTH_PW' ] ?? null );
+				$request->set_header( 'PHP_AUTH_PW', $_SERVER['PHP_AUTH_PW'] ?? null );
 			}
 
 			return $request;

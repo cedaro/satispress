@@ -63,7 +63,7 @@ interface PackageRepository {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @param callable $filter Filter callback.
+	 * @param callable $callback Filter callback.
 	 * @return PackageRepository
 	 */
 	public function with_filter( callable $callback ): PackageRepository;

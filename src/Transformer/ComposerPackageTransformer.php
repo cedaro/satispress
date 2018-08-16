@@ -56,7 +56,7 @@ class ComposerPackageTransformer implements PackageTransformer {
 	 * @since 0.3.0
 	 *
 	 * @param Package $package Package.
-	 * @return array
+	 * @return Package
 	 */
 	public function transform( Package $package ) {
 		$builder = $this->factory->create( 'composer' )->with_package( $package );

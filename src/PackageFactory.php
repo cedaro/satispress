@@ -48,7 +48,7 @@ final class PackageFactory {
 	 * @since 0.3.0
 	 *
 	 * @param string $package_type Package type.
-	 * @return ComposerBuilder|PluginBuilder|ThemeBuilder|PackageBuilder Package builder instance.
+	 * @return PluginBuilder|ThemeBuilder|PackageBuilder Package builder instance.
 	 */
 	public function create( string $package_type ): PackageBuilder {
 		switch ( $package_type ) {

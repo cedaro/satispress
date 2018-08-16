@@ -20,6 +20,7 @@ use Psr\Log\LoggerInterface;
 use SatisPress\Exception\FileDownloadFailed;
 use SatisPress\Exception\FileOperationFailed;
 use SatisPress\Exception\InvalidReleaseVersion;
+use SatisPress\Exception\PackageNotInstalled;
 use SatisPress\PackageType\Plugin;
 
 /**
