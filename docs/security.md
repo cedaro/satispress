@@ -10,7 +10,7 @@ Resources created by SatisPress are private by default and require authenticatio
 
 Only users registered in WordPress with the appropriate [capabilities](#capabilities) can access protected resources, which include package artifacts (plugin and theme zip files) and the `packages.json` endpoint.
 
-SatisPress ships with support for accessing protected resources by using API Keys via ["Basic" HTTP Authentication](https://tools.ietf.org/html/rfc2617).
+SatisPress ships with support for accessing protected resources by using API Keys via [Basic HTTP Authentication](https://tools.ietf.org/html/rfc2617).
 
 ## API Keys
 
@@ -45,7 +45,7 @@ Composer [requires HTTPS by default](https://getcomposer.org/doc/06-config.md#se
 
 Also keep in mind that even with HTTPS enabled, the credentials will most likely be stored in clear text at some point, whether it's an `auth.json` file or directly in URLs in `composer.json`.
 
-_WordPress usernames and passwords will no longer work with the default authentication provider included in SatisPress versions after 0.2.3._
+_WordPress usernames and passwords will not work with the default authentication provider included in SatisPress versions after 0.2.3._
 
 ## Third-Party Authentication Providers
 
