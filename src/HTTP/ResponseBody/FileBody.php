@@ -69,7 +69,7 @@ class FileBody implements ResponseBody {
 			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			echo $buffer;
 			// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
-			@ob_flush();
+			ob_flush();
 			flush();
 		}
 
@@ -83,25 +83,25 @@ class FileBody implements ResponseBody {
 	 * @since 0.3.0
 	 */
 	protected function configure_environment() {
-		// phpcs:disable Generic.PHP.NoSilencedErrors.Discouraged
-		@session_write_close();
-		if ( \function_exists( 'apache_setenv' ) ) {
-			// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.runtime_configuration_apache_setenv
-			@apache_setenv( 'no-gzip', '1' );
-		}
+		try {
+			session_write_close();
 
-		if ( get_magic_quotes_runtime() ) {
-			// phpcs:ignore PHPCompatibility.PHP.DeprecatedFunctions.set_magic_quotes_runtimeDeprecatedRemoved, WordPress.PHP.DiscouragedPHPFunctions.runtime_configuration_set_magic_quotes_runtime
-			@set_magic_quotes_runtime( 0 );
-		}
+			if ( \function_exists( 'apache_setenv' ) ) {
+				// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.runtime_configuration_apache_setenv
+				apache_setenv( 'no-gzip', '1' );
+			}
 
-		// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.runtime_configuration_ini_set
-		@ini_set( 'zlib.output_compression', 'Off' );
-		@set_time_limit( 0 );
-		@ob_end_clean();
-		if ( ob_get_level() ) {
-			@ob_end_clean(); // Zip corruption fix.
+			// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.runtime_configuration_ini_set
+			ini_set( 'zlib.output_compression', 'Off' );
+			set_time_limit( 0 );
+
+			ob_end_clean();
+			if ( ob_get_level() ) {
+				ob_end_clean(); // Zip corruption fix.
+			}
+		// phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch
+		} catch ( \Throwable $t ) {
+			// noop.
 		}
-		//phpcs:enable Generic.PHP.NoSilencedErrors.Discouraged
 	}
 }
