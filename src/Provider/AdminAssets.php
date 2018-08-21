@@ -48,13 +48,17 @@ class AdminAssets extends AbstractHookProvider {
 			true
 		);
 
-		wp_localize_script( 'satispress-api-keys', '_satispressApiKeySettings', [
-			'createApiKeyNonce' => wp_create_nonce( 'create-api-key' ),
-			'deleteApiKeyNonce' => wp_create_nonce( 'delete-api-key' ),
-			'l10n'              => [
-				'aysDeleteApiKey' => esc_html__( 'Are you sure you want to delete this API Key?', 'satispress' ),
-			],
-		] );
+		wp_localize_script(
+			'satispress-api-keys',
+			'_satispressApiKeySettings',
+			[
+				'createApiKeyNonce' => wp_create_nonce( 'create-api-key' ),
+				'deleteApiKeyNonce' => wp_create_nonce( 'delete-api-key' ),
+				'l10n'              => [
+					'aysDeleteApiKey' => esc_html__( 'Are you sure you want to delete this API Key?', 'satispress' ),
+				],
+			]
+		);
 
 		wp_register_script(
 			'satispress-package-settings',

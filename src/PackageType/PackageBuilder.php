@@ -289,9 +289,12 @@ class PackageBuilder {
 			}
 		}
 
-		uasort( $releases, function( Release $a, Release $b ) {
-			return version_compare( $b->get_version(), $a->get_version() );
-		} );
+		uasort(
+			$releases,
+			function( Release $a, Release $b ) {
+				return version_compare( $b->get_version(), $a->get_version() );
+			}
+		);
 
 		foreach ( $releases as $release ) {
 			$this->add_release( $release->get_version(), $release->get_source_url() );

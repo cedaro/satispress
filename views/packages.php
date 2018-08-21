@@ -55,22 +55,28 @@ foreach ( $packages as $package ) :
 			<td class="satispress-releases">
 				<?php
 				if ( $package->has_releases() ) {
-					$versions = array_map( function( $release ) {
-						return sprintf(
-							'<a href="%1$s" data-version="%2$s" class="button satispress-release">%3$s</a>',
-							esc_url( $release->get_download_url() ),
-							esc_attr( $release->get_version() ),
-							esc_html( $release->get_version() )
-						);
-					}, $package->get_releases() );
+					$versions = array_map(
+						function( $release ) {
+								return sprintf(
+									'<a href="%1$s" data-version="%2$s" class="button satispress-release">%3$s</a>',
+									esc_url( $release->get_download_url() ),
+									esc_attr( $release->get_version() ),
+									esc_html( $release->get_version() )
+								);
+						},
+						$package->get_releases()
+					);
 
 					// Prepend the latest release.
-					array_unshift( $versions, sprintf(
-						'<a href="%1$s" data-version="%2$s" class="button satispress-release">%3$s</a>',
-						esc_url( $package->get_latest_download_url() ),
-						esc_attr( $package->get_latest_release()->get_version() ),
-						esc_html_x( 'Latest', 'latest version', 'satispress' )
-					) );
+					array_unshift(
+						$versions,
+						sprintf(
+							'<a href="%1$s" data-version="%2$s" class="button satispress-release">%3$s</a>',
+							esc_url( $package->get_latest_download_url() ),
+							esc_attr( $package->get_latest_release()->get_version() ),
+							esc_html_x( 'Latest', 'latest version', 'satispress' )
+						)
+					);
 
 					echo wp_kses(
 						implode( ' ', array_filter( $versions ) ),

@@ -175,11 +175,14 @@ class PackageArchiver extends AbstractHookProvider {
 
 				$this->release_manager->archive( $release );
 			} catch ( SatispressException $e ) {
-				$this->logger->error( 'Error archiving update for {package}.', [
-					'exception' => $e,
-					'package'   => $package->get_name(),
-					'version'   => $release->get_version(),
-				] );
+				$this->logger->error(
+					'Error archiving update for {package}.',
+					[
+						'exception' => $e,
+						'package'   => $package->get_name(),
+						'version'   => $release->get_version(),
+					]
+				);
 			}
 		}
 
@@ -217,10 +220,13 @@ class PackageArchiver extends AbstractHookProvider {
 				$this->release_manager->archive( $package->get_latest_release() );
 			}
 		} catch ( SatispressException $e ) {
-			$this->logger->error( 'Error archiving {package}.', [
-				'exception' => $e,
-				'package'   => $package->get_name(),
-			] );
+			$this->logger->error(
+				'Error archiving {package}.',
+				[
+					'exception' => $e,
+					'package'   => $package->get_name(),
+				]
+			);
 		}
 	}
 }

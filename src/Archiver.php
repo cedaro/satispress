@@ -65,15 +65,19 @@ class Archiver {
 		$release     = $package->get_release( $version );
 		$remove_path = \dirname( $package->get_directory() );
 
-		$excludes = apply_filters( 'satispress_archive_excludes', [
-			'.DS_Store',
-			'.git',
-			'coverage',
-			'docs',
-			'dist',
-			'node_modules',
-			'tests',
-		], $release );
+		$excludes = apply_filters(
+			'satispress_archive_excludes',
+			[
+				'.DS_Store',
+				'.git',
+				'coverage',
+				'docs',
+				'dist',
+				'node_modules',
+				'tests',
+			],
+			$release
+		);
 
 		$files = $package->get_files( $excludes );
 
@@ -91,17 +95,21 @@ class Archiver {
 
 		$contents = $zip->create(
 			$files,
-			PCLZIP_OPT_REMOVE_PATH, $remove_path
+			PCLZIP_OPT_REMOVE_PATH,
+			$remove_path
 		);
 
 		if ( 0 === $contents ) {
 			throw FileOperationFailed::unableToCreateZipFile( $filename );
 		}
 
-		$this->logger->info( 'Archived {package} {version} from source.', [
-			'package' => $package->get_name(),
-			'version' => $version,
-		] );
+		$this->logger->info(
+			'Archived {package} {version} from source.',
+			[
+				'package' => $package->get_name(),
+				'version' => $version,
+			]
+		);
 
 		return $filename;
 	}
@@ -124,10 +132,13 @@ class Archiver {
 		$tmpfname = download_url( $release->get_source_url() );
 
 		if ( is_wp_error( $tmpfname ) ) {
-			$this->logger->error( 'Download failed.', [
-				'error' => $tmpfname,
-				'url'   => $release->get_source_url(),
-			] );
+			$this->logger->error(
+				'Download failed.',
+				[
+					'error' => $tmpfname,
+					'url'   => $release->get_source_url(),
+				]
+			);
 
 			throw FileDownloadFailed::forFileName( $filename );
 		}
@@ -140,10 +151,13 @@ class Archiver {
 			throw FileOperationFailed::unableToRenameTemporaryArtifact( $filename, $tmpfname );
 		}
 
-		$this->logger->info( 'Archived {package} {version} from URL.', [
-			'package' => $release->get_package()->get_name(),
-			'version' => $release->get_version(),
-		] );
+		$this->logger->info(
+			'Archived {package} {version} from URL.',
+			[
+				'package' => $release->get_package()->get_name(),
+				'version' => $release->get_version(),
+			]
+		);
 
 		return $filename;
 	}

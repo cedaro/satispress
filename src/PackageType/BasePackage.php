@@ -173,9 +173,12 @@ class BasePackage implements \ArrayAccess, Package {
 		$files     = scandir( $directory, SCANDIR_SORT_NONE );
 		$files     = array_values( array_diff( $files, $excludes, [ '.', '..' ] ) );
 
-		return array_map( function( $file ) {
-			return $this->get_path( $file );
-		}, $files );
+		return array_map(
+			function( $file ) {
+					return $this->get_path( $file );
+			},
+			$files
+		);
 	}
 
 	/**

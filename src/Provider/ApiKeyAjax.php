@@ -63,9 +63,11 @@ class ApiKeyAjax extends AbstractHookProvider {
 	 */
 	public function create_api_key() {
 		if ( ! isset( $_POST['name'], $_POST['nonce'], $_POST['user'] ) ) {
-			wp_send_json_error( [
-				'message' => '',
-			] );
+			wp_send_json_error(
+				[
+					'message' => '',
+				]
+			);
 		}
 
 		check_ajax_referer( 'create-api-key', 'nonce' );
@@ -73,17 +75,22 @@ class ApiKeyAjax extends AbstractHookProvider {
 		$user_id = absint( $_POST['user'] );
 
 		if ( ! current_user_can( 'edit_user', $user_id ) ) {
-			wp_send_json_error( [
-				'message' => '',
-			] );
+			wp_send_json_error(
+				[
+					'message' => '',
+				]
+			);
 		}
 
 		$user = get_user_by( 'id', $user_id );
 
-		$api_key = $this->factory->create( $user, [
-			'name'       => sanitize_text_field( $_POST['name'] ),
-			'created_by' => get_current_user_id(),
-		] );
+		$api_key = $this->factory->create(
+			$user,
+			[
+				'name'       => sanitize_text_field( $_POST['name'] ),
+				'created_by' => get_current_user_id(),
+			]
+		);
 
 		$this->repository->save( $api_key );
 
@@ -100,9 +107,11 @@ class ApiKeyAjax extends AbstractHookProvider {
 	 */
 	public function delete_api_key() {
 		if ( ! isset( $_POST['nonce'], $_POST['token'] ) ) {
-			wp_send_json_error( [
-				'message' => '',
-			] );
+			wp_send_json_error(
+				[
+					'message' => '',
+				]
+			);
 		}
 
 		check_ajax_referer( 'delete-api-key', 'nonce' );
@@ -114,9 +123,11 @@ class ApiKeyAjax extends AbstractHookProvider {
 			null === $api_key
 			|| ! current_user_can( 'edit_user', $api_key->get_user()->ID )
 		) {
-			wp_send_json_error( [
-				'message' => '',
-			] );
+			wp_send_json_error(
+				[
+					'message' => '',
+				]
+			);
 		}
 
 		$this->repository->revoke( $api_key );

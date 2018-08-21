@@ -86,15 +86,22 @@ class EditUser extends AbstractHookProvider {
 		$user     = get_user_by( 'id', $user_id );
 		$api_keys = $this->api_keys->find_for_user( $user );
 
-		$items = array_map( function( ApiKey $api_key ) {
-			return $api_key->to_array();
-		}, $api_keys );
+		$items = array_map(
+			function( ApiKey $api_key ) {
+					return $api_key->to_array();
+			},
+			$api_keys
+		);
 
 		wp_enqueue_script( 'satispress-api-keys' );
-		wp_localize_script( 'satispress-api-keys', '_satispressApiKeysData', [
-			'items'  => $items,
-			'userId' => $user_id,
-		] );
+		wp_localize_script(
+			'satispress-api-keys',
+			'_satispressApiKeysData',
+			[
+				'items'  => $items,
+				'userId' => $user_id,
+			]
+		);
 	}
 
 	/**

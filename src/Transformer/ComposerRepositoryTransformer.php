@@ -145,11 +145,14 @@ class ComposerRepositoryTransformer implements PackageRepositoryTransformer {
 					'homepage'           => $package->get_homepage(),
 				];
 			} catch ( FileNotFound $e ) {
-				$this->logger->error( 'Package artifact could not be found for {package}:{version}.', [
-					'exception' => $e,
-					'package'   => $package->get_name(),
-					'version'   => $version,
-				] );
+				$this->logger->error(
+					'Package artifact could not be found for {package}:{version}.',
+					[
+						'exception' => $e,
+						'package'   => $package->get_name(),
+						'version'   => $version,
+					]
+				);
 			}
 		}
 

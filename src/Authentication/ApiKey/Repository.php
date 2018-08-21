@@ -56,16 +56,18 @@ class Repository implements ApiKeyRepository {
 	public function find_by_token( string $token ) {
 		$meta_key = static::get_meta_key( $token );
 
-		$query = new WP_User_Query( [
-			'number'      => 1,
-			'count_total' => false,
-			'meta_query'  => [
-				[
-					'key'     => $meta_key,
-					'compare' => 'EXISTS',
+		$query = new WP_User_Query(
+			[
+				'number'      => 1,
+				'count_total' => false,
+				'meta_query'  => [
+					[
+						'key'     => $meta_key,
+						'compare' => 'EXISTS',
+					],
 				],
-			],
-		] );
+			]
+		);
 
 		$users = $query->get_results();
 		if ( empty( $users ) ) {

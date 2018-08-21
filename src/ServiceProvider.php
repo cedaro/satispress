@@ -58,10 +58,13 @@ class ServiceProvider implements ServiceProviderInterface {
 		};
 
 		$container['authentication.servers'] = function( $container ) {
-			$servers = apply_filters( 'satispress_authentication_servers', [
-				20  => 'authentication.api_key',
-				100 => 'authentication.unauthorized',
-			] );
+			$servers = apply_filters(
+				'satispress_authentication_servers',
+				[
+					20  => 'authentication.api_key',
+					100 => 'authentication.unauthorized',
+				]
+			);
 
 			return new ServiceIterator( $container, $servers );
 		};
@@ -184,10 +187,12 @@ class ServiceProvider implements ServiceProviderInterface {
 		};
 
 		$container['repository.installed'] = function( $container ) {
-			return new Repository\MultiRepository( [
-				$container['repository.plugins'],
-				$container['repository.themes'],
-			] );
+			return new Repository\MultiRepository(
+				[
+					$container['repository.plugins'],
+					$container['repository.themes'],
+				]
+			);
 		};
 
 		$container['repository.plugins'] = function( $container ) {
@@ -232,20 +237,24 @@ class ServiceProvider implements ServiceProviderInterface {
 			$themes = apply_filters( 'satispress_themes', (array) get_option( 'satispress_themes', [] ) );
 
 			return $container['repository.installed']
-				->with_filter( function( $package ) use ( $plugins ) {
-					if ( ! $package instanceof Plugin ) {
-						return true;
-					}
+				->with_filter(
+					function( $package ) use ( $plugins ) {
+						if ( ! $package instanceof Plugin ) {
+							  return true;
+						}
 
-					return in_array( $package->get_basename(), $plugins, true );
-				} )
-				->with_filter( function( $package ) use ( $themes ) {
-					if ( ! $package instanceof Theme ) {
-						return true;
+							return in_array( $package->get_basename(), $plugins, true );
 					}
+				)
+				->with_filter(
+					function( $package ) use ( $themes ) {
+						if ( ! $package instanceof Theme ) {
+							  return true;
+						}
 
-					return in_array( $package->get_slug(), $themes, true );
-				} );
+							return in_array( $package->get_slug(), $themes, true );
+					}
+				);
 		};
 
 		$container['route.composer'] = function( $container ) {
@@ -263,10 +272,13 @@ class ServiceProvider implements ServiceProviderInterface {
 		};
 
 		$container['route.controllers'] = function( $container ) {
-			return new ServiceLocator( $container, [
-				'composer' => 'route.composer',
-				'download' => 'route.download',
-			] );
+			return new ServiceLocator(
+				$container,
+				[
+					'composer' => 'route.composer',
+					'download' => 'route.download',
+				]
+			);
 		};
 
 		$container['screen.edit_user'] = function( $container ) {

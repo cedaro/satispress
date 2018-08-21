@@ -66,8 +66,12 @@ $satispress = plugin()
 	->register_hooks( $satispress_container->get( 'hooks.deactivation' ) );
 
 // Authentication handlers need to be registered early.
-add_action( 'plugins_loaded', function() use ( $satispress, $satispress_container ) {
-	$satispress->register_hooks( $satispress_container->get( 'hooks.authentication' ) );
-}, 5 );
+add_action(
+	'plugins_loaded',
+	function() use ( $satispress, $satispress_container ) {
+		$satispress->register_hooks( $satispress_container->get( 'hooks.authentication' ) );
+	},
+	5
+);
 
 add_action( 'plugins_loaded', [ $satispress, 'compose' ] );

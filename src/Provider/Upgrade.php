@@ -141,10 +141,13 @@ class Upgrade extends AbstractHookProvider {
 				$this->release_manager->archive( $package->get_installed_release() );
 				$this->release_manager->archive( $package->get_latest_release() );
 			} catch ( SatispressException $e ) {
-				$this->logger->error( 'Error archiving {package} during upgrade.', [
-					'exception' => $e,
-					'package'   => $package->get_name(),
-				] );
+				$this->logger->error(
+					'Error archiving {package} during upgrade.',
+					[
+						'exception' => $e,
+						'package'   => $package->get_name(),
+					]
+				);
 			}
 		}
 	}
