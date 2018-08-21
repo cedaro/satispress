@@ -60,20 +60,20 @@ class FileBody implements ResponseBody {
 	 * @since 0.3.0
 	 */
 	protected function configure_environment() {
-		try {
-			session_write_close();
+		session_write_close();
 
-			if ( \function_exists( 'apache_setenv' ) ) {
-				// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.runtime_configuration_apache_setenv
-				apache_setenv( 'no-gzip', '1' );
-			}
+		if ( $this->function_exists( 'apache_setenv' ) ) {
+			// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.runtime_configuration_apache_setenv
+			apache_setenv( 'no-gzip', '1' );
+		}
 
+		if ( $this->function_exists( 'ini_set' ) ) {
 			// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.runtime_configuration_ini_set
 			ini_set( 'zlib.output_compression', 'Off' );
+		}
+
+		if ( $this->function_exists( 'set_time_limit' ) ) {
 			set_time_limit( 0 );
-		// phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch
-		} catch ( \Throwable $t ) {
-			// noop.
 		}
 	}
 
@@ -100,7 +100,7 @@ class FileBody implements ResponseBody {
 	 *
 	 * @param string $filename Absolute path to a file.
 	 */
-	protected function readfile_chunked( $filename ) {
+	protected function readfile_chunked( string $filename ) {
 		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fopen
 		$handle = fopen( $filename, 'rb' );
 		if ( false === $handle ) {
@@ -119,5 +119,17 @@ class FileBody implements ResponseBody {
 
 		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fclose
 		fclose( $handle );
+	}
+
+	/**
+	 * Whether a function exists and is enabled.
+	 *
+	 * @since 0.3.0
+	 *
+	 * @param string $name Function name.
+	 * @return bool
+	 */
+	protected function function_exists( string $name ): bool {
+		return \function_exists( $name ) && false === strpos( ini_get( 'disable_functions' ), $name );
 	}
 }
