@@ -34,6 +34,12 @@
 		https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Customizable-sniff-properties -->
 	<config name="minimum_supported_wp_version" value="4.9"/>
 
+	<rule ref="WordPress.PHP.NoSilencedErrors">
+		<properties>
+			<property name="use_default_whitelist" value="true"/>
+		</properties>
+	</rule>
+
 	<rule ref="WordPress.Files.FileName">
 		<properties>
 			<property name="strict_class_file_names" value="false"/>
