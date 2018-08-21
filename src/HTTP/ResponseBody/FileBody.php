@@ -104,14 +104,12 @@ class FileBody implements ResponseBody {
 		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fopen
 		$handle = fopen( $filename, 'rb' );
 		if ( false === $handle ) {
-			// @todo Throw an exception?
 			return;
 		}
 
 		while ( ! feof( $handle ) ) {
-			$chunk_size = 1024 * 1024;
 			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fread
-			$buffer = fread( $handle, $chunk_size );
+			$buffer = fread( $handle, MB_IN_BYTES );
 			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			echo $buffer;
 			flush();
