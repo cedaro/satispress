@@ -136,16 +136,11 @@ class Response {
 			'Content-Type'              => 'application/force-download',
 			'Content-Description'       => 'File Transfer',
 			'Content-Disposition'       => 'attachment; filename="' . basename( $filename ) . '";',
+			'Content-Length'            => filesize( $filename ),
 			'Content-Transfer-Encoding' => 'binary',
 		];
 
 		$headers = array_merge( wp_get_nocache_headers(), $headers );
-
-		// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
-		$size = @filesize( $filename );
-		if ( $size ) {
-			$headers['Content-Length'] = $size;
-		}
 
 		return new static(
 			new FileBody( $filename ),
