@@ -154,6 +154,7 @@ class ServiceProvider implements ServiceProviderInterface {
 		$container['http.request'] = function() {
 			$request = new Request( $_SERVER['REQUEST_METHOD'] );
 
+			// phpcs:ignore WordPress.Security.NonceVerification.NoNonceVerification
 			$request->set_query_params( wp_unslash( $_GET ) );
 			$request->set_header( 'Authorization', get_authorization_header() );
 
@@ -240,7 +241,7 @@ class ServiceProvider implements ServiceProviderInterface {
 				->with_filter(
 					function( $package ) use ( $plugins ) {
 						if ( ! $package instanceof Plugin ) {
-							  return true;
+							return true;
 						}
 
 							return in_array( $package->get_basename(), $plugins, true );
@@ -249,7 +250,7 @@ class ServiceProvider implements ServiceProviderInterface {
 				->with_filter(
 					function( $package ) use ( $themes ) {
 						if ( ! $package instanceof Theme ) {
-							  return true;
+							return true;
 						}
 
 							return in_array( $package->get_slug(), $themes, true );

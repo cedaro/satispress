@@ -55,7 +55,7 @@ class UnauthorizedServer extends AbstractServer {
 		wp_die(
 			wp_kses_data( $error->get_error_message() ),
 			esc_html__( 'Authentication Required', 'satispress' ),
-			// phpcs:ignore WordPress.XSS.EscapeOutput.OutputNotEscaped
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			[ 'response' => HTTP::UNAUTHORIZED ]
 		);
 	}

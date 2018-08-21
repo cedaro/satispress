@@ -64,7 +64,7 @@ class ManagePlugins extends AbstractHookProvider {
 			return;
 		}
 
-		// phpcs:ignore WordPress.CSRF.NonceVerification.NoNonceVerification
+		// phpcs:ignore WordPress.Security.NonceVerification.NoNonceVerification
 		$plugin  = $_POST['plugin_file'];
 		$plugins = (array) get_option( 'satispress_plugins', [] );
 

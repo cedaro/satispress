@@ -66,7 +66,7 @@ class FileBody implements ResponseBody {
 			$chunk_size = 1024 * 1024;
 			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fread
 			$buffer = fread( $handle, $chunk_size );
-			// phpcs:ignore WordPress.XSS.EscapeOutput.OutputNotEscaped
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			echo $buffer;
 			// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
 			@ob_flush();

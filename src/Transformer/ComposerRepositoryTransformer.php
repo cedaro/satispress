@@ -87,7 +87,7 @@ class ComposerRepositoryTransformer implements PackageRepositoryTransformer {
 		$items = [];
 
 		foreach ( $repository->all() as $slug => $package ) {
-			/** @var Package $package */
+			/* @var Package $package Package. */
 			if ( ! $package->has_releases() ) {
 				continue;
 			}

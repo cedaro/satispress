@@ -123,7 +123,7 @@ function get_packages_permalink( array $args = null ): string {
  * @return int
  */
 function get_edited_user_id(): int {
-	// phpcs:ignore WordPress.CSRF.NonceVerification.NoNonceVerification
+	// phpcs:ignore WordPress.Security.NonceVerification.NoNonceVerification
 	return empty( $_GET['user_id'] ) ? get_current_user_id() : (int) $_GET['user_id'];
 }
 

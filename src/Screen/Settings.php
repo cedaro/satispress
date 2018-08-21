@@ -305,7 +305,7 @@ class Settings extends AbstractHookProvider {
 		$value = get_option( 'satispress_themes', [] );
 
 		foreach ( wp_get_themes() as $slug => $theme ) {
-			/** @var WP_Theme $theme */
+			/* @var WP_Theme $theme Theme. */
 			printf(
 				'<label><input type="checkbox" name="satispress_themes[]" value="%1$s"%2$s> %3$s</label><br />',
 				esc_attr( $slug ),
