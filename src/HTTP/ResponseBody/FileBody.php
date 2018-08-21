@@ -46,35 +46,12 @@ class FileBody implements ResponseBody {
 	/**
 	 * Stream the file.
 	 *
-	 * Reads file in chunks so big downloads are possible without changing `php.ini`.
-	 *
-	 * @link https://github.com/bcit-ci/CodeIgniter/wiki/Download-helper-for-large-files
-	 *
 	 * @since 0.3.0
 	 */
 	public function emit() {
 		$this->configure_environment();
-
-		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fopen
-		$handle = fopen( $this->filename, 'rb' );
-		if ( false === $handle ) {
-			// @todo Throw an exception?
-			return false;
-		}
-
-		while ( ! feof( $handle ) ) {
-			$chunk_size = 1024 * 1024;
-			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fread
-			$buffer = fread( $handle, $chunk_size );
-			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-			echo $buffer;
-			// phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
-			ob_flush();
-			flush();
-		}
-
-		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fclose
-		fclose( $handle );
+		$this->clean_buffers();
+		$this->readfile_chunked( $this->filename );
 	}
 
 	/**
@@ -94,14 +71,53 @@ class FileBody implements ResponseBody {
 			// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.runtime_configuration_ini_set
 			ini_set( 'zlib.output_compression', 'Off' );
 			set_time_limit( 0 );
-
-			ob_end_clean();
-			if ( ob_get_level() ) {
-				ob_end_clean(); // Zip corruption fix.
-			}
 		// phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch
 		} catch ( \Throwable $t ) {
 			// noop.
 		}
+	}
+
+	/**
+	 * Clean output buffers.
+	 *
+	 * @since 0.3.0
+	 */
+	protected function clean_buffers() {
+		$levels = ob_get_level();
+		for ( $i = 0; $i < $levels; $i++ ) {
+			ob_end_clean();
+		}
+	}
+
+	/**
+	 * Output a file.
+	 *
+	 * Reads file in chunks so big downloads are possible without changing `php.ini`.
+	 *
+	 * @link https://github.com/bcit-ci/CodeIgniter/wiki/Download-helper-for-large-files
+	 *
+	 * @since 0.3.0
+	 *
+	 * @param string $filename Absolute path to a file.
+	 */
+	protected function readfile_chunked( $filename ) {
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fopen
+		$handle = fopen( $filename, 'rb' );
+		if ( false === $handle ) {
+			// @todo Throw an exception?
+			return;
+		}
+
+		while ( ! feof( $handle ) ) {
+			$chunk_size = 1024 * 1024;
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fread
+			$buffer = fread( $handle, $chunk_size );
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo $buffer;
+			flush();
+		}
+
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fclose
+		fclose( $handle );
 	}
 }
