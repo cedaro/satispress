@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
 const archiver = require( 'archiver' );
-const fs = require( 'fs' );
+const config = require( '../package.json' );
+const fs = require( 'fs-extra' );
 const glob = require( 'glob' );
 const makepot = require( 'node-wp-i18n' ).makepot;
 const path = require( 'path' );
@@ -11,8 +12,7 @@ const argv = require( 'minimist' )( process.argv.slice( 2 ), {
 	string: [ 'version' ]
 } );
 
-const pluginSlug = 'satispress';
-const pluginFile = path.join( __dirname, `../${ pluginSlug }.php` );
+const pluginFile = path.join( __dirname, `../${ config.name }.php` );
 const packageJson = path.join( __dirname, '../package.json' );
 let version = argv.version;
 
@@ -27,17 +27,9 @@ replaceInFile( pluginFile, /(Version:[\s]+).+/, `\$1${ version }` )
 	.then( () => spawn( 'composer', [ 'install', '--no-dev', '--prefer-dist' ] ) )
 	.then( () => spawn( 'composer', [ 'dump-autoload', '--no-dev', '--optimize' ] ) )
 	.then( () => makepot( { poedit: true } ) )
-	.then( () => compress( pluginSlug, version, [
-		'satispress.php',
-		'README.md',
-		'{assets,languages,src,views}/**',
-		'vendor/autoload.php',
-		'vendor/composer/*.php',
-		'vendor/{cedaro/wp-plugin,composer/semver,psr/container}/src/**',
-		'vendor/pimple/pimple/src/Pimple/!(Tests){*.php,**/*.php}'
-	] ) );
+	.then( () => compress( config.name, version, config.distFiles ) );
 
-function compress( pluginSlug, version, files ) {
+function compress( slug, version, files ) {
 	return new Promise( ( resolve, reject ) => {
 		const dist = path.join( __dirname, '../dist' );
 
@@ -46,10 +38,10 @@ function compress( pluginSlug, version, files ) {
 		} catch ( error ) {}
 
 		const archive = archiver.create( 'zip' );
-		const output = fs.createWriteStream( path.join( dist, `${ pluginSlug }-${ version }.zip` ) );
+		const output = fs.createWriteStream( path.join( dist, `${ slug }-${ version }.zip` ) );
 
 		output.on( 'close', () => {
-			console.log( `Created dist/${ pluginSlug }-${ version }.zip` );
+			console.log( `Created dist/${ slug }-${ version }.zip` );
 			console.log( `Total bytes: ${ archive.pointer() }` );
 			resolve();
 		} );
@@ -62,7 +54,7 @@ function compress( pluginSlug, version, files ) {
 			glob.sync( pattern, {
 				nodir: true
 			} ).forEach( file => {
-				archive.file( file, { name: `${ pluginSlug }/${ file }` } )
+				archive.file( file, { name: `${ slug }/${ file }` } )
 			} );
 		} );
 
