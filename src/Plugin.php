@@ -12,6 +12,7 @@ declare ( strict_types = 1 );
 namespace SatisPress;
 
 use Cedaro\WP\Plugin\Plugin as BasePlugin;
+use Psr\Container\ContainerInterface;
 
 /**
  * Main plugin class - composition root.
@@ -25,14 +26,17 @@ class Plugin extends BasePlugin implements Composable {
 	 * @since 0.3.0
 	 */
 	public function compose() {
+		$container = $this->container;
+
 		/**
 		 * Start composing the object graph in SatisPress.
 		 *
 		 * @since 0.3.0
+		 *
+		 * @param Plugin             $plugin    Main plugin instance.
+		 * @param ContainerInterface $container Dependency container.
 		 */
-		do_action( 'satispress_compose' );
-
-		$container = $this->container;
+		do_action( 'satispress_compose', $this, $container );
 
 		// Register hook providers.
 		$this
@@ -62,7 +66,10 @@ class Plugin extends BasePlugin implements Composable {
 		 * Finished composing the object graph in SatisPress.
 		 *
 		 * @since 0.3.0
+		 *
+		 * @param Plugin             $plugin    Main plugin instance.
+		 * @param ContainerInterface $container Dependency container.
 		 */
-		do_action( 'satispress_composed' );
+		do_action( 'satispress_composed', $this, $container );
 	}
 }
