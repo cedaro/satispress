@@ -13,18 +13,9 @@ use Monolog\Handler\ErrorLogHandler;
 use Monolog\Processor\PsrLogMessageProcessor;
 
 /**
- * Register the logger before SatisPress is configured.
+ * Register the logger before SatisPress is composed.
  */
-add_action( 'plugins_loaded', function() {
-	// Bail if SatisPress isn't loaded.
-	if ( ! function_exists( '\SatisPress\plugin' ) ) {
-		return;
-	}
-
-	// Retrieve the container.
-	$container = \SatisPress\plugin()->get_container();
-
-	// Register a custom logger.
+add_action( 'satispress_compose', function( $plugin, $container ) {
 	$container['logger'] = function() {
 		$logger = new Logger( 'satispress' );
 		$logger->pushHandler( new ErrorLogHandler( ErrorLogHandler::OPERATING_SYSTEM, LOGGER::WARNING ) );
@@ -32,7 +23,7 @@ add_action( 'plugins_loaded', function() {
 
 		return $logger;
 	};
-}, 1 );
+}, 10, 2 );
 ```
 
 _Monolog should be required with Composer and the autoloader needs to be included before using it in your project._
