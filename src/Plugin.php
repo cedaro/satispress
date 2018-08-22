@@ -26,7 +26,7 @@ class Plugin extends BasePlugin implements Composable {
 	 * @since 0.3.0
 	 */
 	public function compose() {
-		$container = $this->container;
+		$container = $this->get_container();
 
 		/**
 		 * Start composing the object graph in SatisPress.
@@ -40,6 +40,7 @@ class Plugin extends BasePlugin implements Composable {
 
 		// Register hook providers.
 		$this
+			->register_hooks( $container->get( 'hooks.authentication' ) )
 			->register_hooks( $container->get( 'hooks.i18n' ) )
 			->register_hooks( $container->get( 'hooks.capabilities' ) )
 			->register_hooks( $container->get( 'hooks.rewrite_rules' ) )
