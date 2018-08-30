@@ -2,7 +2,7 @@
 
 This document outlines the considerations we've made regarding the security of SatisPress and the resources it creates to provide you with the information you need to help make informed decisions about the security of your site.
 
-If you think you've discovered a vulnerability, please [get in touch privately](https://www.blazersix.com/contact/).
+If you think you've discovered a vulnerability, please [get in touch privately](https://www.cedaro.com/contact/).
 
 ## Introduction
 

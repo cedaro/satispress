@@ -1,5 +1,5 @@
 {
-	"name": "blazersix/satispress",
+	"name": "cedaro/satispress",
 	"description": "Generate a Composer repository from installed WordPress plugins and themes.",
 	"keywords": [
 		"wordpress",
@@ -7,13 +7,13 @@
 		"satis"
 	],
 	"type": "wordpress-plugin",
-	"homepage": "https://github.com/blazersix/satispress",
+	"homepage": "https://github.com/cedaro/satispress",
 	"license": "GPL-2.0-or-later",
 	"authors": [
 		{
 			"name": "Brady Vercher",
 			"email": "brady@blazersix.com",
-			"homepage": "https://www.blazersix.com/"
+			"homepage": "https://www.cedaro.com/"
 		},
 		{
 			"name": "Gary Jones",
@@ -22,8 +22,8 @@
 		}
 	],
 	"support": {
-		"issues": "https://github.com/blazersix/satispress/issues",
-		"source": "https://github.com/blazersix/satispress"
+		"issues": "https://github.com/cedaro/satispress/issues",
+		"source": "https://github.com/cedaro/satispress"
 	},
 	"config": {
 		"sort-packages": true

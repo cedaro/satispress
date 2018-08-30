@@ -54,4 +54,4 @@ For installation notes, information about usage, security, and more, see the [do
 
 ## Credits
 
-Created by [Brady Vercher](https://www.blazersix.com/) and supported by [Gary Jones](https://gamajo.com).
+Created by [Brady Vercher](https://www.cedaro.com/) and supported by [Gary Jones](https://gamajo.com).

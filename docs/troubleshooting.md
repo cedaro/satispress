@@ -4,7 +4,7 @@
 
 Certain server arrangements don't allow the Basic Auth credentials to be made available under PHP. To get around this, you'll need to set an environment variable in the site root .htaccess file.
 
-See https://github.com/blazersix/satispress/wiki/Basic-Auth for more info.
+See https://github.com/cedaro/satispress/wiki/Basic-Auth for more info.
 
 ## Rewrite Rules
 

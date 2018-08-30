@@ -264,7 +264,7 @@ class Settings extends AbstractHookProvider {
 		echo '<div id="satispress-api-key-manager"></div>';
 
 		printf(
-			'<p><a href="https://github.com/blazersix/satispress/blob/develop/docs/security.md" target="_blank" rel="noopener noreferer"><em>%s</em></a></p>',
+			'<p><a href="https://github.com/cedaro/satispress/blob/develop/docs/security.md" target="_blank" rel="noopener noreferer"><em>%s</em></a></p>',
 			esc_html__( 'Read more about securing your SatisPress repository.', 'satispress' )
 		);
 	}

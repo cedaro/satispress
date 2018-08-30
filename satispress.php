@@ -8,18 +8,18 @@
  *
  * @wordpress-plugin
  * Plugin Name: SatisPress
- * Plugin URI: https://github.com/blazersix/satispress
+ * Plugin URI: https://github.com/cedaro/satispress
  * Description: Generate a Composer repository from installed WordPress plugins and themes.
  * Version: 0.3.0-dev1
- * Author: Blazer Six
- * Author URI: https://www.blazersix.com/
+ * Author: Cedaro
+ * Author URI: https://www.cedaro.com/
  * License: GPL-2.0-or-later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: satispress
  * Domain Path: /languages
  * Requires PHP: 7.0
  * Network: true
- * GitHub Plugin URI: blazersix/satispress
+ * GitHub Plugin URI: cedaro/satispress
  * Release Asset: true
  */
 
