@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.3.0 - 2018-XX-XX
+## 0.3.0 - 2018-08-31
 
 This is a major rewrite that helps shift SatisPress from an experimental concept to a working solution for managing WordPress plugins and themes as Composer packages.
 
