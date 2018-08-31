@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.3.0 - 2018-08-31
+## [0.3.0] - 2018-08-31
 
 This is a major rewrite that helps shift SatisPress from an experimental concept to a working solution for managing WordPress plugins and themes as Composer packages.
 
@@ -13,3 +13,6 @@ Major changes include:
 * Pending theme and plugin updates are downloaded directly from the vendor and exposed in `packages.json`, so updating is no longer required to expose new releases to Composer.
 * [Capabilities](docs/security.md#capabilities) were added for viewing and downloading packages, as well as managing SatisPress options. Only administrators have access by default.
 * The storage layer was abstracted to make it swappable.
+
+[Unreleased]: https://github.com/cedaro/satispress/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/cedaro/satispress/compare/v0.2.3...v0.3.0
