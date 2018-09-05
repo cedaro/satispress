@@ -143,3 +143,30 @@ function get_edited_user_id(): int {
 function is_plugin_file( $plugin_file ) {
 	return '.php' === substr( $plugin_file, -4 );
 }
+
+/**
+ * Display a notice about missing dependencies.
+ *
+ * @since 0.3.1
+ */
+function display_missing_dependencies_notice() {
+	$message = sprintf(
+		/* translators: %s: documentation URL */
+		__( 'SatisPress is missing required dependencies. <a href="%s" target="_blank" rel="noopener noreferer">Learn more.</a>', 'satispress' ),
+		'https://github.com/cedaro/satispress/blob/master/docs/installation.md'
+	);
+
+	printf(
+		'<div class="satispress-compatibility-notice notice notice-error"><p>%s</p></div>',
+		wp_kses(
+			$message,
+			[
+				'a' => [
+					'href'   => true,
+					'rel'    => true,
+					'target' => true,
+				],
+			]
+		)
+	);
+}

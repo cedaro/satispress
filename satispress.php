@@ -44,6 +44,13 @@ if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
 	require __DIR__ . '/vendor/autoload.php';
 }
 
+// Display a notice and bail if dependencies are missing.
+if ( ! function_exists( __NAMESPACE__ . '\autoloader_classmap' ) ) {
+	require_once __DIR__ . '/src/functions.php';
+	add_action( 'admin_notices', __NAMESPACE__ . '\display_missing_dependencies_notice' );
+	return;
+}
+
 // Autoload mapped classes.
 spl_autoload_register( __NAMESPACE__ . '\autoloader_classmap' );
 
