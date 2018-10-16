@@ -1,5 +1,8 @@
 <?xml version="1.0"?>
-<ruleset name="SatisPress">
+<ruleset name="SatisPress"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="vendor/squizlabs/php_codesniffer/phpcs.xsd">
+
 	<description>Custom ruleset for the SatisPress plugin.</description>
 
 	<!-- For help in understanding this file: https://github.com/squizlabs/PHP_CodeSniffer/wiki/Annotated-ruleset.xml -->
