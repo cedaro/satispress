@@ -79,7 +79,7 @@ class Download implements Route {
 			throw HttpException::forForbiddenResource();
 		}
 
-		$slug = sanitize_key( $request['slug'] );
+		$slug = preg_replace( '/[^A-Za-z0-9_\-]+/i', '', $request['slug'] );
 		if ( empty( $slug ) ) {
 			throw HttpException::forUnknownPackage( $slug );
 		}
