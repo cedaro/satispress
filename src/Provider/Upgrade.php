@@ -93,6 +93,7 @@ class Upgrade extends AbstractHookProvider {
 		$this->repository      = $repository;
 		$this->release_manager = $release_manager;
 		$this->storage         = $storage;
+		$this->logger          = $logger;
 	}
 
 	/**
