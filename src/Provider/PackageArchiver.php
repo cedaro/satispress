@@ -144,18 +144,14 @@ class PackageArchiver extends AbstractHookProvider {
 			return $value;
 		}
 
+		$type = 'pre_set_site_transient_update_plugins' === current_filter() ? 'plugin' : 'theme';
+
 		// The $id will be a theme slug or the plugin file.
-		foreach ( $value->response as $id => $update_data ) {
+		foreach ( $value->response as $slug => $update_data ) {
 			// Bail if a URL isn't available.
 			if ( empty( $update_data->package ) ) {
 				continue;
 			}
-
-			// Plugin data is stored as an object. Coerce to an array.
-			$update_data = (array) $update_data;
-
-			$type = isset( $update_data['plugin'] ) ? 'plugin' : 'theme';
-			$slug = $update_data[ $type ];
 
 			$args = compact( 'slug', 'type' );
 
@@ -166,6 +162,9 @@ class PackageArchiver extends AbstractHookProvider {
 
 			try {
 				$package = $this->packages->first_where( $args );
+
+				// Plugin data is stored as an object. Coerce to an array.
+				$update_data = (array) $update_data;
 
 				$release = new Release(
 					$package,
