@@ -22,6 +22,7 @@ Packages are exposed via a `packages.json` file for inclusion as a Composer repo
 	1. [Central Package Server](workflows/central-server.md)
 	1. Continous Integration
 	1. Commercial Vendors
+1. [MU Plugins](mu-plugins.md)
 1. [Logging](logging.md)
 1. [Integrations](integrations.md)
 1. [Troubleshooting](troubleshooting.md)
