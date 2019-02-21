@@ -57,7 +57,7 @@ gravityforms
 
 ## Configuring Authentication
 
-It's also possible configure Composer to use your API Key by running the `config` command:
+It's also possible to configure Composer to use your API Key by running the `config` command:
 
 ```sh
 $ composer config http-basic.packages.example.com \

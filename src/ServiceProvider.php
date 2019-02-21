@@ -17,11 +17,12 @@ use Pimple\Container as PimpleContainer;
 use Pimple\ServiceIterator;
 use Pimple\ServiceProviderInterface;
 use Pimple\Psr11\ServiceLocator;
-use Psr\Log\NullLogger;
+use Psr\Log\LogLevel;
 use SatisPress\Authentication\ApiKey;
 use SatisPress\Authentication;
 use SatisPress\HTTP\Request;
 use SatisPress\Integration;
+use SatisPress\Logger;
 use SatisPress\PackageType\Plugin;
 use SatisPress\PackageType\Theme;
 use SatisPress\Provider;
@@ -167,7 +168,16 @@ class ServiceProvider implements ServiceProviderInterface {
 		};
 
 		$container['logger'] = function( $container ) {
-			return new NullLogger();
+			return new Logger( $container['logger.level'] );
+		};
+
+		$container['logger.level'] = function( $container ) {
+			// Log warnings and above when WP_DEBUG is enabled.
+			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+				$level = LogLevel::WARNING;
+			}
+
+			return $level ?? '';
 		};
 
 		$container['package.factory'] = function( $container ) {
