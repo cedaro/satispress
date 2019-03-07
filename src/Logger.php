@@ -48,7 +48,7 @@ final class Logger extends AbstractLogger {
 	 * @since 0.4.0
 	 * @var int
 	 */
-	protected $minimium_level_code;
+	protected $minimum_level_code;
 
 	/**
 	 * Constructor method.
@@ -58,7 +58,7 @@ final class Logger extends AbstractLogger {
 	 * @param string $minimum_level Minimum level to log.
 	 */
 	public function __construct( string $minimum_level ) {
-		$this->minimium_level_code = $this->get_level_code( $minimum_level );
+		$this->minimum_level_code = $this->get_level_code( $minimum_level );
 	}
 
 	/**
