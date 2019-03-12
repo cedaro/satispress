@@ -54,7 +54,7 @@ class Capabilities extends AbstractHookProvider {
 	}
 
 	public function user_has_cap( array $allcaps, array $caps, array $args ) {
-		if ( $this->disable_authentication) {
+		if ( $this->disable_authentication ) {
 			$allcaps[Caps::DOWNLOAD_PACKAGES] = true;
 			$allcaps[Caps::VIEW_PACKAGES] = true;
 		}
