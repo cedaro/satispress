@@ -27,6 +27,7 @@ class Capabilities extends AbstractHookProvider {
 	 */
 	public function register_hooks() {
 		add_filter( 'map_meta_cap', [ $this, 'map_meta_cap' ], 10, 4 );
+		add_filter( 'user_has_cap', [ $this, 'user_has_cap' ], 10, 3 );
 	}
 
 	/**
@@ -50,5 +51,14 @@ class Capabilities extends AbstractHookProvider {
 		}
 
 		return $caps;
+	}
+
+	public function user_has_cap( array $allcaps, array $caps, array $args ) {
+		if ( $this->disable_authentication) {
+			$allcaps[Caps::DOWNLOAD_PACKAGES] = true;
+			$allcaps[Caps::VIEW_PACKAGES] = true;
+		}
+
+		return $allcaps;
 	}
 }

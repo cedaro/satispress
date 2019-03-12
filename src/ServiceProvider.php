@@ -77,6 +77,15 @@ class ServiceProvider implements ServiceProviderInterface {
 			);
 		};
 
+		$container['authentication.disable'] = function( $container ) {
+			$server_count = \iterator_count( $container['authentication.servers'] );
+			if ( 0 >= $server_count ) {
+				return true;
+			} else {
+				return false;
+			}
+		};
+
 		$container['authentication.unauthorized'] = function( $container ) {
 			return new Authentication\UnauthorizedServer(
 				$container['http.request']
@@ -102,8 +111,8 @@ class ServiceProvider implements ServiceProviderInterface {
 			return new Provider\Authentication( $container['authentication.servers'] );
 		};
 
-		$container['hooks.capabilities'] = function() {
-			return new Provider\Capabilities();
+		$container['hooks.capabilities'] = function( $container ) {
+			return new Provider\Capabilities( $container['authentication.disable'] );
 		};
 
 		$container['hooks.custom_vendor'] = function() {
