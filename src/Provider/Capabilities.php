@@ -22,7 +22,7 @@ use SatisPress\Capabilities as Caps;
 class Capabilities extends AbstractHookProvider {
 	protected $disable_authentication;
 	
-	public function __construct( bool $disable_authenticatin = false ) {
+	public function __construct( bool $disable_authentication = false ) {
 		$this->disable_authentication = $disable_authentication;
 	}
 	
