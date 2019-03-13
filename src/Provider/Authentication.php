@@ -45,7 +45,7 @@ class Authentication extends AbstractHookProvider {
 	 */
 	public function register_hooks() {
 		add_action( 'plugins_loaded', [ $this, 'register_authentication_servers' ], 8 );
-		add_filter( 'user_has_cap', [ $this, 'maybe_allow_public_access' ], 10, 1 );
+		add_filter( 'user_has_cap', [ $this, 'maybe_allow_public_access' ] );
 	}
 
 	/**
