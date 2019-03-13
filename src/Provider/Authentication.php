@@ -14,6 +14,7 @@ namespace SatisPress\Provider;
 use Cedaro\WP\Plugin\AbstractHookProvider;
 use Pimple\ServiceIterator;
 use SatisPress\Authentication\Server;
+use SatisPress\Capabilities as Caps;
 
 /**
  * Authentication provider class.
@@ -44,6 +45,7 @@ class Authentication extends AbstractHookProvider {
 	 */
 	public function register_hooks() {
 		add_action( 'plugins_loaded', [ $this, 'register_authentication_servers' ], 8 );
+		add_filter( 'user_has_cap', [ $this, 'user_has_cap' ], 10, 3 );
 	}
 
 	/**
@@ -118,5 +120,16 @@ class Authentication extends AbstractHookProvider {
 		}
 
 		return '/' . ltrim( $request_path, '/' );
+	}
+
+	public function user_has_cap( array $allcaps, array $caps, array $args ) {
+		$server_count = \iterator_count( $this->servers );
+
+		if ( 0 >= $server_count ) {
+			$allcaps[Caps::DOWNLOAD_PACKAGES] = true;
+			$allcaps[Caps::VIEW_PACKAGES] = true;
+		}
+
+		return $allcaps;
 	}
 }
