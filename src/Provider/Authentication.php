@@ -45,7 +45,7 @@ class Authentication extends AbstractHookProvider {
 	 */
 	public function register_hooks() {
 		add_action( 'plugins_loaded', [ $this, 'register_authentication_servers' ], 8 );
-		add_filter( 'user_has_cap', [ $this, 'user_has_cap' ], 10, 3 );
+		add_filter( 'user_has_cap', [ $this, 'maybe_allow_public_access' ], 10, 1 );
 	}
 
 	/**
@@ -122,12 +122,21 @@ class Authentication extends AbstractHookProvider {
 		return '/' . ltrim( $request_path, '/' );
 	}
 
-	public function user_has_cap( array $allcaps, array $caps, array $args ) {
-		$server_count = \iterator_count( $this->servers );
-
-		if ( 0 >= $server_count ) {
-			$allcaps[Caps::DOWNLOAD_PACKAGES] = true;
-			$allcaps[Caps::VIEW_PACKAGES] = true;
+	/**
+	 * Sets and returns all the capabilities the current user has and should have.
+	 *
+	 * Appends `allcaps` with satispress_download_packages
+	 * as well as satispress_view_packages if there are no servers,
+	 * meaning that authentication should be skipped.
+	 *
+	 * @param array $allcaps All capabilities the current user has.
+	 *
+	 * @return array
+	 */
+	public function maybe_allow_public_access( array $allcaps ): array {
+		if ( 0 >= \iterator_count( $this->servers ) ) {
+			$allcaps[ Caps::DOWNLOAD_PACKAGES ] = true;
+			$allcaps[ Caps::VIEW_PACKAGES ]     = true;
 		}
 
 		return $allcaps;

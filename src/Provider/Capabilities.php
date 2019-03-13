@@ -20,7 +20,6 @@ use SatisPress\Capabilities as Caps;
  * @since 0.3.0
  */
 class Capabilities extends AbstractHookProvider {
-
 	/**
 	 * Register hooks.
 	 *
