@@ -190,7 +190,7 @@ class Upgrade extends AbstractHookProvider {
 	 */
 	protected function rename_existing_directory( $directory ) {
 		$upload_config = wp_upload_dir();
-		$old_path      = $upload_config['basedir'] . '/' . 'satispress';
+		$old_path      = $upload_config['basedir'] . '/satispress';
 
 		if ( ! file_exists( $old_path ) ) {
 			return;
