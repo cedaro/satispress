@@ -47,7 +47,7 @@ final class PluginBuilder extends PackageBuilder {
 		$directory = '.' === \dirname( $plugin_file ) ? '' : \dirname( $plugin_file );
 
 		if ( empty( $plugin_data ) ) {
-			$plugin_data = get_plugin_data( path_join( WP_PLUGIN_DIR, $plugin_file ) );
+			$plugin_data = get_plugin_data( WP_PLUGIN_DIR . '/' . $plugin_file );
 		}
 
 		return $this
@@ -55,7 +55,7 @@ final class PluginBuilder extends PackageBuilder {
 			->set_author_url( $plugin_data['AuthorURI'] )
 			->set_basename( $plugin_file )
 			->set_description( $plugin_data['Description'] )
-			->set_directory( path_join( WP_PLUGIN_DIR, $directory ) )
+			->set_directory( WP_PLUGIN_DIR . '/' . $directory )
 			->set_name( $plugin_data['Name'] )
 			->set_homepage( $plugin_data['PluginURI'] )
 			->set_installed( true )
