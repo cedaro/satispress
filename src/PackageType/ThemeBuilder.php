@@ -37,7 +37,7 @@ final class ThemeBuilder extends PackageBuilder {
 			->set_author( $theme->get( 'Author' ) )
 			->set_author_url( $theme->get( 'AuthorURI' ) )
 			->set_description( $theme->get( 'Description' ) )
-			->set_directory( path_join( get_theme_root(), $slug ) )
+			->set_directory( get_theme_root() . '/' . $slug )
 			->set_name( $theme->get( 'Name' ) )
 			->set_homepage( $theme->get( 'ThemeURI' ) )
 			->set_installed( true )
