@@ -129,8 +129,9 @@ class Authentication extends AbstractHookProvider {
 	 * as well as satispress_view_packages if there are no servers,
 	 * meaning that authentication should be skipped.
 	 *
-	 * @param array $allcaps All capabilities the current user has.
+	 * @since 0.4.0
 	 *
+	 * @param array $allcaps All capabilities the current user has.
 	 * @return array
 	 */
 	public function maybe_allow_public_access( array $allcaps ): array {

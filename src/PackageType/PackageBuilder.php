@@ -77,6 +77,13 @@ class PackageBuilder {
 	 * @return Package
 	 */
 	public function build(): Package {
+		uasort(
+			$this->releases,
+			function( Release $a, Release $b ) {
+				return version_compare( $b->get_version(), $a->get_version() );
+			}
+		);
+
 		$this->set( 'releases', $this->releases );
 		return $this->package;
 	}
@@ -288,13 +295,6 @@ class PackageBuilder {
 				$releases[ $update->get_version() ] = $update;
 			}
 		}
-
-		uasort(
-			$releases,
-			function( Release $a, Release $b ) {
-				return version_compare( $b->get_version(), $a->get_version() );
-			}
-		);
 
 		foreach ( $releases as $release ) {
 			$this->add_release( $release->get_version(), $release->get_source_url() );
