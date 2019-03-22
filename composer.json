@@ -26,10 +26,21 @@
 		"source": "https://github.com/cedaro/satispress"
 	},
 	"config": {
+		"preferred-install": "dist",
 		"sort-packages": true
 	},
-	"minimum-stability": "dev",
 	"prefer-stable": true,
+	"repositories": {
+		"wordpress": {
+			"type": "vcs",
+			"url": "https://github.com/WordPress/wordpress-develop",
+			"no-api": true
+		},
+		"wp-test-suite": {
+			"type": "vcs",
+			"url": "https://github.com/cedaro/wp-test-suite"
+		}
+	},
 	"require": {
 		"php": "^7",
 		"cedaro/wp-plugin": "^0.4.0",
@@ -40,10 +51,14 @@
 		"psr/log": "^1.0"
 	},
 	"require-dev": {
+		"brain/monkey": "^2.2",
+		"cedaro/wp-test-suite": "dev-develop",
 		"dealerdirect/phpcodesniffer-composer-installer": "^0.5",
 		"phpcompatibility/phpcompatibility-wp": "^2",
+		"phpunit/phpunit": "^7.5",
 		"roave/security-advisories": "dev-master",
 		"squizlabs/php_codesniffer": "^3.3",
+		"wordpress/wordpress": "^5.1",
 		"wp-coding-standards/wpcs": "^1"
 	},
 	"autoload": {
@@ -54,10 +69,16 @@
 			"src/functions.php"
 		]
 	},
+	"autoload-dev": {
+		"psr-4": {
+			"SatisPress\\Test\\": "tests/phpunit/"
+		}
+	},
 	"scripts": {
 		"install-codestandards": [
 			"Dealerdirect\\Composer\\Plugin\\Installers\\PHPCodeSniffer\\Plugin::run"
 		],
-		"phpcs": "./vendor/bin/phpcs"
+		"phpcs": "./vendor/bin/phpcs",
+		"test": "./vendor/bin/phpunit --testsuite=Unit --colors=always"
 	}
 }

@@ -5,3 +5,5 @@
 /package-lock.json
 /phpcs.xml
 /.phpcs.xml
+/.phpunit.result.cache
+/phpunit.xml
