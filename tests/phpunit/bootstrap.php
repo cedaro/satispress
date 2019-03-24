@@ -2,6 +2,7 @@
 declare ( strict_types = 1 );
 
 use Cedaro\WP\Tests\TestSuite;
+use Psr\Log\NullLogger;
 
 use function Cedaro\WP\Tests\get_current_suite;
 
@@ -26,5 +27,10 @@ $GLOBALS['wp_tests_options'] = [
 $suite->addFilter( 'muplugins_loaded', function() {
 	require dirname( __DIR__, 2 ) . '/satispress.php';
 } );
+
+$suite->addFilter( 'satispress_compose', function( $plugin, $container ) {
+	$container['logger'] = new NullLogger();
+	$container['storage.working_directory'] = SATISPRESS_TESTS_DIR . '/Fixture/wp-content/uploads/satispress/';
+}, 10, 2 );
 
 $suite->bootstrap();
