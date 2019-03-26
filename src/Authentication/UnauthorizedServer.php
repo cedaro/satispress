@@ -13,7 +13,8 @@ declare ( strict_types = 1 );
 
 namespace SatisPress\Authentication;
 
-use SatisPress\WP_Error\HttpError;
+use SatisPress\Exception\HttpException;
+use SatisPress\HTTP\Request;
 use WP_Error;
 use WP_Http as HTTP;
 
@@ -22,24 +23,29 @@ use WP_Http as HTTP;
  *
  * @since 0.3.0
  */
-class UnauthorizedServer extends AbstractServer {
+class UnauthorizedServer implements Server {
+	/**
+	 * Check if the server should handle the current request.
+	 *
+	 * @since 0.4.0
+	 *
+	 * @param Request $request Request instance.
+	 * @return bool
+	 */
+	public function check_scheme( Request $request ): bool {
+		return true;
+	}
+
 	/**
 	 * Handle authentication.
 	 *
 	 * @since 0.3.0
 	 *
-	 * @param int|bool $user_id Current user ID or false if unknown.
-	 * @return int|bool A user ID on success, or false on failure.
+	 * @param Request $request Request instance.
+	 * @throws HttpException If the user has not been authenticated at this point.
 	 */
-	public function authenticate( $user_id ) {
-		if ( ! empty( $user_id ) || ! $this->should_attempt ) {
-			return $user_id;
-		}
-
-		$this->should_attempt = false;
-		$this->auth_status    = HttpError::authenticationRequired();
-
-		return false;
+	public function authenticate( Request $request ): int {
+		throw HttpException::forAuthenticationRequired();
 	}
 
 	/**
@@ -47,13 +53,13 @@ class UnauthorizedServer extends AbstractServer {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @param WP_Error $error Error object.
+	 * @param HttpException $e HTTP exception.
 	 */
-	protected function handle_error( WP_Error $error ) {
+	public function handle_error( HttpException $e ): WP_Error {
 		header( 'WWW-Authenticate: Basic realm="SatisPress"' );
 
 		wp_die(
-			wp_kses_data( $error->get_error_message() ),
+			wp_kses_data( $e->getMessage() ),
 			esc_html__( 'Authentication Required', 'satispress' ),
 			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			[ 'response' => HTTP::UNAUTHORIZED ]

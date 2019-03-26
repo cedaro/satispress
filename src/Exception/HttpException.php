@@ -52,6 +52,60 @@ class HttpException extends \Exception implements SatispressException {
 	}
 
 	/**
+	 * Create an exception for requests that require authentication.
+	 *
+	 * @since 0.4.0.
+	 *
+	 * @param int       $code     Optional. The Exception code.
+	 * @param Throwable $previous Optional. The previous throwable used for the exception chaining.
+	 * @return HTTPException
+	 */
+	public static function forAuthenticationRequired(
+		int $code = 0,
+		Throwable $previous = null
+	): HttpException {
+		$message = 'Authentication is required for this resource.';
+
+		return new static( $message, HTTP::UNAUTHORIZED, $code, $previous );
+	}
+
+	/**
+	 * Create an exception for invalid credentials.
+	 *
+	 * @since 0.4.0.
+	 *
+	 * @param int       $code     Optional. The Exception code.
+	 * @param Throwable $previous Optional. The previous throwable used for the exception chaining.
+	 * @return HTTPException
+	 */
+	public static function forInvalidCredentials(
+		int $code = 0,
+		Throwable $previous = null
+	): HttpException {
+		$message = 'Invalid credentials.';
+
+		return new static( $message, HTTP::UNAUTHORIZED, $code, $previous );
+	}
+
+	/**
+	 * Create an exception for a missing authorization header.
+	 *
+	 * @since 0.4.0.
+	 *
+	 * @param int       $code     Optional. The Exception code.
+	 * @param Throwable $previous Optional. The previous throwable used for the exception chaining.
+	 * @return HTTPException
+	 */
+	public static function forMissingAuthorizationHeader(
+		int $code = 0,
+		Throwable $previous = null
+	): HttpException {
+		$message = 'Missing authorization header.';
+
+		return new static( $message, HTTP::UNAUTHORIZED, $code, $previous );
+	}
+
+	/**
 	 * Create an exception for a forbidden resource request.
 	 *
 	 * @since 0.3.0.
