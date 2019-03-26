@@ -12,7 +12,7 @@ declare ( strict_types = 1 );
 namespace SatisPress\Authentication\ApiKey;
 
 use SatisPress\Authentication\Server as ServerInterface;
-use SatisPress\Exception\HttpException;
+use SatisPress\Exception\AuthenticationException;
 use SatisPress\HTTP\Request;
 use WP_Error;
 use WP_Http as HTTP;
@@ -74,7 +74,7 @@ class Server implements ServerInterface {
 	 * @since 0.3.0
 	 *
 	 * @param Request $request Request instance.
-	 * @throws HttpException If authentication fails.
+	 * @throws AuthenticationException If authentication fails.
 	 * @return int A user ID.
 	 */
 	public function authenticate( Request $request ): int {
@@ -82,41 +82,26 @@ class Server implements ServerInterface {
 
 		// Bail if an API Key wasn't provided.
 		if ( null === $api_key_id ) {
-			throw HttpException::forMissingAuthorizationHeader();
+			throw AuthenticationException::forMissingAuthorizationHeader();
 		}
 
 		$api_key = $this->repository->find_by_token( $api_key_id );
 
 		// Bail if the API Key doesn't exist.
 		if ( null === $api_key ) {
-			throw HttpException::forInvalidCredentials();
+			throw AuthenticationException::forInvalidCredentials();
 		}
 
 		$user = $api_key->get_user();
 
 		// Bail if the user couldn't be determined.
 		if ( ! $this->validate_user( $user ) ) {
-			throw HttpException::forInvalidCredentials();
+			throw AuthenticationException::forInvalidCredentials();
 		}
 
 		$this->maybe_update_last_used_time( $api_key );
 
 		return $user->ID;
-	}
-
-	/**
-	 * Handle errors encountered when authenticating.
-	 *
-	 * @since 0.3.0
-	 *
-	 * @param HttpException $e HTTP exception.
-	 */
-	public function handle_error( HttpException $e ): WP_Error {
-		if ( HTTP::UNAUTHORIZED === $e->getStatusCode() ) {
-			header( 'WWW-Authenticate: Basic realm="SatisPress"' );
-		}
-
-		wp_die( wp_kses_data( $e->getMessage() ), absint( $e->getStatusCode() ) );
 	}
 
 	/**

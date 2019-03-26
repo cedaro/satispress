@@ -11,6 +11,7 @@ declare ( strict_types = 1 );
 
 namespace SatisPress\HTTP;
 
+use SatisPress\Exception\AuthenticationException;
 use SatisPress\Exception\HttpException;
 use SatisPress\HTTP\ResponseBody\ErrorBody;
 use SatisPress\HTTP\ResponseBody\FileBody;
@@ -159,6 +160,7 @@ class Response {
 	 */
 	public static function from_exception( \Exception $e ): Response {
 		$status_code = 500;
+		$headers     = [];
 
 		if ( $e instanceof HttpException ) {
 			$status_code = $e->getStatusCode();
@@ -171,9 +173,15 @@ class Response {
 			$message = 'Sorry, you cannot view this resource.';
 		}
 
+		if ( $e instanceof AuthenticationException ) {
+			$headers = $e->getHeaders();
+			$message = $e->getMessage();
+		}
+
 		return new static(
 			new ErrorBody( $message, $status_code ),
-			$status_code
+			$status_code,
+			$headers
 		);
 	}
 
