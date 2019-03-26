@@ -13,7 +13,7 @@ declare ( strict_types = 1 );
 
 namespace SatisPress\Authentication;
 
-use SatisPress\Exception\HttpException;
+use SatisPress\Exception\AuthenticationException;
 use SatisPress\HTTP\Request;
 use WP_Error;
 use WP_Http as HTTP;
@@ -42,27 +42,9 @@ class UnauthorizedServer implements Server {
 	 * @since 0.3.0
 	 *
 	 * @param Request $request Request instance.
-	 * @throws HttpException If the user has not been authenticated at this point.
+	 * @throws AuthenticationException If the user has not been authenticated at this point.
 	 */
 	public function authenticate( Request $request ): int {
-		throw HttpException::forAuthenticationRequired();
-	}
-
-	/**
-	 * Display an error message when authentication fails.
-	 *
-	 * @since 0.3.0
-	 *
-	 * @param HttpException $e HTTP exception.
-	 */
-	public function handle_error( HttpException $e ): WP_Error {
-		header( 'WWW-Authenticate: Basic realm="SatisPress"' );
-
-		wp_die(
-			wp_kses_data( $e->getMessage() ),
-			esc_html__( 'Authentication Required', 'satispress' ),
-			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-			[ 'response' => HTTP::UNAUTHORIZED ]
-		);
+		throw AuthenticationException::forAuthenticationRequired();
 	}
 }

@@ -11,7 +11,7 @@ declare ( strict_types = 1 );
 
 namespace SatisPress\Authentication;
 
-use SatisPress\Exception\HttpException;
+use SatisPress\Exception\AuthenticationException;
 use Satispress\HTTP\Request;
 use WP_Error;
 
@@ -37,18 +37,8 @@ interface Server {
 	 * @since 0.3.0
 	 *
 	 * @param Request $request Request instance.
-	 * @throws HttpException If authentications fails.
+	 * @throws AuthenticationException If authentications fails.
 	 * @return int A user ID.
 	 */
 	public function authenticate( Request $request ): int;
-
-	/**
-	 * Handle errors encountered when authenticating.
-	 *
-	 * @since 0.4.0
-	 *
-	 * @param HttpException $e HTTP exception.
-	 * @return WP_Error
-	 */
-	public function handle_error( HttpException $e ): WP_Error;
 }

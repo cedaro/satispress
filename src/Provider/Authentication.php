@@ -15,7 +15,7 @@ use Cedaro\WP\Plugin\AbstractHookProvider;
 use Pimple\ServiceIterator;
 use SatisPress\Authentication\Server;
 use SatisPress\Capabilities as Caps;
-use SatisPress\Exception\HttpException;
+use SatisPress\Exception\AuthenticationException;
 use SatisPress\HTTP\Request;
 use WP_Error;
 
@@ -26,16 +26,9 @@ use WP_Error;
  */
 class Authentication extends AbstractHookProvider {
 	/**
-	 * Server used for authenticating the request.
-	 *
-	 * @var Server
-	 */
-	protected $active_server;
-
-	/**
 	 * Errors that occurred during authentication.
 	 *
-	 * @var HttpException Authentication exception.
+	 * @var AuthenticationException Authentication exception.
 	 */
 	protected $auth_status;
 
@@ -119,10 +112,9 @@ class Authentication extends AbstractHookProvider {
 
 			try {
 				$user_id = $server->authenticate( $this->request );
-			} catch ( HttpException $e ) {
-				$this->auth_status   = $e;
-				$this->active_server = $server;
-				$user_id             = false;
+			} catch ( AuthenticationException $e ) {
+				$this->auth_status = $e;
+				$user_id           = false;
 
 				add_filter( 'rest_authentication_errors', [ $this, 'get_authentication_errors' ] );
 			}
@@ -140,6 +132,7 @@ class Authentication extends AbstractHookProvider {
 	 *
 	 * @param WP_Error|mixed $value Error from another authentication handler,
 	 *                              null if we should handle it, or another value if not.
+	 * @throws AuthenticationException If this isn't a REST request.
 	 * @return WP_Error|bool|null
 	 */
 	public function get_authentication_errors( $value ) {
@@ -147,8 +140,17 @@ class Authentication extends AbstractHookProvider {
 			return $value;
 		}
 
-		return $this->active_server
-			->handle_error( $this->auth_status );
+		$e = $this->auth_status;
+
+		if ( ! defined( 'REST_REQUEST' ) || ! REST_REQUEST ) {
+			throw $e;
+		}
+
+		return new WP_Error(
+			$e->getCode(),
+			$e->getMessage(),
+			[ 'status' => $e->getStatusCode() ]
+		);
 	}
 
 	/**
