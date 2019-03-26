@@ -72,15 +72,12 @@ class ServiceProvider implements ServiceProviderInterface {
 
 		$container['authentication.api_key'] = function( $container ) {
 			return new ApiKey\Server(
-				$container['http.request'],
 				$container['api_key.repository']
 			);
 		};
 
 		$container['authentication.unauthorized'] = function( $container ) {
-			return new Authentication\UnauthorizedServer(
-				$container['http.request']
-			);
+			return new Authentication\UnauthorizedServer();
 		};
 
 		$container['hooks.activation'] = function() {
@@ -99,7 +96,10 @@ class ServiceProvider implements ServiceProviderInterface {
 		};
 
 		$container['hooks.authentication'] = function( $container ) {
-			return new Provider\Authentication( $container['authentication.servers'] );
+			return new Provider\Authentication(
+				$container['authentication.servers'],
+				$container['http.request']
+			);
 		};
 
 		$container['hooks.capabilities'] = function() {

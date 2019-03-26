@@ -11,6 +11,8 @@ declare ( strict_types = 1 );
 
 namespace SatisPress\Authentication;
 
+use SatisPress\Exception\HttpException;
+use Satispress\HTTP\Request;
 use WP_Error;
 
 /**
@@ -20,22 +22,33 @@ use WP_Error;
  */
 interface Server {
 	/**
+	 * Check if the server should handle the current request.
+	 *
+	 * @since 0.4.0
+	 *
+	 * @param Request $request Request instance.
+	 * @return bool
+	 */
+	public function check_scheme( Request $request ): bool;
+
+	/**
 	 * Handle authentication.
 	 *
 	 * @since 0.3.0
 	 *
-	 * @param int|bool $user_id Current user ID or false if unknown.
-	 * @return int|bool A user on success, or false on failure.
+	 * @param Request $request Request instance.
+	 * @throws HttpException If authentications fails.
+	 * @return int A user ID.
 	 */
-	public function authenticate( $user_id );
+	public function authenticate( Request $request ): int;
 
 	/**
-	 * Report authentication errors.
+	 * Handle errors encountered when authenticating.
 	 *
-	 * @since 0.3.0
+	 * @since 0.4.0
 	 *
-	 * @param WP_Error|mixed $value Error from another authentication handler, null if we should handle it, or another value if not.
-	 * @return WP_Error|bool|null
+	 * @param HttpException $e HTTP exception.
+	 * @return WP_Error
 	 */
-	public function get_authentication_errors( $value );
+	public function handle_error( HttpException $e ): WP_Error;
 }

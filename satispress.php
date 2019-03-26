@@ -70,6 +70,7 @@ $satispress = plugin()
 	->set_url( plugin_dir_url( __FILE__ ) )
 	->set_container( $satispress_container )
 	->register_hooks( $satispress_container->get( 'hooks.activation' ) )
-	->register_hooks( $satispress_container->get( 'hooks.deactivation' ) );
+	->register_hooks( $satispress_container->get( 'hooks.deactivation' ) )
+	->register_hooks( $satispress_container->get( 'hooks.authentication' ) );
 
 add_action( 'plugins_loaded', [ $satispress, 'compose' ], 5 );

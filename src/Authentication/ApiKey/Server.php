@@ -11,9 +11,9 @@ declare ( strict_types = 1 );
 
 namespace SatisPress\Authentication\ApiKey;
 
-use SatisPress\Authentication\AbstractServer;
+use SatisPress\Authentication\Server as ServerInterface;
+use SatisPress\Exception\HttpException;
 use SatisPress\HTTP\Request;
-use SatisPress\WP_Error\HttpError;
 use WP_Error;
 use WP_Http as HTTP;
 
@@ -22,7 +22,7 @@ use WP_Http as HTTP;
  *
  * @since 0.3.0
  */
-class Server extends AbstractServer {
+class Server implements ServerInterface {
 	/**
 	 * API Key repository.
 	 *
@@ -35,12 +35,37 @@ class Server extends AbstractServer {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @param Request          $request    Request instance.
 	 * @param ApiKeyRepository $repository API Key repository.
 	 */
-	public function __construct( Request $request, ApiKeyRepository $repository ) {
-		parent::__construct( $request );
+	public function __construct( ApiKeyRepository $repository ) {
 		$this->repository = $repository;
+	}
+
+	/**
+	 * Check if the server should handle the current request.
+	 *
+	 * @since 0.4.0
+	 *
+	 * @param Request $request Request instance.
+	 * @return bool
+	 */
+	public function check_scheme( Request $request ): bool {
+		$header = $request->get_header( 'authorization' );
+
+		// Bail if the authorization header doesn't exist.
+		if ( null === $header || 0 !== stripos( $header, 'basic ' ) ) {
+			return false;
+		}
+
+		// The password field isn't used for API Key authentication.
+		$realm = $request->get_header( 'PHP_AUTH_PW' );
+
+		// Bail if this isn't a SatisPress authentication request.
+		if ( 'satispress' !== $realm ) {
+			return false;
+		}
+
+		return true;
 	}
 
 	/**
@@ -48,57 +73,33 @@ class Server extends AbstractServer {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @param int|bool $user_id Current user ID or false if unknown.
-	 * @return int|bool A user on success, or false on failure.
+	 * @param Request $request Request instance.
+	 * @throws HttpException If authentication fails.
+	 * @return int A user ID.
 	 */
-	public function authenticate( $user_id ) {
-		if ( ! empty( $user_id ) || ! $this->should_attempt ) {
-			return $user_id;
-		}
-
-		$header = $this->request->get_header( 'authorization' );
-
-		// Bail if the authorization header doesn't exist.
-		if ( null === $header || 0 !== stripos( $header, 'basic ' ) ) {
-			return $user_id;
-		}
-
-		// The password field isn't used for API Key authentication.
-		$realm = $this->request->get_header( 'PHP_AUTH_PW' );
-
-		// Bail if this isn't a SatisPress authentication request.
-		if ( 'satispress' !== $realm ) {
-			return $user_id;
-		}
-
-		$this->should_attempt = false;
-
-		$api_key_id = $this->request->get_header( 'PHP_AUTH_USER' );
+	public function authenticate( Request $request ): int {
+		$api_key_id = $request->get_header( 'PHP_AUTH_USER' );
 
 		// Bail if an API Key wasn't provided.
 		if ( null === $api_key_id ) {
-			$this->auth_status = HttpError::missingAuthorizationHeader();
-			return false;
+			throw HttpException::forMissingAuthorizationHeader();
 		}
 
 		$api_key = $this->repository->find_by_token( $api_key_id );
 
 		// Bail if the API Key doesn't exist.
 		if ( null === $api_key ) {
-			$this->auth_status = HttpError::invalidCredentials();
-			return false;
+			throw HttpException::forInvalidCredentials();
 		}
 
 		$user = $api_key->get_user();
 
 		// Bail if the user couldn't be determined.
 		if ( ! $this->validate_user( $user ) ) {
-			$this->auth_status = HttpError::invalidCredentials();
-			return false;
+			throw HttpException::forInvalidCredentials();
 		}
 
 		$this->maybe_update_last_used_time( $api_key );
-		$this->auth_status = true;
 
 		return $user->ID;
 	}
@@ -108,17 +109,14 @@ class Server extends AbstractServer {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @param WP_Error $error Error object.
+	 * @param HttpException $e HTTP exception.
 	 */
-	protected function handle_error( WP_Error $error ) {
-		$error_data = $error->get_error_data();
-
-		if ( ! empty( $error_data['status'] ) && HTTP::UNAUTHORIZED === $error_data['status'] ) {
+	public function handle_error( HttpException $e ): WP_Error {
+		if ( HTTP::UNAUTHORIZED === $e->getStatusCode() ) {
 			header( 'WWW-Authenticate: Basic realm="SatisPress"' );
 		}
 
-		$status_code = empty( $error_data['status'] ) ? HTTP::INTERNAL_SERVER_ERROR : $error_data['status'];
-		wp_die( wp_kses_data( $error->get_error_message() ), absint( $status_code ) );
+		wp_die( wp_kses_data( $e->getMessage() ), absint( $e->getStatusCode() ) );
 	}
 
 	/**
