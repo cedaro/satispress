@@ -105,7 +105,7 @@ function get_packages_permalink( array $args = null ): string {
 
 	$permalink = get_option( 'permalink_structure' );
 	if ( empty( $permalink ) ) {
-		$url = add_query_arg( 'satispress', 'packages.json', home_url( '/' ) );
+		$url = add_query_arg( 'satispress_route', 'composer', home_url( '/' ) );
 	} else {
 		// Leave off the packages.json if 'base' arg is true.
 		$suffix = isset( $args['base'] ) && $args['base'] ? '' : 'packages.json';
