@@ -214,7 +214,7 @@ class Settings extends AbstractHookProvider {
 	 */
 	public function sanitize_settings( array $value ): array {
 		if ( ! empty( $value['vendor'] ) ) {
-			$value['vendor'] = sanitize_text_field( $value['vendor'] );
+			$value['vendor'] = preg_replace( '/[^a-z0-9_\-\.]+/i', '', $value['vendor'] );
 		}
 
 		return (array) apply_filters( 'satispress_sanitize_settings', $value );
