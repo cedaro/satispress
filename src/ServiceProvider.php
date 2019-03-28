@@ -254,7 +254,7 @@ class ServiceProvider implements ServiceProviderInterface {
 							return true;
 						}
 
-							return in_array( $package->get_basename(), $plugins, true );
+						return in_array( $package->get_basename(), $plugins, true );
 					}
 				)
 				->with_filter(
@@ -263,7 +263,7 @@ class ServiceProvider implements ServiceProviderInterface {
 							return true;
 						}
 
-							return in_array( $package->get_slug(), $themes, true );
+						return in_array( $package->get_slug(), $themes, true );
 					}
 				);
 		};
