@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+* Packages names have been lowercased and invalid characters will be removed to prevent errors when Composer 2.0 is released ([#90](https://github.com/cedaro/satispress/issues/90)). This may require updates to `composer.json` if your project requires packages with uppercase characters.
+* Refactored authentication servers to prevent conflicts with plugins that call `determine_current_user` earlier than expected ([#94](https://github.com/cedaro/satispress/issues/94)). This changes the server interface and will require code updates if you're using custom authentication server.
+* Introduced a default logger implementation to surface issues in `debug.log` when debug mode is enabled. By default, only messages with a `warning` level or higher will be logged ([#86](https://github.com/cedaro/satispress/issues/86)). 
+* Updated the sanitization rules for custom vendor names to align more closely with Composer's rules.
+* Introduced a testing suite and tests.
+* Sorted releases just before building a package to ensure they're always in the expected order.
+* Fixed the permalink for `packages.json` when rewrites aren't enabled.
+
 ## [0.3.2] - 2019-02-01
 
 * Improved the method for discovering package updates to make caching more reliable.
@@ -26,7 +34,7 @@ Major changes include:
 * [Capabilities](docs/security.md#capabilities) were added for viewing and downloading packages, as well as managing SatisPress options. Only administrators have access by default.
 * The storage layer was abstracted to make it swappable.
 
-[Unreleased]: https://github.com/cedaro/satispress/compare/v0.3.1...HEAD
+[Unreleased]: https://github.com/cedaro/satispress/compare/v0.3.2...HEAD
 [0.3.2]: https://github.com/cedaro/satispress/compare/v0.3.1...v0.3.2
 [0.3.1]: https://github.com/cedaro/satispress/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/cedaro/satispress/compare/v0.2.3...v0.3.0
