@@ -7,6 +7,7 @@
 * Introduced a default logger implementation to surface issues in `debug.log` when debug mode is enabled. By default, only messages with a `warning` level or higher will be logged ([#86](https://github.com/cedaro/satispress/issues/86)). 
 * Updated the sanitization rules for custom vendor names to align more closely with Composer's rules.
 * Introduced a testing suite and tests.
+* Fixed the documented method for disabling authentication ([#93](https://github.com/cedaro/satispress/pull/93)). Props [@rickard-berg](https://github.com/rickard-berg)
 * Sorted releases just before building a package to ensure they're always in the expected order.
 * Fixed the permalink for `packages.json` when rewrites aren't enabled.
 
