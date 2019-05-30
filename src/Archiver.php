@@ -62,12 +62,14 @@ class Archiver {
 			throw PackageNotInstalled::unableToArchiveFromSource( $package );
 		}
 
-		$release     = $package->get_release( $version );
-		$remove_path = \dirname( $package->get_directory() );
+		$release          = $package->get_release( $version );
+		$remove_path      = \dirname( $package->get_directory() );
+		$dist_ignore_path = $package->get_directory() . '/.distignore';
 
-		$excludes = apply_filters(
-			'satispress_archive_excludes',
-			[
+		if ( ( ! $package instanceof Plugin || ! $package->is_single_file() ) && file_exists( $dist_ignore_path ) ) {
+			$excludes = $this->get_dist_ignored_files( $dist_ignore_path );
+		} else {
+			$excludes = [
 				'.DS_Store',
 				'.git',
 				'coverage',
@@ -75,9 +77,10 @@ class Archiver {
 				'dist',
 				'node_modules',
 				'tests',
-			],
-			$release
-		);
+			];
+		}
+
+		$excludes = apply_filters( 'satispress_archive_excludes', $excludes, $release );
 
 		$files = $package->get_files( $excludes );
 
@@ -112,6 +115,24 @@ class Archiver {
 		);
 
 		return $filename;
+	}
+
+	private function get_dist_ignored_files( string $dist_ignore_path ): array {
+
+		$ignored_files       = array();
+		$maybe_ignored_files = explode( PHP_EOL, file_get_contents( $dist_ignore_path ) );
+
+		foreach ( $maybe_ignored_files as $file ) {
+			$file = trim( $file );
+
+			if ( ! $file || 0 === strpos( $file, '#' ) ) {
+				continue;
+			}
+
+			$ignored_files[] = $file;
+		}
+
+		return $ignored_files;
 	}
 
 	/**
