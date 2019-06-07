@@ -117,9 +117,19 @@ class Archiver {
 		return $filename;
 	}
 
+	/**
+	 * Get the list of files to exclude based on a .distignore file.
+	 *
+	 * @since 0.5.0
+	 *
+	 * @param string $dist_ignore_path Path to the .distignore file. File must already exist.
+	 *
+	 * @return string[]
+	 */
 	private function get_dist_ignored_files( string $dist_ignore_path ): array {
+		$ignored_files = array();
 
-		$ignored_files       = array();
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 		$maybe_ignored_files = explode( PHP_EOL, file_get_contents( $dist_ignore_path ) );
 
 		foreach ( $maybe_ignored_files as $file ) {
