@@ -4,8 +4,8 @@
 
 ## [0.4.1] - 2019-06-20
 
-* Add support for `.distignore` files to customize which files are excluded from generated artifacts ([#100](https://github.com/cedaro/satispress/issues/100)). Props [@TimothyBJacobs](https://github.com/TimothyBJacobs)
-* Prevent a fatal error when the request path is `null` ([#98](https://github.com/cedaro/satispress/issues/98)). Props [@danielbachhuber](https://github.com/danielbachhuber)
+* Added support for `.distignore` files to customize which files are excluded from generated artifacts ([#100](https://github.com/cedaro/satispress/issues/100)). Props [@TimothyBJacobs](https://github.com/TimothyBJacobs)
+* Prevented a fatal error when the request path is `null` ([#98](https://github.com/cedaro/satispress/issues/98)). Props [@danielbachhuber](https://github.com/danielbachhuber)
 
 ## [0.4.0] - 2019-04-02
 
@@ -42,7 +42,8 @@ Major changes include:
 * [Capabilities](docs/security.md#capabilities) were added for viewing and downloading packages, as well as managing SatisPress options. Only administrators have access by default.
 * The storage layer was abstracted to make it swappable.
 
-[Unreleased]: https://github.com/cedaro/satispress/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/cedaro/satispress/compare/v0.4.1...HEAD
+[0.4.1]: https://github.com/cedaro/satispress/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/cedaro/satispress/compare/v0.3.2...v0.4.0
 [0.3.2]: https://github.com/cedaro/satispress/compare/v0.3.1...v0.3.2
 [0.3.1]: https://github.com/cedaro/satispress/compare/v0.3.0...v0.3.1
