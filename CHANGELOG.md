@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+## [0.4.1] - 2019-06-20
+
+* Add support for `.distignore` files to customize which files are excluded from generated artifacts ([#100](https://github.com/cedaro/satispress/issues/100)). Props [@TimothyBJacobs](https://github.com/TimothyBJacobs)
+* Prevent a fatal error when the request path is `null` ([#98](https://github.com/cedaro/satispress/issues/98)). Props [@danielbachhuber](https://github.com/danielbachhuber)
+
 ## [0.4.0] - 2019-04-02
 
 * Packages names have been lowercased and invalid characters will be removed to prevent errors when Composer 2.0 is released ([#90](https://github.com/cedaro/satispress/issues/90)). This may require updates to `composer.json` if your project requires packages with uppercase characters.
