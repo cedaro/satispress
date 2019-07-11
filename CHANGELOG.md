@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+* Removed the `/coverage`, `/docs`, `/dist`, and `/tests` directories from the default excludes. This is a breaking change in the sense that files in those directories will now be included unless they're configured to be excluded via a filter or `.distignore`. See [#103](https://github.com/cedaro/satispress/issues/103)
+* Added a `.distignore` to exclude development files if SatisPress is added to the repository.
+
 ## [0.4.1] - 2019-06-20
 
 * Added support for `.distignore` files to customize which files are excluded from generated artifacts ([#100](https://github.com/cedaro/satispress/issues/100)). Props [@TimothyBJacobs](https://github.com/TimothyBJacobs)
