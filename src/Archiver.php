@@ -72,11 +72,7 @@ class Archiver {
 			$excludes = [
 				'.DS_Store',
 				'.git',
-				'coverage',
-				'docs',
-				'dist',
 				'node_modules',
-				'tests',
 			];
 		}
 
