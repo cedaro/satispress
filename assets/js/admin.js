@@ -30,7 +30,7 @@
 	}, 1 );
 
 	// Handle the checkbox for toggling plugins.
-	$( '.satispress-status' ).on( 'change', function() {
+	$( document ).on( 'change', '.satispress-status', function() {
 		var $checkbox = $( this ),
 			$spinner = $( this ).siblings( '.spinner' ).addClass( 'is-active' );
 
