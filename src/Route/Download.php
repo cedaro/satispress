@@ -35,6 +35,20 @@ class Download implements Route {
 	const LATEST_VERSION = 'latest';
 
 	/**
+	 * Regex for sanitizing package slugs.
+	 *
+	 * @var string
+	 */
+	const PACKAGE_SLUG_REGEX = '/[^A-Za-z0-9_\-]+/i';
+
+	/**
+	 * Regex for sanitizing package versions.
+	 *
+	 * @var string
+	 */
+	const PACKAGE_VERSION_REGEX = '/[^0-9a-z.-]+/i';
+
+	/**
 	 * Release manager.
 	 *
 	 * @var ReleaseManager
@@ -79,14 +93,14 @@ class Download implements Route {
 			throw HttpException::forForbiddenResource();
 		}
 
-		$slug = preg_replace( '/[^A-Za-z0-9_\-]+/i', '', $request['slug'] );
+		$slug = preg_replace( self::PACKAGE_SLUG_REGEX, '', $request['slug'] );
 		if ( empty( $slug ) ) {
 			throw HttpException::forUnknownPackage( $slug );
 		}
 
 		$version = '';
 		if ( ! empty( $request['version'] ) ) {
-			$version = preg_replace( '/[^0-9a-z.-]+/i', '', $request['version'] );
+			$version = preg_replace( self::PACKAGE_VERSION_REGEX, '', $request['version'] );
 		}
 
 		$package = $this->repository->first_where( [ 'slug' => $slug ] );
