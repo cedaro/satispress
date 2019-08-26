@@ -39,7 +39,7 @@ class Download implements Route {
 	 *
 	 * @var string
 	 */
-	const PACKAGE_SLUG_REGEX = '/[^A-Za-z0-9_\-]+/i';
+	const PACKAGE_SLUG_REGEX = '/[^A-Za-z0-9._\-]+/i';
 
 	/**
 	 * Regex for sanitizing package versions.
