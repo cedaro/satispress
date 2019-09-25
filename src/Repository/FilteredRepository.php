@@ -58,7 +58,7 @@ class FilteredRepository extends AbstractRepository implements PackageRepository
 
 		foreach ( $this->repository->all() as $package ) {
 			if ( ( $this->callback )( $package ) ) {
-				$packages[ $package->get_slug() ] = $package;
+				$packages[] = $package;
 			}
 		}
 

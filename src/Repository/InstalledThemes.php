@@ -51,7 +51,7 @@ class InstalledThemes extends AbstractRepository implements PackageRepository {
 		$items = [];
 
 		foreach ( wp_get_themes() as $slug => $theme ) {
-			$items[ $slug ] = $this->build( $slug, $theme );
+			$items[] = $this->build( $slug, $theme );
 		}
 
 		return $items;

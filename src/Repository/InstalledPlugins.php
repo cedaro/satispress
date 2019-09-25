@@ -52,7 +52,7 @@ class InstalledPlugins extends AbstractRepository implements PackageRepository {
 		foreach ( get_plugins() as $plugin_file => $plugin_data ) {
 			$package        = $this->build( $plugin_file, $plugin_data );
 			$slug           = $package->get_slug();
-			$items[ $slug ] = $package;
+			$items[] = $package;
 		}
 
 		ksort( $items );
