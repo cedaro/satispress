@@ -2,8 +2,13 @@
 
 ## [Unreleased]
 
+## [0.5.0] - 2019-09-25
+
+* Added the `.` (dot) character to the list of allowed characters for package slugs. See [#108](https://github.com/cedaro/satispress/issues/108)
 * Removed the `/coverage`, `/docs`, `/dist`, and `/tests` directories from the default excludes. This is a breaking change in the sense that files in those directories will now be included unless they're configured to be excluded via a filter or `.distignore`. See [#103](https://github.com/cedaro/satispress/issues/103)
 * Added a `.distignore` to exclude development files if SatisPress is added to the repository.
+* Delegated the event handler for toggling plugins on the *Manage Plugins* screen to fix a bug preventing plugins from being toggled if the list of plugins had been filtered. See [#107](https://github.com/cedaro/satispress/issues/107)
+* Removed internal array keys from the package repository classes to prevent an error when a theme and plugin have the same slug. See [#109](https://github.com/cedaro/satispress/issues/109)
 
 ## [0.4.1] - 2019-06-20
 
@@ -45,7 +50,8 @@ Major changes include:
 * [Capabilities](docs/security.md#capabilities) were added for viewing and downloading packages, as well as managing SatisPress options. Only administrators have access by default.
 * The storage layer was abstracted to make it swappable.
 
-[Unreleased]: https://github.com/cedaro/satispress/compare/v0.4.1...HEAD
+[Unreleased]: https://github.com/cedaro/satispress/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/cedaro/satispress/compare/v0.4.1...v0.5.0
 [0.4.1]: https://github.com/cedaro/satispress/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/cedaro/satispress/compare/v0.3.2...v0.4.0
 [0.3.2]: https://github.com/cedaro/satispress/compare/v0.3.1...v0.3.2
