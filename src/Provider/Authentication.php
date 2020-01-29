@@ -185,6 +185,10 @@ class Authentication extends AbstractHookProvider {
 	protected function get_request_path(): string {
 		$request_path = wp_parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH );
 
+		if ( false === $request_path ) {
+			return '';
+		}
+
 		$wp_base = get_home_url( null, '/', 'relative' );
 		if ( $request_path && 0 === strpos( $request_path, $wp_base ) ) {
 			$request_path = substr( $request_path, \strlen( $wp_base ) );
