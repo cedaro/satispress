@@ -15,6 +15,8 @@ SatisPress requires PHP 7.0 or later.
 
 [GitHub Updater](https://github.com/afragen/github-updater) can be used to receive notifications and install updates when new releases are available.
 
+*__Note__: If you're using GitHub Updater to install SatisPress, copy the full URL to the [latest release asset](https://github.com/cedaro/satispress/releases/latest) (the asset named `satispress-{version}.zip`). Using the repository URL alone won't work.*
+
 ## Composer
 
 SatisPress is available on [Packagist](https://packagist.org/packages/cedaro/satispress), so it can be installed via Composer:
