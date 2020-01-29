@@ -46,7 +46,7 @@ namespace SatisPress;
 	]
 }</code></pre>
 
-		<form action="options.php" method="post">
+		<form action="<?php echo esc_url( admin_url( 'options.php' ) ); ?>" method="post">
 			<?php settings_fields( 'satispress' ); ?>
 			<?php do_settings_sections( 'satispress' ); ?>
 			<?php submit_button(); ?>
