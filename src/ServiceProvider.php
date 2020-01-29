@@ -154,11 +154,7 @@ class ServiceProvider implements ServiceProviderInterface {
 
 		$container['http.request'] = function() {
 
-			if( wp_doing_cron() ) {
-				return new Request();
-			}
-
-			$request = new Request( $_SERVER['REQUEST_METHOD'] );
+			$request = new Request( $_SERVER['REQUEST_METHOD'] ?? '' );
 
 			// phpcs:ignore WordPress.Security.NonceVerification.NoNonceVerification
 			$request->set_query_params( wp_unslash( $_GET ) );
