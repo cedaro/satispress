@@ -50,8 +50,7 @@ class InstalledPlugins extends AbstractRepository implements PackageRepository {
 		$items = [];
 
 		foreach ( get_plugins() as $plugin_file => $plugin_data ) {
-			$package        = $this->build( $plugin_file, $plugin_data );
-			$slug           = $package->get_slug();
+			$package = $this->build( $plugin_file, $plugin_data );
 			$items[] = $package;
 		}
 
