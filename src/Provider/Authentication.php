@@ -114,7 +114,6 @@ class Authentication extends AbstractHookProvider {
 				$user_id = $server->authenticate( $this->request );
 			} catch ( AuthenticationException $e ) {
 				$this->auth_status = $e;
-				$user_id           = false;
 
 				add_filter( 'rest_authentication_errors', [ $this, 'get_authentication_errors' ] );
 			}
