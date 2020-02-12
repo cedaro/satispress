@@ -45,6 +45,7 @@ class Plugin extends BasePlugin implements Composable {
 			->register_hooks( $container->get( 'hooks.rewrite_rules' ) )
 			->register_hooks( $container->get( 'hooks.ajax.api_key' ) )
 			->register_hooks( $container->get( 'hooks.custom_vendor' ) )
+			->register_hooks( $container->get( 'hooks.health_check' ) )
 			->register_hooks( $container->get( 'hooks.request_handler' ) )
 			->register_hooks( $container->get( 'hooks.package_archiver' ) );
 
