@@ -63,7 +63,7 @@ class AuthenticationException extends HttpException {
 	/**
 	 * Create an exception for requests that require authentication.
 	 *
-	 * @since 0.4.0.
+	 * @since 0.4.0
 	 *
 	 * @param array     $headers  Response headers.
 	 * @param string    $code     Optional. The Exception code.
@@ -84,7 +84,7 @@ class AuthenticationException extends HttpException {
 	/**
 	 * Create an exception for invalid credentials.
 	 *
-	 * @since 0.4.0.
+	 * @since 0.4.0
 	 *
 	 * @param array     $headers  Response headers.
 	 * @param string    $code     Optional. The Exception code.
@@ -105,7 +105,7 @@ class AuthenticationException extends HttpException {
 	/**
 	 * Create an exception for a missing authorization header.
 	 *
-	 * @since 0.4.0.
+	 * @since 0.4.0
 	 *
 	 * @param array     $headers  Response headers.
 	 * @param string    $code     Optional. The Exception code.
