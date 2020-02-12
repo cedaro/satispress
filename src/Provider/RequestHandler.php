@@ -13,6 +13,7 @@ namespace SatisPress\Provider;
 
 use Cedaro\WP\Plugin\AbstractHookProvider;
 use Psr\Container\ContainerInterface;
+use SatisPress\Exception\AuthenticationException;
 use SatisPress\HTTP\Request;
 use SatisPress\HTTP\Response;
 use SatisPress\Route\Route;
@@ -89,7 +90,9 @@ class RequestHandler extends AbstractHookProvider {
 				$response   = $controller->handle( $this->request );
 			}
 		} catch ( \Exception $e ) {
-			if ( $this->is_debug_mode() ) {
+			// Don't throw authentication exceptions in debug mode so challenge
+			// headers can be sent to display login prompts.
+			if ( $this->is_debug_mode() && ! $e instanceof AuthenticationException ) {
 				throw $e;
 			}
 
