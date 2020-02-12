@@ -116,6 +116,12 @@ class ServiceProvider implements ServiceProviderInterface {
 			return new Provider\Deactivation();
 		};
 
+		$container['hooks.health_check'] = function( $container ) {
+			return new Provider\HealthCheck(
+				$container['http.request']
+			);
+		};
+
 		$container['hooks.i18n'] = function() {
 			return new I18n();
 		};

@@ -15,6 +15,7 @@ use Cedaro\WP\Plugin\AbstractHookProvider;
 use SatisPress\Authentication\ApiKey\ApiKey;
 use SatisPress\Authentication\ApiKey\ApiKeyRepository;
 use SatisPress\Capabilities;
+use SatisPress\Provider\HealthCheck;
 use SatisPress\Repository\PackageRepository;
 use SatisPress\Transformer\PackageTransformer;
 use WP_Theme;
@@ -108,6 +109,7 @@ class Settings extends AbstractHookProvider {
 	 */
 	public function load_screen() {
 		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_assets' ] );
+		add_action( 'admin_notices', [ HealthCheck::class, 'display_admin_notice' ] );
 	}
 
 	/**
