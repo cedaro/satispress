@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+## [0.5.1] - 2020-03-03
+
+* Stopped throwing authentication exceptions when `WP_DEBUG` is enabled so HTTP challenge headers could be sent and allow clients to display a login prompt. [#105](https://github.com/cedaro/satispress/issues/105).
+* Prevented a fatal error in the authentication provider when URLs couldn't be parsed [#122](https://github.com/cedaro/satispress/pull/122). Props [@BrianHenryIE](https://github.com/BrianHenryIE)
+* Handled cases when the server doesn't define the request method to prevent a notice [#122](https://github.com/cedaro/satispress/pull/122). Props [@BrianHenryIE](https://github.com/BrianHenryIE)
+* Allowed settings to be saved when SatisPress is used in multisite mode [#119](https://github.com/cedaro/satispress/issues/119).
+* Removed a couple of dead or superfluous lines of code.
+
 ## [0.5.0] - 2019-09-25
 
 * Added the `.` (dot) character to the list of allowed characters for package slugs. See [#108](https://github.com/cedaro/satispress/issues/108)
@@ -50,7 +58,8 @@ Major changes include:
 * [Capabilities](docs/security.md#capabilities) were added for viewing and downloading packages, as well as managing SatisPress options. Only administrators have access by default.
 * The storage layer was abstracted to make it swappable.
 
-[Unreleased]: https://github.com/cedaro/satispress/compare/v0.5.0...HEAD
+[Unreleased]: https://github.com/cedaro/satispress/compare/v0.5.1...HEAD
+[0.5.1]: https://github.com/cedaro/satispress/compare/v0.5.0...v0.5.1
 [0.5.0]: https://github.com/cedaro/satispress/compare/v0.4.1...v0.5.0
 [0.4.1]: https://github.com/cedaro/satispress/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/cedaro/satispress/compare/v0.3.2...v0.4.0
