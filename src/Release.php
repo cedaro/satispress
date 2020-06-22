@@ -69,7 +69,7 @@ class Release {
 		$url = sprintf(
 			'/satispress/%s/%s/%s',
 			$package_type,
-            $this->get_package()->get_slug(),
+			$this->get_package()->get_slug(),
 			$this->get_version()
 		);
 

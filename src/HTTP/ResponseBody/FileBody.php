@@ -35,7 +35,6 @@ class FileBody implements ResponseBody {
 	 * @throws InvalidFileName If the file name fails validation.
 	 */
 	public function __construct( string $filename ) {
-
 		$result = validate_file( $filename );
 
 		// if windows file path is found, ignore in
