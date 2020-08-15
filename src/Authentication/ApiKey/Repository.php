@@ -93,7 +93,7 @@ class Repository implements ApiKeyRepository {
 		$keys = [];
 
 		foreach ( $meta as $meta_key => $values ) {
-			if ( 0 !== strpos( $meta_key, static::META_PREFIX ) ) {
+			if ( 0 !== strpos( (string) $meta_key, static::META_PREFIX ) ) {
 				continue;
 			}
 
