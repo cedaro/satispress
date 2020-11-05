@@ -62,21 +62,9 @@ class Archiver {
 			throw PackageNotInstalled::unableToArchiveFromSource( $package );
 		}
 
-		$release          = $package->get_release( $version );
-		$remove_path      = \dirname( $package->get_directory() );
-		$dist_ignore_path = $package->get_directory() . '/.distignore';
-
-		if ( ( ! $package instanceof Plugin || ! $package->is_single_file() ) && file_exists( $dist_ignore_path ) ) {
-			$excludes = $this->get_dist_ignored_files( $dist_ignore_path );
-		} else {
-			$excludes = [
-				'.DS_Store',
-				'.git',
-				'node_modules',
-			];
-		}
-
-		$excludes = apply_filters( 'satispress_archive_excludes', $excludes, $release );
+		$release     = $package->get_release( $version );
+		$remove_path = \dirname( $package->get_directory() );
+		$excludes    = $this->get_excluded_files( $package, $release );
 
 		$files = $package->get_files( $excludes );
 
@@ -114,12 +102,36 @@ class Archiver {
 	}
 
 	/**
+	 * Get the list of files to exclude from a package artifact.
+	 *
+	 * @since 0.6.0
+	 *
+	 * @param Package $package Installed package instance.
+	 * @param Release $release Release instance.
+	 * @return string[] Array of files to exclude.
+	 */
+	protected function get_excluded_files( Package $package, Release $release ): array {
+		$dist_ignore_path = $package->get_directory() . '/.distignore';
+
+		if ( ( ! $package instanceof Plugin || ! $package->is_single_file() ) && file_exists( $dist_ignore_path ) ) {
+			$excludes = $this->get_dist_ignored_files( $dist_ignore_path );
+		} else {
+			$excludes = [
+				'.DS_Store',
+				'.git',
+				'node_modules',
+			];
+		}
+
+		return apply_filters( 'satispress_archive_excludes', $excludes, $release );
+	}
+
+	/**
 	 * Get the list of files to exclude based on a .distignore file.
 	 *
 	 * @since 0.5.0
 	 *
 	 * @param string $dist_ignore_path Path to the .distignore file. File must already exist.
-	 *
 	 * @return string[]
 	 */
 	private function get_dist_ignored_files( string $dist_ignore_path ): array {
