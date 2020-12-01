@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+## [0.5.2] - 2020-12-01
+
+* Cast meta keys to strings in `SatisPress\Authentication\ApiKey\ApiKeyRepository::find_for_user()` to prevent fatal errors in some situations [#133](https://github.com/cedaro/satispress/issues/133).
+* Fixed a fatal error when `wp_parse_url()` returned `null` [#135](https://github.com/cedaro/satispress/pull/135). Props [@danielbachhuber](https://github.com/danielbachhuber)
+
 ## [0.5.1] - 2020-03-03
 
 * Stopped throwing authentication exceptions when `WP_DEBUG` is enabled so HTTP challenge headers could be sent and allow clients to display a login prompt. [#105](https://github.com/cedaro/satispress/issues/105).
@@ -58,7 +63,8 @@ Major changes include:
 * [Capabilities](docs/security.md#capabilities) were added for viewing and downloading packages, as well as managing SatisPress options. Only administrators have access by default.
 * The storage layer was abstracted to make it swappable.
 
-[Unreleased]: https://github.com/cedaro/satispress/compare/v0.5.1...HEAD
+[Unreleased]: https://github.com/cedaro/satispress/compare/v0.5.2...HEAD
+[0.5.2]: https://github.com/cedaro/satispress/compare/v0.5.1...v0.5.2
 [0.5.1]: https://github.com/cedaro/satispress/compare/v0.5.0...v0.5.1
 [0.5.0]: https://github.com/cedaro/satispress/compare/v0.4.1...v0.5.0
 [0.4.1]: https://github.com/cedaro/satispress/compare/v0.4.0...v0.4.1
