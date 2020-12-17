@@ -17,6 +17,7 @@ namespace SatisPress;
 
 use PclZip;
 use Psr\Log\LoggerInterface;
+use SatisPress\Exception\FileArchiveInvalid;
 use SatisPress\Exception\FileDownloadFailed;
 use SatisPress\Exception\FileOperationFailed;
 use SatisPress\Exception\InvalidReleaseVersion;
@@ -181,6 +182,20 @@ class Archiver {
 			);
 
 			throw FileDownloadFailed::forFileName( $filename );
+		}
+
+		$zip = new pclzip($tmpfname);
+
+		if ( $zip->properties()['status'] !== 'ok' ) {
+			$this->logger->error(
+				'File archive invalid.',
+				[
+					'error' => $tmpfname,
+					'url'   => $release->get_source_url(),
+				]
+			);
+
+			throw FileArchiveInvalid::forFileName( $filename );
 		}
 
 		if ( ! wp_mkdir_p( \dirname( $filename ) ) ) {
