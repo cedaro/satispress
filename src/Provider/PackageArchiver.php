@@ -149,13 +149,15 @@ class PackageArchiver extends AbstractHookProvider {
 
 		// The $id will be a theme slug or the plugin file.
 		foreach ( $value->response as $slug => $update_data ) {
+			// Plugin data is stored as an object. Coerce to an array.
+			$update_data = (array) $update_data;
+
 			// Bail if a URL isn't available.
-			if ( empty( $update_data->package ) ) {
+			if ( empty( $update_data['package'] ) ) {
 				continue;
 			}
 
 			$args = compact( 'slug', 'type' );
-
 			// Bail if the package isn't whitelisted.
 			if ( ! $this->whitelisted_packages->contains( $args ) ) {
 				continue;
@@ -163,9 +165,6 @@ class PackageArchiver extends AbstractHookProvider {
 
 			try {
 				$package = $this->packages->first_where( $args );
-
-				// Plugin data is stored as an object. Coerce to an array.
-				$update_data = (array) $update_data;
 
 				$release = new Release(
 					$package,
