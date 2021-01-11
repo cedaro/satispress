@@ -86,6 +86,7 @@ class PackageArchiver extends AbstractHookProvider {
 		add_action( 'update_option_satispress_themes', [ $this, 'archive_on_option_update' ], 10, 3 );
 		add_filter( 'pre_set_site_transient_update_plugins', [ $this, 'archive_updates' ], 9999 );
 		add_filter( 'pre_set_site_transient_update_themes', [ $this, 'archive_updates' ], 9999 );
+		add_filter( 'upgrader_post_install', [ $this, 'archive_on_upgrade' ], 10, 3 );
 	}
 
 	/**
@@ -200,6 +201,27 @@ class PackageArchiver extends AbstractHookProvider {
 		foreach ( $slugs as $slug ) {
 			$this->archive_package( $slug, $type );
 		}
+	}
+
+	/**
+	 * Archive a package when upgrading through the admin panel UI.
+	 *
+	 * @since 0.6.0
+	 *
+	 * @param bool  $response   Installation response.
+	 * @param array $hook_extra Extra arguments passed to hooked filters.
+	 * @param array $result     Installation result data.
+	 */
+	public function archive_on_upgrade( $response, $hook_extra, $result ) {
+		$type = $hook_extra['type'] ?? '';
+		$slug = $result['destination_name'] ?? '';
+		$args = compact( 'slug', 'type' );
+
+		if ( $this->whitelisted_packages->contains( $args ) ) {
+			$this->archive_package( $slug, $type );
+		}
+
+		return $response;
 	}
 
 	/**
