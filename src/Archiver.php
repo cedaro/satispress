@@ -167,8 +167,9 @@ class Archiver {
 	public function archive_from_url( Release $release ): string {
 		include_once ABSPATH . 'wp-admin/includes/file.php';
 
-		$filename = $this->get_absolute_path( $release->get_file() );
-		$tmpfname = download_url( $release->get_source_url() );
+		$filename     = $this->get_absolute_path( $release->get_file() );
+		$download_url = apply_filters( 'satispress_package_download_url', $release->get_source_url(), $release );
+		$tmpfname     = download_url( $download_url );
 
 		if ( is_wp_error( $tmpfname ) ) {
 			$this->logger->error(
