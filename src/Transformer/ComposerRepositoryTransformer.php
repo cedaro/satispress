@@ -123,8 +123,18 @@ class ComposerRepositoryTransformer implements PackageRepositoryTransformer {
 
 			// Cache the release in case an artifact doesn't already exist for
 			// the installed version.
-			if ( $package->is_installed_release( $release ) ) {
-				$release = $this->release_manager->archive( $release );
+			if ( $package->is_installed() && $package->is_installed_release( $release ) ) {
+				try {
+					$release = $this->release_manager->archive( $release );
+				} catch ( SatispressException $e ) {
+					$this->logger->error(
+						'Error archiving {package}.',
+						[
+							'exception' => $e,
+							'package'   => $package->get_name(),
+						]
+					);
+				}
 			}
 
 			$version = $release->get_version();
