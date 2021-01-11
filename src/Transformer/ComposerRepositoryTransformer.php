@@ -121,6 +121,12 @@ class ComposerRepositoryTransformer implements PackageRepositoryTransformer {
 				continue;
 			}
 
+			// Cache the release in case an artifact doesn't already exist for
+			// the installed version.
+			if ( $package->is_installed_release( $release ) ) {
+				$release = $this->release_manager->archive( $release );
+			}
+
 			$version = $release->get_version();
 
 			try {
