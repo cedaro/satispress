@@ -104,7 +104,7 @@ class Archiver {
 	/**
 	 * Get the list of files to exclude from a package artifact.
 	 *
-	 * @since 0.6.0
+	 * @since 0.5.2
 	 *
 	 * @param Package $package Installed package instance.
 	 * @param Release $release Release instance.

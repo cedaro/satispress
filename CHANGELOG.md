@@ -6,6 +6,7 @@
 
 * Cast meta keys to strings in `SatisPress\Authentication\ApiKey\ApiKeyRepository::find_for_user()` to prevent fatal errors in some situations [#133](https://github.com/cedaro/satispress/issues/133).
 * Fixed a fatal error when `wp_parse_url()` returned `null` [#135](https://github.com/cedaro/satispress/pull/135). Props [@danielbachhuber](https://github.com/danielbachhuber)
+* Moved functionality for determining excluded files to `SatisPress\Archiver::get_excluded_files()`.
 
 ## [0.5.1] - 2020-03-03
 
