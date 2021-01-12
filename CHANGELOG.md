@@ -2,6 +2,15 @@
 
 ## [Unreleased]
 
+## [0.6.0] - 2021-1-11
+
+* Added the `satispress_package_download_url` filter. This can be used to ignore update requests from vendors with custom update routines that cause invalid artifacts to be downloaded.
+* Created missing artifacts from source for the currently installed version of a package when viewing the `packages.json` endpoint. This allows updates made through FTP, git, or the admin UI to be archived automatically and included in `packages.json` without having to perform any additional manual steps. See [#131](https://github.com/cedaro/satispress/issues/131)
+* Archived packages automatically when they're upgraded in the WordPress admin panel.
+* Coerced package download URLs retrieved from the `update_plugins` and `update_themes` transients to strings before using them to prevent fatal errors caused by packages that inject unexpected data. See [#106](https://github.com/cedaro/satispress/issues/106)
+* Updated `dealerdirect/phpcodesniffer-composer-installer` for Composer 2 compatibility. Props [@aaronware](https://github.com/aaronware) 
+* Updated `composer/semver` dependency to version 3.2.
+
 ## [0.5.2] - 2020-12-01
 
 * Cast meta keys to strings in `SatisPress\Authentication\ApiKey\ApiKeyRepository::find_for_user()` to prevent fatal errors in some situations [#133](https://github.com/cedaro/satispress/issues/133).
@@ -64,7 +73,8 @@ Major changes include:
 * [Capabilities](docs/security.md#capabilities) were added for viewing and downloading packages, as well as managing SatisPress options. Only administrators have access by default.
 * The storage layer was abstracted to make it swappable.
 
-[Unreleased]: https://github.com/cedaro/satispress/compare/v0.5.2...HEAD
+[Unreleased]: https://github.com/cedaro/satispress/compare/v0.6.0...HEAD
+[0.6.0]: https://github.com/cedaro/satispress/compare/v0.5.2...v0.6.0
 [0.5.2]: https://github.com/cedaro/satispress/compare/v0.5.1...v0.5.2
 [0.5.1]: https://github.com/cedaro/satispress/compare/v0.5.0...v0.5.1
 [0.5.0]: https://github.com/cedaro/satispress/compare/v0.4.1...v0.5.0
