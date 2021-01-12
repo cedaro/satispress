@@ -169,7 +169,7 @@ class PackageArchiver extends AbstractHookProvider {
 				$release = new Release(
 					$package,
 					$update_data['new_version'],
-					$update_data['package']
+					(string) $update_data['package']
 				);
 
 				$this->release_manager->archive( $release );

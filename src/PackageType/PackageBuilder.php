@@ -318,13 +318,13 @@ class PackageBuilder {
 			$updates = get_site_transient( 'update_plugins' );
 			if ( ! empty( $updates->response[ $package->get_basename() ]->package ) ) {
 				$update  = $updates->response[ $package->get_basename() ];
-				$release = new Release( $package, $update->new_version, $update->package );
+				$release = new Release( $package, $update->new_version, (string) $update->package );
 			}
 		} elseif ( $package instanceof Theme ) {
 			$updates = get_site_transient( 'update_themes' );
 			if ( ! empty( $updates->response[ $package->get_slug() ]['package'] ) ) {
 				$update  = $updates->response[ $package->get_slug() ];
-				$release = new Release( $package, $update['new_version'], $update['package'] );
+				$release = new Release( $package, $update['new_version'], (string) $update['package'] );
 			}
 		}
 
