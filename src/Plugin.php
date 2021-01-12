@@ -57,9 +57,16 @@ class Plugin extends BasePlugin implements Composable {
 				->register_hooks( $container->get( 'screen.settings' ) );
 		}
 
+		if ( \function_exists( 'envato_market' ) ) {
+			$this->register_hooks( $container->get( 'plugin.envato_market' ) );
+		}
+
 		if ( \function_exists( 'members_plugin' ) ) {
-			$this
-				->register_hooks( $container->get( 'plugin.members' ) );
+			$this->register_hooks( $container->get( 'plugin.members' ) );
+		}
+
+		if ( \function_exists( 'vc_plugin_name' ) ) {
+			$this->register_hooks( $container->get( 'plugin.wpbakery' ) );
 		}
 
 		/**

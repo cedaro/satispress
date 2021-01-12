@@ -186,8 +186,16 @@ class ServiceProvider implements ServiceProviderInterface {
 			);
 		};
 
+		$container['plugin.envato_market'] = function() {
+			return new Integration\EnvatoMarket();
+		};
+
 		$container['plugin.members'] = function() {
 			return new Integration\Members();
+		};
+
+		$container['plugin.wpbakery'] = function() {
+			return new Integration\WPBakery();
 		};
 
 		$container['release.manager'] = function( $container ) {
