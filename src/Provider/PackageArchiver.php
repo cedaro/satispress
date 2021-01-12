@@ -211,7 +211,7 @@ class PackageArchiver extends AbstractHookProvider {
 	 * @param array $hook_extra Extra arguments passed to hooked filters.
 	 * @param array $result     Installation result data.
 	 */
-	public function archive_on_upgrade( $response, $hook_extra, $result ) {
+	public function archive_on_upgrade( bool $response, array $hook_extra, array $result ): bool {
 		$type = $hook_extra['type'] ?? '';
 		$slug = $result['destination_name'] ?? '';
 		$args = compact( 'slug', 'type' );
