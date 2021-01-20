@@ -17,9 +17,9 @@ namespace SatisPress;
 
 use PclZip;
 use Psr\Log\LoggerInterface;
-use SatisPress\Exception\FileArchiveInvalid;
 use SatisPress\Exception\FileDownloadFailed;
 use SatisPress\Exception\FileOperationFailed;
+use SatisPress\Exception\InvalidPackageArtifact;
 use SatisPress\Exception\InvalidReleaseVersion;
 use SatisPress\Exception\PackageNotInstalled;
 use SatisPress\PackageType\Plugin;
@@ -184,18 +184,18 @@ class Archiver {
 			throw FileDownloadFailed::forFileName( $filename );
 		}
 
-		$zip = new pclzip($tmpfname);
+		$zip = new pclzip( $tmpfname );
 
-		if ( $zip->properties()['status'] !== 'ok' ) {
+		if ( 'ok' !== $zip->properties()['status'] ) {
 			$this->logger->error(
-				'File archive invalid.',
+				'Downloaded package artifact was invalid.',
 				[
 					'error' => $tmpfname,
-					'url'   => $release->get_source_url(),
+					'url'   => $download_url,
 				]
 			);
 
-			throw FileArchiveInvalid::forFileName( $filename );
+			throw InvalidPackageArtifact::forFileName( $filename );
 		}
 
 		if ( ! wp_mkdir_p( \dirname( $filename ) ) ) {
