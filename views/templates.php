@@ -84,7 +84,21 @@ declare( strict_types = 1 );
 		</tr>
 		<tr>
 			<th scope="row"><label for="satispress-release-action-require-{{ data.name }}"><?php esc_html_e( 'Require', 'satispress' ); ?></label></th>
-			<td><input type="text" value='"{{ data.name }}": "{{ data.version }}"' class="regular-text" readonly="readonly" id="satispress-release-action-require-{{ data.name }}" /></td>
+			<td>
+				<input type="text" value='"{{ data.name }}": "{{ data.version }}"' class="regular-text" readonly="readonly" id="satispress-release-action-require-{{ data.name }}" /><br>
+				<span class="description">
+					<em>
+						<?php
+						/* translators: %s: <code>composer.json</code> */
+						printf( esc_html__( 'Copy and paste into %s', 'satispress' ), '<code>composer.json</code>' );
+						?>
+					</em>
+				</span>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row"><label for="satispress-release-action-cli-{{ data.name }}"><?php esc_html_e( 'CLI Command', 'satispress' ); ?></label></th>
+			<td><input type="text" value="composer require {{ data.name }}:{{ data.version }}" class="regular-text" readonly="readonly" id="satispress-release-action-cli-{{ data.name }}" /></td>
 		</tr>
 		<tr>
 			<td colspan="2">
