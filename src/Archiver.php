@@ -53,6 +53,7 @@ class Archiver {
 	 *
 	 * @param Package $package Installed package instance.
 	 * @param string  $version Release version.
+	 * @throws PackageNotInstalled If the package is not installed.
 	 * @throws InvalidReleaseVersion If the version is invalid.
 	 * @throws FileOperationFailed If a temporary working directory can't be created.
 	 * @throws FileOperationFailed If zip creation fails.
@@ -163,6 +164,8 @@ class Archiver {
 	 * @throws FileDownloadFailed  If the artifact can't be downloaded.
 	 * @throws FileOperationFailed If a temporary working directory can't be created.
 	 * @throws FileOperationFailed If a temporary artifact can't be renamed.
+	 * @throws InvalidPackageArtifact If download artifact is an invalid zip file.
+	 * @throws InvalidPackageArtifact If downloaded artifact doesn't contain any files.
 	 * @return string Absolute path to the artifact.
 	 */
 	public function archive_from_url( Release $release ): string {
@@ -181,21 +184,35 @@ class Archiver {
 				]
 			);
 
-			throw FileDownloadFailed::forFileName( $filename );
+			throw FileDownloadFailed::forFileName( $tmpfname );
 		}
 
-		$zip = new pclzip( $tmpfname );
+		$zip = new PclZip( $tmpfname );
 
-		if ( 'ok' !== $zip->properties()['status'] ) {
+		if ( 0 === $zip->properties() ) {
 			$this->logger->error(
 				'Downloaded package artifact was invalid.',
 				[
-					'error' => $tmpfname,
-					'url'   => $download_url,
+					'package' => $release->get_package()->get_name(),
+					'version' => $release->get_version(),
+					'url'     => $download_url,
 				]
 			);
 
-			throw InvalidPackageArtifact::forFileName( $filename );
+			throw InvalidPackageArtifact::forUnreadableZip( $tmpfname );
+		}
+
+		if ( $this->has_top_level_macosx_directory( $zip ) ) {
+			$this->logger->error(
+				'Downloaded package artifact had a top level __MACOSX directory.',
+				[
+					'package' => $release->get_package()->get_name(),
+					'version' => $release->get_version(),
+					'url'     => $download_url,
+				]
+			);
+
+			throw InvalidPackageArtifact::hasMacOsxDirectory( $tmpfname );
 		}
 
 		if ( ! wp_mkdir_p( \dirname( $filename ) ) ) {
@@ -227,5 +244,31 @@ class Archiver {
 	 */
 	protected function get_absolute_path( string $path = '' ): string {
 		return get_temp_dir() . 'satispress/' . ltrim( $path, '/' );
+	}
+
+	/**
+	 * Whether a zip contains a top level __MACOSX directory.
+	 *
+	 * @since 0.7.0
+	 *
+	 * @param  PclZip $zip PclZip instance.
+	 * @return bool
+	 */
+	private function has_top_level_macosx_directory( PclZip $zip ): bool {
+		$directories = [];
+
+		$contents = $zip->listContent();
+		foreach ( $contents as $file ) {
+			if ( false === $file['folder'] ) {
+				continue;
+			}
+
+			$directory = strtok( $file['filename'], '/' );
+			if ( '__MACOSX' === $directory ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 }
