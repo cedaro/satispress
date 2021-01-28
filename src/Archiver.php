@@ -206,7 +206,7 @@ class Archiver {
 				]
 			);
 
-			throw FileDownloadFailed::forFileName( $tmpfname );
+			throw FileDownloadFailed::forFileName( $filename );
 		}
 
 		if ( ! wp_mkdir_p( \dirname( $filename ) ) ) {
