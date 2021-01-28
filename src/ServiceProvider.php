@@ -31,6 +31,7 @@ use SatisPress\Screen;
 use SatisPress\Storage;
 use SatisPress\Transformer\ComposerPackageTransformer;
 use SatisPress\Transformer\ComposerRepositoryTransformer;
+use SatisPress\Validator;
 
 /**
  * Plugin service provider class.
@@ -55,7 +56,8 @@ class ServiceProvider implements ServiceProviderInterface {
 		};
 
 		$container['archiver'] = function( $container ) {
-			return new Archiver( $container['logger'] );
+			return ( new Archiver( $container['logger'] ) )
+				->register_validators( $container['validators.artifact'] );
 		};
 
 		$container['authentication.servers'] = function( $container ) {
@@ -358,6 +360,26 @@ class ServiceProvider implements ServiceProviderInterface {
 				$container['version.parser'],
 				$container['logger']
 			);
+		};
+
+		$container['validator.hidden_directory'] = function() {
+			return new Validator\HiddenDirectoryValidator();
+		};
+
+		$container['validator.zip'] = function() {
+			return new Validator\ZipValidator();
+		};
+
+		$container['validators.artifact'] = function( $container ) {
+			$servers = apply_filters(
+				'satispress_artifact_validators',
+				[
+					10 => 'validator.zip',
+					20 => 'validator.hidden_directory',
+				]
+			);
+
+			return new ServiceIterator( $container, $servers );
 		};
 
 		$container['version.parser'] = function() {

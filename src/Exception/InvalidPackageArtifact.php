@@ -18,7 +18,7 @@ namespace SatisPress\Exception;
  */
 class InvalidPackageArtifact extends \RuntimeException implements SatispressException {
 	/**
-	 * Create an exception for artifact that's unreadable as a zip archive.
+	 * Create an exception for artifact that is unreadable as a zip archive.
 	 *
 	 * @since 0.7.0
 	 *
@@ -27,7 +27,7 @@ class InvalidPackageArtifact extends \RuntimeException implements SatispressExce
 	 * @param \Throwable $previous Optional. The previous throwable used for the exception chaining.
 	 * @return InvalidPackageArtifact
 	 */
-	public static function forUnreadableZip(
+	public static function unreadableZip(
 		string $filename,
 		int $code = 0,
 		\Throwable $previous = null
@@ -47,7 +47,7 @@ class InvalidPackageArtifact extends \RuntimeException implements SatispressExce
 	 * @param \Throwable $previous Optional. The previous throwable used for the exception chaining.
 	 * @return InvalidPackageArtifact
 	 */
-	public static function hasMacOsxDirectory(
+	public static function containsMacOsxDirectory(
 		string $filename,
 		int $code = 0,
 		\Throwable $previous = null

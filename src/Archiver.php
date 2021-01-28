@@ -15,7 +15,9 @@ declare ( strict_types = 1 );
 
 namespace SatisPress;
 
+use LogicException;
 use PclZip;
+use Pimple\ServiceIterator;
 use Psr\Log\LoggerInterface;
 use SatisPress\Exception\FileDownloadFailed;
 use SatisPress\Exception\FileOperationFailed;
@@ -23,6 +25,7 @@ use SatisPress\Exception\InvalidPackageArtifact;
 use SatisPress\Exception\InvalidReleaseVersion;
 use SatisPress\Exception\PackageNotInstalled;
 use SatisPress\PackageType\Plugin;
+use SatisPress\Validator\ArtifactValidator;
 
 /**
  * Archiver class.
@@ -38,12 +41,32 @@ class Archiver {
 	protected $logger;
 
 	/**
+	 * Artifact validators.
+	 *
+	 * @var ServiceIterator
+	 */
+	protected $validators = [];
+
+	/**
 	 * Constructor.
 	 *
 	 * @param LoggerInterface $logger Logger.
 	 */
 	public function __construct( LoggerInterface $logger ) {
 		$this->logger = $logger;
+	}
+
+	/**
+	 * Register artifact validators.
+	 *
+	 * @since 0.7.0
+	 *
+	 * @param ServiceIterator $validators Artifact validators.
+	 * @return $this
+	 */
+	public function register_validators( ServiceIterator $validators ) {
+		$this->validators = $validators;
+		return $this;
 	}
 
 	/**
@@ -54,7 +77,6 @@ class Archiver {
 	 * @param Package $package Installed package instance.
 	 * @param string  $version Release version.
 	 * @throws PackageNotInstalled If the package is not installed.
-	 * @throws InvalidReleaseVersion If the version is invalid.
 	 * @throws FileOperationFailed If a temporary working directory can't be created.
 	 * @throws FileOperationFailed If zip creation fails.
 	 * @return string Absolute path to the artifact.
@@ -163,9 +185,9 @@ class Archiver {
 	 * @param Release $release Release instance.
 	 * @throws FileDownloadFailed  If the artifact can't be downloaded.
 	 * @throws FileOperationFailed If a temporary working directory can't be created.
+	 * @throws LogicException If a registered server doesn't implement the server interface.
+	 * @throws InvalidPackageArtifact If downloaded artifact cannot be validated.
 	 * @throws FileOperationFailed If a temporary artifact can't be renamed.
-	 * @throws InvalidPackageArtifact If download artifact is an invalid zip file.
-	 * @throws InvalidPackageArtifact If downloaded artifact doesn't contain any files.
 	 * @return string Absolute path to the artifact.
 	 */
 	public function archive_from_url( Release $release ): string {
@@ -187,36 +209,18 @@ class Archiver {
 			throw FileDownloadFailed::forFileName( $tmpfname );
 		}
 
-		$zip = new PclZip( $tmpfname );
-
-		if ( 0 === $zip->properties() ) {
-			$this->logger->error(
-				'Downloaded package artifact was invalid.',
-				[
-					'package' => $release->get_package()->get_name(),
-					'version' => $release->get_version(),
-					'url'     => $download_url,
-				]
-			);
-
-			throw InvalidPackageArtifact::forUnreadableZip( $tmpfname );
-		}
-
-		if ( $this->has_top_level_macosx_directory( $zip ) ) {
-			$this->logger->error(
-				'Downloaded package artifact had a top level __MACOSX directory.',
-				[
-					'package' => $release->get_package()->get_name(),
-					'version' => $release->get_version(),
-					'url'     => $download_url,
-				]
-			);
-
-			throw InvalidPackageArtifact::hasMacOsxDirectory( $tmpfname );
-		}
-
 		if ( ! wp_mkdir_p( \dirname( $filename ) ) ) {
 			throw FileOperationFailed::unableToCreateTemporaryDirectory( $filename );
+		}
+
+		foreach ( $this->validators as $validator ) {
+			if ( ! $validator instanceof ArtifactValidator ) {
+				throw new LogicException( 'Artifact validators must implement \SatisPress\Validator\ArtifactValidator.' );
+			}
+
+			if ( ! $validator->validate( $tmpfname, $release ) ) {
+				throw new InvalidPackageArtifact( "Unable to validate {$tmpfname} as a zip archive." );
+			}
 		}
 
 		if ( ! rename( $tmpfname, $filename ) ) {
@@ -244,31 +248,5 @@ class Archiver {
 	 */
 	protected function get_absolute_path( string $path = '' ): string {
 		return get_temp_dir() . 'satispress/' . ltrim( $path, '/' );
-	}
-
-	/**
-	 * Whether a zip contains a top level __MACOSX directory.
-	 *
-	 * @since 0.7.0
-	 *
-	 * @param  PclZip $zip PclZip instance.
-	 * @return bool
-	 */
-	private function has_top_level_macosx_directory( PclZip $zip ): bool {
-		$directories = [];
-
-		$contents = $zip->listContent();
-		foreach ( $contents as $file ) {
-			if ( false === $file['folder'] ) {
-				continue;
-			}
-
-			$directory = strtok( $file['filename'], '/' );
-			if ( '__MACOSX' === $directory ) {
-				return true;
-			}
-		}
-
-		return false;
 	}
 }
