@@ -2,6 +2,13 @@
 
 ## [Unreleased]
 
+## [0.7.0] - 2021-1-28
+
+* Introduced validators to prevent invalid artifacts from being cached when downloaded from the vendor.
+* Introduced adapters for downloading artifacts from vendors that use a non-standard update process.
+* Added a field to the SatisPress package list screen to copy the CLI command for requiring a package in `composer.json`.
+* Fixed a bug with the logger not logging messages above the specified log level.
+
 ## [0.6.0] - 2021-1-11
 
 * Added the `satispress_package_download_url` filter. This can be used to ignore update requests from vendors with custom update routines that cause invalid artifacts to be downloaded.
@@ -73,7 +80,8 @@ Major changes include:
 * [Capabilities](docs/security.md#capabilities) were added for viewing and downloading packages, as well as managing SatisPress options. Only administrators have access by default.
 * The storage layer was abstracted to make it swappable.
 
-[Unreleased]: https://github.com/cedaro/satispress/compare/v0.6.0...HEAD
+[Unreleased]: https://github.com/cedaro/satispress/compare/v0.7.0...HEAD
+[0.6.0]: https://github.com/cedaro/satispress/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/cedaro/satispress/compare/v0.5.2...v0.6.0
 [0.5.2]: https://github.com/cedaro/satispress/compare/v0.5.1...v0.5.2
 [0.5.1]: https://github.com/cedaro/satispress/compare/v0.5.0...v0.5.1
