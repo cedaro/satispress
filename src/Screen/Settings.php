@@ -109,7 +109,8 @@ class Settings extends AbstractHookProvider {
 	 */
 	public function load_screen() {
 		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_assets' ] );
-		add_action( 'admin_notices', [ HealthCheck::class, 'display_admin_notice' ] );
+		add_action( 'admin_notices', [ HealthCheck::class, 'display_authorization_notice' ] );
+		add_action( 'admin_notices', [ HealthCheck::class, 'display_permalink_notice' ] );
 	}
 
 	/**
