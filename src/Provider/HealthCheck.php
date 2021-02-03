@@ -4,7 +4,7 @@
  *
  * @package SatisPress
  * @license GPL-2.0-or-later
- * @since 0.5.1
+ * @since 0.7.1
  */
 
 declare ( strict_types = 1 );
@@ -21,7 +21,7 @@ use function SatisPress\get_authorization_header;
 /**
  * Class to check the health of the system.
  *
- * @since 0.5.1
+ * @since 0.7.1
  */
 class HealthCheck extends AbstractHookProvider {
 	/**
@@ -34,7 +34,7 @@ class HealthCheck extends AbstractHookProvider {
 	/**
 	 * Constructor.
 	 *
-	 * @since 0.5.1
+	 * @since 0.7.1
 	 *
 	 * @param Request $request Request instance.
 	 */
@@ -45,42 +45,73 @@ class HealthCheck extends AbstractHookProvider {
 	/**
 	 * Register hooks.
 	 *
-	 * @since 0.5.1
+	 * @since 0.7.1
 	 */
 	public function register_hooks() {
 		add_action( 'admin_post_nopriv_satispress_check_authorization_header', [ $this, 'handle_authorization_request' ] );
 	}
 
 	/**
+	 * Display a notice.
+	 *
+	 * @since 0.7.1
+	 *
+	 * @param string $message Message to display.
+	 */
+	protected static function display_notice( $message ) {
+		printf(
+			'<div class="notice notice-error"><p><strong>%s:</strong> %s</p></div>',
+			esc_html__( 'Health Check', 'satispress' ),
+			wp_kses(
+				$message,
+				[
+					'a' => [
+						'href'   => true,
+						'rel'    => true,
+						'target' => true,
+					],
+				]
+			)
+		);
+	}
+
+	/**
 	 * Display a health check admin notice if a check fails.
 	 *
-	 * @since 0.5.1
+	 * @since 0.7.1
 	 */
-	public static function display_admin_notice() {
+	public static function display_authorization_notice() {
 		try {
 			self::check_authorization_header();
 		} catch ( \Exception $e ) {
-			printf(
-				'<div class="notice notice-error"><p><strong>%s:</strong> %s</p></div>',
-				esc_html__( 'Health Check', 'satispress' ),
-				wp_kses(
-					$e->getMessage(),
-					[
-						'a' => [
-							'href'   => true,
-							'rel'    => true,
-							'target' => true,
-						],
-					]
-				)
-			);
+			self::display_notice( $e->getMessage() );
 		}
+	}
+
+	/**
+	 * Display a notice if pretty permalinks aren't enabled.
+	 *
+	 * @since 0.7.1
+	 */
+	public static function display_permalink_notice() {
+		$value = get_option( 'permalink_structure', '' );
+		if ( ! empty( $value ) ) {
+			return;
+		}
+
+		$message = sprintf(
+			/* translators: %s: permalink screen URL */
+			__( 'SatisPress requires pretty permalinks to be enabled. <a href="%s">Enable permalinks</a>.', 'satispress' ),
+			esc_url( admin_url( 'options-permalink.php' ) )
+		);
+
+		self::display_notice( $message );
 	}
 
 	/**
 	 * Check whether authorization headers are supported.
 	 *
-	 * @since 0.5.1
+	 * @since 0.7.1
 	 *
 	 * @throws \UnexpectedValueException If the response could not be handled or parsed.
 	 * @throws \RuntimeException If the authorization check fails.
@@ -132,7 +163,7 @@ class HealthCheck extends AbstractHookProvider {
 	/**
 	 * Handle authorization check requests.
 	 *
-	 * @since 0.5.1
+	 * @since 0.7.1
 	 */
 	public function handle_authorization_request() {
 		$header = $this->request->get_header( 'authorization' );
@@ -168,7 +199,7 @@ class HealthCheck extends AbstractHookProvider {
 	/**
 	 * Send a JSON error response.
 	 *
-	 * @since 0.5.1
+	 * @since 0.7.1
 	 *
 	 * @param  string $code    Error code.
 	 * @param  string $message Error message.
