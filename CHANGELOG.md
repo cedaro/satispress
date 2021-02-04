@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+## [0.7.1] - 2021-02-04
+
+* There weren't any changes in this release. The version number was bumped to allow Composer to install updates from the previously botched release process.
+
 ## [0.7.0] - 2021-1-28
 
 * Introduced validators to prevent invalid artifacts from being cached when downloaded from the vendor.
@@ -80,7 +84,8 @@ Major changes include:
 * [Capabilities](docs/security.md#capabilities) were added for viewing and downloading packages, as well as managing SatisPress options. Only administrators have access by default.
 * The storage layer was abstracted to make it swappable.
 
-[Unreleased]: https://github.com/cedaro/satispress/compare/v0.7.0...HEAD
+[Unreleased]: https://github.com/cedaro/satispress/compare/v0.7.1...HEAD
+[0.6.0]: https://github.com/cedaro/satispress/compare/v0.7.0...v0.7.1
 [0.6.0]: https://github.com/cedaro/satispress/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/cedaro/satispress/compare/v0.5.2...v0.6.0
 [0.5.2]: https://github.com/cedaro/satispress/compare/v0.5.1...v0.5.2
