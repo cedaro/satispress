@@ -6,7 +6,7 @@
 
 ## WordPress Packagist
 
-[WordPress Packagsit](https://wpackagist.org/) mirrors the WordPress plugin and theme directories as a Composer repository so they can be installed with Composer.
+[WordPress Packagist](https://wpackagist.org/) mirrors the WordPress plugin and theme directories as a Composer repository so they can be installed with Composer.
 
 ## Private Packagist
 
