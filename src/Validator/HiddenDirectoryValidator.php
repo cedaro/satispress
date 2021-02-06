@@ -35,7 +35,7 @@ class HiddenDirectoryValidator implements ArtifactValidator {
 		$zip = new PclZip( $filename );
 
 		if ( $this->has_top_level_macosx_directory( $zip ) ) {
-			throw InvalidPackageArtifact::containsMacOsxDirectory( $tmpfname );
+			throw InvalidPackageArtifact::containsMacOsxDirectory( $filename );
 		}
 
 		return true;
