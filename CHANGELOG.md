@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+## [0.7.2] - 2021-02-11
+
+* Fixed an incorrect variable name in the `HiddenDirectoryValidator` that caused a fatal error.
+* Added a Health Check feature to display admin notices for common configuration issues.
+* Fixed authentication integration tests to check for the correct exception type after preventing `AuthenticationException`s from being thrown in [a2415c7](https://github.com/cedaro/satispress/commit/a2415c7eaf2f3b7f4bb81baf7bed22cb19aad26e).
+* Moved validator tests to the integration test suite.
+* Removed the `PclZip` development dependency from `composer.json`. WordPress uses a patched version and in cases where it was inadvertently installed, it could cause issues. See [#149](https://github.com/cedaro/satispress/issues/149).
+
 ## [0.7.1] - 2021-02-04
 
 * There weren't any changes in this release. The version number was bumped to allow Composer to install updates from the previously botched release process.
@@ -84,7 +92,8 @@ Major changes include:
 * [Capabilities](docs/security.md#capabilities) were added for viewing and downloading packages, as well as managing SatisPress options. Only administrators have access by default.
 * The storage layer was abstracted to make it swappable.
 
-[Unreleased]: https://github.com/cedaro/satispress/compare/v0.7.1...HEAD
+[Unreleased]: https://github.com/cedaro/satispress/compare/v0.7.2...HEAD
+[0.6.0]: https://github.com/cedaro/satispress/compare/v0.7.1...v0.7.2
 [0.6.0]: https://github.com/cedaro/satispress/compare/v0.7.0...v0.7.1
 [0.6.0]: https://github.com/cedaro/satispress/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/cedaro/satispress/compare/v0.5.2...v0.6.0
