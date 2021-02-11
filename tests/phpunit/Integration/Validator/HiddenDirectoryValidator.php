@@ -1,7 +1,7 @@
 <?php
 declare ( strict_types = 1 );
 
-namespace SatisPress\Test\Unit\Validator;
+namespace SatisPress\Test\Integration\Validator;
 
 use SatisPress\Exception\InvalidPackageArtifact;
 use SatisPress\Release;

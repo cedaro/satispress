@@ -54,7 +54,6 @@
 		"brain/monkey": "^2.2",
 		"cedaro/wp-test-suite": "dev-develop",
 		"dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",
-		"pclzip/pclzip": "^2.8",
 		"phpcompatibility/phpcompatibility-wp": "^2",
 		"phpunit/phpunit": "^7.5",
 		"roave/security-advisories": "dev-master",
