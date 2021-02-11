@@ -10,6 +10,7 @@ use SatisPress\HTTP\Request;
 use SatisPress\Provider\Authentication;
 use SatisPress\Test\Integration\TestCase;
 use WP_Error;
+use WPDieException;
 
 use function Patchwork\{always, redefine, restore};
 use function SatisPress\get_packages_permalink;
@@ -79,7 +80,7 @@ class AuthenticationTest extends TestCase {
 		$user = wp_get_current_user();
 		$this->assertSame( 0, $user->ID );
 
-		$this->expectException( AuthenticationException::class );
+		$this->expectException( WPDieException::class );
 		$this->go_to( get_packages_permalink() );
 	}
 
@@ -93,7 +94,7 @@ class AuthenticationTest extends TestCase {
 		$user = wp_get_current_user();
 		$this->assertSame( 0, $user->ID );
 
-		$this->expectException( AuthenticationException::class );
+		$this->expectException( WPDieException::class );
 		$this->go_to( get_packages_permalink() );
 	}
 
@@ -106,7 +107,7 @@ class AuthenticationTest extends TestCase {
 		$user = wp_get_current_user();
 		$this->assertSame( 0, $user->ID );
 
-		$this->expectException( AuthenticationException::class );
+		$this->expectException( WPDieException::class );
 		$this->go_to( get_packages_permalink() );
 	}
 
@@ -120,7 +121,7 @@ class AuthenticationTest extends TestCase {
 		$user = wp_get_current_user();
 		$this->assertSame( 0, $user->ID );
 
-		$this->expectException( AuthenticationException::class );
+		$this->expectException( WPDieException::class );
 		$this->go_to( get_packages_permalink() );
 	}
 
