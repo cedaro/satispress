@@ -59,7 +59,7 @@ class Composer implements Route {
 	 * @since 0.3.0
 	 *
 	 * @param Request $request HTTP request instance.
-	 * @throws HTTPException If the user doesn't have permission to view packages.
+	 * @throws HttpException If the user doesn't have permission to view packages.
 	 * @return Response
 	 */
 	public function handle( Request $request ): Response {

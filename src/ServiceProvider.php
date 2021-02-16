@@ -91,13 +91,6 @@ class ServiceProvider implements ServiceProviderInterface {
 			return new Provider\AdminAssets();
 		};
 
-		$container['hooks.ajax.api_key'] = function( $container ) {
-			return new Provider\ApiKeyAjax(
-				$container['api_key.factory'],
-				$container['api_key.repository']
-			);
-		};
-
 		$container['hooks.authentication'] = function( $container ) {
 			return new Provider\Authentication(
 				$container['authentication.servers'],
@@ -362,16 +355,8 @@ class ServiceProvider implements ServiceProviderInterface {
 			);
 		};
 
-		$container['screen.manage_plugins'] = function( $container ) {
-			return new Screen\ManagePlugins( $container['repository.whitelist'] );
-		};
-
 		$container['screen.settings'] = function( $container ) {
-			return new Screen\Settings(
-				$container['repository.whitelist'],
-				$container['api_key.repository'],
-				$container['transformer.composer_package']
-			);
+			return new Screen\Settings( $container['api_key.repository'] );
 		};
 
 		$container['storage.packages'] = function( $container ) {

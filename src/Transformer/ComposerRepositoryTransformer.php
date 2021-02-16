@@ -14,6 +14,7 @@ namespace SatisPress\Transformer;
 use Psr\Log\LoggerInterface;
 use SatisPress\Capabilities;
 use SatisPress\Exception\FileNotFound;
+use SatisPress\Exception\SatispressException;
 use SatisPress\Package;
 use SatisPress\ReleaseManager;
 use SatisPress\Repository\PackageRepository;
