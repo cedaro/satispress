@@ -1,21 +1,18 @@
-/* Plugins Screen
-------------------------------------------------------------------------------*/
-
-.column-satispress input[type="checkbox"] {
-	float: left;
-	margin-top: 4px;
-}
-
-.column-satispress .spinner {
-	float: left;
-}
-
-
 /* Settings Screen
 ------------------------------------------------------------------------------*/
 
+.satispress-screen {
+	display: flex;
+	flex-wrap: nowrap;
+}
+
+.satispress-screen-content {
+	width: 100%;
+}
+
 .js .satispress-tab-panel {
 	display: none;
+	margin-top: 1em;
 }
 
 .satispress-tab-panel.is-active {
@@ -26,33 +23,86 @@
 	color: #ff0000;
 }
 
-.satispress-repository-snippet {
+.satispress-composer-snippet {
 	background: #333;
 	color: #fff;
 	line-height: 1.2;
 	padding: 10px;
 }
 
-.satispress-repository-snippet code {
+.satispress-composer-snippet code {
 	background: transparent;
 }
 
+.satispress-screen-sidebar {
+	background: #fff;
+	color: #1e1e1e;
+	display: none;
+	flex: 0 0 350px;
+	overflow-y: scroll;
+	position: fixed;
+	top: 32px;
+	right: 0;
+	bottom: 0;
+	width: 350px;
+	z-index: 10;
+}
 
-/* Packages Tab
+.satispress-screen-sidebar .components-panel__header {
+	background: #fff;
+	border-top-width: 0;
+	padding-right: 4px;
+	position: sticky;
+	top: 0;
+	z-index: 2;
+}
+
+.satispress-screen-sidebar .components-tab-panel__tabs {
+	background: #fff;
+	border-bottom: 1px solid #ddd;
+	position: sticky;
+	top: 49px;
+	z-index: 1;
+}
+
+.satispress-screen-sidebar .components-tab-panel__tab-content {
+	padding: 16px;
+}
+
+.satispress-screen-sidebar .components-tab-panel__tab-content > :first-child {
+	margin-top: 0;
+}
+
+.sidebar-is-open .satispress-screen-content {
+	margin-right: 370px;
+}
+
+.sidebar-is-open .satispress-screen-sidebar {
+	display: block;
+}
+
+
+/* Repository Tab
 ----------------------------------------------------------------------------- */
 
-.satispress-card {
-	background: #fff;
-	border: 1px solid #e5e5e5;
-	box-shadow: 0 1px 1px rgba(0,0,0,0.04);
-	margin-top: 20px;
-	max-width: 620px;
-	padding: 0.7em 2em 1em;
-	position: relative;
+.satispress-repository .components-placeholder {
+	max-width: 720px;
+}
+
+.satispress-repository > .components-button.is-pressed {
+	padding-right: 12px;
+}
+
+.satispress-repository .components-placeholder {
+	box-shadow: inset 0 0 0 1px #ccd0d4;
 }
 
 .satispress-package {
 	margin-top: 20px;
+}
+
+.satispress-package thead .components-button {
+	float: right;
 }
 
 .satispress-package tbody th,
@@ -80,12 +130,6 @@
 	margin-top: 1em;
 }
 
-.satispress-release-actions input {
-	background: #fff;
-	max-width: 100%;
-	width: 35em;
-}
-
 .satispress-release-actions td,
 .satispress-release-actions th {
 	padding: 5px 10px;
@@ -103,6 +147,20 @@
 .satispress-release-actions tr:last-child td,
 .satispress-release-actions tr:last-child th {
 	padding-bottom: 10px;
+}
+
+.satispress-release-actions .components-base-control {
+	width: 35em;
+}
+
+.satispress-release-actions .components-base-control__field {
+	margin-bottom: 1px;
+}
+
+.satispress-release-actions .components-text-control__input {
+	background: #fff;
+	max-width: 100%;
+	width: 35em;
 }
 
 @media screen and ( max-width: 782px ) {
@@ -136,7 +194,7 @@
 
 .satispress-api-key-table tfoot td input {
 	margin-left: 0;
-	padding: 4px 6px;
+	padding: 0 6px;
 	width: 20em;
 }
 
@@ -165,156 +223,23 @@
 	display: none;
 }
 
+.satispress-api-key-form .components-base-control {
+	width: 25em;
+}
 
-/* Dropdown Group
+.satispress-api-key-form .components-base-control__field {
+	margin-bottom: 1px;
+}
+
+.satispress-api-key-form .components-text-control__input {
+	height: 36px;
+}
+
+/* Composer Tab
 ----------------------------------------------------------------------------- */
 
-.satispress-dropdown-group {
-	display: inline-flex;
-	position: relative;
-}
-
-.satispress-dropdown-group > .button {
-	position: relative;
-	z-index: 2;
-}
-
-.satispress-dropdown-group > .button:first-child {
-	border-top-right-radius: 0;
-	border-bottom-right-radius: 0;
-	border-right-width: 0;
-}
-
-.satispress-dropdown-group > .satispress-dropdown-toggle {
-	align-items: center;
-	background: transparent;
-	border-radius: 4px;
-	border-width: 0;
-	color: #68717a;
-	cursor: pointer;
-	display: flex;
-	padding: 8px 4px;
-	position: relative;
-}
-
-.satispress-dropdown-group > .satispress-dropdown-toggle svg {
-	fill: currentColor;
-	transform: rotate(90deg);
-}
-
-.satispress-dropdown-group > .satispress-dropdown-toggle:focus,
-.satispress-dropdown-group > .satispress-dropdown-toggle:hover {
-	box-shadow: inset 0 0 0 1px #e2e4e7, inset 0 0 0 2px #fff, 0 1px 1px rgba( 25, 30, 35, .2 );
-	color: #191e23;
-}
-
-.satispress-dropdown-group > .satispress-dropdown-toggle:focus {
-	background: #edeff0;
-	box-shadow: inset 0 0 0 1px #555d66, inset 0 0 0 2px #fff;
-	outline: none;
-}
-
-.satispress-dropdown-group-items {
-	background-color: #fff;
-	border: 1px solid #ddd;
-	box-shadow: 1px 0 4px rgba( 0, 0, 0, 0.15 );
-	display: none;
-	list-style: none;
-	margin: 0;
-	max-width: 100%;
-	min-width: 180px;
-	padding: 5px 0;
-	position: absolute;
-	top: calc( 100% + 15px );
-	left: -15px;
-	z-index: 1;
-}
-
-.satispress-dropdown-group-items:after,
-.satispress-dropdown-group-items:before {
-	content: "";
-	display: block;
-	height: 0;
-	line-height: 0;
-	width: 0;
-}
-
-.satispress-dropdown-group-items:after {
-	border-color: #fff transparent;
-	border-style: solid inset;
-	border-width: 0 8px 8px 8px;
-	position: absolute;
-	top: -8px;
-	left: 19px;
-}
-
-.satispress-dropdown-group-items:before {
-	border-color: #e2e4e7 transparent;
-	border-style: solid inset;
-	border-width: 0 10px 10px 10px;
-	position: absolute;
-	top: -10px;
-	left: 17px;
-}
-
-.satispress-dropdown-group-items li {
-	display: block;
-	margin: 0;
-	padding: 5px 15px;
-	text-align: left;
-}
-
-.satispress-dropdown-group-items li a,
-.satispress-dropdown-group-items li button,
-.satispress-dropdown-group-items li button.button-link {
-	display: block;
-	line-height: 2;
-	margin: -5px -15px;
-	padding: 5px 15px;
-	text-align: left;
-	text-decoration: none;
-}
-
-.satispress-dropdown-group-items li a:hover,
-.satispress-dropdown-group-items li button:hover,
-.satispress-dropdown-group-items li button.button-link:hover {
-	background-color: #f8f8f8;
-}
-
-.satispress-dropdown-group-items li button,
-.satispress-dropdown-group-items li button.button-link {
-	width: calc(100% + 30px);
-}
-
-.satispress-dropdown-group-items ul {
-	margin: 0;
-}
-
-.satispress-dropdown-group-items.right {
-	right: -15px;
-	left: auto;
-}
-
-.satispress-dropdown-group-items.right:after {
-	right: 19px;
-	left: auto;
-}
-
-.satispress-dropdown-group-items.right:before {
-	right: 17px;
-	left: auto;
-}
-
-.satispress-dropdown-group.is-open {
-	z-index: 10;
-}
-
-.satispress-dropdown-group.is-open > .button {
-	border-bottom-left-radius: 0;
-	border-bottom-right-radius: 0;
-	border-bottom-width: 0;
-}
-
-.satispress-dropdown-group.is-open .satispress-dropdown-group-items {
-	display: block;
+input.satispress-cli-field {
+	background: #f6f6f6;
+	font-family: monospace;
+	max-width: 720px;
 }

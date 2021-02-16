@@ -16,11 +16,10 @@ use SatisPress\Authentication\ApiKey\ApiKey;
 use SatisPress\Authentication\ApiKey\ApiKeyRepository;
 use SatisPress\Capabilities;
 use SatisPress\Provider\HealthCheck;
-use SatisPress\Repository\PackageRepository;
-use SatisPress\Transformer\PackageTransformer;
 use WP_Theme;
 
 use function SatisPress\get_packages_permalink;
+use function SatisPress\preload_rest_data;
 
 /**
  * Settings screen provider class.
@@ -36,30 +35,12 @@ class Settings extends AbstractHookProvider {
 	protected $api_keys;
 
 	/**
-	 * Composer package transformer.
-	 *
-	 * @var PackageTransformer
-	 */
-	protected $composer_transformer;
-
-	/**
-	 * Package repository.
-	 *
-	 * @var PackageRepository
-	 */
-	protected $packages;
-
-	/**
 	 * Create the setting screen.
 	 *
-	 * @param PackageRepository  $packages            Package repository.
-	 * @param ApiKeyRepository   $api_keys            API Key repository.
-	 * @param PackageTransformer $composer_transformer Package transformer.
+	 * @param ApiKeyRepository $api_keys API Key repository.
 	 */
-	public function __construct( PackageRepository $packages, ApiKeyRepository $api_keys, PackageTransformer $composer_transformer ) {
-		$this->api_keys             = $api_keys;
-		$this->packages             = $packages;
-		$this->composer_transformer = $composer_transformer;
+	public function __construct( ApiKeyRepository $api_keys ) {
+		$this->api_keys = $api_keys;
 	}
 
 	/**
@@ -121,29 +102,33 @@ class Settings extends AbstractHookProvider {
 	public function enqueue_assets() {
 		wp_enqueue_script( 'satispress-admin' );
 		wp_enqueue_style( 'satispress-admin' );
-		wp_enqueue_script( 'satispress-package-settings' );
+		wp_enqueue_script( 'satispress-access' );
+		wp_enqueue_script( 'satispress-repository' );
 
-		$api_keys = $this->api_keys->find_for_user( wp_get_current_user() );
-
-		$items = array_map(
-			function( ApiKey $api_key ) {
-					$data                   = $api_key->to_array();
-					$data['user_edit_link'] = esc_url( get_edit_user_link( $api_key->get_user()->ID ) );
-
-					return $data;
-			},
-			$api_keys
-		);
-
-		wp_enqueue_script( 'satispress-api-keys' );
 		wp_localize_script(
-			'satispress-api-keys',
-			'_satispressApiKeysData',
+			'satispress-access',
+			'_satispressAccessData',
 			[
-				'items'  => $items,
-				'userId' => get_current_user_id(),
+				'editedUserId' => get_current_user_id(),
 			]
 		);
+
+		$preload_paths = [
+			'/satispress/v1/packages',
+		];
+
+		if ( current_user_can( Capabilities::MANAGE_OPTIONS ) ) {
+			$preload_paths = array_merge(
+				$preload_paths,
+				[
+					'/satispress/v1/apikeys?user=' . get_current_user_id(),
+					'/satispress/v1/plugins?_fields=slug,name,type',
+					'/satispress/v1/themes?_fields=slug,name,type',
+				]
+			);
+		}
+
+		preload_rest_data( $preload_paths );
 	}
 
 	/**
@@ -153,7 +138,6 @@ class Settings extends AbstractHookProvider {
 	 */
 	public function register_settings() {
 		register_setting( 'satispress', 'satispress', [ $this, 'sanitize_settings' ] );
-		register_setting( 'satispress', 'satispress_themes', [ $this, 'sanitize_theme_settings' ] );
 	}
 
 	/**
@@ -166,20 +150,6 @@ class Settings extends AbstractHookProvider {
 			'default',
 			esc_html__( 'General', 'satispress' ),
 			'__return_null',
-			'satispress'
-		);
-
-		add_settings_section(
-			'access',
-			esc_html__( 'Access', 'satispress' ),
-			[ $this, 'render_section_access_description' ],
-			'satispress'
-		);
-
-		add_settings_section(
-			'themes',
-			esc_html__( 'Themes', 'satispress' ),
-			[ $this, 'render_section_themes_description' ],
 			'satispress'
 		);
 	}
@@ -196,14 +166,6 @@ class Settings extends AbstractHookProvider {
 			[ $this, 'render_field_vendor' ],
 			'satispress',
 			'default'
-		);
-
-		add_settings_field(
-			'themes',
-			esc_html__( 'Themes', 'satispress' ),
-			[ $this, 'render_field_themes' ],
-			'satispress',
-			'themes'
 		);
 	}
 
@@ -224,64 +186,36 @@ class Settings extends AbstractHookProvider {
 	}
 
 	/**
-	 * Sanitize list of themes.
-	 *
-	 * @since 0.2.0
-	 *
-	 * @param mixed $value Setting value.
-	 * @return array
-	 */
-	public function sanitize_theme_settings( $value ): array {
-		return array_filter( array_unique( (array) $value ) );
-	}
-
-	/**
 	 * Display the screen.
 	 *
 	 * @since 0.2.0
 	 */
 	public function render_screen() {
 		$permalink = esc_url( get_packages_permalink() );
-		$packages  = array_map( [ $this->composer_transformer, 'transform' ], $this->packages->all() );
+
+		$tabs = [
+			'repository' => [
+				'name'       => esc_html__( 'Repository', 'satispress' ),
+				'capability' => Capabilities::VIEW_PACKAGES,
+			],
+			'access'     => [
+				'name'       => esc_html__( 'Access', 'satispress' ),
+				'capability' => Capabilities::MANAGE_OPTIONS,
+				'is_active'  => false,
+			],
+			'composer'   => [
+				'name'       => esc_html__( 'Composer', 'satispress' ),
+				'capability' => Capabilities::VIEW_PACKAGES,
+			],
+			'settings'   => [
+				'name'       => esc_html__( 'Settings', 'satispress' ),
+				'capability' => Capabilities::MANAGE_OPTIONS,
+			],
+		];
+
+		$active_tab = 'repository';
+
 		include $this->plugin->get_path( 'views/screen-settings.php' );
-		include $this->plugin->get_path( 'views/templates.php' );
-	}
-
-	/**
-	 * Display the access section description.
-	 *
-	 * @since 0.2.0
-	 */
-	public function render_section_access_description() {
-		printf(
-			'<p>%s</p>',
-			esc_html__( 'API Keys are used to access your SatisPress repository and download packages. Your personal API keys appear below or you can create keys for other users by editing their accounts.', 'satispress' )
-		);
-
-		printf(
-			'<p>%s</p>',
-			/* translators: %s: <code>satispress</code> */
-			sprintf( esc_html__( 'The password for all API Keys is %s.', 'satispress' ), '<code>satispress</code>' )
-		);
-
-		echo '<div id="satispress-api-key-manager"></div>';
-
-		printf(
-			'<p><a href="https://github.com/cedaro/satispress/blob/develop/docs/security.md" target="_blank" rel="noopener noreferer"><em>%s</em></a></p>',
-			esc_html__( 'Read more about securing your SatisPress repository.', 'satispress' )
-		);
-	}
-
-	/**
-	 * Display the themes section description.
-	 *
-	 * @since 0.2.0
-	 */
-	public function render_section_themes_description() {
-		printf(
-			'<p>%s</p>',
-			esc_html__( 'Choose themes to make available in your SatisPress repository.', 'satispress' )
-		);
 	}
 
 	/**
@@ -297,25 +231,6 @@ class Settings extends AbstractHookProvider {
 			<span class="description">Default is <code>satispress</code></span>
 		</p>
 		<?php
-	}
-
-	/**
-	 * Display the themes list field.
-	 *
-	 * @since 0.2.0
-	 */
-	public function render_field_themes() {
-		$value = get_option( 'satispress_themes', [] );
-
-		foreach ( wp_get_themes() as $slug => $theme ) {
-			/* @var WP_Theme $theme Theme. */
-			printf(
-				'<label><input type="checkbox" name="satispress_themes[]" value="%1$s"%2$s> %3$s</label><br />',
-				esc_attr( $slug ),
-				checked( \in_array( $slug, $value, true ), true, false ),
-				esc_html( $theme->get( 'Name' ) )
-			);
-		}
 	}
 
 	/**

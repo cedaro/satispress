@@ -18,6 +18,7 @@ use SatisPress\Capabilities;
 use WP_User;
 
 use function SatisPress\get_edited_user_id;
+use function SatisPress\preload_rest_data;
 
 /**
  * Edit Usser screen provider class.
@@ -70,7 +71,6 @@ class EditUser extends AbstractHookProvider {
 		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_assets' ] );
 		add_action( 'edit_user_profile', [ $this, 'render_api_keys_section' ] );
 		add_action( 'show_user_profile', [ $this, 'render_api_keys_section' ] );
-		add_action( 'admin_footer', [ $this, 'print_templates' ] );
 	}
 
 	/**
@@ -82,24 +82,19 @@ class EditUser extends AbstractHookProvider {
 		wp_enqueue_script( 'satispress-admin' );
 		wp_enqueue_style( 'satispress-admin' );
 
-		$user_id  = get_edited_user_id();
-		$user     = get_user_by( 'id', $user_id );
-		$api_keys = $this->api_keys->find_for_user( $user );
+		wp_enqueue_script( 'satispress-access' );
 
-		$items = array_map(
-			function( ApiKey $api_key ) {
-					return $api_key->to_array();
-			},
-			$api_keys
+		wp_localize_script(
+			'satispress-access',
+			'_satispressAccessData',
+			[
+				'editedUserId' => get_edited_user_id(),
+			]
 		);
 
-		wp_enqueue_script( 'satispress-api-keys' );
-		wp_localize_script(
-			'satispress-api-keys',
-			'_satispressApiKeysData',
+		preload_rest_data(
 			[
-				'items'  => $items,
-				'userId' => $user_id,
+				'/satispress/v1/apikeys?user=' . get_edited_user_id(),
 			]
 		);
 	}
@@ -112,14 +107,5 @@ class EditUser extends AbstractHookProvider {
 	public function render_api_keys_section( WP_User $user ) {
 		printf( '<h2>%s</h2>', esc_html__( 'SatisPress API Keys', 'satispress' ) );
 		echo '<div id="satispress-api-key-manager"></div>';
-	}
-
-	/**
-	 * Print Underscore.js templates.
-	 *
-	 * @since 0.3.0
-	 */
-	public function print_templates() {
-		include $this->plugin->get_path( 'views/templates.php' );
 	}
 }

@@ -12,48 +12,45 @@ declare ( strict_types = 1 );
 namespace SatisPress;
 
 ?>
-<div class="wrap">
-	<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
-	<h2 class="nav-tab-wrapper">
-		<a href="#satispress-settings" class="nav-tab nav-tab-active"><?php esc_html_e( 'Settings', 'satispress' ); ?></a>
-		<a href="#satispress-packages" class="nav-tab"><?php esc_html_e( 'Packages', 'satispress' ); ?></a>
-	</h2>
 
-	<div id="satispress-settings" class="satispress-tab-panel is-active">
-		<p>
-			<?php esc_html_e( 'Your SatisPress repository is available at:', 'satispress' ); ?>
-			<a href="<?php echo esc_url( $permalink ); ?>"><?php echo esc_html( $permalink ); ?></a>
-		</p>
-		<p>
+<div class="satispress-screen">
+	<div class="satispress-screen-content wrap">
+		<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
+		<h2 class="nav-tab-wrapper">
 			<?php
-			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Need to update global variable.
-			$allowed_html = [ 'code' => [] ];
-			printf(
-				/* translators: 1: <code>repositories</code>, 2: <code>composer.json</code> */
-				esc_html__( 'Add it to the %1$s list in your %2$s:', 'satispress' ),
-				'<code>repositories</code>',
-				'<code>composer.json</code>'
-			);
+			foreach ( $tabs as $tab_id => $tab_data ) {
+				if ( ! current_user_can( $tab_data['capability'] ) ) {
+					continue;
+				}
+
+				printf(
+					'<a href="#satispress-%1$s" class="nav-tab%2$s">%3$s</a>',
+					esc_attr( $tab_id ),
+					$active_tab === $tab_id ? ' nav-tab-active' : '',
+					esc_html( $tab_data['name'] )
+				);
+			}
 			?>
-		</p>
+		</h2>
 
-		<pre class="satispress-repository-snippet"><code>{
-	"repositories": [
-		{
-			"type": "composer",
-			"url": "<?php echo esc_url( get_packages_permalink( [ 'base' => true ] ) ); ?>"
+		<?php
+		foreach ( $tabs as $tab_id => $tab_data ) {
+			if ( ! current_user_can( $tab_data['capability'] ) ) {
+				continue;
+			}
+
+			printf(
+				'<div id="satispress-%1$s" class="satispress-%1$s satispress-tab-panel%2$s">',
+				esc_attr( $tab_id ),
+				$active_tab === $tab_id ? ' is-active' : ''
+			);
+
+			require $this->plugin->get_path( "views/tabs/{$tab_id}.php" );
+
+			echo '</div>';
 		}
-	]
-}</code></pre>
-
-		<form action="<?php echo esc_url( admin_url( 'options.php' ) ); ?>" method="post">
-			<?php settings_fields( 'satispress' ); ?>
-			<?php do_settings_sections( 'satispress' ); ?>
-			<?php submit_button(); ?>
-		</form>
+		?>
 	</div>
 
-	<div id="satispress-packages" class="satispress-tab-panel">
-		<?php require $this->plugin->get_path( 'views/packages.php' ); ?>
-	</div>
+	<div id="satispress-screen-sidebar" class="satispress-screen-sidebar"></div>
 </div>

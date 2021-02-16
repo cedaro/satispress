@@ -24,6 +24,7 @@ class AdminAssets extends AbstractHookProvider {
 	 */
 	public function register_hooks() {
 		add_action( 'admin_enqueue_scripts', [ $this, 'register_assets' ], 1 );
+		add_filter( 'script_loader_tag', [ $this, 'filter_script_type' ], 10, 3 );
 	}
 
 	/**
@@ -35,44 +36,66 @@ class AdminAssets extends AbstractHookProvider {
 		wp_register_script(
 			'satispress-admin',
 			$this->plugin->get_url( 'assets/js/admin.js' ),
-			[ 'jquery', 'wp-backbone', 'wp-util' ],
-			'20180708',
+			[ 'jquery' ],
+			'20210215',
 			true
 		);
 
 		wp_register_script(
-			'satispress-api-keys',
-			$this->plugin->get_url( 'assets/js/api-keys.js' ),
-			[ 'wp-backbone', 'wp-util' ],
-			'20180708',
+			'satispress-access',
+			$this->plugin->get_url( 'assets/js/access.js' ),
+			[ 'wp-components', 'wp-data', 'wp-data-controls', 'wp-element', 'wp-i18n' ],
+			'20210211',
 			true
 		);
 
-		wp_localize_script(
-			'satispress-api-keys',
-			'_satispressApiKeySettings',
-			[
-				'createApiKeyNonce' => wp_create_nonce( 'create-api-key' ),
-				'deleteApiKeyNonce' => wp_create_nonce( 'delete-api-key' ),
-				'l10n'              => [
-					'aysDeleteApiKey' => esc_html__( 'Are you sure you want to delete this API Key?', 'satispress' ),
-				],
-			]
+		wp_set_script_translations(
+			'satispress-access',
+			'satispress',
+			$this->plugin->get_path( 'languages' )
 		);
 
 		wp_register_script(
-			'satispress-package-settings',
-			$this->plugin->get_url( 'assets/js/package-settings.js' ),
-			[ 'wp-backbone', 'wp-util' ],
-			'20180708',
+			'satispress-repository',
+			$this->plugin->get_url( 'assets/js/repository.js' ),
+			[ 'wp-components', 'wp-data', 'wp-data-controls', 'wp-element', 'wp-i18n' ],
+			'20210211',
 			true
+		);
+
+		wp_set_script_translations(
+			'satispress-repository',
+			'satispress',
+			$this->plugin->get_path( 'languages' )
 		);
 
 		wp_register_style(
 			'satispress-admin',
 			$this->plugin->get_url( 'assets/css/admin.css' ),
-			[],
+			[ 'wp-components' ],
 			'20180816'
 		);
+	}
+
+	/**
+	 * Filter script tag type attributes.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $tag    Script tag HTML.
+	 * @param string $handle Script identifier.
+	 * @return string
+	 */
+	public function filter_script_type( string $tag, string $handle ): string {
+		$modules = [
+			'satispress-access',
+			'satispress-repository',
+		];
+
+		if ( in_array( $handle, $modules, true ) ) {
+			$tag = str_replace( '<script', '<script type="module"', $tag );
+		}
+
+		return $tag;
 	}
 }

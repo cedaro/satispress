@@ -170,3 +170,24 @@ function display_missing_dependencies_notice() {
 		)
 	);
 }
+
+/**
+ * Preload REST API data.
+ *
+ * @since 1.0.0
+ *
+ * @param array $paths Array of REST paths.
+ */
+function preload_rest_data( $paths ) {
+	$preload_data = array_reduce(
+		$paths,
+		'rest_preload_api_request',
+		[]
+	);
+
+	wp_add_inline_script(
+		'wp-api-fetch',
+		sprintf( 'wp.apiFetch.use( wp.apiFetch.createPreloadingMiddleware( %s ) );', wp_json_encode( $preload_data ) ),
+		'after'
+	);
+}
