@@ -26,6 +26,7 @@ use SatisPress\Logger;
 use SatisPress\PackageType\Plugin;
 use SatisPress\PackageType\Theme;
 use SatisPress\Provider;
+use SatisPress\REST;
 use SatisPress\Repository;
 use SatisPress\Screen;
 use SatisPress\Storage;
@@ -140,6 +141,10 @@ class ServiceProvider implements ServiceProviderInterface {
 				$container['http.request'],
 				$container['route.controllers']
 			);
+		};
+
+		$container['hooks.rest'] = function( $container ) {
+			return new Provider\REST( $container['rest.controllers'] );
 		};
 
 		$container['hooks.rewrite_rules'] = function() {
@@ -278,6 +283,53 @@ class ServiceProvider implements ServiceProviderInterface {
 						return in_array( $package->get_slug(), $themes, true );
 					}
 				);
+		};
+
+		$container['rest.controller.api_keys'] = function( $container ) {
+			return new REST\ApiKeysController(
+				'satispress/v1',
+				'apikeys',
+				$container['api_key.factory'],
+				$container['api_key.repository']
+			);
+		};
+
+		$container['rest.controller.packages'] = function( $container ) {
+			return new REST\PackagesController(
+				'satispress/v1',
+				'packages',
+				$container['repository.whitelist'],
+				$container['repository.installed'],
+				$container['transformer.composer_package']
+			);
+		};
+
+		$container['rest.controller.plugins'] = function( $container ) {
+			return new REST\InstalledPackagesController(
+				'satispress/v1',
+				'plugins',
+				$container['repository.plugins']
+			);
+		};
+
+		$container['rest.controller.themes'] = function( $container ) {
+			return new REST\InstalledPackagesController(
+				'satispress/v1',
+				'themes',
+				$container['repository.themes']
+			);
+		};
+
+		$container['rest.controllers'] = function( $container ) {
+			return new ServiceIterator(
+				$container,
+				[
+					'api_keys' => 'rest.controller.api_keys',
+					'packages' => 'rest.controller.packages',
+					'plugins'  => 'rest.controller.plugins',
+					'themes'   => 'rest.controller.themes',
+				]
+			);
 		};
 
 		$container['route.composer'] = function( $container ) {
