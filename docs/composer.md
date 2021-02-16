@@ -4,12 +4,12 @@ Once SatisPress is installed and configured you can include the SatisPress repos
 
 ```json
 {
-	"repositories": [
-		{
+	"repositories": {
+		"satispress": {
 			"type": "composer",
 			"url": "https://packages.example.com/satispress/"
 		}
-	],
+	},
 	"require": {
 		"composer/installers": "^1.0",
 		"satispress/atomic-blocks": "*",
@@ -17,6 +17,12 @@ Once SatisPress is installed and configured you can include the SatisPress repos
 		"satispress/gravityforms": "*"
 	}
 }
+```
+
+The repository can also be added by running the `config` command:
+
+```sh
+composer config repositories.satispress composer https://packages.example.com/satispress/
 ```
 
 _The `satispress` vendor name can be changed on the [Settings page](settings.md)._
