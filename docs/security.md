@@ -20,7 +20,7 @@ An API Key is a series of 32 randomly generated letters and numbers that look so
 aUEZYqq6pXlMjdg8swe0rQgMCZAPJNaR
 ```
 
-API Keys are associated with the user they're created for and inherit the users' capabilities &mdash; a key doesn't provide access to protected resources if the user can't access those resources. API Keys are read-only and limited to accessing SatisPress resources, so if one where to become compromised, an attacker could only view and download whitelisted packages.
+API Keys are associated with the user they're created for and inherit the users' capabilities &mdash; a key doesn't provide access to protected resources if the user can't access those resources. API Keys are read-only and limited to accessing SatisPress resources, so if one were to become compromised, an attacker could only view and download whitelisted packages.
 
 To use an API Key with Basic authentication, the API Key should be provided as the username with a password of `satispress`:
 

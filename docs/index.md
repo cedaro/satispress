@@ -12,10 +12,9 @@ Packages are exposed via a `packages.json` file for inclusion as a Composer repo
 
 1. [Installation](installation.md)
 1. Managing SatisPress
-	1. [Whitelisting Plugins and Themes](whitelisting.md)
-	1. [Settings](settings.md)
-	1. [Packages](packages.md)
+	1. [Getting Started](setup.md)
 	1. [Security](security.md)
+	1. [Settings](settings.md)
 1. [Using Composer](composer.md)
 1. Workflows
 	1. [Running SatisPress in Production](workflows/production.md)
