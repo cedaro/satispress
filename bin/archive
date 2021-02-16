@@ -4,7 +4,6 @@ const archiver = require( 'archiver' );
 const config = require( '../package.json' );
 const fs = require( 'fs-extra' );
 const glob = require( 'glob' );
-const makepot = require( 'node-wp-i18n' ).makepot;
 const path = require( 'path' );
 const spawnProcess = require( 'child_process' ).spawn;
 
@@ -24,9 +23,7 @@ if ( ! version ) {
 replaceInFile( pluginFile, /(Version:[\s]+).+/, `\$1${ version }` )
 	.then( () => replaceInFile( pluginFile, /VERSION = '.+'/, `VERSION = '${ version }'` ) )
 	.then( () => replaceInFile( packageJson, /"version": "[^"]+"/, `"version": "${ version }"` ))
-	.then( () => spawn( 'composer', [ 'install', '--no-dev', '--prefer-dist' ] ) )
-	.then( () => spawn( 'composer', [ 'dump-autoload', '--no-dev', '--optimize' ] ) )
-	.then( () => makepot( { poedit: true } ) )
+	.then( () => spawn( 'composer', [ 'prepare-for-release' ] ) )
 	.then( () => compress( config.name, version, config.distFiles ) );
 
 function compress( slug, version, files ) {
