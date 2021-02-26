@@ -207,20 +207,21 @@ class PackageArchiver extends AbstractHookProvider {
 	 *
 	 * @since 0.6.0
 	 *
-	 * @param bool  $response   Installation response.
-	 * @param array $hook_extra Extra arguments passed to hooked filters.
-	 * @param array $result     Installation result data.
+	 * @param bool|WP_Error $result     Installation result.
+	 * @param array         $hook_extra Extra arguments passed to hooked filters.
+	 * @param array         $data       Installation result data.
+	 * @return bool|WP_Error
 	 */
-	public function archive_on_upgrade( bool $response, array $hook_extra, array $result ): bool {
+	public function archive_on_upgrade( $result, array $hook_extra, array $data ): bool {
 		$type = $hook_extra['type'] ?? '';
-		$slug = $result['destination_name'] ?? '';
+		$slug = $data['destination_name'] ?? '';
 		$args = compact( 'slug', 'type' );
 
 		if ( $this->whitelisted_packages->contains( $args ) ) {
 			$this->archive_package( $slug, $type );
 		}
 
-		return $response;
+		return $result;
 	}
 
 	/**
