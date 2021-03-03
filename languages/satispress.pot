@@ -2,18 +2,44 @@
 # This file is distributed under the GPL-2.0-or-later.
 msgid ""
 msgstr ""
-"Project-Id-Version: SatisPress 0.7.2\n"
+"Project-Id-Version: SatisPress 1.0.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/satispress\n"
-"POT-Creation-Date: 2021-02-11 15:33:23+00:00\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2021-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2021-03-03T17:04:48+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.4.0\n"
+"X-Domain: satispress\n"
 
-#. Plugin Name of the plugin/theme
+#. Plugin Name of the plugin
+#: src/Integration/Members.php:44
+#: src/Screen/Settings.php:76
+#: src/Screen/Settings.php:77
 msgid "SatisPress"
+msgstr ""
+
+#. Plugin URI of the plugin
+msgid "https://github.com/cedaro/satispress"
+msgstr ""
+
+#. Description of the plugin
+msgid "Generate a Composer repository from installed WordPress plugins and themes."
+msgstr ""
+
+#. Author of the plugin
+msgid "Cedaro"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://www.cedaro.com/"
+msgstr ""
+
+#. translators: %s: documentation URL
+#: src/functions.php:155
+msgid "SatisPress is missing required dependencies. <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferer\">Learn more.</a>"
 msgstr ""
 
 #: src/Integration/Members.php:63
@@ -28,214 +54,305 @@ msgstr ""
 msgid "Manage Options"
 msgstr ""
 
-#: src/Provider/AdminAssets.php:58
-msgid "Are you sure you want to delete this API Key?"
-msgstr ""
-
 #: src/Provider/HealthCheck.php:64
 msgid "Health Check"
 msgstr ""
 
-#: src/Provider/HealthCheck.php:104
 #. translators: %s: permalink screen URL
-msgid ""
-"SatisPress requires pretty permalinks to be enabled. <a href=\"%s\">Enable "
-"permalinks</a>."
+#: src/Provider/HealthCheck.php:104
+msgid "SatisPress requires pretty permalinks to be enabled. <a href=\"%s\">Enable permalinks</a>."
 msgstr ""
 
-#: src/Screen/EditUser.php:113
+#: src/REST/ApiKeysController.php:124
+#: src/REST/ApiKeysController.php:390
+msgid "The ID for the user associated with the API Key."
+msgstr ""
+
+#: src/REST/ApiKeysController.php:147
+msgid "Sorry, you are not allowed to view API keys."
+msgstr ""
+
+#: src/REST/ApiKeysController.php:155
+msgid "Sorry, you are not allowed to view API keys for this user."
+msgstr ""
+
+#: src/REST/ApiKeysController.php:195
+msgid "Sorry, you are not allowed to create API keys."
+msgstr ""
+
+#: src/REST/ApiKeysController.php:203
+msgid "Sorry, you are not allowed to create API keys for this user."
+msgstr ""
+
+#: src/REST/ApiKeysController.php:253
+msgid "Invalid API Key token."
+msgstr ""
+
+#: src/REST/ApiKeysController.php:261
+msgid "Sorry, you are not allowed to delete API keys."
+msgstr ""
+
+#: src/REST/ApiKeysController.php:269
+msgid "Sorry, you are not allowed to delete API Keys for this user."
+msgstr ""
+
+#: src/REST/ApiKeysController.php:362
+msgid "The date the API key was created."
+msgstr ""
+
+#: src/REST/ApiKeysController.php:368
+msgid "The date the API key was last used."
+msgstr ""
+
+#: src/REST/ApiKeysController.php:374
+msgid "A descriptive name for the API key."
+msgstr ""
+
+#: src/REST/ApiKeysController.php:383
+msgid "The API Key token."
+msgstr ""
+
+#: src/REST/ApiKeysController.php:396
+msgid "The username for the user associated with the API key."
+msgstr ""
+
+#: src/REST/InstalledPackagesController.php:98
+msgid "Sorry, you are not allowed to view installed packages."
+msgstr ""
+
+#: src/REST/InstalledPackagesController.php:177
+#: src/REST/PackagesController.php:433
+msgid "The name of the package author."
+msgstr ""
+
+#: src/REST/InstalledPackagesController.php:183
+#: src/REST/PackagesController.php:439
+msgid "The package author URL."
+msgstr ""
+
+#: src/REST/InstalledPackagesController.php:190
+#: src/REST/PackagesController.php:467
+msgid "The package description."
+msgstr ""
+
+#: src/REST/InstalledPackagesController.php:196
+#: src/REST/PackagesController.php:473
+msgid "The package URL."
+msgstr ""
+
+#: src/REST/InstalledPackagesController.php:203
+#: src/REST/PackagesController.php:480
+msgid "The name of the package."
+msgstr ""
+
+#: src/REST/InstalledPackagesController.php:209
+#: src/REST/PackagesController.php:509
+msgid "The package slug."
+msgstr ""
+
+#: src/REST/InstalledPackagesController.php:215
+#: src/REST/PackagesController.php:133
+#: src/REST/PackagesController.php:516
+msgid "Type of package."
+msgstr ""
+
+#: src/REST/PackagesController.php:157
+msgid "Sorry, you are not allowed to view packages."
+msgstr ""
+
+#: src/REST/PackagesController.php:202
+msgid "Sorry, you are not allowed to add packages to the repository."
+msgstr ""
+
+#: src/REST/PackagesController.php:211
+#: src/REST/PackagesController.php:276
+msgid "Invalid package."
+msgstr ""
+
+#: src/REST/PackagesController.php:267
+msgid "Sorry, you are not allowed to delete this package."
+msgstr ""
+
+#: src/REST/PackagesController.php:334
+msgid "Limit results to packages of one or more types."
+msgstr ""
+
+#: src/REST/PackagesController.php:446
+msgid "Package data formatted for Composer."
+msgstr ""
+
+#: src/REST/PackagesController.php:452
+msgid "Composer package name."
+msgstr ""
+
+#: src/REST/PackagesController.php:458
+msgid "Composer package type."
+msgstr ""
+
+#: src/REST/PackagesController.php:486
+msgid "A list of package releases."
+msgstr ""
+
+#: src/REST/PackagesController.php:495
+msgid "A URL to download the release."
+msgstr ""
+
+#: src/REST/PackagesController.php:501
+msgid "The release version."
+msgstr ""
+
+#: src/Screen/EditUser.php:108
 msgid "SatisPress API Keys"
 msgstr ""
 
-#: src/Screen/Settings.php:167
+#: src/Screen/Settings.php:151
 msgid "General"
 msgstr ""
 
-#: src/Screen/Settings.php:174
-msgid "Access"
-msgstr ""
-
-#: src/Screen/Settings.php:181 src/Screen/Settings.php:203
-#: views/packages.php:129
-msgid "Themes"
-msgstr ""
-
-#: src/Screen/Settings.php:195
+#: src/Screen/Settings.php:165
 msgid "Vendor"
 msgstr ""
 
-#: src/Screen/Settings.php:258
-msgid ""
-"API Keys are used to access your SatisPress repository and download "
-"packages. Your personal API keys appear below or you can create keys for "
-"other users by editing their accounts."
+#: src/Screen/Settings.php:198
+msgid "Repository"
 msgstr ""
 
-#: src/Screen/Settings.php:264
-#. translators: %s: <code>satispress</code>
-msgid "The password for all API Keys is %s."
+#: src/Screen/Settings.php:202
+msgid "Access"
 msgstr ""
 
-#: src/Screen/Settings.php:271
-msgid "Read more about securing your SatisPress repository."
+#: src/Screen/Settings.php:207
+msgid "Composer"
 msgstr ""
 
-#: src/Screen/Settings.php:283
-msgid "Choose themes to make available in your SatisPress repository."
-msgstr ""
-
-#: src/functions.php:155
-#. translators: %s: documentation URL
-msgid ""
-"SatisPress is missing required dependencies. <a href=\"%s\" "
-"target=\"_blank\" rel=\"noopener noreferer\">Learn more.</a>"
-msgstr ""
-
-#: views/packages.php:44
-msgid "Homepage"
-msgstr ""
-
-#: views/packages.php:50
-msgid "Authors"
-msgstr ""
-
-#: views/packages.php:54
-msgid "Releases"
-msgstr ""
-
-#: views/packages.php:96
-msgid "Package Type"
-msgstr ""
-
-#: views/packages.php:107
-msgid "Whitelisting Packages"
-msgstr ""
-
-#: views/packages.php:109
-msgid ""
-"Plugins and themes need to be whitelisted to make them available as "
-"Composer packages."
-msgstr ""
-
-#: views/packages.php:112
-msgid "Read more about whitelisting plugins and themes."
-msgstr ""
-
-#: views/packages.php:115
-msgid "Plugins"
-msgstr ""
-
-#: views/packages.php:121
-#. translators: %s: Plugins screen URL
-msgid ""
-"Plugins can be whitelisted by visiting the <a href=\"%s\"><em>Plugins "
-"&rarr; Installed Plugins</em></a> screen and toggling the checkbox for each "
-"plugin in the \"SatisPress\" column."
-msgstr ""
-
-#: views/packages.php:135
-#. translators: %s: SatisPress settings screen URL
-msgid ""
-"Themes can be toggled on the <a href=\"%s\"><em>Settings &rarr; "
-"SatisPress</em></a> screen."
-msgstr ""
-
-#: views/screen-settings.php:18
+#: src/Screen/Settings.php:211
 msgid "Settings"
 msgstr ""
 
-#: views/screen-settings.php:19
-msgid "Packages"
+#: views/tabs/access.php:16
+msgid "API keys are used to access your SatisPress repository and download packages. Your personal API keys appear below or you can create keys for other users by editing their accounts."
 msgstr ""
 
-#: views/screen-settings.php:24
+#. translators: %s: <code>satispress</code>
+#: views/tabs/access.php:22
+msgid "The password for all API keys is %s."
+msgstr ""
+
+#: views/tabs/access.php:29
+msgid "Read more about securing your SatisPress repository."
+msgstr ""
+
+#: views/tabs/composer.php:17
 msgid "Your SatisPress repository is available at:"
 msgstr ""
 
-#: views/screen-settings.php:33
 #. translators: 1: <code>repositories</code>, 2: <code>composer.json</code>
+#: views/tabs/composer.php:26
 msgid "Add it to the %1$s list in your %2$s:"
 msgstr ""
 
-#: views/templates.php:17 views/templates.php:37
-msgid "Name"
+#. translators: 1: <code>config</code>
+#: views/tabs/composer.php:47
+msgid "Or run the %1$s command:"
 msgstr ""
 
-#: views/templates.php:18
-msgid "User"
-msgstr ""
-
-#: views/templates.php:19
-msgid "API Key"
-msgstr ""
-
-#: views/templates.php:20
-msgid "Last Used"
-msgstr ""
-
-#: views/templates.php:21
-msgid "Created"
-msgstr ""
-
-#: views/templates.php:28
+#: assets/js/components/access-table.js:17
 msgid "Add an API Key to access the SatisPress repository."
 msgstr ""
 
-#: views/templates.php:36
-msgid "API Key Name"
+#: assets/js/components/access-table.js:35
+#: assets/js/components/api-key-form.js:25
+msgid "Name"
 msgstr ""
 
-#: views/templates.php:39
-msgid "Create API Key"
+#: assets/js/components/access-table.js:36
+msgid "User"
 msgstr ""
 
-#: views/templates.php:66
+#: assets/js/components/access-table.js:37
+msgid "API Key"
+msgstr ""
+
+#: assets/js/components/access-table.js:38
+msgid "Last Used"
+msgstr ""
+
+#: assets/js/components/access-table.js:39
+msgid "Created"
+msgstr ""
+
+#: assets/js/components/access-table.js:85
 msgid "Toggle dropdown"
 msgstr ""
 
-#: views/templates.php:72
-msgid "Revoke"
+#: assets/js/components/api-key-form.js:23
+msgid "API Key Name"
 msgstr ""
 
-#: views/templates.php:82
-msgid "Download URL"
+#: assets/js/components/api-key-form.js:37
+msgid "Create API Key"
 msgstr ""
 
-#: views/templates.php:86
-msgid "Require"
+#: assets/js/components/package-selector.js:37
+msgid "Plugins"
 msgstr ""
 
-#: views/templates.php:93
-#. translators: %s: <code>composer.json</code>
-msgid "Copy and paste into %s"
+#: assets/js/components/package-selector.js:42
+msgid "Themes"
 msgstr ""
 
-#: views/templates.php:100
-msgid "CLI Command"
+#: assets/js/components/package-selector.js:69
+#: assets/js/repository.js:44
+msgid "Manage Packages"
 msgstr ""
 
-#: views/templates.php:108
+#: assets/js/components/package-selector.js:71
+msgid "Close package inserter"
+msgstr ""
+
+#: assets/js/components/package-table.js:31
+msgid "Homepage"
+msgstr ""
+
+#: assets/js/components/package-table.js:35
+msgid "Authors"
+msgstr ""
+
+#: assets/js/components/package-table.js:39
+msgid "Releases"
+msgstr ""
+
+#: assets/js/components/package-table.js:45
+msgid "Package Type"
+msgstr ""
+
 #. translators: %s: version number
+#: assets/js/components/release-actions.js:20
 msgid "Download %s"
 msgstr ""
 
-#. Plugin URI of the plugin/theme
-msgid "https://github.com/cedaro/satispress"
+#. translators: %s: <code>composer.json</code>
+#: assets/js/components/release-actions.js:23
+msgid "Copy and paste into %s"
 msgstr ""
 
-#. Description of the plugin/theme
-msgid "Generate a Composer repository from installed WordPress plugins and themes."
+#: assets/js/components/release-actions.js:31
+msgid "Download URL"
 msgstr ""
 
-#. Author of the plugin/theme
-msgid "Cedaro"
+#: assets/js/components/release-actions.js:44
+msgid "Require"
 msgstr ""
 
-#. Author URI of the plugin/theme
-msgid "https://www.cedaro.com/"
+#: assets/js/components/release-actions.js:60
+msgid "CLI Command"
 msgstr ""
 
-#: views/packages.php:77
-msgctxt "latest version"
-msgid "Latest"
+#: assets/js/components/repository.js:10
+#: assets/js/components/repository.js:17
+msgid "Add Packages"
+msgstr ""
+
+#: assets/js/components/repository.js:11
+msgid "Get started by adding plugins and themes to your local repository. Packages in your repositority will be available for you to install with Composer."
 msgstr ""

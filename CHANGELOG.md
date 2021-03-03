@@ -2,6 +2,16 @@
 
 ## [Unreleased]
 
+## [1.0.0] - 2021-03-03
+
+* Updated the admin interface to make it easier to manage the repository from a single screen.
+* Introduced REST endpoints for managing SatisPress resources:
+	* `/satispress/v1/packages`
+	* `/satispress/v1/plugins`
+	* `/satispress/v1/themes`
+* Removed the meta capability check from the Composer repository transformer. This allowed packages or individual releases to be filtered from `packages.json`, but prevented the transformer from being used in other scenarios.
+* Removed a type hint from the `upgrader_post_install` to prevent fatal errors when a `WP_Error` object is passed as a parameter. See [#152](https://github.com/cedaro/satispress/issues/152)
+
 ## [0.7.2] - 2021-02-11
 
 * Fixed an incorrect variable name in the `HiddenDirectoryValidator` that caused a fatal error.
@@ -92,10 +102,11 @@ Major changes include:
 * [Capabilities](docs/security.md#capabilities) were added for viewing and downloading packages, as well as managing SatisPress options. Only administrators have access by default.
 * The storage layer was abstracted to make it swappable.
 
-[Unreleased]: https://github.com/cedaro/satispress/compare/v0.7.2...HEAD
-[0.6.0]: https://github.com/cedaro/satispress/compare/v0.7.1...v0.7.2
-[0.6.0]: https://github.com/cedaro/satispress/compare/v0.7.0...v0.7.1
-[0.6.0]: https://github.com/cedaro/satispress/compare/v0.6.0...v0.7.0
+[Unreleased]: https://github.com/cedaro/satispress/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/cedaro/satispress/compare/v0.7.2...v1.0.0
+[0.7.2]: https://github.com/cedaro/satispress/compare/v0.7.1...v0.7.2
+[0.7.1]: https://github.com/cedaro/satispress/compare/v0.7.0...v0.7.1
+[0.7.0]: https://github.com/cedaro/satispress/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/cedaro/satispress/compare/v0.5.2...v0.6.0
 [0.5.2]: https://github.com/cedaro/satispress/compare/v0.5.1...v0.5.2
 [0.5.1]: https://github.com/cedaro/satispress/compare/v0.5.0...v0.5.1
