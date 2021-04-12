@@ -67,15 +67,15 @@ class EnvatoMarket extends AbstractHookProvider {
 	 * @link https://build.envato.com/api/#market_0_getBuyerDownload
 	 * @see Envato_Market_Admin::set_bearer_args()
 	 *
-	 * @param int $id Item id.
+	 * @param string $id Item id.
 	 * @return array
 	 */
-	protected function get_bearer_args( int $id ): array {
+	protected function get_bearer_args( string $id ): array {
 		$token = '';
 		$items = envato_market()->get_option( 'items', [] );
 
 		foreach ( $items as $item ) {
-			if ( absint( $item['id'] ) === absint( $id ) ) {
+			if ( (int) $item['id'] ) === (int) $id ) {
 				$token = $item['token'];
 				break;
 			}
