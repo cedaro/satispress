@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+## [1.0.1] - 2021-04-12
+
+* Fixed the validation logic in the hidden directory validator and updated the test. See [#142](https://github.com/cedaro/satispress/issues/142). Props [@patrick-leb](https://github.com/patrick-leb) for troubleshooting and help in resolving this issue.
+* Fixed a fatal error in the Envato Market adapter. See [#153](https://github.com/cedaro/satispress/issues/153)
+
 ## [1.0.0] - 2021-03-03
 
 * Updated the admin interface to make it easier to manage the repository from a single screen.
@@ -102,7 +107,8 @@ Major changes include:
 * [Capabilities](docs/security.md#capabilities) were added for viewing and downloading packages, as well as managing SatisPress options. Only administrators have access by default.
 * The storage layer was abstracted to make it swappable.
 
-[Unreleased]: https://github.com/cedaro/satispress/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/cedaro/satispress/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/cedaro/satispress/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/cedaro/satispress/compare/v0.7.2...v1.0.0
 [0.7.2]: https://github.com/cedaro/satispress/compare/v0.7.1...v0.7.2
 [0.7.1]: https://github.com/cedaro/satispress/compare/v0.7.0...v0.7.1
