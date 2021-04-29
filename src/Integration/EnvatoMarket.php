@@ -75,7 +75,7 @@ class EnvatoMarket extends AbstractHookProvider {
 		$items = envato_market()->get_option( 'items', [] );
 
 		foreach ( $items as $item ) {
-			if ( (int) $item['id'] ) === (int) $id ) {
+			if ( (int) $item['id'] === (int) $id ) {
 				$token = $item['token'];
 				break;
 			}
