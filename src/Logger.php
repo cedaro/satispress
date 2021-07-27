@@ -148,7 +148,6 @@ final class Logger extends AbstractLogger {
 				'code'    => $e->getCode(),
 				'file'    => $e->getFile(),
 				'line'    => $e->getLine(),
-				'trace'   => $e->getTrace(),
 			],
 			\JSON_UNESCAPED_SLASHES
 		);
