@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+## [1.0.2] - 2021-7-27
+
+* Fixed a parse error in the Envato Market integration.
+* Skipped releases without a SemVer compliant version string in the Composer repository transformer to prevent fatal errors. [See #160](https://github.com/cedaro/satispress/issues/160). Props [@DavidSingh3](https://github.com/DavidSingh3)
+* Removed the trace from `\SatisPress\Logger\format_exception()` to prevent fatal errors.
+
 ## [1.0.1] - 2021-04-12
 
 * Fixed the validation logic in the hidden directory validator and updated the test. See [#142](https://github.com/cedaro/satispress/issues/142). Props [@patrick-leb](https://github.com/patrick-leb) for troubleshooting and help in resolving this issue.
@@ -107,7 +113,8 @@ Major changes include:
 * [Capabilities](docs/security.md#capabilities) were added for viewing and downloading packages, as well as managing SatisPress options. Only administrators have access by default.
 * The storage layer was abstracted to make it swappable.
 
-[Unreleased]: https://github.com/cedaro/satispress/compare/v1.0.1...HEAD
+[Unreleased]: https://github.com/cedaro/satispress/compare/v1.0.2...HEAD
+[1.0.2]: https://github.com/cedaro/satispress/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/cedaro/satispress/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/cedaro/satispress/compare/v0.7.2...v1.0.0
 [0.7.2]: https://github.com/cedaro/satispress/compare/v0.7.1...v0.7.2
