@@ -147,7 +147,7 @@ class ComposerRepositoryTransformer implements PackageRepositoryTransformer {
 						'shasum' => $this->release_manager->checksum( 'sha1', $release ),
 					],
 					'require'            => [
-						'composer/installers' => '^1.0 || ^2.0';
+						'composer/installers' => '^1.0 || ^2.0',
 					],
 					'type'               => $package->get_type(),
 					'authors'            => [
