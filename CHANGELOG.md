@@ -2,7 +2,13 @@
 
 ## [Unreleased]
 
-## [1.0.2] - 2021-7-27
+## [1.0.3] - 2022-01-07
+
+* Added a search field in the package selector sidebar. Props [@DavidSingh3](https://github.com/DavidSingh3)
+* Added support for composer/installers 2.0+ for packages served by SatisPress. Props [@tyrann0us](https://github.com/tyrann0us)
+* Added support for PHP 8.
+
+## [1.0.2] - 2021-07-27
 
 * Fixed a parse error in the Envato Market integration.
 * Skipped releases without a SemVer compliant version string in the Composer repository transformer to prevent fatal errors. [See #160](https://github.com/cedaro/satispress/issues/160). Props [@DavidSingh3](https://github.com/DavidSingh3)
@@ -35,14 +41,14 @@
 
 * There weren't any changes in this release. The version number was bumped to allow Composer to install updates from the previously botched release process.
 
-## [0.7.0] - 2021-1-28
+## [0.7.0] - 2021-01-28
 
 * Introduced validators to prevent invalid artifacts from being cached when downloaded from the vendor.
 * Introduced adapters for downloading artifacts from vendors that use a non-standard update process.
 * Added a field to the SatisPress package list screen to copy the CLI command for requiring a package in `composer.json`.
 * Fixed a bug with the logger not logging messages above the specified log level.
 
-## [0.6.0] - 2021-1-11
+## [0.6.0] - 2021-01-11
 
 * Added the `satispress_package_download_url` filter. This can be used to ignore update requests from vendors with custom update routines that cause invalid artifacts to be downloaded.
 * Created missing artifacts from source for the currently installed version of a package when viewing the `packages.json` endpoint. This allows updates made through FTP, git, or the admin UI to be archived automatically and included in `packages.json` without having to perform any additional manual steps. See [#131](https://github.com/cedaro/satispress/issues/131)
@@ -113,7 +119,8 @@ Major changes include:
 * [Capabilities](docs/security.md#capabilities) were added for viewing and downloading packages, as well as managing SatisPress options. Only administrators have access by default.
 * The storage layer was abstracted to make it swappable.
 
-[Unreleased]: https://github.com/cedaro/satispress/compare/v1.0.2...HEAD
+[Unreleased]: https://github.com/cedaro/satispress/compare/v1.0.3...HEAD
+[1.0.3]: https://github.com/cedaro/satispress/compare/v1.0.2...v1.0.3
 [1.0.2]: https://github.com/cedaro/satispress/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/cedaro/satispress/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/cedaro/satispress/compare/v0.7.2...v1.0.0

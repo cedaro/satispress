@@ -1,17 +1,17 @@
-# Copyright (C) 2021 Cedaro
+# Copyright (C) 2022 Cedaro
 # This file is distributed under the GPL-2.0-or-later.
 msgid ""
 msgstr ""
-"Project-Id-Version: SatisPress 1.0.2\n"
+"Project-Id-Version: SatisPress 1.0.3\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/satispress\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-07-27T17:18:30+00:00\n"
+"POT-Creation-Date: 2022-01-07T18:01:37+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.4.0\n"
+"X-Generator: WP-CLI 2.5.0\n"
 "X-Domain: satispress\n"
 
 #. Plugin Name of the plugin
@@ -293,20 +293,25 @@ msgstr ""
 msgid "Create API Key"
 msgstr ""
 
-#: assets/js/components/package-selector.js:37
+#: assets/js/components/package-selector.js:39
 msgid "Plugins"
 msgstr ""
 
-#: assets/js/components/package-selector.js:42
+#: assets/js/components/package-selector.js:44
 msgid "Themes"
 msgstr ""
 
-#: assets/js/components/package-selector.js:69
+#: assets/js/components/package-selector.js:77
+#: assets/js/components/package-selector.js:79
+msgid "Search"
+msgstr ""
+
+#: assets/js/components/package-selector.js:89
 #: assets/js/repository.js:44
 msgid "Manage Packages"
 msgstr ""
 
-#: assets/js/components/package-selector.js:71
+#: assets/js/components/package-selector.js:91
 msgid "Close package inserter"
 msgstr ""
 
