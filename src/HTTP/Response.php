@@ -137,11 +137,15 @@ class Response {
 			'Content-Type'              => 'application/force-download',
 			'Content-Description'       => 'File Transfer',
 			'Content-Disposition'       => 'attachment; filename="' . basename( $filename ) . '";',
-			'Content-Length'            => filesize( $filename ),
+			'Content-Length'            => (string) filesize( $filename ),
 			'Content-Transfer-Encoding' => 'binary',
 		];
 
 		$headers = array_merge( wp_get_nocache_headers(), $headers );
+
+		// WordPress sets this to false in wp_get_nocache_headers() and either
+		// overrides the 'Last-Modified' value or removes it anywhere it's called.
+		unset( $headers['Last-Modified'] );
 
 		return new static(
 			new FileBody( $filename ),
