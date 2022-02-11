@@ -48,7 +48,7 @@
 	"require": {
 		"php": ">=7.1",
 		"cedaro/wp-plugin": "^0.4.0",
-		"composer/installers": "^2.0",
+		"composer/installers": "^1.0 || ^2.0",
 		"composer/semver": "^3.2",
 		"pimple/pimple": "^3.2",
 		"psr/container": "^1.0",
