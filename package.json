@@ -1,6 +1,6 @@
 {
 	"name": "satispress",
-	"version": "1.0.3",
+	"version": "1.0.4",
 	"description": "Generate a Composer repository from installed WordPress plugins and themes.",
 	"repository": {
 		"type": "git",

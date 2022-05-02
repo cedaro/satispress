@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+## [1.0.4] - 2022-05-02
+
+* Allowed SatisPress dependencies to require `composer/installers` version 1 or 2. Props [@LucasDemea](https://github.com/LucasDemea)
+* Removed `node_modules` from the list of directories to be automatically excluded for cases where a package depends on it existing. Props [@tyrann0us](https://github.com/tyrann0us)
+
 ## [1.0.3] - 2022-01-07
 
 * Added a search field in the package selector sidebar. Props [@DavidSingh3](https://github.com/DavidSingh3)
@@ -119,7 +124,8 @@ Major changes include:
 * [Capabilities](docs/security.md#capabilities) were added for viewing and downloading packages, as well as managing SatisPress options. Only administrators have access by default.
 * The storage layer was abstracted to make it swappable.
 
-[Unreleased]: https://github.com/cedaro/satispress/compare/v1.0.3...HEAD
+[Unreleased]: https://github.com/cedaro/satispress/compare/v1.0.4...HEAD
+[1.0.4]: https://github.com/cedaro/satispress/compare/v1.0.3...v1.0.4
 [1.0.3]: https://github.com/cedaro/satispress/compare/v1.0.2...v1.0.3
 [1.0.2]: https://github.com/cedaro/satispress/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/cedaro/satispress/compare/v1.0.0...v1.0.1
