@@ -28,6 +28,10 @@ function PackageTable( props ) {
 					<td colSpan="2">${ description }</td>
 				</tr>
 				<tr>
+					<th>${ __( 'Name', 'satispress' ) }</th>
+					<td>${ name }</td>
+				</tr>
+				<tr>
 					<th>${ __( 'Homepage', 'satispress' ) }</th>
 					<td><a href="${ homepage }" target="_blank" rel="noopener noreferer">${ homepage }</a></td>
 				</tr>
