@@ -180,6 +180,7 @@ class ComposerRepositoryTransformer implements PackageRepositoryTransformer {
 			}
 		}
 
+		$data = apply_filters( 'satispress_package_repository_item', $data, $package );
 		return $data;
 	}
 }
