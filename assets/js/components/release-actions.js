@@ -1,6 +1,7 @@
-import { components, html, i18n } from '../utils/index.js';
+import { components, element, html, i18n } from '../utils/index.js';
 
 const { Button, TextControl } = components;
+const { createElement, createInterpolateElement } = element;
 const { __, sprintf } = i18n;
 
 const selectField = ( e ) => e.nativeEvent.target.select();
@@ -19,8 +20,10 @@ function  ReleaseActions( props ) {
 	/* translators: %s: version number */
 	const buttonText = __( 'Download %s', 'satispress' );
 
-	/* translators: %s: <code>composer.json</code> */
-	const copyPasteText = __( 'Copy and paste into %s', 'satispress' );
+	const copyPasteHtml = createInterpolateElement(
+		__( 'Copy and paste into <code>composer.json</code>', 'satispress' ),
+		{ code: createElement( 'code' ) }
+	);
 
 	return html`
 		<div className="satispress-release-actions">
@@ -51,7 +54,7 @@ function  ReleaseActions( props ) {
 								onClick=${ selectField }
 							/>
 							<span className="description">
-								<em>${ sprintf( copyPasteText, '<code>composer.json</code>' ) }</em>
+								<em>${ copyPasteHtml }</em>
 							</span>
 						</td>
 					</tr>
