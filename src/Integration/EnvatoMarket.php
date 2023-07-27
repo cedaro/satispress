@@ -51,8 +51,12 @@ class EnvatoMarket extends AbstractHookProvider {
 			$download_url = '';
 
 			if ( $vars['item_id'] ) {
-				$args         = $this->get_bearer_args( $vars['item_id'] );
-				$download_url = envato_market()->api()->download( $vars['item_id'], $args );
+				$args                = $this->get_bearer_args( $vars['item_id'] );
+				$envato_download_url = envato_market()->api()->download( $vars['item_id'], $args );
+				// Envato returns false, if the download fails. i.e id is missing, product does not exist anymore.
+				if ( $envato_download_url ) {
+					$download_url = $envato_download_url;
+				}
 			}
 		}
 
