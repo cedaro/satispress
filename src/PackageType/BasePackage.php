@@ -396,7 +396,7 @@ class BasePackage implements \ArrayAccess, Package {
 	 * @param string $name Property name.
 	 * @return bool
 	 */
-	public function offsetExists( $name ): bool {
+	public function offsetExists( mixed $name ): bool {
 		return method_exists( $this, "get_{$name}" );
 	}
 
@@ -408,7 +408,7 @@ class BasePackage implements \ArrayAccess, Package {
 	 * @param string $name Property name.
 	 * @return mixed
 	 */
-	public function offsetGet( $name ) {
+	public function offsetGet( mixed $name ): mixed {
 		$method = "get_{$name}";
 
 		if ( ! method_exists( $this, $method ) ) {
@@ -426,7 +426,7 @@ class BasePackage implements \ArrayAccess, Package {
 	 * @param string $name  Property name.
 	 * @param array  $value Property value.
 	 */
-	public function offsetSet( $name, $value ) {
+	public function offsetSet( mixed $name, $value ): void {
 		// Prevent properties from being modified.
 	}
 
@@ -437,7 +437,7 @@ class BasePackage implements \ArrayAccess, Package {
 	 *
 	 * @param string $name Property name.
 	 */
-	public function offsetUnset( $name ) {
+	public function offsetUnset( mixed $name ): void {
 		// Prevent properties from being modified.
 	}
 }
