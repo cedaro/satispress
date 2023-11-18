@@ -61,7 +61,7 @@ class ReleaseManager {
 		$releases = [];
 
 		foreach ( $this->storage->list_files( $package->get_slug() ) as $filename ) {
-			$version              = str_replace( $package->get_slug() . '-', '', basename( $filename, '.zip' ) );
+			$version              = str_replace( $package->get_slug() . '-', '', basename( (string) $filename, '.zip' ) );
 			$releases[ $version ] = new Release( $package, $version );
 		}
 

@@ -107,7 +107,7 @@ class BasePackage implements \ArrayAccess, Package {
 	 * @param string $name  Property name.
 	 * @param mixed  $value Property value.
 	 */
-	public function __set( string $name, $value ) {
+	public function __set( string $name, mixed $value ) {
 		// Don't allow undefined properties to be set.
 	}
 
@@ -174,9 +174,7 @@ class BasePackage implements \ArrayAccess, Package {
 		$files     = array_values( array_diff( $files, $excludes, [ '.', '..' ] ) );
 
 		return array_map(
-			function( $file ) {
-					return $this->get_path( $file );
-			},
+			fn($file) => $this->get_path( $file ),
 			$files
 		);
 	}

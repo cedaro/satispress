@@ -32,7 +32,7 @@ final class Factory {
 	 * @return ApiKey
 	 */
 	public function create( WP_User $user, array $data = null, string $token = null ): ApiKey {
-		$data = $data ?? [];
+		$data ??= [];
 
 		if ( ! isset( $data['created'] ) ) {
 			$data['created'] = time();

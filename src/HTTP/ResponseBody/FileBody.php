@@ -128,6 +128,6 @@ class FileBody implements ResponseBody {
 	 * @return bool
 	 */
 	protected function function_exists( string $name ): bool {
-		return \function_exists( $name ) && false === strpos( ini_get( 'disable_functions' ), $name );
+		return \function_exists( $name ) && !str_contains( ini_get( 'disable_functions' ), $name );
 	}
 }

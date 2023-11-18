@@ -109,7 +109,7 @@ final class Logger extends AbstractLogger {
 		foreach ( $context as $key => $value ) {
 			$placeholder = '{' . $key . '}';
 
-			if ( false === strpos( $message, $placeholder ) ) {
+			if ( !str_contains( $message, $placeholder ) ) {
 				continue;
 			}
 
@@ -161,7 +161,7 @@ final class Logger extends AbstractLogger {
 	 * @param mixed $value Message.
 	 * @return string
 	 */
-	protected function to_string( $value ): string {
+	protected function to_string( mixed $value ): string {
 		if ( is_wp_error( $value ) ) {
 			$value = $value->get_error_message();
 		} elseif ( is_object( $value ) && method_exists( '__toString', $value ) ) {
@@ -181,7 +181,7 @@ final class Logger extends AbstractLogger {
 	 * @param mixed $level PSR Log level.
 	 * @return bool
 	 */
-	protected function handle_level( $level ): bool {
+	protected function handle_level( mixed $level ): bool {
 		return $this->minimum_level_code >= 0 && $this->minimum_level_code <= $this->get_level_code( $level );
 	}
 
@@ -193,7 +193,7 @@ final class Logger extends AbstractLogger {
 	 * @param mixed $level PSR log level.
 	 * @return int
 	 */
-	protected function get_level_code( $level ) {
+	protected function get_level_code( mixed $level ) {
 		$code = array_search( $level, $this->levels, true );
 		return false === $code ? -1 : $code;
 	}

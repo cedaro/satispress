@@ -63,6 +63,6 @@ final class Plugin extends BasePackage {
 	 * @return bool
 	 */
 	public function is_single_file(): bool {
-		return false === strpos( $this->get_basename(), '/' );
+		return !str_contains( $this->get_basename(), '/' );
 	}
 }

@@ -34,7 +34,7 @@ class Upgrade extends AbstractHookProvider {
 	 *
 	 * @var string
 	 */
-	const VERSION_OPTION_NAME = 'satispress_version';
+	final public const VERSION_OPTION_NAME = 'satispress_version';
 
 	/**
 	 * Htaccess handler.

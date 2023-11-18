@@ -75,7 +75,7 @@ function generate_random_string( int $length = 12 ): string {
  */
 function get_authorization_header() {
 	if ( ! empty( $_SERVER['HTTP_AUTHORIZATION'] ) ) {
-		return stripslashes( $_SERVER['HTTP_AUTHORIZATION'] );
+		return stripslashes( (string) $_SERVER['HTTP_AUTHORIZATION'] );
 	}
 
 	if ( \function_exists( 'getallheaders' ) ) {
@@ -143,7 +143,7 @@ function get_edited_user_id(): int {
  * @return bool
  */
 function is_plugin_file( $plugin_file ) {
-	return '.php' === substr( $plugin_file, -4 );
+	return str_ends_with($plugin_file, '.php');
 }
 
 /**

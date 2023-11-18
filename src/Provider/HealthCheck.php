@@ -147,7 +147,7 @@ class HealthCheck extends AbstractHookProvider {
 			);
 		}
 
-		$json = json_decode( wp_remote_retrieve_body( $response ) );
+		$json = json_decode( (string) wp_remote_retrieve_body( $response ), null, 512, JSON_THROW_ON_ERROR );
 
 		if ( ! isset( $json->success ) ) {
 			throw new \UnexpectedValueException( 'The authorization header check failed; the response could not be parsed as JSON.' );

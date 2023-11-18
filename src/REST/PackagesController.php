@@ -35,7 +35,7 @@ class PackagesController extends WP_REST_Controller {
 	 *
 	 * @var string
 	 */
-	const SLUG_PATTERN = '[^.\/]+(?:\/[^.\/]+)?';
+	final public const SLUG_PATTERN = '[^.\/]+(?:\/[^.\/]+)?';
 
 	/**
 	 * Composer package transformer.
@@ -174,9 +174,7 @@ class PackagesController extends WP_REST_Controller {
 		$items = [];
 
 		$repository = $this->repository->with_filter(
-			function( $package ) use ( $request ) {
-				return in_array( $package->get_type(), $request['type'], true );
-			}
+			fn($package) => in_array( $package->get_type(), $request['type'], true )
 		);
 
 		foreach ( $repository->all() as $slug => $package ) {
@@ -265,7 +263,7 @@ class PackagesController extends WP_REST_Controller {
 			return new WP_Error(
 				'rest_cannot_delete',
 				esc_html__( 'Sorry, you are not allowed to delete this package.', 'satispress' ),
-				array( 'status' => rest_authorization_required_code() )
+				['status' => rest_authorization_required_code()]
 			);
 		}
 
@@ -408,7 +406,7 @@ class PackagesController extends WP_REST_Controller {
 					'version' => $version,
 				];
 			// phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch
-			} catch ( FileNotFound $e ) {
+			} catch ( FileNotFound ) {
 				// Skip if the release artifact is missing.
 			}
 		}
