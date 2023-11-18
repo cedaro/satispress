@@ -10,7 +10,12 @@ return static function (RectorConfig $rectorConfig): void {
 	$rectorConfig->importShortClasses(false);
 
 	$rectorConfig->autoloadPaths([
-		__DIR__ . 'vendor/php-stubs/wordpress-stubs/wordpress-stubs.php',
+		__DIR__ . '/vendor/php-stubs/wordpress-stubs/wordpress-stubs.php',
+	]);
+
+	$rectorConfig->skip([
+		//  This should stop Rector changing callable arrays to $this->function in WP's add_*
+		\Rector\Php81\Rector\Array_\FirstClassCallableRector::class
 	]);
 
 	$rectorConfig->paths([
