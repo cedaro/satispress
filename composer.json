@@ -65,7 +65,7 @@
 		"roave/security-advisories": "dev-latest",
 		"roots/wordpress": "^6.3",
 		"squizlabs/php_codesniffer": "^3.3",
-		"wp-cli/i18n-command": "dev-main",
+		"wp-cli/i18n-command": "^2.4",
 		"wp-coding-standards/wpcs": "^3"
 	},
 	"autoload": {
@@ -88,10 +88,7 @@
 		"makepot": "./vendor/bin/wp i18n make-pot . languages/satispress.pot",
 		"phpcs": "./vendor/bin/phpcs",
 		"prepare-for-release": [
-			"composer install",
-			"composer makepot",
-			"composer install --no-dev --prefer-dist",
-			"composer dump-autoload --no-dev --optimize"
+			"composer update --no-dev"
 		],
 		"test": "./vendor/bin/phpunit --testsuite=Unit --colors=always"
 	}
