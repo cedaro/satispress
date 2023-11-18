@@ -26,45 +26,47 @@
 		"source": "https://github.com/cedaro/satispress"
 	},
 	"config": {
-		"preferred-install": "dist",
-		"sort-packages": true,
 		"allow-plugins": {
 			"dealerdirect/phpcodesniffer-composer-installer": true,
-			"composer/installers": true
-		}
+			"composer/installers": true,
+			"roots/wordpress-core-installer": true
+		},
+		"optimize-autoloader": true,
+		"platform": {
+			"php": "8.1"
+		},
+		"preferred-install": "dist",
+		"sort-packages": true
 	},
 	"prefer-stable": true,
 	"repositories": {
-		"wordpress": {
-			"type": "vcs",
-			"url": "https://github.com/WordPress/wordpress-develop",
-			"no-api": true
-		},
 		"wp-test-suite": {
 			"type": "vcs",
 			"url": "https://github.com/cedaro/wp-test-suite"
 		}
 	},
 	"require": {
-		"php": ">=7.1",
+		"php": ">=8.1",
 		"cedaro/wp-plugin": "^0.4.0",
-		"composer/installers": "^1.0 || ^2.0",
+		"composer/installers": "^2.0",
 		"composer/semver": "^3.2",
 		"pimple/pimple": "^3.2",
-		"psr/container": "^1.0",
-		"psr/log": "^1.0"
+		"psr/container": "2.0.2 as 1.1.2",
+		"psr/log": "^2.0"
 	},
 	"require-dev": {
 		"brain/monkey": "^2.2",
 		"cedaro/wp-test-suite": "dev-develop",
-		"dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",
+		"dealerdirect/phpcodesniffer-composer-installer": "^1.0",
+		"php-stubs/wordpress-stubs": "^6.4",
 		"phpcompatibility/phpcompatibility-wp": "^2",
-		"phpunit/phpunit": "^7.5",
+		"phpunit/phpunit": "^10",
+		"rector/rector": "^0.18.10",
 		"roave/security-advisories": "dev-latest",
+		"roots/wordpress": "^6.3",
 		"squizlabs/php_codesniffer": "^3.3",
-		"wordpress/wordpress": "^5.1",
 		"wp-cli/i18n-command": "dev-main",
-		"wp-coding-standards/wpcs": "^1"
+		"wp-coding-standards/wpcs": "^3"
 	},
 	"autoload": {
 		"psr-4": {
