@@ -25,35 +25,35 @@ final class Capabilities {
 	 *
 	 * @var string
 	 */
-	const DOWNLOAD_PACKAGES = 'satispress_download_packages';
+	public const DOWNLOAD_PACKAGES = 'satispress_download_packages';
 
 	/**
 	 * Meta capability for downloading a specific package.
 	 *
 	 * @var string
 	 */
-	const DOWNLOAD_PACKAGE = 'satispress_download_package';
+	public const DOWNLOAD_PACKAGE = 'satispress_download_package';
 
 	/**
 	 * Primitive capability for viewing packages.
 	 *
 	 * @var string
 	 */
-	const VIEW_PACKAGES = 'satispress_view_packages';
+	public const VIEW_PACKAGES = 'satispress_view_packages';
 
 	/**
 	 * Meta capability for viewing a specific package.
 	 *
 	 * @var string
 	 */
-	const VIEW_PACKAGE = 'satispress_view_package';
+	public const VIEW_PACKAGE = 'satispress_view_package';
 
 	/**
 	 * Primitive capability for managing options.
 	 *
 	 * @var string
 	 */
-	const MANAGE_OPTIONS = 'satispress_manage_options';
+	public const MANAGE_OPTIONS = 'satispress_manage_options';
 
 	/**
 	 * Register capabilities.

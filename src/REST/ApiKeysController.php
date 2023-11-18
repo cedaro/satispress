@@ -32,7 +32,7 @@ class ApiKeysController extends WP_REST_Controller {
 	 *
 	 * @var string
 	 */
-	const TOKEN_PATTERN = '[A-Za-z0-9]{32}';
+	final public const TOKEN_PATTERN = '[A-Za-z0-9]{32}';
 
 	/**
 	 * API Key factory.
@@ -116,9 +116,7 @@ class ApiKeysController extends WP_REST_Controller {
 						'type'              => 'string',
 						'pattern'           => self::TOKEN_PATTERN,
 						'required'          => true,
-						'sanitize_callback' => function ( $value ) {
-							return preg_replace( '/[^A-Za-z0-9]+/', '', $value );
-						},
+						'sanitize_callback' => fn($value) => preg_replace( '/[^A-Za-z0-9]+/', '', (string) $value ),
 					],
 					'user'    => [
 						'description' => esc_html__( 'The ID for the user associated with the API Key.', 'satispress' ),

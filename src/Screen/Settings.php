@@ -137,7 +137,7 @@ class Settings extends AbstractHookProvider {
 	 * @since 0.2.0
 	 */
 	public function register_settings() {
-		register_setting( 'satispress', 'satispress', [ $this, 'sanitize_settings' ] );
+		register_setting( 'satispress', 'satispress', $this->sanitize_settings(...) );
 	}
 
 	/**
@@ -179,7 +179,7 @@ class Settings extends AbstractHookProvider {
 	 */
 	public function sanitize_settings( array $value ): array {
 		if ( ! empty( $value['vendor'] ) ) {
-			$value['vendor'] = preg_replace( '/[^a-z0-9_\-\.]+/i', '', $value['vendor'] );
+			$value['vendor'] = preg_replace( '/[^a-z0-9_\-.]+/i', '', (string) $value['vendor'] );
 		}
 
 		return (array) apply_filters( 'satispress_sanitize_settings', $value );
@@ -242,7 +242,7 @@ class Settings extends AbstractHookProvider {
 	 * @param mixed  $default Optional. Default setting value.
 	 * @return mixed
 	 */
-	protected function get_setting( string $key, $default = null ) {
+	protected function get_setting( string $key, mixed $default = null ) {
 		$option = get_option( 'satispress' );
 
 		return $option[ $key ] ?? $default;

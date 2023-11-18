@@ -158,7 +158,7 @@ class Archiver {
 	 * @return string[]
 	 */
 	private function get_dist_ignored_files( string $dist_ignore_path ): array {
-		$ignored_files = array();
+		$ignored_files = [];
 
 		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 		$maybe_ignored_files = explode( PHP_EOL, file_get_contents( $dist_ignore_path ) );
@@ -166,7 +166,7 @@ class Archiver {
 		foreach ( $maybe_ignored_files as $file ) {
 			$file = trim( $file );
 
-			if ( ! $file || 0 === strpos( $file, '#' ) ) {
+			if ( ! $file || str_starts_with($file, '#') ) {
 				continue;
 			}
 

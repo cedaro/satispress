@@ -27,7 +27,7 @@ final class ApiKey implements ArrayAccess {
 	 *
 	 * @var int
 	 */
-	const TOKEN_LENGTH = 32;
+	public const TOKEN_LENGTH = 32;
 
 	/**
 	 * API key data.
@@ -35,13 +35,6 @@ final class ApiKey implements ArrayAccess {
 	 * @var array
 	 */
 	private $data;
-
-	/**
-	 * API key token.
-	 *
-	 * @var string
-	 */
-	private $token;
 
 	/**
 	 * User associated with the API key.
@@ -59,9 +52,11 @@ final class ApiKey implements ArrayAccess {
 	 * @param string  $token API key token.
 	 * @param array   $data  Optional. Additional data associated with the key.
 	 */
-	public function __construct( WP_User $user, string $token, array $data = null ) {
+	public function __construct( WP_User $user, /**
+  * API key token.
+  */
+ private readonly string $token, array $data = null ) {
 		$this->user  = $user;
-		$this->token = $token;
 		$this->data  = $data ?? [];
 	}
 
@@ -187,7 +182,7 @@ final class ApiKey implements ArrayAccess {
 	 * @param string $name Field name.
 	 * @return bool
 	 */
-	public function offsetExists( $name ): bool {
+	public function offsetExists( mixed $name ): bool {
 		return isset( $this->data[ $name ] );
 	}
 
@@ -199,18 +194,14 @@ final class ApiKey implements ArrayAccess {
 	 * @param string $name Field name.
 	 * @return mixed
 	 */
-	public function offsetGet( $name ) {
+	public function offsetGet( mixed $name ): mixed {
 		$method = "get_{$name}";
 
 		if ( method_exists( $this, $method ) ) {
 			return $this->$method();
 		}
 
-		if ( isset( $this->data[ $name ] ) ) {
-			return $this->data[ $name ];
-		}
-
-		return null;
+		return $this->data[ $name ] ?? null;
 	}
 
 	/**
@@ -221,7 +212,7 @@ final class ApiKey implements ArrayAccess {
 	 * @param string $name  Field name.
 	 * @param array  $value Field value.
 	 */
-	public function offsetSet( $name, $value ) {
+	public function offsetSet( mixed $name, $value ): void {
 		if ( ! $this->is_protected_field( $name ) ) {
 			$this->data[ $name ] = $value;
 		}
@@ -234,7 +225,7 @@ final class ApiKey implements ArrayAccess {
 	 *
 	 * @param string $name Field name.
 	 */
-	public function offsetUnset( $name ) {
+	public function offsetUnset( mixed $name ): void {
 		if ( ! $this->is_protected_field( $name ) ) {
 			unset( $this->data[ $name ] );
 		}

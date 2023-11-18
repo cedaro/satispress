@@ -25,7 +25,7 @@ class Repository implements ApiKeyRepository {
 	 *
 	 * @var string
 	 */
-	const META_PREFIX = 'satispress_api_key.';
+	final public const META_PREFIX = 'satispress_api_key.';
 
 	/**
 	 * API Key factory.
@@ -93,11 +93,11 @@ class Repository implements ApiKeyRepository {
 		$keys = [];
 
 		foreach ( $meta as $meta_key => $values ) {
-			if ( 0 !== strpos( (string) $meta_key, static::META_PREFIX ) ) {
+			if ( !str_starts_with((string) $meta_key, static::META_PREFIX) ) {
 				continue;
 			}
 
-			$token  = substr( $meta_key, \strlen( static::META_PREFIX ) );
+			$token  = substr( (string) $meta_key, \strlen( static::META_PREFIX ) );
 			$data   = maybe_unserialize( $values[0] );
 			$keys[] = $this->factory->create( $user, $data, $token );
 		}

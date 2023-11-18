@@ -44,8 +44,8 @@ class EnvatoMarket extends AbstractHookProvider {
 	 * @return string
 	 */
 	public function filter_package_download_url( string $download_url ): string {
-		if ( false !== strpos( $download_url, 'envato-market' ) && false !== strrpos( $download_url, 'deferred_download' ) ) {
-			parse_str( wp_parse_url( $download_url, PHP_URL_QUERY ), $vars );
+		if ( str_contains( $download_url, 'envato-market' ) && false !== strrpos( $download_url, 'deferred_download' ) ) {
+			parse_str( (string) wp_parse_url( $download_url, PHP_URL_QUERY ), $vars );
 
 			// Don't send a URL if the actual download URL can't be determined.
 			$download_url = '';
@@ -56,7 +56,7 @@ class EnvatoMarket extends AbstractHookProvider {
 			}
 		}
 
-		return $download_url;
+		return is_string($download_url) ? $download_url : '';
 	}
 
 	/**
