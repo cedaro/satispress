@@ -182,7 +182,7 @@ final class ApiKey implements ArrayAccess {
 	 * @param string $name Field name.
 	 * @return bool
 	 */
-	public function offsetExists( $name ): bool {
+	public function offsetExists( mixed $name ): bool {
 		return isset( $this->data[ $name ] );
 	}
 
@@ -194,7 +194,7 @@ final class ApiKey implements ArrayAccess {
 	 * @param string $name Field name.
 	 * @return mixed
 	 */
-	public function offsetGet( $name ) {
+	public function offsetGet( mixed $name ): mixed {
 		$method = "get_{$name}";
 
 		if ( method_exists( $this, $method ) ) {
@@ -212,7 +212,7 @@ final class ApiKey implements ArrayAccess {
 	 * @param string $name  Field name.
 	 * @param array  $value Field value.
 	 */
-	public function offsetSet( $name, $value ) {
+	public function offsetSet( mixed $name, $value ): void {
 		if ( ! $this->is_protected_field( $name ) ) {
 			$this->data[ $name ] = $value;
 		}
@@ -225,7 +225,7 @@ final class ApiKey implements ArrayAccess {
 	 *
 	 * @param string $name Field name.
 	 */
-	public function offsetUnset( $name ) {
+	public function offsetUnset( mixed $name ): void {
 		if ( ! $this->is_protected_field( $name ) ) {
 			unset( $this->data[ $name ] );
 		}
