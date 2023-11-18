@@ -117,7 +117,7 @@ class Response {
 	 */
 	public function set_status( int $status_code ) {
 		if ( $status_code < 100 || $status_code > 599 ) {
-			throw new \InvalidArgumentException( "Invalid status code '${status_code}'." );
+			throw new \InvalidArgumentException( "Invalid status code '$status_code'." );
 		}
 
 		$this->status_code = $status_code;
