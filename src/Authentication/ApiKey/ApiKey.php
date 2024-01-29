@@ -179,6 +179,7 @@ final class ApiKey implements ArrayAccess {
 		return $datetime->format( $format );
 	}
 
+	#[\ReturnTypeWillChange]
 	/**
 	 * Whether a field exists.
 	 *
@@ -191,6 +192,7 @@ final class ApiKey implements ArrayAccess {
 		return isset( $this->data[ $name ] );
 	}
 
+	#[\ReturnTypeWillChange]
 	/**
 	 * Retrieve a field value.
 	 *
@@ -213,6 +215,7 @@ final class ApiKey implements ArrayAccess {
 		return null;
 	}
 
+	#[\ReturnTypeWillChange]
 	/**
 	 * Set a field value.
 	 *
@@ -227,6 +230,7 @@ final class ApiKey implements ArrayAccess {
 		}
 	}
 
+	#[\ReturnTypeWillChange]
 	/**
 	 * Remove a field.
 	 *

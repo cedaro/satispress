@@ -388,6 +388,7 @@ class BasePackage implements \ArrayAccess, Package {
 		return $this->is_installed() && version_compare( $this->get_installed_version(), $this->get_latest_version(), '<' );
 	}
 
+	#[\ReturnTypeWillChange]
 	/**
 	 * Whether a property exists.
 	 *
@@ -402,6 +403,7 @@ class BasePackage implements \ArrayAccess, Package {
 		return method_exists( $this, "get_{$name}" );
 	}
 
+	#[\ReturnTypeWillChange]
 	/**
 	 * Retrieve a property value.
 	 *
@@ -420,6 +422,7 @@ class BasePackage implements \ArrayAccess, Package {
 		return $this->$method();
 	}
 
+	#[\ReturnTypeWillChange]
 	/**
 	 * Set a property value.
 	 *
@@ -432,6 +435,7 @@ class BasePackage implements \ArrayAccess, Package {
 		// Prevent properties from being modified.
 	}
 
+	#[\ReturnTypeWillChange]
 	/**
 	 * Unset a property.
 	 *
