@@ -91,6 +91,7 @@ add_filter( 'satispress_authentication_servers', '__return_empty_array' );
 ```
 
 _Keep in mind that disabling authentication may make it easier for malicious actors to determine which plugins are being used on your site._
+Be warned that you may have to put this code in a must-use plugin to ensure it is registered and applied on time.
 
 ## Other Methods
 
