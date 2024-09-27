@@ -135,7 +135,7 @@ function get_edited_user_id(): int {
  * Plugins can be identified by their plugin file (relative path to the main
  * plugin file from the root plugin directory) or their slug.
  *
- * This doesn't validate whether or not the plugin actually exists.
+ * This doesn't validate whether the plugin actually exists.
  *
  * @since 0.3.0
  *
@@ -143,7 +143,7 @@ function get_edited_user_id(): int {
  * @return bool
  */
 function is_plugin_file( $plugin_file ) {
-	return str_ends_with($plugin_file, '.php');
+	return is_string($plugin_file) && str_ends_with($plugin_file, '.php');
 }
 
 /**
