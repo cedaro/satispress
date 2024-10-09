@@ -184,10 +184,10 @@ final class ApiKey implements ArrayAccess {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @param mixed $name Field name.
+	 * @param string $name Field name.
 	 * @return bool
 	 */
-	public function offsetExists( mixed $name ): bool {
+	public function offsetExists( $name ): bool {
 		return isset( $this->data[ $name ] );
 	}
 
@@ -196,10 +196,10 @@ final class ApiKey implements ArrayAccess {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @param mixed $name Field name.
+	 * @param string $name Field name.
 	 * @return mixed
 	 */
-	public function offsetGet( mixed $name ): mixed {
+	public function offsetGet( $name ): mixed {
 		$method = "get_{$name}";
 
 		if ( method_exists( $this, $method ) ) {
@@ -218,10 +218,10 @@ final class ApiKey implements ArrayAccess {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @param mixed $name  Field name.
-	 * @param array $value Field value.
+	 * @param string $name  Field name.
+	 * @param array  $value Field value.
 	 */
-	public function offsetSet( mixed $name, $value ): void {
+	public function offsetSet( $name, $value ): void {
 		if ( ! $this->is_protected_field( $name ) ) {
 			$this->data[ $name ] = $value;
 		}
@@ -232,9 +232,9 @@ final class ApiKey implements ArrayAccess {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @param mixed $name Field name.
+	 * @param string $name Field name.
 	 */
-	public function offsetUnset( mixed $name ): void {
+	public function offsetUnset( $name ): void {
 		if ( ! $this->is_protected_field( $name ) ) {
 			unset( $this->data[ $name ] );
 		}
