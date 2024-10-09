@@ -125,7 +125,7 @@ class PackagesController extends WP_REST_Controller {
 				'args'   => [
 					'context' => $this->get_context_param( [ 'default' => 'view' ] ),
 					'slug'    => [
-						'description' => esc_html( 'The package slug.', 'satispress' ),
+						'description' => esc_html__( 'The package slug.', 'satispress' ),
 						'type'        => 'string',
 						'pattern'     => self::SLUG_PATTERN,
 					],

@@ -60,7 +60,7 @@ abstract class AbstractRepository {
 
 			foreach ( $args as $key => $value ) {
 				if ( $item[ $key ] && $value === $item[ $key ] ) {
-					$matched++;
+					$matched++; // phpcs:ignore Universal.Operators.DisallowStandalonePostIncrementDecrement
 				}
 			}
 

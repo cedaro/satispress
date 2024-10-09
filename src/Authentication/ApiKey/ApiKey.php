@@ -184,7 +184,7 @@ final class ApiKey implements ArrayAccess {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @param string $name Field name.
+	 * @param mixed $name Field name.
 	 * @return bool
 	 */
 	public function offsetExists( mixed $name ): bool {
@@ -196,7 +196,7 @@ final class ApiKey implements ArrayAccess {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @param string $name Field name.
+	 * @param mixed $name Field name.
 	 * @return mixed
 	 */
 	public function offsetGet( mixed $name ): mixed {
@@ -218,8 +218,8 @@ final class ApiKey implements ArrayAccess {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @param string $name  Field name.
-	 * @param array  $value Field value.
+	 * @param mixed $name  Field name.
+	 * @param array $value Field value.
 	 */
 	public function offsetSet( mixed $name, $value ): void {
 		if ( ! $this->is_protected_field( $name ) ) {
@@ -232,7 +232,7 @@ final class ApiKey implements ArrayAccess {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @param string $name Field name.
+	 * @param mixed $name Field name.
 	 */
 	public function offsetUnset( mixed $name ): void {
 		if ( ! $this->is_protected_field( $name ) ) {
@@ -248,7 +248,7 @@ final class ApiKey implements ArrayAccess {
 	 * @param string $name Field name.
 	 * @return bool
 	 */
-	private function is_protected_field( $name ): bool {
+	private function is_protected_field( string $name ): bool {
 		$protected = [ 'created', 'created_by' ];
 		return \in_array( $name, $protected, true );
 	}

@@ -68,7 +68,7 @@ class FileBody implements ResponseBody {
 		}
 
 		if ( $this->function_exists( 'ini_set' ) ) {
-			// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.runtime_configuration_ini_set
+			// phpcs:ignore WordPress.PHP.IniSet.Risky
 			ini_set( 'zlib.output_compression', 'Off' );
 		}
 
@@ -101,21 +101,21 @@ class FileBody implements ResponseBody {
 	 * @param string $filename Absolute path to a file.
 	 */
 	protected function readfile_chunked( string $filename ) {
-		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fopen
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen
 		$handle = fopen( $filename, 'rb' );
 		if ( false === $handle ) {
 			return;
 		}
 
 		while ( ! feof( $handle ) ) {
-			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fread
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fread
 			$buffer = fread( $handle, MB_IN_BYTES );
 			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			echo $buffer;
 			flush();
 		}
 
-		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fclose
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
 		fclose( $handle );
 	}
 

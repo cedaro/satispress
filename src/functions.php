@@ -29,15 +29,15 @@ function plugin(): Plugin {
  *
  * @since 0.3.0
  *
- * @param string $class Class name.
+ * @param string $class_name Class name.
  */
-function autoloader_classmap( string $class ) {
+function autoloader_classmap( string $class_name ) {
 	$class_map = [
 		'PclZip' => ABSPATH . 'wp-admin/includes/class-pclzip.php',
 	];
 
-	if ( isset( $class_map[ $class ] ) ) {
-		require_once $class_map[ $class ];
+	if ( isset( $class_map[ $class_name ] ) ) {
+		require_once $class_map[ $class_name ];
 	}
 }
 
@@ -125,7 +125,7 @@ function get_packages_permalink( array $args = null ): string {
  * @return int
  */
 function get_edited_user_id(): int {
-	// phpcs:ignore WordPress.Security.NonceVerification.NoNonceVerification
+	// phpcs:ignore WordPress.Security.NonceVerification
 	return empty( $_GET['user_id'] ) ? get_current_user_id() : (int) $_GET['user_id'];
 }
 

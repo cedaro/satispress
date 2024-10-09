@@ -197,6 +197,7 @@ class Upgrade extends AbstractHookProvider {
 		}
 
 		wp_mkdir_p( dirname( $directory ) );
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.rename_rename
 		rename( $old_path, $directory );
 	}
 
@@ -222,8 +223,10 @@ class Upgrade extends AbstractHookProvider {
 		// subdirectory doesn't, rename it to /satispress-XXXX/packages.
 		if ( file_exists( $old_path ) && 'satispress' === strtok( basename( $old_path ), '-' ) ) {
 			$tmpfname = dirname( $old_path ) . '/satispress-packages';
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.rename_rename
 			rename( $old_path, $tmpfname );
 			wp_mkdir_p( dirname( $directory ) );
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.rename_rename
 			rename( $tmpfname, $directory );
 		}
 	}

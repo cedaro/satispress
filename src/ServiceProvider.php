@@ -79,7 +79,7 @@ class ServiceProvider implements ServiceProviderInterface {
 			);
 		};
 
-		$container['authentication.unauthorized'] = function( $container ) {
+		$container['authentication.unauthorized'] = function() {
 			return new Authentication\UnauthorizedServer();
 		};
 
@@ -161,7 +161,7 @@ class ServiceProvider implements ServiceProviderInterface {
 		$container['http.request'] = function() {
 			$request = new Request( $_SERVER['REQUEST_METHOD'] ?? '' );
 
-			// phpcs:ignore WordPress.Security.NonceVerification.NoNonceVerification
+			// phpcs:ignore WordPress.Security.NonceVerification
 			$request->set_query_params( wp_unslash( $_GET ) );
 			$request->set_header( 'Authorization', get_authorization_header() );
 
@@ -177,7 +177,7 @@ class ServiceProvider implements ServiceProviderInterface {
 			return new Logger( $container['logger.level'] );
 		};
 
-		$container['logger.level'] = function( $container ) {
+		$container['logger.level'] = function() {
 			// Log warnings and above when WP_DEBUG is enabled.
 			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 				$level = LogLevel::WARNING;

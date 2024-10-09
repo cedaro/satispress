@@ -162,7 +162,7 @@ class Authentication extends AbstractHookProvider {
 	protected function is_satispress_request(): bool {
 		$request_path = $this->get_request_path();
 
-		// phpcs:ignore WordPress.Security.NonceVerification.NoNonceVerification
+		// phpcs:ignore WordPress.Security.NonceVerification
 		if ( ! empty( $_GET['satispress_route'] ) ) {
 			return true;
 		}

@@ -222,6 +222,7 @@ class Archiver {
 			}
 		}
 
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.rename_rename
 		if ( ! rename( $tmpfname, $filename ) ) {
 			throw FileOperationFailed::unableToRenameTemporaryArtifact( $filename, $tmpfname );
 		}
