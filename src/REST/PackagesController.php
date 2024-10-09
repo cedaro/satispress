@@ -174,7 +174,7 @@ class PackagesController extends WP_REST_Controller {
 		$items = [];
 
 		$repository = $this->repository->with_filter(
-			function( $package ) use ( $request ) {
+			function ( $package ) use ( $request ) {
 				return in_array( $package->get_type(), $request['type'], true );
 			}
 		);
