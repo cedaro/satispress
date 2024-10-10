@@ -2,6 +2,19 @@
 
 ## [Unreleased]
 
+## [2.0.0] - 2024-10-10
+
+* SatisPress now requires PHP 8+.
+* Updated Composer dependencies. The latest versions of PSR packages and the Pimple container may prevent conflicts with other plugins.
+* Added return type hints for classes implementing `ArrayAccess`. This prevents errors in PHP 8+.
+* Fixed a fatal error in the Envato integration. See [#182]. Props [@BjornKraft](https://github.com/BjornKraft)
+* Added `satispress_debug_mode` filter to prevent exceptions from being thrown in the request handler. See [#211].
+* Fixed output of `code` tags in the admin.
+* Prevented errors when header names aren't strings. See [#192].
+* Fixed formatting of the authors array in `package.json`. See [#185]. Props [@NielsdeBlaauw](https://github.com/NielsdeBlaauw)
+* Added the package name to the information displayed on the Repository tab in the admin. See [#191]. Props [@tyrann0us](https://github.com/tyrann0us)
+* Fixed numerous WPCS warnings and errors after updating to WPCS 3.
+
 ## [1.0.4] - 2022-05-02
 
 * Allowed SatisPress dependencies to require `composer/installers` version 1 or 2. Props [@LucasDemea](https://github.com/LucasDemea)
@@ -124,7 +137,8 @@ Major changes include:
 * [Capabilities](docs/security.md#capabilities) were added for viewing and downloading packages, as well as managing SatisPress options. Only administrators have access by default.
 * The storage layer was abstracted to make it swappable.
 
-[Unreleased]: https://github.com/cedaro/satispress/compare/v1.0.4...HEAD
+[Unreleased]: https://github.com/cedaro/satispress/compare/v2.0.0...HEAD
+[2.0.0]: https://github.com/cedaro/satispress/compare/v1.0.4...v2.0.0
 [1.0.4]: https://github.com/cedaro/satispress/compare/v1.0.3...v1.0.4
 [1.0.3]: https://github.com/cedaro/satispress/compare/v1.0.2...v1.0.3
 [1.0.2]: https://github.com/cedaro/satispress/compare/v1.0.1...v1.0.2
