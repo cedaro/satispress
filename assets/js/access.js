@@ -3,24 +3,24 @@ import AccessTable from './components/access-table.js';
 import './data/access.js';
 
 const { useDispatch, useSelect } = data;
-const { render } = element;
+const { createRoot, useEffect } = element;
 
 const { editedUserId } = _satispressAccessData;
 
-function App( props ) {
-	const { userId } = props;
-
+function App( { userId } ) {
 	const {
 		createApiKey,
 		setUserId,
 		revokeApiKey,
 	} = useDispatch( 'satispress/access' );
 
-	setUserId( userId );
-
 	const apiKeys = useSelect( ( select ) => {
 		return select( 'satispress/access' ).getApiKeys()
 	} );
+
+	useEffect( () => {
+		setUserId( userId );
+	}, [ userId ] );
 
 	return html`
 		<${ AccessTable }
@@ -32,7 +32,5 @@ function App( props ) {
 	`;
 }
 
-render(
-	html`<${ App } userId=${ editedUserId } />`,
-	document.getElementById( 'satispress-api-key-manager' )
-);
+const root = createRoot( document.getElementById( 'satispress-api-key-manager' ) );
+root.render( html`<${ App } userId=${ editedUserId } />` );
