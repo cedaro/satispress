@@ -257,7 +257,7 @@ class ServiceProvider implements ServiceProviderInterface {
 			 */
 			$themes = apply_filters( 'satispress_themes', (array) get_option( 'satispress_themes', [] ) );
 
-			return $container['repository.installed']
+			$repository = $container['repository.installed']
 				->with_filter(
 					function ( $package ) use ( $plugins ) {
 						if ( ! $package instanceof Plugin ) {
@@ -276,6 +276,11 @@ class ServiceProvider implements ServiceProviderInterface {
 						return in_array( $package->get_slug(), $themes, true );
 					}
 				);
+
+			return new Repository\ManagedPackages(
+				$repository,
+				$container['package.factory']
+			);
 		};
 
 		$container['rest.controller.api_keys'] = function ( $container ) {
@@ -293,7 +298,8 @@ class ServiceProvider implements ServiceProviderInterface {
 				'packages',
 				$container['repository.whitelist'],
 				$container['repository.installed'],
-				$container['transformer.composer_package']
+				$container['transformer.composer_package'],
+				$container['package.factory']
 			);
 		};
 

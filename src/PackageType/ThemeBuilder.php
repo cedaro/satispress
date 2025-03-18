@@ -44,6 +44,6 @@ final class ThemeBuilder extends PackageBuilder {
 			->set_installed_version( $theme->get( 'Version' ) )
 			->set_slug( $slug )
 			->set_type( 'theme' )
-			->add_cached_releases();
+			->add_initial_releases();
 	}
 }

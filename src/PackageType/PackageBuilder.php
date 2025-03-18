@@ -268,6 +268,31 @@ class PackageBuilder {
 	}
 
 	/**
+	 * Add releases for the currently installed version and pending updates.
+	 *
+	 * @since 3.0.0
+	 *
+	 * @return $this
+	 */
+	public function add_initial_releases() {
+		if ( $this->package->is_installed() ) {
+			// Add the installed version in case it hasn't been cached yet.
+			$installed_version = $this->package->get_installed_version();
+			$release           = new Release( $this->package, $installed_version );
+
+			$this->add_release( $installed_version, $release->get_source_url() );
+
+			// Add a pending update if one is available.
+			$update = $this->get_package_update( $this->package );
+			if ( $update instanceof Release ) {
+				$this->add_release( $update->get_version(), $update->get_source_url() );
+			}
+		}
+
+		return $this;
+	}
+
+	/**
 	 * Add cached releases to a package.
 	 *
 	 * This must be called after setting the installed state and version for
@@ -281,20 +306,6 @@ class PackageBuilder {
 	 */
 	public function add_cached_releases(): self {
 		$releases = $this->release_manager->all( $this->package );
-
-		if ( $this->package->is_installed() ) {
-			// Add the installed version in case it hasn't been cached yet.
-			$installed_version = $this->package->get_installed_version();
-			if ( ! isset( $releases[ $installed_version ] ) ) {
-				$releases[ $installed_version ] = new Release( $this->package, $installed_version );
-			}
-
-			// Add a pending update if one is available.
-			$update = $this->get_package_update( $this->package );
-			if ( $update instanceof Release ) {
-				$releases[ $update->get_version() ] = $update;
-			}
-		}
 
 		foreach ( $releases as $release ) {
 			$this->add_release( $release->get_version(), $release->get_source_url() );
