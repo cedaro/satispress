@@ -62,7 +62,7 @@ final class PluginBuilder extends PackageBuilder {
 			->set_installed_version( $plugin_data['Version'] )
 			->set_slug( $slug )
 			->set_type( 'plugin' )
-			->add_cached_releases();
+			->add_initial_releases();
 	}
 
 	/**
