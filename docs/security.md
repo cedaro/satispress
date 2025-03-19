@@ -45,7 +45,7 @@ Composer [requires HTTPS by default](https://getcomposer.org/doc/06-config.md#se
 
 Also keep in mind that even with HTTPS enabled, the credentials will most likely be stored in clear text at some point, whether it's an `auth.json` file or directly in URLs in `composer.json`.
 
-_WordPress usernames and passwords will not work with the default authentication provider included in SatisPress versions after 0.2.3._
+_WordPress usernames and passwords will not work with the default authentication provider included in SatisPress._
 
 ## Third-Party Authentication Providers
 
