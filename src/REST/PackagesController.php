@@ -478,13 +478,13 @@ class PackagesController extends WP_REST_Controller {
 					'readonly'    => true,
 					'properties'  => [
 						'name' => [
-							'description' => __( 'Composer package name.', 'satispress' ),
+							'description' => esc_html__( 'Composer package name.', 'satispress' ),
 							'type'        => 'string',
 							'context'     => [ 'view', 'edit' ],
 							'readonly'    => true,
 						],
 						'type' => [
-							'description' => __( 'Composer package type.', 'satispress' ),
+							'description' => esc_html__( 'Composer package type.', 'satispress' ),
 							'type'        => 'string',
 							'enum'        => [ 'wordpress-plugin', 'wordpress-theme' ],
 							'context'     => [ 'view', 'edit' ],
