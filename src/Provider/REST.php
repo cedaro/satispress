@@ -56,7 +56,7 @@ class REST extends AbstractHookProvider {
 	public function register_rest_controllers() {
 		foreach ( $this->controllers as $controller ) {
 			if ( ! $controller instanceof WP_REST_Controller ) {
-				throw new \LogicException( 'Authentication servers must implement \WP_REST_Controller.' );
+				throw new \LogicException( 'REST controllers must implement \WP_REST_Controller.' );
 			}
 
 			$controller->register_routes();

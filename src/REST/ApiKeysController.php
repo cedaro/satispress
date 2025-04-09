@@ -314,7 +314,7 @@ class ApiKeysController extends WP_REST_Controller {
 	}
 
 	/**
-	 * Prepare a single package output for response.
+	 * Prepare a single API key output for response.
 	 *
 	 * @since 1.0.0
 	 *
