@@ -214,6 +214,14 @@ class PackageArchiver extends AbstractHookProvider {
 	 */
 	public function archive_on_upgrade( $result, array $hook_extra, array $data ): bool {
 		$type = $hook_extra['type'] ?? '';
+
+		// Determine the type from the the extra info.
+		if ( empty( $type ) && isset( $hook_extra['plugin'] ) ) {
+			$type = 'plugin';
+		} elseif ( empty( $type ) && isset( $hook_extra['theme'] ) ) {
+			$type = 'theme';
+		}
+
 		$slug = $data['destination_name'] ?? '';
 		$args = compact( 'slug', 'type' );
 
