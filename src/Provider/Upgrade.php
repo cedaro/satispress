@@ -127,7 +127,7 @@ class Upgrade extends AbstractHookProvider {
 	/**
 	 * Cache existing packages.
 	 *
-	 * If any packages are already whitelisted before upgrading to 0.3.0, cache
+	 * If any packages are already managed before upgrading to 0.3.0, cache
 	 * them so checksums can be generated for packages.json.
 	 *
 	 * @since 0.3.0

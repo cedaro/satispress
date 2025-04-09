@@ -78,7 +78,7 @@ class Download implements Route {
 	/**
 	 * Process a download request.
 	 *
-	 * Determines if the current request is for packages.json or a whitelisted
+	 * Determines if the current request is for packages.json or a managed
 	 * package and routes it to the appropriate method.
 	 *
 	 * @since 0.3.0

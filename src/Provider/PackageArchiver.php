@@ -46,32 +46,32 @@ class PackageArchiver extends AbstractHookProvider {
 	protected $release_manager;
 
 	/**
-	 * Whitelisted packages repository.
+	 * Managed packages repository.
 	 *
 	 * @var PackageRepository
 	 */
-	protected $whitelisted_packages;
+	protected $managed_packages;
 
 	/**
 	 * Constructor.
 	 *
 	 * @since 0.3.0
 	 *
-	 * @param PackageRepository $packages             Installed packages repository.
-	 * @param PackageRepository $whitelisted_packages Whitelisted packages repository.
-	 * @param ReleaseManager    $release_manager      Release manager.
-	 * @param LoggerInterface   $logger               Logger.
+	 * @param PackageRepository $packages         Installed packages repository.
+	 * @param PackageRepository $managed_packages Managed packages repository.
+	 * @param ReleaseManager    $release_manager  Release manager.
+	 * @param LoggerInterface   $logger           Logger.
 	 */
 	public function __construct(
 		PackageRepository $packages,
-		PackageRepository $whitelisted_packages,
+		PackageRepository $managed_packages,
 		ReleaseManager $release_manager,
 		LoggerInterface $logger
 	) {
-		$this->packages             = $packages;
-		$this->whitelisted_packages = $whitelisted_packages;
-		$this->release_manager      = $release_manager;
-		$this->logger               = $logger;
+		$this->packages         = $packages;
+		$this->managed_packages = $managed_packages;
+		$this->release_manager  = $release_manager;
+		$this->logger           = $logger;
 	}
 
 	/**
@@ -90,9 +90,9 @@ class PackageArchiver extends AbstractHookProvider {
 	}
 
 	/**
-	 * Archive packages when they're added to the whitelist.
+	 * Archive packages when they're added to the allowlist.
 	 *
-	 * Archiving packages when they're whitelisted helps ensure a checksum can
+	 * Archiving packages when they're added helps ensure a checksum can
 	 * be included in packages.json.
 	 *
 	 * @since 0.3.0
@@ -110,9 +110,9 @@ class PackageArchiver extends AbstractHookProvider {
 	}
 
 	/**
-	 * Archive packages when they're added to the whitelist.
+	 * Archive packages when they're added to the allowlist.
 	 *
-	 * Archiving packages when they're whitelisted helps ensure a checksum can
+	 * Archiving packages when they're added helps ensure a checksum can
 	 * be included in packages.json.
 	 *
 	 * @since 0.3.0
@@ -158,8 +158,8 @@ class PackageArchiver extends AbstractHookProvider {
 			}
 
 			$args = compact( 'slug', 'type' );
-			// Bail if the package isn't whitelisted.
-			if ( ! $this->whitelisted_packages->contains( $args ) ) {
+			// Bail if the package isn't in the allowlist.
+			if ( ! $this->managed_packages->contains( $args ) ) {
 				continue;
 			}
 
@@ -217,7 +217,7 @@ class PackageArchiver extends AbstractHookProvider {
 		$slug = $data['destination_name'] ?? '';
 		$args = compact( 'slug', 'type' );
 
-		if ( $this->whitelisted_packages->contains( $args ) ) {
+		if ( $this->managed_packages->contains( $args ) ) {
 			$this->archive_package( $slug, $type );
 		}
 
