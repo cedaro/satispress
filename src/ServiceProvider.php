@@ -123,7 +123,7 @@ class ServiceProvider implements ServiceProviderInterface {
 		$container['hooks.package_archiver'] = function ( $container ) {
 			return new Provider\PackageArchiver(
 				$container['repository.installed'],
-				$container['repository.whitelist'],
+				$container['repository.managed'],
 				$container['release.manager'],
 				$container['logger']
 			);
@@ -146,7 +146,7 @@ class ServiceProvider implements ServiceProviderInterface {
 
 		$container['hooks.upgrade'] = function ( $container ) {
 			return new Provider\Upgrade(
-				$container['repository.whitelist'],
+				$container['repository.managed'],
 				$container['release.manager'],
 				$container['storage.packages'],
 				$container['htaccess.handler'],
@@ -216,27 +216,11 @@ class ServiceProvider implements ServiceProviderInterface {
 			);
 		};
 
-		$container['repository.plugins'] = function ( $container ) {
-			return new Repository\CachedRepository(
-				new Repository\InstalledPlugins(
-					$container['package.factory']
-				)
-			);
-		};
-
-		$container['repository.themes'] = function ( $container ) {
-			return new Repository\CachedRepository(
-				new Repository\InstalledThemes(
-					$container['package.factory']
-				)
-			);
-		};
-
-		$container['repository.whitelist'] = function ( $container ) {
+		$container['repository.managed'] = function ( $container ) {
 			/**
-			 * Filter the list of whitelisted plugins.
+			 * Filter the list of allowed plugins.
 			 *
-			 * Plugins should be added to the whitelist by appending a plugin's
+			 * Plugins should be added to the allowlist by appending a plugin's
 			 * basename to the array. The basename is the main plugin file's
 			 * relative path from the root plugin directory.
 			 *
@@ -249,7 +233,7 @@ class ServiceProvider implements ServiceProviderInterface {
 			$plugins = apply_filters( 'satispress_plugins', (array) get_option( 'satispress_plugins', [] ) );
 
 			/**
-			 * Filter the list of whitelisted themes.
+			 * Filter the list of allowed themes.
 			 *
 			 * @since 0.3.0
 			 *
@@ -283,6 +267,22 @@ class ServiceProvider implements ServiceProviderInterface {
 			);
 		};
 
+		$container['repository.plugins'] = function ( $container ) {
+			return new Repository\CachedRepository(
+				new Repository\InstalledPlugins(
+					$container['package.factory']
+				)
+			);
+		};
+
+		$container['repository.themes'] = function ( $container ) {
+			return new Repository\CachedRepository(
+				new Repository\InstalledThemes(
+					$container['package.factory']
+				)
+			);
+		};
+
 		$container['rest.controller.api_keys'] = function ( $container ) {
 			return new REST\ApiKeysController(
 				'satispress/v1',
@@ -296,7 +296,7 @@ class ServiceProvider implements ServiceProviderInterface {
 			return new REST\PackagesController(
 				'satispress/v1',
 				'packages',
-				$container['repository.whitelist'],
+				$container['repository.managed'],
 				$container['repository.installed'],
 				$container['transformer.composer_package'],
 				$container['package.factory']
@@ -333,14 +333,14 @@ class ServiceProvider implements ServiceProviderInterface {
 
 		$container['route.composer'] = function ( $container ) {
 			return new Route\Composer(
-				$container['repository.whitelist'],
+				$container['repository.managed'],
 				$container['transformer.composer_repository']
 			);
 		};
 
 		$container['route.download'] = function ( $container ) {
 			return new Route\Download(
-				$container['repository.whitelist'],
+				$container['repository.managed'],
 				$container['release.manager']
 			);
 		};
