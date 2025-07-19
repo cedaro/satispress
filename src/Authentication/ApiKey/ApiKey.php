@@ -59,7 +59,7 @@ final class ApiKey implements ArrayAccess {
 	 * @param string  $token API key token.
 	 * @param array   $data  Optional. Additional data associated with the key.
 	 */
-	public function __construct( WP_User $user, string $token, array $data = null ) {
+	public function __construct( WP_User $user, string $token, ?array $data = null ) {
 		$this->user  = $user;
 		$this->token = $token;
 		$this->data  = $data ?? [];
@@ -85,7 +85,7 @@ final class ApiKey implements ArrayAccess {
 	 * @param string $format Optional. Date format.
 	 * @return mixed
 	 */
-	public function get_date( string $name, string $format = null ) {
+	public function get_date( string $name, ?string $format = null ) {
 		if ( empty( $this->data[ $name ] ) ) {
 			return '';
 		}
@@ -153,7 +153,7 @@ final class ApiKey implements ArrayAccess {
 	 * @param string $format    Optional. Date format.
 	 * @return string
 	 */
-	private function format_date( int $timestamp, string $format = null ): string {
+	private function format_date( int $timestamp, ?string $format = null ): string {
 		$format      = $format ?: get_option( 'date_format' );
 		$timezone_id = get_option( 'timezone_string' );
 		$datetime    = new DateTime();

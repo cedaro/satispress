@@ -40,7 +40,7 @@ class Htaccess {
 	 *
 	 * @param string $path Optional. Directory path where .htaccess is located. Default is empty string.
 	 */
-	public function __construct( string $path = null ) {
+	public function __construct( ?string $path = null ) {
 		if ( null === $path ) {
 			$path = '';
 		}
