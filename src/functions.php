@@ -1,6 +1,6 @@
 <?php
 /**
- * Helper functions
+ * Helper functions.
  *
  * @package SatisPress
  * @license GPL-2.0-or-later
