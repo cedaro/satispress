@@ -62,7 +62,6 @@
 		"phpcompatibility/phpcompatibility-wp": "^2",
 		"phpunit/phpunit": "^10",
 		"rector/rector": "^0.18.10",
-		"roave/security-advisories": "dev-latest",
 		"roots/wordpress": "^6.3",
 		"squizlabs/php_codesniffer": "^3.3",
 		"wp-cli/i18n-command": "^2.4",
