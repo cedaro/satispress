@@ -100,7 +100,7 @@ function get_authorization_header() {
  * @param array $args Optional. Query string parameters. Default is an empty array.
  * @return string
  */
-function get_packages_permalink( array $args = null ): string {
+function get_packages_permalink( ?array $args = null ): string {
 	if ( null === $args ) {
 		$args = [];
 	}

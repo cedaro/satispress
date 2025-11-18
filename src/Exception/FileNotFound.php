@@ -28,7 +28,7 @@ class FileNotFound extends \RuntimeException implements SatispressException {
 	public static function forInvalidChecksum(
 		string $filename,
 		int $code = 0,
-		\Throwable $previous = null
+		?\Throwable $previous = null
 	): FileNotFound {
 		$message = "Cannot compute a checksum for an unknown file at {$filename}.";
 

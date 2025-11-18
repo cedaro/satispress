@@ -32,7 +32,7 @@ class FileOperationFailed extends \RuntimeException implements SatispressExcepti
 		string $filename,
 		string $destination,
 		int $code = 0,
-		\Throwable $previous = null
+		?\Throwable $previous = null
 	): FileOperationFailed {
 		$message = "Unable to move release artifact {$filename} to storage: {$destination}.";
 
@@ -52,7 +52,7 @@ class FileOperationFailed extends \RuntimeException implements SatispressExcepti
 	public static function unableToCreateTemporaryDirectory(
 		string $filename,
 		int $code = 0,
-		\Throwable $previous = null
+		?\Throwable $previous = null
 	): FileOperationFailed {
 		$directory = \dirname( $filename );
 		$message   = "Unable to create temporary directory: {$directory}.";
@@ -73,7 +73,7 @@ class FileOperationFailed extends \RuntimeException implements SatispressExcepti
 	public static function unableToCreateZipFile(
 		string $filename,
 		int $code = 0,
-		\Throwable $previous = null
+		?\Throwable $previous = null
 	): FileOperationFailed {
 		$message = "Unable to create zip file for {$filename}.";
 
@@ -95,7 +95,7 @@ class FileOperationFailed extends \RuntimeException implements SatispressExcepti
 		string $filename,
 		string $tmpfname,
 		int $code = 0,
-		\Throwable $previous = null
+		?\Throwable $previous = null
 	): FileOperationFailed {
 		$message = "Unable to rename temporary artifact {$tmpfname} to {$filename}.";
 

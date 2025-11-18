@@ -32,7 +32,7 @@ class InvalidFileName extends \InvalidArgumentException implements SatispressExc
 		string $filename,
 		int $validation_code,
 		int $code = 0,
-		\Throwable $previous = null
+		?\Throwable $previous = null
 	): InvalidFileName {
 		$message = "File name '{$filename}' ";
 

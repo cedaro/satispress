@@ -34,7 +34,7 @@ class PackageNotInstalled extends \RuntimeException implements SatispressExcepti
 		string $method,
 		Package $package,
 		int $code = 0,
-		\Throwable $previous = null
+		?\Throwable $previous = null
 	): PackageNotInstalled {
 		$name    = $package->get_name();
 		$message = "Cannot call method {$method} for a package that is not installed; Package: {$name}.";
@@ -55,7 +55,7 @@ class PackageNotInstalled extends \RuntimeException implements SatispressExcepti
 	public static function unableToArchiveFromSource(
 		Package $package,
 		int $code = 0,
-		\Throwable $previous = null
+		?\Throwable $previous = null
 	): PackageNotInstalled {
 		$name    = $package->get_name();
 		$message = "Unable to archive {$package}; source does not exist.";

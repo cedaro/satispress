@@ -31,7 +31,7 @@ final class Factory {
 	 * @param string  $token Optional. API Key token.
 	 * @return ApiKey
 	 */
-	public function create( WP_User $user, array $data = null, string $token = null ): ApiKey {
+	public function create( WP_User $user, ?array $data = null, ?string $token = null ): ApiKey {
 		$data = $data ?? [];
 
 		if ( ! isset( $data['created'] ) ) {
