@@ -61,6 +61,7 @@
 		"phpcompatibility/phpcompatibility-wp": "^2",
 		"phpunit/phpunit": "^8",
 		"roave/security-advisories": "dev-latest",
+		"slevomat/coding-standard": "^8.22",
 		"squizlabs/php_codesniffer": "^3.3",
 		"wordpress/wordpress": "^6.6",
 		"wp-cli/i18n-command": "dev-main",
