@@ -52,7 +52,7 @@ class AuthenticationException extends HttpException {
 		string $message,
 		int $status_code = HTTP::INTERNAL_SERVER_ERROR,
 		array $headers = [],
-		Throwable $previous = null
+		?Throwable $previous = null
 	) {
 		$this->code    = $code;
 		$this->headers = $headers;
@@ -73,7 +73,7 @@ class AuthenticationException extends HttpException {
 	public static function forAuthenticationRequired(
 		array $headers = [],
 		string $code = 'invalid_request',
-		Throwable $previous = null
+		?Throwable $previous = null
 	): HttpException {
 		$headers = $headers ?: [ 'WWW-Authenticate' => 'Basic realm="SatisPress"' ];
 		$message = 'Authentication is required for this resource.';
@@ -94,7 +94,7 @@ class AuthenticationException extends HttpException {
 	public static function forInvalidCredentials(
 		array $headers = [],
 		string $code = 'invalid_credentials',
-		Throwable $previous = null
+		?Throwable $previous = null
 	): HttpException {
 		$headers = $headers ?: [ 'WWW-Authenticate' => 'Basic realm="SatisPress"' ];
 		$message = 'Invalid credentials.';
@@ -115,7 +115,7 @@ class AuthenticationException extends HttpException {
 	public static function forMissingAuthorizationHeader(
 		array $headers = [],
 		string $code = 'invalid_credentials',
-		Throwable $previous = null
+		?Throwable $previous = null
 	): HttpException {
 		$headers = $headers ?: [ 'WWW-Authenticate' => 'Basic realm="SatisPress"' ];
 		$message = 'Missing authorization header.';

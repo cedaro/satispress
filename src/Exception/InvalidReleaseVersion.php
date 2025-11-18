@@ -32,7 +32,7 @@ class InvalidReleaseVersion extends \LogicException implements SatispressExcepti
 		string $version,
 		string $package_name,
 		int $code = 0,
-		\Throwable $previous = null
+		?\Throwable $previous = null
 	): InvalidReleaseVersion {
 		$message = "Invalid release version for {$package_name}: {$version}";
 
@@ -52,7 +52,7 @@ class InvalidReleaseVersion extends \LogicException implements SatispressExcepti
 	public static function hasNoReleases(
 		string $package_name,
 		int $code = 0,
-		\Throwable $previous = null
+		?\Throwable $previous = null
 	): InvalidReleaseVersion {
 		$message = "Package {$package_name} has no releases.";
 

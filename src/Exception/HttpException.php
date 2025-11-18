@@ -43,7 +43,7 @@ class HttpException extends \Exception implements SatispressException {
 		string $message,
 		int $status_code = HTTP::INTERNAL_SERVER_ERROR,
 		int $code = 0,
-		Throwable $previous = null
+		?Throwable $previous = null
 	) {
 		$this->status_code = $status_code;
 		$message           = $message ?: 'Internal Server Error';
@@ -62,7 +62,7 @@ class HttpException extends \Exception implements SatispressException {
 	 */
 	public static function forForbiddenResource(
 		int $code = 0,
-		Throwable $previous = null
+		?Throwable $previous = null
 	): HttpException {
 		$user_id     = get_current_user_id();
 		$request_uri = $_SERVER['REQUEST_URI'];
@@ -84,7 +84,7 @@ class HttpException extends \Exception implements SatispressException {
 	public static function forUnknownPackage(
 		string $slug,
 		int $code = 0,
-		Throwable $previous = null
+		?Throwable $previous = null
 	): HttpException {
 		$message = "Package does not exist; Package: {$slug}";
 
@@ -104,7 +104,7 @@ class HttpException extends \Exception implements SatispressException {
 	public static function forForbiddenPackage(
 		Package $package,
 		int $code = 0,
-		Throwable $previous = null
+		?Throwable $previous = null
 	): HttpException {
 		$user_id = get_current_user_id();
 		$slug    = $package->get_slug();
@@ -128,7 +128,7 @@ class HttpException extends \Exception implements SatispressException {
 		Package $package,
 		string $version,
 		int $code = 0,
-		Throwable $previous = null
+		?Throwable $previous = null
 	): HttpException {
 		$name    = $package->get_name();
 		$message = "An artifact for {$name} {$version} does not exist.";
@@ -149,7 +149,7 @@ class HttpException extends \Exception implements SatispressException {
 	public static function forMissingRelease(
 		Release $release,
 		int $code = 0,
-		Throwable $previous = null
+		?Throwable $previous = null
 	): HttpException {
 		$name    = $release->get_package()->get_name();
 		$version = $release->get_version();
