@@ -63,7 +63,7 @@ class PackageBuilder {
 		try {
 			$this->class = new ReflectionClass( $package );
 		// phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch
-		} catch ( \ReflectionException ) {
+		} catch ( \ReflectionException $e ) {
 			// noop.
 		}
 		$this->release_manager = $release_manager;
@@ -79,7 +79,9 @@ class PackageBuilder {
 	public function build(): Package {
 		uasort(
 			$this->releases,
-			fn(Release $a, Release $b) => version_compare( $b->get_version(), $a->get_version() )
+			function ( Release $a, Release $b ) {
+				return version_compare( $b->get_version(), $a->get_version() );
+			}
 		);
 
 		$this->set( 'releases', $this->releases );
@@ -341,7 +343,7 @@ class PackageBuilder {
 	 * @param mixed  $value Property value.
 	 * @return $this
 	 */
-	protected function set( $name, mixed $value ): self {
+	protected function set( $name, $value ): self {
 		$property = $this->class->getProperty( $name );
 		$property->setAccessible( true );
 		$property->setValue( $this->package, $value );

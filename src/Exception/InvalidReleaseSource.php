@@ -32,7 +32,7 @@ class InvalidReleaseSource extends \LogicException implements SatispressExceptio
 	public static function forRelease(
 		Release $release,
 		int $code = 0,
-		\Throwable $previous = null
+		?\Throwable $previous = null
 	): InvalidReleaseSource {
 		$name = $release->get_package()->get_name();
 

@@ -7,7 +7,7 @@ import './data/packages.js';
 
 const { Button } = components;
 const { dispatch, useSelect } = data;
-const { Fragment, render, useEffect, useState } = element;
+const { createRoot, Fragment, useEffect, useState } = element;
 const { __ } = i18n;
 
 const { addPackage, removePackage } = dispatch( 'satispress/packages' );
@@ -62,7 +62,5 @@ function App() {
 	`;
 }
 
-render(
-	html`<${ App } />`,
-	document.getElementById( 'satispress-repository' )
-);
+const root = createRoot( document.getElementById( 'satispress-repository' ) );
+root.render( html`<${ App } />` );

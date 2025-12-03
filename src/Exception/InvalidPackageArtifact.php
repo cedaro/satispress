@@ -30,7 +30,7 @@ class InvalidPackageArtifact extends \RuntimeException implements SatispressExce
 	public static function unreadableZip(
 		string $filename,
 		int $code = 0,
-		\Throwable $previous = null
+		?\Throwable $previous = null
 	): InvalidPackageArtifact {
 		$message = "Unable to parse {$filename} as a valid zip archive.";
 
@@ -50,7 +50,7 @@ class InvalidPackageArtifact extends \RuntimeException implements SatispressExce
 	public static function containsMacOsxDirectory(
 		string $filename,
 		int $code = 0,
-		\Throwable $previous = null
+		?\Throwable $previous = null
 	): InvalidPackageArtifact {
 		$message = "Package artifact {$filename} has a top level __MACOSX directory.";
 

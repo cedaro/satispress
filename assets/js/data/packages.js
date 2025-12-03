@@ -1,7 +1,6 @@
-import { data, dataControls } from '../utils/index.js';
+import { apiFetch, data } from '../utils/index.js';
 
-const { dispatch, registerStore, select } = data;
-const { apiFetch, controls } = dataControls;
+const { createReduxStore, register } = data;
 
 const STORE_KEY = 'satispress/packages';
 
@@ -11,9 +10,7 @@ const DEFAULT_STATE = {
 	themes: [],
 };
 
-const packageExists = ( slug, type ) => {
-	const packages = select( STORE_KEY ).getPackages();
-
+const packageExists = ( packages, slug, type ) => {
 	return !! packages.filter( item => slug === item.slug && type === item.type ).length;
 }
 
@@ -29,14 +26,14 @@ const compareByName = ( a, b ) => {
 	return 0;
 };
 
-function* addPackage( slug, type ) {
-	const packages = select( STORE_KEY ).getPackages();
+const addPackage = ( slug, type ) => async ( { dispatch, select } ) => {
+	const packages = select.getPackages();
 
-	if ( packageExists( slug, type ) ) {
+	if ( packageExists( packages, slug, type ) ) {
 		return;
 	}
 
-	const result = yield apiFetch( {
+	const result = await apiFetch( {
 		path: '/satispress/v1/packages',
 		method: 'POST',
 		data: {
@@ -45,31 +42,27 @@ function* addPackage( slug, type ) {
 		},
 	} );
 
-	if ( result ) {
-		return {
-			type: 'SET_PACKAGES',
-			packages: [
-				...packages,
-				result
-			].sort( compareByName )
-		};
-	}
+	dispatch.setPackages(
+		[
+			...packages,
+			result
+		]
+	);
 }
 
-function* removePackage( slug, type ) {
-	const packages = select( STORE_KEY ).getPackages();
+const removePackage = ( slug, type ) => async ( { dispatch, select } ) => {
+	const packages = select.getPackages();
 
-	const result = yield apiFetch( {
+	await apiFetch( {
 		path: `/satispress/v1/packages/${ slug }?type=${ type }`,
 		method: 'DELETE',
 	} );
 
-	return {
-		type: 'SET_PACKAGES',
-		packages: packages.filter( item => {
+	dispatch.setPackages(
+		packages.filter( item => {
 			return slug !== item.slug || type !== item.type;
 		} )
-	};
+	);
 }
 
 function setPackages( packages ) {
@@ -93,22 +86,22 @@ function setThemes( themes ) {
 	};
 }
 
-function* getPackages() {
-	const packages = yield apiFetch( { path: '/satispress/v1/packages' } );
-	dispatch( STORE_KEY ).setPackages( packages.sort( compareByName ) );
+const getPackages = () => async ( { dispatch, select } ) => {
+	const packages = await apiFetch( { path: '/satispress/v1/packages' } );
+	dispatch.setPackages( packages );
 }
 
-function* getPlugins() {
-	const plugins = yield apiFetch( { path: '/satispress/v1/plugins?_fields=slug,name,type' } );
-	dispatch( STORE_KEY ).setPlugins( plugins );
+const getPlugins = () => async ( { dispatch, select } ) => {
+	const plugins = await apiFetch( { path: '/satispress/v1/plugins?_fields=slug,name,type' } );
+	dispatch.setPlugins( plugins );
 }
 
-function* getThemes() {
-	const themes = yield apiFetch( { path: '/satispress/v1/themes?_fields=slug,name,type' } );
-	dispatch( STORE_KEY ).setThemes( themes );
+const getThemes = () => async ( { dispatch, select } ) => {
+	const themes = await apiFetch( { path: '/satispress/v1/themes?_fields=slug,name,type' } );
+	dispatch.setThemes( themes );
 }
 
-const store = {
+const store = createReduxStore( STORE_KEY, {
 	reducer( state = DEFAULT_STATE, action ) {
 		switch ( action.type ) {
 			case 'SET_PACKAGES' :
@@ -154,8 +147,7 @@ const store = {
 		getPackages,
 		getPlugins,
 		getThemes,
-	},
-	controls,
-};
+	}
+} );
 
-registerStore( STORE_KEY, store );
+register( store );

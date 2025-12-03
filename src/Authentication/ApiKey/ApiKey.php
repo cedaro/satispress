@@ -27,7 +27,7 @@ final class ApiKey implements ArrayAccess {
 	 *
 	 * @var int
 	 */
-	public const TOKEN_LENGTH = 32;
+	const TOKEN_LENGTH = 32;
 
 	/**
 	 * API key data.
@@ -52,10 +52,7 @@ final class ApiKey implements ArrayAccess {
 	 * @param string  $token API key token.
 	 * @param array   $data  Optional. Additional data associated with the key.
 	 */
-	public function __construct( WP_User $user, /**
-  * API key token.
-  */
- private readonly string $token, array $data = null ) {
+	public function __construct( WP_User $user, private readonly string $token, ?array $data = null ) {
 		$this->user  = $user;
 		$this->data  = $data ?? [];
 	}
@@ -80,7 +77,7 @@ final class ApiKey implements ArrayAccess {
 	 * @param string $format Optional. Date format.
 	 * @return mixed
 	 */
-	public function get_date( string $name, string $format = null ) {
+	public function get_date( string $name, ?string $format = null ) {
 		if ( empty( $this->data[ $name ] ) ) {
 			return '';
 		}
@@ -148,7 +145,7 @@ final class ApiKey implements ArrayAccess {
 	 * @param string $format    Optional. Date format.
 	 * @return string
 	 */
-	private function format_date( int $timestamp, string $format = null ): string {
+	private function format_date( int $timestamp, ?string $format = null ): string {
 		$format      = $format ?: get_option( 'date_format' );
 		$timezone_id = get_option( 'timezone_string' );
 		$datetime    = new DateTime();
@@ -182,7 +179,7 @@ final class ApiKey implements ArrayAccess {
 	 * @param string $name Field name.
 	 * @return bool
 	 */
-	public function offsetExists( mixed $name ): bool {
+	public function offsetExists( $name ): bool {
 		return isset( $this->data[ $name ] );
 	}
 
@@ -194,14 +191,18 @@ final class ApiKey implements ArrayAccess {
 	 * @param string $name Field name.
 	 * @return mixed
 	 */
-	public function offsetGet( mixed $name ): mixed {
+	public function offsetGet( $name ): mixed {
 		$method = "get_{$name}";
 
 		if ( method_exists( $this, $method ) ) {
 			return $this->$method();
 		}
 
-		return $this->data[ $name ] ?? null;
+		if ( isset( $this->data[ $name ] ) ) {
+			return $this->data[ $name ];
+		}
+
+		return null;
 	}
 
 	/**
@@ -212,7 +213,7 @@ final class ApiKey implements ArrayAccess {
 	 * @param string $name  Field name.
 	 * @param array  $value Field value.
 	 */
-	public function offsetSet( mixed $name, $value ): void {
+	public function offsetSet( $name, $value ): void {
 		if ( ! $this->is_protected_field( $name ) ) {
 			$this->data[ $name ] = $value;
 		}
@@ -225,7 +226,7 @@ final class ApiKey implements ArrayAccess {
 	 *
 	 * @param string $name Field name.
 	 */
-	public function offsetUnset( mixed $name ): void {
+	public function offsetUnset( $name ): void {
 		if ( ! $this->is_protected_field( $name ) ) {
 			unset( $this->data[ $name ] );
 		}
@@ -239,7 +240,7 @@ final class ApiKey implements ArrayAccess {
 	 * @param string $name Field name.
 	 * @return bool
 	 */
-	private function is_protected_field( $name ): bool {
+	private function is_protected_field( string $name ): bool {
 		$protected = [ 'created', 'created_by' ];
 		return \in_array( $name, $protected, true );
 	}

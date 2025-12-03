@@ -28,7 +28,7 @@ final class ThemeBuilder extends PackageBuilder {
 	 * @param WP_Theme $theme Optional. Theme instance.
 	 * @return ThemeBuilder
 	 */
-	public function from_source( string $slug, WP_Theme $theme = null ): self {
+	public function from_source( string $slug, ?WP_Theme $theme = null ): self {
 		if ( null === $theme ) {
 			$theme = wp_get_theme( $slug );
 		}
