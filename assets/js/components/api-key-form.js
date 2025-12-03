@@ -1,12 +1,10 @@
 import { components, element, html, i18n } from '../utils/index.js';
 
 const { Button, Flex, FlexItem, TextControl } = components;
-const { useEffect, useState } = element;
+const { useState } = element;
 const { __ } = i18n;
 
-function ApiKeyForm( props ) {
-	const { onSubmit } = props;
-
+function ApiKeyForm( { onSubmit } ) {
 	const [ name, setName ] = useState( '' );
 
 	const isEmpty = '' === name;
@@ -25,6 +23,7 @@ function ApiKeyForm( props ) {
 					placeholder=${ __( 'Name', 'satispress' ) }
 					onChange=${ setName }
 					value=${ name }
+					__nextHasNoMarginBottom
 				/>
 			</${ FlexItem }>
 			<${ FlexItem }>

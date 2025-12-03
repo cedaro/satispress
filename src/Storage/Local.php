@@ -68,6 +68,7 @@ class Local implements Storage {
 	 * @return bool
 	 */
 	public function delete( string $file ): bool {
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.unlink_unlink
 		return unlink( $this->get_absolute_path( $file ) );
 	}
 
@@ -131,6 +132,7 @@ class Local implements Storage {
 			return false;
 		}
 
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.rename_rename
 		if ( ! rename( $source, $filename ) ) {
 			return false;
 		}

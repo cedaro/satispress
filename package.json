@@ -1,6 +1,6 @@
 {
 	"name": "satispress",
-	"version": "2.0.1",
+	"version": "2.0.0",
 	"description": "Generate a Composer repository from installed WordPress plugins and themes.",
 	"repository": {
 		"type": "git",
@@ -25,6 +25,10 @@
 	"distFiles": [
 		"satispress.php",
 		"README.md",
-		"{assets,languages,src,vendor,views}/**"
+		"{assets,languages,src,views}/**",
+		"vendor/autoload.php",
+		"vendor/composer/*.php",
+		"vendor/{cedaro/wp-plugin,composer/semver,psr/container,psr/log}/src/**",
+		"vendor/pimple/pimple/src/Pimple/!(Tests){*.php,**/*.php}"
 	]
 }

@@ -30,7 +30,7 @@ class FileDownloadFailed extends \RuntimeException implements SatispressExceptio
 	public static function forFileName(
 		string $filename,
 		int $code = 0,
-		\Throwable $previous = null
+		?\Throwable $previous = null
 	): FileDownloadFailed {
 		$message = "Artifact download failed for file {$filename}.";
 

@@ -1,7 +1,6 @@
-import { data, dataControls } from '../utils/index.js';
+import { apiFetch, data } from '../utils/index.js';
 
-const { dispatch, registerStore, select } = data;
-const { apiFetch, controls } = dataControls;
+const { createReduxStore, register } = data;
 
 const STORE_KEY = 'satispress/access';
 
@@ -10,43 +9,35 @@ const DEFAULT_STATE = {
 	userId: null,
 };
 
-function* createApiKey( name, userId ) {
-	const apiKeys = select( STORE_KEY ).getApiKeys();
+const createApiKey = ( name, userId ) => async ( { dispatch, select } ) => {
+	const apiKeys = select.getApiKeys();
 
-	const result = yield apiFetch( {
+	const result = await apiFetch( {
 		path: '/satispress/v1/apikeys',
 		method: 'POST',
 		data: {
 			name,
 			user: userId,
 		},
-	} );
+	} )
 
-	if ( result ) {
-		return {
-			type: 'SET_API_KEYS',
-			apiKeys: [
-				...apiKeys,
-				result
-			]
-		};
-	}
+	dispatch.setApiKeys( [
+		...apiKeys,
+		result
+	] );
 }
 
-function* revokeApiKey( token, userId ) {
-	const apiKeys = select( STORE_KEY ).getApiKeys();
-
-	const result = yield apiFetch( {
+const revokeApiKey = ( token, userId ) => async ( { dispatch, select } ) => {
+	apiFetch( {
 		path: `/satispress/v1/apikeys/${ token }?user=${ userId }`,
 		method: 'DELETE',
 	} );
 
-	return {
-		type: 'SET_API_KEYS',
-		apiKeys: apiKeys.filter( item => {
-			return token !== item.token;
-		} )
-	};
+	const apiKeys = select.getApiKeys().filter( item => {
+		return token !== item.token;
+	} );
+
+	dispatch.setApiKeys( apiKeys );
 }
 
 function setApiKeys( apiKeys ) {
@@ -63,13 +54,7 @@ function setUserId( userId ) {
 	};
 }
 
-function* getApiKeys() {
-	const userId = select( STORE_KEY ).getUserId();
-	const apiKeys = yield apiFetch( { path: `/satispress/v1/apikeys?user=${ userId }` } );
-	dispatch( STORE_KEY ).setApiKeys( apiKeys );
-}
-
-const store = {
+const store = createReduxStore( STORE_KEY, {
 	reducer( state = DEFAULT_STATE, action ) {
 		switch ( action.type ) {
 			case 'SET_API_KEYS' :
@@ -102,9 +87,12 @@ const store = {
 		},
 	},
 	resolvers: {
-		getApiKeys,
+		getApiKeys: () => async ( { dispatch, select } ) => {
+			const userId = select.getUserId();
+			const apiKeys = await apiFetch( { path: `/satispress/v1/apikeys?user=${ userId }` } );
+			dispatch.setApiKeys( apiKeys );
+		},
 	},
-	controls,
-};
+} );
 
-registerStore( STORE_KEY, store );
+register( store );

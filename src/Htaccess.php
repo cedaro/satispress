@@ -40,7 +40,7 @@ class Htaccess {
 	 *
 	 * @param string $path Optional. Directory path where .htaccess is located. Default is empty string.
 	 */
-	public function __construct( string $path = null ) {
+	public function __construct( ?string $path = null ) {
 		if ( null === $path ) {
 			$path = '';
 		}
@@ -104,6 +104,7 @@ class Htaccess {
 	public function is_writable(): bool {
 		$file = $this->get_file();
 
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_is_writable
 		return ( ! $this->file_exists() && is_writable( $this->path ) ) || is_writable( $file );
 	}
 

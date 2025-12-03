@@ -1,11 +1,10 @@
 <?php
 declare ( strict_types = 1 );
 
-namespace SatisPress\Test\Integration\Provider\Authentication;
+namespace SatisPress\Test\Integration\Provider;
 
 use Pimple\ServiceIterator;
 use SatisPress\Capabilities as Caps;
-use SatisPress\Exception\AuthenticationException;
 use SatisPress\HTTP\Request;
 use SatisPress\Provider\Authentication;
 use SatisPress\Test\Integration\TestCase;
