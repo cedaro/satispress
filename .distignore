@@ -10,6 +10,7 @@ tests
 composer.json
 composer.lock
 .editorconfig
+.gitattributes
 .gitignore
 .jshintrc
 .phpcs.xml.dist
