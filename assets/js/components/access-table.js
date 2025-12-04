@@ -77,6 +77,7 @@ function AccessTableRow( props ) {
 					readOnly
 					onClick=${ selectField }
 					__nextHasNoMarginBottom
+					__next40pxDefaultSize={ true }
 				/>
 			</td>
 			<td className="column-last-used">${ last_used || '—' }</td>

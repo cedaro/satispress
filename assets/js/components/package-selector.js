@@ -81,6 +81,7 @@ function PackageSelector( props ) {
 					onChange=${ setSearchTerm }
 					value=${ searchTerm }
 					__nextHasNoMarginBottom
+					__next40pxDefaultSize={ true }
 				/>
 			<ul>${ listItems }</ul>
 		</div>`;
