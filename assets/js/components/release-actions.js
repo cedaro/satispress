@@ -39,8 +39,8 @@ function  ReleaseActions( props ) {
 								readOnly="readonly"
 								id="satispress-release-action-download-url-${ composerName }"
 								onClick=${ selectField }
-								__nextHasNoMarginBottom={ true }
-								__next40pxDefaultSize={ true }
+								__nextHasNoMarginBottom
+								__next40pxDefaultSize
 							/>
 						</td>
 					</tr>
@@ -54,8 +54,8 @@ function  ReleaseActions( props ) {
 								readOnly="readonly"
 								id="satispress-release-action-require-${ composerName }"
 								onClick=${ selectField }
-								__nextHasNoMarginBottom={ true }
-								__next40pxDefaultSize={ true }
+								__nextHasNoMarginBottom
+								__next40pxDefaultSize
 							/>
 							<span className="description">
 								<em>${ copyPasteHtml }</em>
@@ -72,8 +72,8 @@ function  ReleaseActions( props ) {
 								readOnly="readonly"
 								id="satispress-release-action-cli-${ composerName }"
 								onClick=${ selectField }
-								__nextHasNoMarginBottom={ true }
-								__next40pxDefaultSize={ true }
+								__nextHasNoMarginBottom
+								__next40pxDefaultSize
 							/>
 						</td>
 					</tr>
