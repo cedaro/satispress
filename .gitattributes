@@ -1,0 +1,17 @@
+/.git export-ignore
+/.github export-ignore
+/bin export-ignore
+/docs export-ignore
+/node_modules export-ignore
+/tests export-ignore
+.distignore export-ignore
+.gitattributes export-ignore
+.gitignore export-ignore
+.jshintrc export-ignore
+.phpcs.xml.dist export-ignore
+composer.json export-ignore
+composer.lock export-ignore
+package.json export-ignore
+package-lock.json export-ignore
+phpunit.xml.dist export-ignore
+rector.php export-ignore

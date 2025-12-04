@@ -1,6 +1,5 @@
 {
   "boss": true,
-  "browser": true,
   "bitwise": true,
   "browser": true,
   "curly": true,
