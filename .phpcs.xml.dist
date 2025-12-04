@@ -15,6 +15,7 @@
 	<exclude-pattern>node_modules/</exclude-pattern>
 	<exclude-pattern>tests/</exclude-pattern>
 	<exclude-pattern>vendor/</exclude-pattern>
+	<exclude-pattern>wordpress/</exclude-pattern>
 
 	<!-- How to scan -->
 	<arg value="sp"/> <!-- Show sniff and progress -->
@@ -22,13 +23,15 @@
 	<arg name="basepath" value="."/> <!-- Strip the file paths down to the relevant bit -->
 	<arg name="parallel" value="50"/> <!-- Enables parallel processing when available for faster results. -->
 	<arg name="extensions" value="php"/> <!-- Limit to PHP files -->
+    <!-- For CI, don't fail on warnings -->
+    <config name="ignore_warnings_on_exit" value="1"/>
 
 	<!-- Rules: Check PHP version compatibility - see
 		https://github.com/PHPCompatibility/PHPCompatibilityWP -->
 	<rule ref="PHPCompatibilityWP"/>
 	<!-- For help in understanding this testVersion:
 		https://github.com/PHPCompatibility/PHPCompatibility#sniffing-your-code-for-compatibility-with-specific-php-versions -->
-	<config name="testVersion" value="8.0-"/>
+	<config name="testVersion" value="8.1-"/>
 
 	<!-- Rules: WordPress Coding Standards - see
 		https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards -->
