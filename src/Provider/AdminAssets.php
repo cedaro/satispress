@@ -45,7 +45,7 @@ class AdminAssets extends AbstractHookProvider {
 			'satispress-access',
 			$this->plugin->get_url( 'assets/js/access.js' ),
 			[ 'wp-components', 'wp-data', 'wp-data-controls', 'wp-element', 'wp-i18n' ],
-			'20210211',
+			'20251204',
 			true
 		);
 
@@ -59,7 +59,7 @@ class AdminAssets extends AbstractHookProvider {
 			'satispress-repository',
 			$this->plugin->get_url( 'assets/js/repository.js' ),
 			[ 'wp-components', 'wp-data', 'wp-data-controls', 'wp-element', 'wp-i18n' ],
-			'20210211',
+			'20251204',
 			true
 		);
 
