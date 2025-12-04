@@ -23,7 +23,7 @@ function ApiKeyForm( { onSubmit } ) {
 					placeholder=${ __( 'Name', 'satispress' ) }
 					onChange=${ setName }
 					value=${ name }
-					__nextHasNoMarginBottom
+					__nextHasNoMarginBottom={ true }
 					__next40pxDefaultSize={ true }
 				/>
 			</${ FlexItem }>
