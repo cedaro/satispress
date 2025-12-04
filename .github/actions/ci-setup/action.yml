@@ -1,0 +1,70 @@
+name: CI Setup
+description: "Sets up the environment for jobs during CI workflow"
+# https://alejandrocelaya.blog/2022/08/19/how-to-reduce-duplication-in-your-github-actions-workflows/
+
+inputs:
+  extensions:
+    default: 'curl, mysql, zip'
+    description: 'shivammathur/setup-php extensions'
+    required: false
+  extensions-cache-key:
+    description: 'The key used to cache PHP extensions'
+    required: true
+  php-version:
+    description: 'The PHP version to be setup'
+    required: true
+  token:
+    description: 'A GitHub PAT'
+    required: true
+  tools:
+    default: 'composer'
+    description: 'shivammathur/setup-php tools'
+    required: false
+outputs:
+  files:
+    description: 'All changed files'
+    value: ${{ steps.files.outputs.all }}
+
+runs:
+  using: composite
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup cache extensions
+      id: extcache
+      uses: shivammathur/cache-extensions@v1
+      with:
+        php-version: ${{ inputs.php-version }}
+        extensions: ${{ inputs.extensions }}
+        key: ${{ inputs.extensions-cache-key }}
+
+    - name: Cache extensions
+      uses: actions/cache@v4
+      with:
+        path: ${{ steps.extcache.outputs.dir }}
+        key: ${{ steps.extcache.outputs.key }}
+        restore-keys: ${{ steps.extcache.outputs.key }}
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ inputs.php-version }}
+        coverage: xdebug
+        extensions: ${{ inputs.extensions }}
+        tools: ${{ inputs.tools }}
+
+    - name: Composer config
+      run: |
+        composer config github-oauth.github.com "${{ env.GITHUB_TOKEN }}"
+      env:
+        GITHUB_TOKEN: ${{ inputs.token }}
+      shell: bash
+
+    - name: Composer update
+      run: composer update --no-interaction --optimize-autoloader
+      shell: bash
+
+    - name: Get Changed Files
+      id: files
+      uses: masesgroup/retrieve-changed-files@v3

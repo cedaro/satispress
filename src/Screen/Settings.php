@@ -137,7 +137,7 @@ class Settings extends AbstractHookProvider {
 	 * @since 0.2.0
 	 */
 	public function register_settings() {
-		register_setting( 'satispress', 'satispress', $this->sanitize_settings(...) );
+		register_setting( 'satispress', 'satispress', [ $this, 'sanitize_settings' ] );
 	}
 
 	/**

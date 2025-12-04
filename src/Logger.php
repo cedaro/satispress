@@ -109,7 +109,7 @@ final class Logger extends AbstractLogger {
 		foreach ( $context as $key => $value ) {
 			$placeholder = '{' . $key . '}';
 
-			if ( !str_contains( $message, $placeholder ) ) {
+			if ( ! str_contains( $message, $placeholder ) ) {
 				continue;
 			}
 

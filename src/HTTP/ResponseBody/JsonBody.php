@@ -24,14 +24,8 @@ class JsonBody implements ResponseBody {
 	 *
 	 * @param mixed $data Response data.
 	 */
-	public function __construct(
-     /**
-      * Message data.
-      */
-     protected mixed $data
- )
- {
- }
+	public function __construct( protected mixed $data ) {
+	}
 
 	/**
 	 * Emit the data as a JSON-serialized string.

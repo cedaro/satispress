@@ -143,7 +143,7 @@ function get_edited_user_id(): int {
  * @return bool
  */
 function is_plugin_file( $plugin_file ) {
-	return is_string($plugin_file) && str_ends_with($plugin_file, '.php');
+	return is_string( $plugin_file ) && str_ends_with( $plugin_file, '.php' );
 }
 
 /**

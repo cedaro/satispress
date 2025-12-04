@@ -39,11 +39,11 @@ class Capabilities extends AbstractHookProvider {
 	 * @return array
 	 */
 	public function map_meta_cap( array $caps, string $cap ): array {
-		$caps = match ($cap) {
-      Caps::DOWNLOAD_PACKAGE => [ Caps::DOWNLOAD_PACKAGES ],
-      Caps::VIEW_PACKAGE => [ Caps::VIEW_PACKAGES ],
-      default => $caps,
-  };
+		$caps = match ( $cap ) {
+			Caps::DOWNLOAD_PACKAGE => [ Caps::DOWNLOAD_PACKAGES ],
+			Caps::VIEW_PACKAGE => [ Caps::VIEW_PACKAGES ],
+			default => $caps,
+		};
 
 		return $caps;
 	}

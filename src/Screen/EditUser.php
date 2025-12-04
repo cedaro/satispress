@@ -21,7 +21,7 @@ use function SatisPress\get_edited_user_id;
 use function SatisPress\preload_rest_data;
 
 /**
- * Edit Usser screen provider class.
+ * Edit User screen provider class.
  *
  * @since 0.3.0
  */
