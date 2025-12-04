@@ -55,7 +55,7 @@ jobs:
       - name: Create artifact
         uses: montudor/action-zip@v1
         with:
-          args: zip -X -r build/${{ github.event.repository.name }}.zip . -x *.git* bin** node_modules/\* .* "*/\.*" *.dist *.xml *.neon composer.* package*.json rector.php tests** build**
+          args: zip -X -r build/${{ github.event.repository.name }}.zip . -x *.git* bin** node_modules/\* .* "*/\.*" *.dist *.xml *.neon composer.* package*.json rector.php docs** tests** build**
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
