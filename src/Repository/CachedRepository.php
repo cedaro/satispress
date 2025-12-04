@@ -45,7 +45,7 @@ class CachedRepository extends AbstractRepository implements PackageRepository {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @param PackageRepository $repository Packge repository.
+	 * @param PackageRepository $repository Package repository.
 	 */
 	public function __construct( PackageRepository $repository ) {
 		$this->repository = $repository;
