@@ -16,6 +16,7 @@
 	<exclude-pattern>tests/</exclude-pattern>
 	<exclude-pattern>vendor/</exclude-pattern>
 	<exclude-pattern>wordpress/</exclude-pattern>
+	<exclude-pattern>rector.php</exclude-pattern>
 
 	<!-- How to scan -->
 	<arg value="sp"/> <!-- Show sniff and progress -->
