@@ -31,7 +31,7 @@ final class PackageFactory {
 	 *
 	 * @param ReleaseManager $release_manager Release manager.
 	 */
-	public function __construct(private readonly ReleaseManager $release_manager) {
+	public function __construct( private readonly ReleaseManager $release_manager ) {
 	}
 
 	/**

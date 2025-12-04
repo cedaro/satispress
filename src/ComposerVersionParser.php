@@ -25,7 +25,7 @@ final class ComposerVersionParser implements VersionParser {
 	 *
 	 * @param \Composer\Semver\VersionParser $parser Version parser.
 	 */
-	public function __construct(private readonly \Composer\Semver\VersionParser $parser) {
+	public function __construct( private readonly \Composer\Semver\VersionParser $parser ) {
 	}
 
 	/**
