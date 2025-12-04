@@ -1,0 +1,35 @@
+name: PHP Security Checker
+
+on:
+  pull_request:
+
+jobs:
+  security-checker:
+    name: PHP Security Checker
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-version: [ "8.1" ]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          coverage: none
+          tools: composer:v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run composer install
+        run: |
+          composer install --no-interaction
+
+      - uses: actions/cache@v4
+        id: cache-db
+        with:
+          path: ~/.symfony/cache
+          key: db-${{ matrix.php-version }}
+
+      - uses: symfonycorp/security-checker-action@v5

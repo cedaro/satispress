@@ -1,0 +1,91 @@
+name: Main PHP Version(s) CI
+
+on:
+  pull_request:
+
+# Cancels all previous workflow runs for the same branch that have not yet completed.
+concurrency:
+  # The concurrency group contains the workflow name and the branch name.
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  run-phpcs:
+    name: Run PHPCS
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-version: [ "8.1" ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup
+        id: ci-setup
+        uses: ./.github/actions/ci-setup
+        with:
+          extensions: 'curl'
+          extensions-cache-key: run-phpcs-${{ matrix.php-version }}
+          php-version: ${{ matrix.php-version }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tools: 'composer, cs2pr, phpcs'
+
+      - name: Run PHPCS
+        continue-on-error: false
+        id: phpcs
+        run: composer phpcs
+        env:
+          CHANGED_FILES: ${{ steps.ci-setup.outputs.files }}
+          PHP_VERSION: ${{ matrix.php-version }}
+
+      - name: Show PHPCS results in PR
+        if: ${{ always() && steps.phpcs.outcome == 'failure' && matrix.php-version == '8.1' }}
+        run: cs2pr ./phpcs-report.xml
+
+  run-phpunit:
+    name: Run PHPUnit
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-version: [ "8.1" ]
+        wp-version: [ 'latest' ]
+        coverage: [ true ]
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_DATABASE: wordpress_test
+          MYSQL_ROOT_PASSWORD: root
+        ports:
+          - "3306:3306"
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=10s --health-retries=10
+    env:
+      WORDPRESS_DB_NAME: wordpress_test
+      WORDPRESS_DB_PASS: root
+      WORDPRESS_DB_USER: root
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install SVN
+        run: sudo apt-get update && sudo apt-get install -y subversion
+
+      - name: Setup PHP ${{ matrix.php-version }}
+        id: ci-setup
+        uses: ./.github/actions/ci-setup
+        with:
+          extensions: 'curl, mysql, mysqli, zip'
+          extensions-cache-key: run-phpunit-${{ matrix.wp-version }}-${{ matrix.php-version }}
+          php-version: ${{ matrix.php-version }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tools: 'composer, phpunit:10'
+
+      - name: Run PHPUnit
+        continue-on-error: false
+        id: phpunit
+        run: composer test
+        env:
+          CHANGED_FILES: ${{ steps.ci-setup.outputs.files }}
+          DB_PORT: ${{ job.services.mysql.ports[3306] }}
+          IS_PHPUNIT__TEST: ${{ true }}
