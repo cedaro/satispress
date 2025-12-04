@@ -5,6 +5,7 @@
 /node_modules export-ignore
 /tests export-ignore
 .distignore export-ignore
+.editorconfig export-ignore
 .gitattributes export-ignore
 .gitignore export-ignore
 .jshintrc export-ignore
