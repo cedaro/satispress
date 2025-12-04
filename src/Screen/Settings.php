@@ -12,14 +12,20 @@ declare ( strict_types = 1 );
 namespace SatisPress\Screen;
 
 use Cedaro\WP\Plugin\AbstractHookProvider;
-use SatisPress\Authentication\ApiKey\ApiKey;
 use SatisPress\Authentication\ApiKey\ApiKeyRepository;
 use SatisPress\Capabilities;
 use SatisPress\Provider\HealthCheck;
-use WP_Theme;
 
+use function add_action;
+use function add_filter;
+use function array_unshift;
+use function esc_attr__;
+use function esc_html__;
+use function menu_page_url;
 use function SatisPress\get_packages_permalink;
+use function SatisPress\plugin;
 use function SatisPress\preload_rest_data;
+use function sprintf;
 
 /**
  * Settings screen provider class.
@@ -55,6 +61,7 @@ class Settings extends AbstractHookProvider {
 			add_action( 'admin_menu', [ $this, 'add_menu_item' ] );
 		}
 
+		add_filter( 'plugin_action_links_' . $this->plugin->get_basename(), [ $this, 'add_settings_link' ] );
 		add_action( 'admin_init', [ $this, 'register_settings' ] );
 		add_action( 'admin_init', [ $this, 'add_sections' ] );
 		add_action( 'admin_init', [ $this, 'add_settings' ] );
@@ -129,6 +136,26 @@ class Settings extends AbstractHookProvider {
 		}
 
 		preload_rest_data( $preload_paths );
+	}
+
+	/**
+	 * Add settings page link to the plugins page.
+	 *
+	 * @param array $actions
+	 * @return array
+	 */
+	public function add_settings_link( array $actions ): array {
+		array_unshift(
+			$actions,
+			sprintf(
+				'<a href="%s" aria-label="%s">%s</a>',
+				menu_page_url( 'satispress', false ),
+				esc_attr__( 'Settings for SatisPress', 'satispress' ),
+				esc_html__( 'Settings', 'satispress' )
+			),
+		);
+
+		return $actions;
 	}
 
 	/**
