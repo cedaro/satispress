@@ -141,7 +141,7 @@ class Settings extends AbstractHookProvider {
 	/**
 	 * Add settings page link to the plugins page.
 	 *
-	 * @param array $actions
+	 * @param array $actions An array of plugin action links.
 	 * @return array
 	 */
 	public function add_settings_link( array $actions ): array {
