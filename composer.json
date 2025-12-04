@@ -87,6 +87,7 @@
 		],
 		"makepot": "./vendor/bin/wp i18n make-pot . languages/satispress.pot",
 		"phpcs": "./vendor/bin/phpcs --standard=.phpcs.xml.dist",
+		"phpcs:fix": "./vendor/bin/phpcbf --standard=.phpcs.xml.dist",
 		"prepare-for-release": [
 			"composer update --no-dev"
 		],
