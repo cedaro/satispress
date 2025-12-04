@@ -76,7 +76,7 @@ function AccessTableRow( props ) {
 					value=${ token }
 					readOnly
 					onClick=${ selectField }
-					__nextHasNoMarginBottom
+					__nextHasNoMarginBottom={ true }
 					__next40pxDefaultSize={ true }
 				/>
 			</td>
