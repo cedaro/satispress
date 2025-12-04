@@ -25,14 +25,8 @@ final class ComposerVersionParser implements VersionParser {
 	 *
 	 * @param \Composer\Semver\VersionParser $parser Version parser.
 	 */
-	public function __construct(
-     /**
-      * Version parser instance.
-      */
-     private readonly \Composer\Semver\VersionParser $parser
- )
- {
- }
+	public function __construct(private readonly \Composer\Semver\VersionParser $parser) {
+	}
 
 	/**
 	 * Normalizes a version string to be able to perform comparisons on it.

@@ -116,7 +116,7 @@ class ApiKeysController extends WP_REST_Controller {
 						'type'              => 'string',
 						'pattern'           => self::TOKEN_PATTERN,
 						'required'          => true,
-						'sanitize_callback' => fn($value) => preg_replace( '/[^A-Za-z0-9]+/', '', (string) $value ),
+						'sanitize_callback' => fn( $value ) => preg_replace( '/[^A-Za-z0-9]+/', '', (string) $value ),
 					],
 					'user'    => [
 						'description' => esc_html__( 'The ID for the user associated with the API Key.', 'satispress' ),

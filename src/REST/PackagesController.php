@@ -174,7 +174,7 @@ class PackagesController extends WP_REST_Controller {
 		$items = [];
 
 		$repository = $this->repository->with_filter(
-			fn($package) => in_array( $package->get_type(), $request['type'], true )
+			fn( $package ) => in_array( $package->get_type(), $request['type'], true )
 		);
 
 		foreach ( $repository->all() as $slug => $package ) {
@@ -263,7 +263,7 @@ class PackagesController extends WP_REST_Controller {
 			return new WP_Error(
 				'rest_cannot_delete',
 				esc_html__( 'Sorry, you are not allowed to delete this package.', 'satispress' ),
-				['status' => rest_authorization_required_code()]
+				[ 'status' => rest_authorization_required_code() ]
 			);
 		}
 

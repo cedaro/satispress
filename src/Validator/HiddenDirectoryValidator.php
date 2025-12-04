@@ -54,7 +54,7 @@ class HiddenDirectoryValidator implements ArtifactValidator {
 
 		$contents = $zip->listContent();
 		foreach ( $contents as $file ) {
-			if ( str_starts_with((string) $file['filename'], '__MACOSX/') ) {
+			if ( str_starts_with( (string) $file['filename'], '__MACOSX/' ) ) {
 				return true;
 			}
 		}

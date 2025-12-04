@@ -79,7 +79,7 @@ class PackageBuilder {
 	public function build(): Package {
 		uasort(
 			$this->releases,
-			fn(Release $a, Release $b) => version_compare( $b->get_version(), $a->get_version() )
+			fn( Release $a, Release $b ) => version_compare( $b->get_version(), $a->get_version() )
 		);
 
 		$this->set( 'releases', $this->releases );

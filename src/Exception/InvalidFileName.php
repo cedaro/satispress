@@ -36,12 +36,12 @@ class InvalidFileName extends \InvalidArgumentException implements SatispressExc
 	): InvalidFileName {
 		$message = "File name '{$filename}' ";
 
-		match ($validation_code) {
-      1 => $message .= ' contains directory traversal.',
-      2 => $message .= ' contains a Windows drive path.',
-      3 => $message .= ' is not in the allowed files list.',
-      default => new static( $message, $code, $previous ),
-  };
+		match ( $validation_code ) {
+			1 => $message .= ' contains directory traversal.',
+			2 => $message .= ' contains a Windows drive path.',
+			3 => $message .= ' is not in the allowed files list.',
+			default => new static( $message, $code, $previous ),
+		};
 
 		return new static( $message, $code, $previous );
 	}

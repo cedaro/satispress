@@ -174,7 +174,7 @@ class BasePackage implements \ArrayAccess, Package {
 		$files     = array_values( array_diff( $files, $excludes, [ '.', '..' ] ) );
 
 		return array_map(
-			fn($file) => $this->get_path( $file ),
+			fn( $file ) => $this->get_path( $file ),
 			$files
 		);
 	}

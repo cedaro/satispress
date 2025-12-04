@@ -53,8 +53,8 @@ final class ApiKey implements ArrayAccess {
 	 * @param array   $data  Optional. Additional data associated with the key.
 	 */
 	public function __construct( WP_User $user, private readonly string $token, ?array $data = null ) {
-		$this->user  = $user;
-		$this->data  = $data ?? [];
+		$this->user = $user;
+		$this->data = $data ?? [];
 	}
 
 	/**

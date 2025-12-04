@@ -60,7 +60,7 @@ class EnvatoMarket extends AbstractHookProvider {
 			}
 		}
 
-		return is_string($download_url) ? $download_url : '';
+		return is_string( $download_url ) ? $download_url : '';
 	}
 
 	/**

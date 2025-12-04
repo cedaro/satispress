@@ -31,14 +31,8 @@ final class PackageFactory {
 	 *
 	 * @param ReleaseManager $release_manager Release manager.
 	 */
-	public function __construct(
-     /**
-      * Release manager.
-      */
-     private readonly ReleaseManager $release_manager
- )
- {
- }
+	public function __construct(private readonly ReleaseManager $release_manager) {
+	}
 
 	/**
 	 * Create a package builder.
@@ -48,12 +42,11 @@ final class PackageFactory {
 	 * @param string $package_type Package type.
 	 * @return PluginBuilder|ThemeBuilder|PackageBuilder Package builder instance.
 	 */
-	public function create(string $package_type): PackageBuilder
- {
-     return match ($package_type) {
-         'plugin' => new PluginBuilder( new Plugin(), $this->release_manager ),
-         'theme' => new ThemeBuilder( new Theme(), $this->release_manager ),
-         default => new PackageBuilder( new BasePackage(), $this->release_manager ),
-     };
- }
+	public function create( string $package_type ): PackageBuilder {
+		return match ( $package_type ) {
+			'plugin' => new PluginBuilder( new Plugin(), $this->release_manager ),
+			'theme' => new ThemeBuilder( new Theme(), $this->release_manager ),
+			default => new PackageBuilder( new BasePackage(), $this->release_manager ),
+		};
+	}
 }
