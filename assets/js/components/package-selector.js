@@ -67,7 +67,7 @@ function PackageSelector( props ) {
 						checked=${ packageExists( slug, type ) }
 						onChange=${ checked => togglePackage( slug, type, checked ) }
 						label=${ name }
-						__nextHasNoMarginBottom={ true }
+						__nextHasNoMarginBottom
 					/>
 				</li>
 			`;
@@ -80,8 +80,8 @@ function PackageSelector( props ) {
 					placeholder=${ __( 'Search', 'satispress' ) + ' ' + tab.title }
 					onChange=${ setSearchTerm }
 					value=${ searchTerm }
-					__nextHasNoMarginBottom={ true }
-					__next40pxDefaultSize={ true }
+					__nextHasNoMarginBottom
+					__next40pxDefaultSize
 				/>
 			<ul>${ listItems }</ul>
 		</div>`;
