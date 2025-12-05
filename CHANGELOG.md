@@ -2,6 +2,15 @@
 
 ## [Unreleased]
 
+## [2.0.1] - 2025-12-04
+
+* Fixed the search functionality in the package selector sidebar. See [#223].
+* Switched to using thunks instead of generators in the React data stores.
+* Added psr/log to the built zip file for release. See [#215].
+* Prevented notices in the console from core React components. See [#222]. Props [@thefrosty](https://github.com/thefrosty)
+* Explicitly marked nullable types for PHP 8.4+ compatability. See [#221]. Props [@andronocean](andronocean)
+* Prevented PHP deprecation notices caused by string interploation. See [#220]. Props [@hirasso](https://github.com/hirasso)
+
 ## [2.0.0] - 2024-10-10
 
 * SatisPress now requires PHP 8+.
@@ -137,7 +146,8 @@ Major changes include:
 * [Capabilities](docs/security.md#capabilities) were added for viewing and downloading packages, as well as managing SatisPress options. Only administrators have access by default.
 * The storage layer was abstracted to make it swappable.
 
-[Unreleased]: https://github.com/cedaro/satispress/compare/v2.0.0...HEAD
+[Unreleased]: https://github.com/cedaro/satispress/compare/v2.0.1...HEAD
+[2.0.1]: https://github.com/cedaro/satispress/compare/v1.0.4...v2.0.1
 [2.0.0]: https://github.com/cedaro/satispress/compare/v1.0.4...v2.0.0
 [1.0.4]: https://github.com/cedaro/satispress/compare/v1.0.3...v1.0.4
 [1.0.3]: https://github.com/cedaro/satispress/compare/v1.0.2...v1.0.3

@@ -1,17 +1,17 @@
-# Copyright (C) 2024 Cedaro
+# Copyright (C) 2025 Cedaro
 # This file is distributed under the GPL-2.0-or-later.
 msgid ""
 msgstr ""
-"Project-Id-Version: SatisPress 2.0.0\n"
+"Project-Id-Version: SatisPress 2.0.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/satispress\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-10-10T17:20:20+00:00\n"
+"POT-Creation-Date: 2025-12-05T00:41:05+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.11.0\n"
+"X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: satispress\n"
 
 #. Plugin Name of the plugin
@@ -44,6 +44,7 @@ msgstr ""
 
 #. translators: %s: documentation URL
 #: src/functions.php:157
+#, php-format
 msgid "SatisPress is missing required dependencies. <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferer\">Learn more.</a>"
 msgstr ""
 
@@ -65,6 +66,7 @@ msgstr ""
 
 #. translators: %s: permalink screen URL
 #: src/Provider/HealthCheck.php:104
+#, php-format
 msgid "SatisPress requires pretty permalinks to be enabled. <a href=\"%s\">Enable permalinks</a>."
 msgstr ""
 
@@ -241,6 +243,7 @@ msgstr ""
 
 #. translators: %s: <code>satispress</code>
 #: views/tabs/access.php:22
+#, php-format
 msgid "The password for all API keys is %s."
 msgstr ""
 
@@ -254,11 +257,13 @@ msgstr ""
 
 #. translators: 1: <code>repositories</code>, 2: <code>composer.json</code>
 #: views/tabs/composer.php:26
+#, php-format
 msgid "Add it to the %1$s list in your %2$s:"
 msgstr ""
 
 #. translators: 1: <code>config</code>
 #: views/tabs/composer.php:47
+#, php-format
 msgid "Or run the %1$s command:"
 msgstr ""
 
@@ -267,7 +272,7 @@ msgid "Add an API Key to access the SatisPress repository."
 msgstr ""
 
 #: assets/js/components/access-table.js:35
-#: assets/js/components/api-key-form.js:25
+#: assets/js/components/api-key-form.js:23
 #: assets/js/components/package-table.js:31
 msgid "Name"
 msgstr ""
@@ -288,11 +293,11 @@ msgstr ""
 msgid "Created"
 msgstr ""
 
-#: assets/js/components/access-table.js:85
+#: assets/js/components/access-table.js:87
 msgid "Toggle dropdown"
 msgstr ""
 
-#: assets/js/components/api-key-form.js:23
+#: assets/js/components/api-key-form.js:21
 msgid "API Key Name"
 msgstr ""
 
@@ -308,17 +313,17 @@ msgstr ""
 msgid "Themes"
 msgstr ""
 
-#: assets/js/components/package-selector.js:77
-#: assets/js/components/package-selector.js:79
+#: assets/js/components/package-selector.js:78
+#: assets/js/components/package-selector.js:80
 msgid "Search"
 msgstr ""
 
-#: assets/js/components/package-selector.js:89
+#: assets/js/components/package-selector.js:92
 #: assets/js/repository.js:44
 msgid "Manage Packages"
 msgstr ""
 
-#: assets/js/components/package-selector.js:91
+#: assets/js/components/package-selector.js:94
 msgid "Close package inserter"
 msgstr ""
 
@@ -340,6 +345,7 @@ msgstr ""
 
 #. translators: %s: version number
 #: assets/js/components/release-actions.js:21
+#, js-format
 msgid "Download %s"
 msgstr ""
 
@@ -351,11 +357,11 @@ msgstr ""
 msgid "Download URL"
 msgstr ""
 
-#: assets/js/components/release-actions.js:47
+#: assets/js/components/release-actions.js:49
 msgid "Require"
 msgstr ""
 
-#: assets/js/components/release-actions.js:63
+#: assets/js/components/release-actions.js:67
 msgid "CLI Command"
 msgstr ""
 
