@@ -92,12 +92,12 @@ const getPackages = () => async ( { dispatch, select } ) => {
 }
 
 const getPlugins = () => async ( { dispatch, select } ) => {
-	const plugins = await apiFetch( { path: '/satispress/v1/plugins?_fields=slug,name,type' } );
+	const plugins = await apiFetch( { path: '/satispress/v1/plugins?_fields=slug,name,type,author' } );
 	dispatch.setPlugins( plugins );
 }
 
 const getThemes = () => async ( { dispatch, select } ) => {
-	const themes = await apiFetch( { path: '/satispress/v1/themes?_fields=slug,name,type' } );
+	const themes = await apiFetch( { path: '/satispress/v1/themes?_fields=slug,name,type,author' } );
 	dispatch.setThemes( themes );
 }
 
