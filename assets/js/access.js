@@ -18,6 +18,10 @@ function App( { userId } ) {
 		return select( 'satispress/access' ).getApiKeys();
 	} );
 
+	const selectedUserId = useSelect( ( select ) => {
+		return select( 'satispress/access' ).getUserId();
+	} );
+
 	useEffect( () => {
 		setUserId( userId );
 	}, [ userId ] );
@@ -25,9 +29,10 @@ function App( { userId } ) {
 	return html`
 		<${ AccessTable }
 			apiKeys=${ apiKeys }
-			userId=${ userId }
-			onCreateApiKey=${ ( name ) => createApiKey( name, userId ) }
+			userId=${ selectedUserId || userId }
+			onCreateApiKey=${ ( name, selected ) => createApiKey( name, selected ) }
 			onRevokeApiKey=${ revokeApiKey }
+			onChangeUser=${ ( id ) => setUserId( id ) }
 		/>
 	`;
 }
