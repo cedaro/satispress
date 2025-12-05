@@ -1,17 +1,39 @@
-import { components, element, html, i18n } from '../utils/index.js';
+import { data, components, element, html, i18n } from '../utils/index.js';
 
-const { Button, Flex, FlexItem, TextControl } = components;
+const { Button, Flex, FlexItem, SelectControl, TextControl } = components;
+const { useSelect } = data;
 const { useState } = element;
 const { __ } = i18n;
 
-function ApiKeyForm( { onSubmit } ) {
-	const [ name, setName ] = useState( '' );
+const { editedUserId } = _satispressAccessData;
 
-	const isEmpty = '' === name;
+function ApiKeyForm( { onSubmit } ) {
+	const [ name, setName, userId, setUserId ] = useState( '' );
+
+	const isEmpty = '' === name || '' === userId;
 
 	const onClick = () => {
 		onSubmit( name );
 		setName( '' );
+		setUserId( '' );
+	};
+
+	const getUsers = () => {
+		let data = [{ value: '', label: 'Select a User', readonly: true }];
+
+		const users = useSelect( ( select ) => {
+			return select( 'core' ).getUsers();
+		}, [] );
+
+		if ( !users ) {
+			return [];
+		}
+
+		Array.from(users).forEach( user => {
+			data.push({ value: user.id, label: user.name, readonly: false });
+		});
+
+		return data;
 	};
 
 	return html`
@@ -28,6 +50,16 @@ function ApiKeyForm( { onSubmit } ) {
 				/>
 			</${ FlexItem }>
 			<${ FlexItem }>
+				<${ SelectControl }
+					label=${ __( 'User', 'satispress' ) }
+					hideLabelFromVision
+					value=${ editedUserId }
+					options=${ getUsers() }
+					__nextHasNoMarginBottom
+					__next40pxDefaultSize
+				/>
+			</${ FlexItem }>
+			<${ FlexItem }>
 				<${ Button }
 					isPrimary=${ ! isEmpty }
 					isSecondary=${ isEmpty }
@@ -39,6 +71,6 @@ function ApiKeyForm( { onSubmit } ) {
 			</${ FlexItem }>
 		</${ Flex }>
 	`;
-};
+}
 
 export default ApiKeyForm;
