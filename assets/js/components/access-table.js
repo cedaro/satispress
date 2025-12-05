@@ -2,7 +2,7 @@ import { components, html, i18n } from '../utils/index.js';
 import ApiKeyForm from './api-key-form.js';
 import { moreVertical } from './icons.js';
 
-const { DropdownMenu, Flex, FlexItem, MenuItem, TextControl } = components;
+const { DropdownMenu, TextControl } = components;
 const { __ } = i18n;
 
 const selectField = ( e ) => e.nativeEvent.target.select();
