@@ -107,6 +107,6 @@ class EditUser extends AbstractHookProvider {
 	 */
 	public function render_api_keys_section( WP_User $user ) {
 		printf( '<h2>%s</h2>', esc_html__( 'SatisPress API Keys', 'satispress' ) );
-		printf( '<div id="satispress-api-key-manager" data-user-id="%d"></div>', $user->ID );
+		printf( '<div id="satispress-api-key-manager" data-user-id="%s"></div>', esc_attr( $user->ID ) );
 	}
 }
