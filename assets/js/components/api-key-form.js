@@ -24,7 +24,7 @@ function ApiKeyForm( { onSubmit, userId: selectedUserId, onChangeUser } ) {
 	};
 
 	const getAdminUsers = () => {
-		let data = [{ value: '', label: 'Select a User', readonly: true }];
+		let data = [{ value: '', label: 'Select a User' }];
 
 		const users = useSelect( ( select ) => {
 			const query = {
@@ -38,11 +38,11 @@ function ApiKeyForm( { onSubmit, userId: selectedUserId, onChangeUser } ) {
 		}, [] );
 
 		if ( !users ) {
-			return [{ value: '', label: __( 'Loading...', 'satispress' ), readonly: true }];
+			return [{ value: '', label: __( 'Loading...', 'satispress' ) }];
 		}
 
 		Array.from(users).forEach( user => {
-			data.push({ value: user.id, label: user.name, readonly: false });
+			data.push({ value: user.id, label: user.name });
 		});
 
 		return data;
