@@ -12,6 +12,8 @@ function AccessTable( props ) {
 		apiKeys,
 		onCreateApiKey,
 		onRevokeApiKey,
+		userId,
+		onChangeUser,
 	} = props;
 
 	let body = html`<tr><td colSpan=6>${ __( 'Add an API Key to access the SatisPress repository.', 'satispress' ) }</td></tr>`;
@@ -47,13 +49,15 @@ function AccessTable( props ) {
 					<td colSpan="6" className="satispress-api-key-form">
 						<${ ApiKeyForm }
 							onSubmit=${ onCreateApiKey }
+							userId=${ userId }
+							onChangeUser=${ onChangeUser }
 						/>
 					</td>
 				</tr>
 			</tfoot>
 		</table>
 	`;
-};
+}
 
 function AccessTableRow( props ) {
 	const {
@@ -66,7 +70,7 @@ function AccessTableRow( props ) {
 		onRevokeApiKey,
 	} = props;
 
-	return html `
+	return html`
 		<tr key="${ token }">
 			<th scope="row">${ name }</th>
 			<td className="column-user">${ user_login }</td>
@@ -96,6 +100,6 @@ function AccessTableRow( props ) {
 			</td>
 		</tr>
 	`;
-};
+}
 
 export default AccessTable;
