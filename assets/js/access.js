@@ -15,7 +15,7 @@ function App( { userId } ) {
 	} = useDispatch( 'satispress/access' );
 
 	const apiKeys = useSelect( ( select ) => {
-		return select( 'satispress/access' ).getApiKeys()
+		return select( 'satispress/access' ).getApiKeys();
 	} );
 
 	useEffect( () => {
