@@ -17,6 +17,7 @@ use SatisPress\Authentication\ApiKey\ApiKeyRepository;
 use SatisPress\Capabilities;
 use WP_User;
 
+use function printf;
 use function SatisPress\get_edited_user_id;
 use function SatisPress\preload_rest_data;
 
@@ -106,6 +107,6 @@ class EditUser extends AbstractHookProvider {
 	 */
 	public function render_api_keys_section( WP_User $user ) {
 		printf( '<h2>%s</h2>', esc_html__( 'SatisPress API Keys', 'satispress' ) );
-		echo '<div id="satispress-api-key-manager"></div>';
+		printf( '<div id="satispress-api-key-manager" data-user-id="%d"></div>', $user->ID );
 	}
 }
