@@ -116,6 +116,7 @@ class Settings extends AbstractHookProvider {
 			'satispress-access',
 			'_satispressAccessData',
 			[
+				'capabilities' => Capabilities::DOWNLOAD_PACKAGES,
 				'editedUserId' => get_current_user_id(),
 			]
 		);

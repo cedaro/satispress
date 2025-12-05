@@ -28,7 +28,7 @@ const createApiKey = ( name, userId ) => async ( { dispatch, select } ) => {
 }
 
 const revokeApiKey = ( token, userId ) => async ( { dispatch, select } ) => {
-	apiFetch( {
+	await apiFetch( {
 		path: `/satispress/v1/apikeys/${ token }?user=${ userId }`,
 		method: 'DELETE',
 	} );

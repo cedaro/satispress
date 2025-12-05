@@ -15,7 +15,11 @@ function App( { userId } ) {
 	} = useDispatch( 'satispress/access' );
 
 	const apiKeys = useSelect( ( select ) => {
-		return select( 'satispress/access' ).getApiKeys()
+		return select( 'satispress/access' ).getApiKeys();
+	} );
+
+	const selectedUserId = useSelect( ( select ) => {
+		return select( 'satispress/access' ).getUserId();
 	} );
 
 	useEffect( () => {
@@ -25,9 +29,10 @@ function App( { userId } ) {
 	return html`
 		<${ AccessTable }
 			apiKeys=${ apiKeys }
-			userId=${ userId }
-			onCreateApiKey=${ ( name ) => createApiKey( name, userId ) }
+			userId=${ selectedUserId || userId }
+			onCreateApiKey=${ ( name, selected ) => createApiKey( name, selected ) }
 			onRevokeApiKey=${ revokeApiKey }
+			onChangeUser=${ ( id ) => setUserId( id ) }
 		/>
 	`;
 }
