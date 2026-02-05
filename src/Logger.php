@@ -66,11 +66,12 @@ final class Logger extends AbstractLogger {
 	 *
 	 * @since 0.4.0
 	 *
-	 * @param string $level   PSR log level.
-	 * @param string $message Log message.
-	 * @param array  $context Additional data.
+	 * @param mixed             $level   PSR log level.
+	 * @param \Stringable|string $message Log message.
+	 * @param array             $context Additional data.
+	 * @return void
 	 */
-	public function log( $level, $message, array $context = [] ) {
+	public function log( $level, \Stringable|string $message, array $context = [] ): void {
 		if ( ! $this->handle_level( $level ) ) {
 			return;
 		}
@@ -80,7 +81,7 @@ final class Logger extends AbstractLogger {
 			sprintf(
 				'SATISPRESS.%s: %s',
 				strtoupper( $level ),
-				$this->format( $message, $context )
+				$this->format( (string) $message, $context )
 			)
 		);
 	}
