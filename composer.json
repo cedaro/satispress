@@ -47,7 +47,7 @@
 	},
 	"require": {
 		"php": ">=8.0",
-		"cedaro/wp-plugin": "^0.5",
+		"cedaro/wp-plugin": "^1.0",
 		"composer/installers": "^2.0",
 		"composer/semver": "^3.2",
 		"pimple/pimple": "^3.5",
