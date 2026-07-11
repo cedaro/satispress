@@ -148,7 +148,7 @@ class ServiceProvider implements ServiceProviderInterface {
 			return new Provider\Upgrade(
 				$container['repository.managed'],
 				$container['release.manager'],
-				$container['storage.packages'],
+				$container['storage.local'],
 				$container['htaccess.handler'],
 				$container['logger']
 			);
@@ -365,9 +365,22 @@ class ServiceProvider implements ServiceProviderInterface {
 			return new Screen\Settings( $container['api_key.repository'] );
 		};
 
-		$container['storage.packages'] = function ( $container ) {
+		$container['storage.local'] = function ( $container ) {
 			$path = path_join( $container['storage.working_directory'], 'packages/' );
 			return new Storage\Local( $path );
+		};
+
+		$container['storage.packages'] = function ( $container ) {
+			/**
+			 * Filter the time to live for cached checksums.
+			 *
+			 * @since 3.0.0
+			 *
+			 * @param int $cache_ttl Time to live in seconds.
+			 */
+			$cache_ttl = (int) apply_filters( 'satispress_checksum_cache_ttl', MONTH_IN_SECONDS );
+
+			return new Storage\CachedStorage( $container['storage.local'], $cache_ttl );
 		};
 
 		$container['storage.working_directory'] = function ( $container ) {
