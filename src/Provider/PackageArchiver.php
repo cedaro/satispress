@@ -212,7 +212,7 @@ class PackageArchiver extends AbstractHookProvider {
 	 * @param array         $data       Installation result data.
 	 * @return bool|WP_Error
 	 */
-	public function archive_on_upgrade( $result, array $hook_extra, array $data ): bool {
+	public function archive_on_upgrade( $result, array $hook_extra, array $data ) {
 		$type = $hook_extra['type'] ?? '';
 
 		// Determine the type from the the extra info.
