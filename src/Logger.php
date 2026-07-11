@@ -70,7 +70,7 @@ final class Logger extends AbstractLogger {
 	 * @param string $message Log message.
 	 * @param array  $context Additional data.
 	 */
-	public function log( $level, $message, array $context = [] ) {
+	public function log( $level, $message, array $context = [] ): void {
 		if ( ! $this->handle_level( $level ) ) {
 			return;
 		}

@@ -52,7 +52,7 @@
 		"composer/semver": "^3.2",
 		"pimple/pimple": "^3.5",
 		"psr/container": "^2.0",
-		"psr/log": "^2.0"
+		"psr/log": "^3.0"
 	},
 	"require-dev": {
 		"brain/monkey": "^2.2",
