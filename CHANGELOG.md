@@ -2,6 +2,18 @@
 
 ## [Unreleased]
 
+## [3.0.0] - 2026-07-12
+
+* Added a storage adapter to cache checksums.
+* Reworked when cached releases are added to a package to prevent all plugins and themes from being searched (instead of only managed packages).
+* Determined package type after an upgrade from provided info to prevent errors.
+* Renamed the whitelist repository to managed.
+* Updated cedaro/wp-plugin dependency to ^1.0.
+* Updated psr/log to ^3.0.
+* Removed the return type for PackageArchive:archive_on_upgrade() to prevent errors.
+* Updated API Key REST controller to check permissions using the API Key user instead of the passed user.
+* Minor code and doc clean up.
+
 ## [2.0.1] - 2025-12-04
 
 * Fixed the search functionality in the package selector sidebar. See [#223].
@@ -146,8 +158,9 @@ Major changes include:
 * [Capabilities](docs/security.md#capabilities) were added for viewing and downloading packages, as well as managing SatisPress options. Only administrators have access by default.
 * The storage layer was abstracted to make it swappable.
 
-[Unreleased]: https://github.com/cedaro/satispress/compare/v2.0.1...HEAD
-[2.0.1]: https://github.com/cedaro/satispress/compare/v1.0.4...v2.0.1
+[Unreleased]: https://github.com/cedaro/satispress/compare/v3.0.0...HEAD
+[3.0.0]: https://github.com/cedaro/satispress/compare/v2.0.1...v3.0.0
+[2.0.1]: https://github.com/cedaro/satispress/compare/v2.0.0...v2.0.1
 [2.0.0]: https://github.com/cedaro/satispress/compare/v1.0.4...v2.0.0
 [1.0.4]: https://github.com/cedaro/satispress/compare/v1.0.3...v1.0.4
 [1.0.3]: https://github.com/cedaro/satispress/compare/v1.0.2...v1.0.3

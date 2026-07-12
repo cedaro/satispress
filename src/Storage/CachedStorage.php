@@ -4,7 +4,7 @@
  *
  * @package SatisPress
  * @license GPL-2.0-or-later
- * @since 2.1.0
+ * @since 3.0.0
  */
 
 declare ( strict_types = 1 );
@@ -23,7 +23,7 @@ use SatisPress\HTTP\Response;
  * by algorithm, so they can be invalidated when the file changes. Writes go
  * through move(), so the cache is invalidated there and in delete().
  *
- * @since 2.1.0
+ * @since 3.0.0
  */
 class CachedStorage implements Storage {
 	/**
@@ -50,7 +50,7 @@ class CachedStorage implements Storage {
 	/**
 	 * Constructor.
 	 *
-	 * @since 2.1.0
+	 * @since 3.0.0
 	 *
 	 * @param Storage $storage   Storage adapter to decorate.
 	 * @param int     $cache_ttl Cache time to live in seconds.
@@ -63,7 +63,7 @@ class CachedStorage implements Storage {
 	/**
 	 * Retrieve the hash value of the contents of a file.
 	 *
-	 * @since 2.1.0
+	 * @since 3.0.0
 	 *
 	 * @param string $algorithm Algorithm.
 	 * @param string $file      Relative file path.
@@ -99,7 +99,7 @@ class CachedStorage implements Storage {
 	/**
 	 * Delete a file.
 	 *
-	 * @since 2.1.0
+	 * @since 3.0.0
 	 *
 	 * @param string $file Relative file path.
 	 * @return bool
@@ -112,7 +112,7 @@ class CachedStorage implements Storage {
 	/**
 	 * Whether a file exists.
 	 *
-	 * @since 2.1.0
+	 * @since 3.0.0
 	 *
 	 * @param string $file Relative file path.
 	 * @return bool
@@ -124,7 +124,7 @@ class CachedStorage implements Storage {
 	/**
 	 * List files.
 	 *
-	 * @since 2.1.0
+	 * @since 3.0.0
 	 *
 	 * @param string $path Relative path.
 	 * @return array Array of relative file paths.
@@ -136,7 +136,7 @@ class CachedStorage implements Storage {
 	/**
 	 * Move a file.
 	 *
-	 * @since 2.1.0
+	 * @since 3.0.0
 	 *
 	 * @param string $source      Absolute path to a file on the local file system.
 	 * @param string $destination Relative destination path; includes the file name.
@@ -150,7 +150,7 @@ class CachedStorage implements Storage {
 	/**
 	 * Send a file for client download.
 	 *
-	 * @since 2.1.0
+	 * @since 3.0.0
 	 *
 	 * @param string $file Relative file path.
 	 * @return Response
@@ -165,7 +165,7 @@ class CachedStorage implements Storage {
 	 * The file path is hashed to keep the name within the transient name
 	 * length limit.
 	 *
-	 * @since 2.1.0
+	 * @since 3.0.0
 	 *
 	 * @param string $file Relative file path.
 	 * @return string
