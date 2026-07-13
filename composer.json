@@ -28,25 +28,25 @@
 	"config": {
 		"allow-plugins": {
 			"dealerdirect/phpcodesniffer-composer-installer": true,
-			"composer/installers": true
+			"composer/installers": true,
+			"roots/wordpress-core-installer": true
+		},
+		"optimize-autoloader": true,
+		"platform": {
+			"php": "8.1"
 		},
 		"preferred-install": "dist",
 		"sort-packages": true
 	},
 	"prefer-stable": true,
 	"repositories": {
-		"wordpress": {
-			"type": "vcs",
-			"url": "https://github.com/WordPress/wordpress-develop",
-			"no-api": true
-		},
 		"wp-test-suite": {
 			"type": "vcs",
 			"url": "https://github.com/cedaro/wp-test-suite"
 		}
 	},
 	"require": {
-		"php": ">=8.0",
+		"php": ">=8.1",
 		"cedaro/wp-plugin": "^1.0",
 		"composer/installers": "^2.0",
 		"composer/semver": "^3.2",
@@ -58,13 +58,14 @@
 		"brain/monkey": "^2.2",
 		"cedaro/wp-test-suite": "dev-develop",
 		"dealerdirect/phpcodesniffer-composer-installer": "^1.0",
+		"php-stubs/wordpress-stubs": "^6.4",
 		"phpcompatibility/phpcompatibility-wp": "^2",
-		"phpunit/phpunit": "^8",
-		"roave/security-advisories": "dev-latest",
+		"phpunit/phpunit": "^10",
+		"rector/rector": "^1.2",
+		"roots/wordpress": "^7.0",
 		"slevomat/coding-standard": "^8.22",
 		"squizlabs/php_codesniffer": "^3.3",
-		"wordpress/wordpress": "^6.6",
-		"wp-cli/i18n-command": "^2.6",
+		"wp-cli/i18n-command": "^2.4",
 		"wp-coding-standards/wpcs": "^3"
 	},
 	"autoload": {
@@ -85,13 +86,13 @@
 			"Dealerdirect\\Composer\\Plugin\\Installers\\PHPCodeSniffer\\Plugin::run"
 		],
 		"makepot": "./vendor/bin/wp i18n make-pot . languages/satispress.pot",
-		"phpcs": "./vendor/bin/phpcs",
+		"phpcs": "./vendor/bin/phpcs --standard=.phpcs.xml.dist",
+		"phpcs:fix": "./vendor/bin/phpcbf --standard=.phpcs.xml.dist",
 		"prepare-for-release": [
-			"composer install",
-			"composer makepot",
-			"composer install --no-dev --prefer-dist",
-			"composer dump-autoload --no-dev --optimize"
+			"composer update --no-dev"
 		],
+		"rector:dry": "vendor/bin/rector process --dry-run",
+		"rector": "vendor/bin/rector process",
 		"test": "./vendor/bin/phpunit --testsuite=Unit --colors=always"
 	}
 }

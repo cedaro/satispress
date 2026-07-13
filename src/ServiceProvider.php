@@ -46,20 +46,14 @@ class ServiceProvider implements ServiceProviderInterface {
 	 * @param PimpleContainer $container Container instance.
 	 */
 	public function register( PimpleContainer $container ) {
-		$container['api_key.factory'] = function () {
-			return new ApiKey\Factory();
-		};
+		$container['api_key.factory'] = fn() => new ApiKey\Factory();
 
-		$container['api_key.repository'] = function ( $container ) {
-			return new ApiKey\Repository(
-				$container['api_key.factory']
-			);
-		};
+		$container['api_key.repository'] = fn( $container ) => new ApiKey\Repository(
+			$container['api_key.factory']
+		);
 
-		$container['archiver'] = function ( $container ) {
-			return ( new Archiver( $container['logger'] ) )
+		$container['archiver'] = fn( $container ) => ( new Archiver( $container['logger'] ) )
 				->register_validators( $container['validators.artifact'] );
-		};
 
 		$container['authentication.servers'] = function ( $container ) {
 			$servers = apply_filters(
@@ -73,52 +67,32 @@ class ServiceProvider implements ServiceProviderInterface {
 			return new ServiceIterator( $container, $servers );
 		};
 
-		$container['authentication.api_key'] = function ( $container ) {
-			return new ApiKey\Server(
-				$container['api_key.repository']
-			);
-		};
+		$container['authentication.api_key'] = fn( $container ) => new ApiKey\Server(
+			$container['api_key.repository']
+		);
 
-		$container['authentication.unauthorized'] = function () {
-			return new Authentication\UnauthorizedServer();
-		};
+		$container['authentication.unauthorized'] = fn() => new Authentication\UnauthorizedServer();
 
-		$container['hooks.activation'] = function () {
-			return new Provider\Activation();
-		};
+		$container['hooks.activation'] = fn() => new Provider\Activation();
 
-		$container['hooks.admin_assets'] = function () {
-			return new Provider\AdminAssets();
-		};
+		$container['hooks.admin_assets'] = fn() => new Provider\AdminAssets();
 
-		$container['hooks.authentication'] = function ( $container ) {
-			return new Provider\Authentication(
-				$container['authentication.servers'],
-				$container['http.request']
-			);
-		};
+		$container['hooks.authentication'] = fn( $container ) => new Provider\Authentication(
+			$container['authentication.servers'],
+			$container['http.request']
+		);
 
-		$container['hooks.capabilities'] = function () {
-			return new Provider\Capabilities();
-		};
+		$container['hooks.capabilities'] = fn() => new Provider\Capabilities();
 
-		$container['hooks.custom_vendor'] = function () {
-			return new Provider\CustomVendor();
-		};
+		$container['hooks.custom_vendor'] = fn() => new Provider\CustomVendor();
 
-		$container['hooks.deactivation'] = function () {
-			return new Provider\Deactivation();
-		};
+		$container['hooks.deactivation'] = fn() => new Provider\Deactivation();
 
-		$container['hooks.health_check'] = function ( $container ) {
-			return new Provider\HealthCheck(
-				$container['http.request']
-			);
-		};
+		$container['hooks.health_check'] = fn( $container ) => new Provider\HealthCheck(
+			$container['http.request']
+		);
 
-		$container['hooks.i18n'] = function () {
-			return new I18n();
-		};
+		$container['hooks.i18n'] = fn() => new I18n();
 
 		$container['hooks.package_archiver'] = function ( $container ) {
 			return new Provider\PackageArchiver(
@@ -129,20 +103,14 @@ class ServiceProvider implements ServiceProviderInterface {
 			);
 		};
 
-		$container['hooks.request_handler'] = function ( $container ) {
-			return new Provider\RequestHandler(
-				$container['http.request'],
-				$container['route.controllers']
-			);
-		};
+		$container['hooks.request_handler'] = fn( $container ) => new Provider\RequestHandler(
+			$container['http.request'],
+			$container['route.controllers']
+		);
 
-		$container['hooks.rest'] = function ( $container ) {
-			return new Provider\REST( $container['rest.controllers'] );
-		};
+		$container['hooks.rest'] = fn( $container ) => new Provider\REST( $container['rest.controllers'] );
 
-		$container['hooks.rewrite_rules'] = function () {
-			return new Provider\RewriteRules();
-		};
+		$container['hooks.rewrite_rules'] = fn() => new Provider\RewriteRules();
 
 		$container['hooks.upgrade'] = function ( $container ) {
 			return new Provider\Upgrade(
@@ -154,9 +122,7 @@ class ServiceProvider implements ServiceProviderInterface {
 			);
 		};
 
-		$container['htaccess.handler'] = function ( $container ) {
-			return new Htaccess( $container['storage.working_directory'] );
-		};
+		$container['htaccess.handler'] = fn( $container ) => new Htaccess( $container['storage.working_directory'] );
 
 		$container['http.request'] = function () {
 			$request = new Request( $_SERVER['REQUEST_METHOD'] ?? '' );
@@ -173,9 +139,7 @@ class ServiceProvider implements ServiceProviderInterface {
 			return $request;
 		};
 
-		$container['logger'] = function ( $container ) {
-			return new Logger( $container['logger.level'] );
-		};
+		$container['logger'] = fn( $container ) => new Logger( $container['logger.level'] );
 
 		$container['logger.level'] = function () {
 			// Log warnings and above when WP_DEBUG is enabled.
@@ -186,35 +150,25 @@ class ServiceProvider implements ServiceProviderInterface {
 			return $level ?? '';
 		};
 
-		$container['package.factory'] = function ( $container ) {
-			return new PackageFactory(
-				$container['release.manager']
-			);
-		};
+		$container['package.factory'] = fn( $container ) => new PackageFactory(
+			$container['release.manager']
+		);
 
-		$container['plugin.envato_market'] = function () {
-			return new Integration\EnvatoMarket();
-		};
+		$container['plugin.envato_market'] = fn() => new Integration\EnvatoMarket();
 
-		$container['plugin.members'] = function () {
-			return new Integration\Members();
-		};
+		$container['plugin.members'] = fn() => new Integration\Members();
 
-		$container['release.manager'] = function ( $container ) {
-			return new ReleaseManager(
-				$container['storage.packages'],
-				$container['archiver']
-			);
-		};
+		$container['release.manager'] = fn( $container ) => new ReleaseManager(
+			$container['storage.packages'],
+			$container['archiver']
+		);
 
-		$container['repository.installed'] = function ( $container ) {
-			return new Repository\MultiRepository(
-				[
-					$container['repository.plugins'],
-					$container['repository.themes'],
-				]
-			);
-		};
+		$container['repository.installed'] = fn( $container ) => new Repository\MultiRepository(
+			[
+				$container['repository.plugins'],
+				$container['repository.themes'],
+			]
+		);
 
 		$container['repository.managed'] = function ( $container ) {
 			/**
@@ -415,26 +369,18 @@ class ServiceProvider implements ServiceProviderInterface {
 			return $directory;
 		};
 
-		$container['transformer.composer_package'] = function ( $container ) {
-			return new ComposerPackageTransformer( $container['package.factory'] );
-		};
+		$container['transformer.composer_package'] = fn( $container ) => new ComposerPackageTransformer( $container['package.factory'] );
 
-		$container['transformer.composer_repository'] = function ( $container ) {
-			return new ComposerRepositoryTransformer(
-				$container['transformer.composer_package'],
-				$container['release.manager'],
-				$container['version.parser'],
-				$container['logger']
-			);
-		};
+		$container['transformer.composer_repository'] = fn( $container ) => new ComposerRepositoryTransformer(
+			$container['transformer.composer_package'],
+			$container['release.manager'],
+			$container['version.parser'],
+			$container['logger']
+		);
 
-		$container['validator.hidden_directory'] = function () {
-			return new Validator\HiddenDirectoryValidator();
-		};
+		$container['validator.hidden_directory'] = fn() => new Validator\HiddenDirectoryValidator();
 
-		$container['validator.zip'] = function () {
-			return new Validator\ZipValidator();
-		};
+		$container['validator.zip'] = fn() => new Validator\ZipValidator();
 
 		$container['validators.artifact'] = function ( $container ) {
 			$servers = apply_filters(
@@ -448,8 +394,6 @@ class ServiceProvider implements ServiceProviderInterface {
 			return new ServiceIterator( $container, $servers );
 		};
 
-		$container['version.parser'] = function () {
-			return new ComposerVersionParser( new VersionParser() );
-		};
+		$container['version.parser'] = fn() => new ComposerVersionParser( new VersionParser() );
 	}
 }

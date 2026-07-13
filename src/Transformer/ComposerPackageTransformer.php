@@ -25,7 +25,7 @@ class ComposerPackageTransformer implements PackageTransformer {
 	 *
 	 * @var array
 	 */
-	const WORDPRESS_TYPES = [
+	final public const WORDPRESS_TYPES = [
 		'dropin'   => 'wordpress-dropin',
 		'muplugin' => 'wordpress-muplugin',
 		'plugin'   => 'wordpress-plugin',

@@ -32,21 +32,21 @@ class Download implements Route {
 	 *
 	 * @var string
 	 */
-	const LATEST_VERSION = 'latest';
+	final public const LATEST_VERSION = 'latest';
 
 	/**
 	 * Regex for sanitizing package slugs.
 	 *
 	 * @var string
 	 */
-	const PACKAGE_SLUG_REGEX = '/[^A-Za-z0-9._\-]+/i';
+	final public const PACKAGE_SLUG_REGEX = '/[^A-Za-z0-9._\-]+/i';
 
 	/**
 	 * Regex for sanitizing package versions.
 	 *
 	 * @var string
 	 */
-	const PACKAGE_VERSION_REGEX = '/[^0-9a-z.-]+/i';
+	final public const PACKAGE_VERSION_REGEX = '/[^0-9a-z.-]+/i';
 
 	/**
 	 * Release manager.
@@ -93,14 +93,14 @@ class Download implements Route {
 			throw HttpException::forForbiddenResource();
 		}
 
-		$slug = preg_replace( self::PACKAGE_SLUG_REGEX, '', $request['slug'] );
+		$slug = preg_replace( self::PACKAGE_SLUG_REGEX, '', (string) $request['slug'] );
 		if ( empty( $slug ) ) {
 			throw HttpException::forUnknownPackage( $slug );
 		}
 
 		$version = '';
 		if ( ! empty( $request['version'] ) ) {
-			$version = preg_replace( self::PACKAGE_VERSION_REGEX, '', $request['version'] );
+			$version = preg_replace( self::PACKAGE_VERSION_REGEX, '', (string) $request['version'] );
 		}
 
 		$package = $this->repository->first_where( [ 'slug' => $slug ] );
@@ -132,7 +132,7 @@ class Download implements Route {
 
 		try {
 			$release = $package->get_release( $version );
-		} catch ( InvalidReleaseVersion $e ) {
+		} catch ( InvalidReleaseVersion ) {
 			throw HttpException::forInvalidRelease( $package, $version );
 		}
 
@@ -144,7 +144,7 @@ class Download implements Route {
 		try {
 			// Cache the release if an artifact doesn't already exist.
 			$release = $this->release_manager->archive( $release );
-		} catch ( SatispressException $e ) {
+		} catch ( SatispressException ) {
 			// Send a 404 if the release isn't available.
 			throw HttpException::forMissingRelease( $release );
 		}

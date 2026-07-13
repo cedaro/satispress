@@ -75,7 +75,7 @@ function generate_random_string( int $length = 12 ): string {
  */
 function get_authorization_header() {
 	if ( ! empty( $_SERVER['HTTP_AUTHORIZATION'] ) ) {
-		return stripslashes( $_SERVER['HTTP_AUTHORIZATION'] );
+		return stripslashes( (string) $_SERVER['HTTP_AUTHORIZATION'] );
 	}
 
 	if ( \function_exists( 'getallheaders' ) ) {
@@ -135,7 +135,7 @@ function get_edited_user_id(): int {
  * Plugins can be identified by their plugin file (relative path to the main
  * plugin file from the root plugin directory) or their slug.
  *
- * This doesn't validate whether or not the plugin actually exists.
+ * This doesn't validate whether the plugin actually exists.
  *
  * @since 0.3.0
  *
@@ -143,7 +143,7 @@ function get_edited_user_id(): int {
  * @return bool
  */
 function is_plugin_file( $plugin_file ) {
-	return '.php' === substr( $plugin_file, -4 );
+	return is_string( $plugin_file ) && str_ends_with( $plugin_file, '.php' );
 }
 
 /**

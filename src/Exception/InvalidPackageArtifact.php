@@ -38,7 +38,7 @@ class InvalidPackageArtifact extends \RuntimeException implements SatispressExce
 	}
 
 	/**
-	 * Create an exception for artifact with a top level __MAXOSX directory.
+	 * Create an exception for artifact with a top level __MACOSX directory.
 	 *
 	 * @since 0.7.0
 	 *

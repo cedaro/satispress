@@ -19,21 +19,13 @@ namespace SatisPress;
  */
 final class ComposerVersionParser implements VersionParser {
 	/**
-	 * Version parser instance.
-	 *
-	 * @var \Composer\Semver\VersionParser
-	 */
-	private $parser;
-
-	/**
 	 * Initialize the version parser.
 	 *
 	 * @since 0.3.0
 	 *
 	 * @param \Composer\Semver\VersionParser $parser Version parser.
 	 */
-	public function __construct( \Composer\Semver\VersionParser $parser ) {
-		$this->parser = $parser;
+	public function __construct( private readonly \Composer\Semver\VersionParser $parser ) {
 	}
 
 	/**

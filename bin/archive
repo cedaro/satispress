@@ -51,7 +51,7 @@ function compress( slug, version, files ) {
 			glob.sync( pattern, {
 				nodir: true
 			} ).forEach( file => {
-				archive.file( file, { name: `${ slug }/${ file }` } )
+				archive.file( file, { name: `${ slug }/${ file }` } );
 			} );
 		} );
 

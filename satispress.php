@@ -17,7 +17,7 @@
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: satispress
  * Domain Path: /languages
- * Requires PHP: 8.0
+ * Requires PHP: 8.1
  * Network: true
  * GitHub Plugin URI: cedaro/satispress
  * Release Asset: true

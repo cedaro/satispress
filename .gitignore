@@ -3,6 +3,7 @@
 /.idea
 /node_modules/
 /vendor/
+/wordpress
 /composer.lock
 /package-lock.json
 /phpcs.xml

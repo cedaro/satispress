@@ -37,13 +37,6 @@ final class ApiKey implements ArrayAccess {
 	private $data;
 
 	/**
-	 * API key token.
-	 *
-	 * @var string
-	 */
-	private $token;
-
-	/**
 	 * User associated with the API key.
 	 *
 	 * @var WP_User
@@ -59,10 +52,9 @@ final class ApiKey implements ArrayAccess {
 	 * @param string  $token API key token.
 	 * @param array   $data  Optional. Additional data associated with the key.
 	 */
-	public function __construct( WP_User $user, string $token, ?array $data = null ) {
-		$this->user  = $user;
-		$this->token = $token;
-		$this->data  = $data ?? [];
+	public function __construct( WP_User $user, private readonly string $token, ?array $data = null ) {
+		$this->user = $user;
+		$this->data = $data ?? [];
 	}
 
 	/**
@@ -206,11 +198,7 @@ final class ApiKey implements ArrayAccess {
 			return $this->$method();
 		}
 
-		if ( isset( $this->data[ $name ] ) ) {
-			return $this->data[ $name ];
-		}
-
-		return null;
+		return $this->data[ $name ] ?? null;
 	}
 
 	/**

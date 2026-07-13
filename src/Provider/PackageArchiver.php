@@ -237,7 +237,7 @@ class PackageArchiver extends AbstractHookProvider {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @param string $slug Packge slug.
+	 * @param string $slug Package slug.
 	 * @param string $type Type of package.
 	 */
 	protected function archive_package( string $slug, string $type ) {

@@ -53,7 +53,7 @@ class Server implements ServerInterface {
 		$header = $request->get_header( 'authorization' );
 
 		// Bail if the authorization header doesn't exist.
-		if ( null === $header || 0 !== stripos( $header, 'basic ' ) ) {
+		if ( null === $header || 0 !== stripos( (string) $header, 'basic ' ) ) {
 			return false;
 		}
 
@@ -131,7 +131,7 @@ class Server implements ServerInterface {
 	 * @param mixed $user WordPress user instance.
 	 * @return bool
 	 */
-	protected function validate_user( $user ): bool {
+	protected function validate_user( mixed $user ): bool {
 		return ! empty( $user ) && ! is_wp_error( $user ) && $user->exists();
 	}
 }

@@ -31,7 +31,7 @@ class InstalledPackagesController extends WP_REST_Controller {
 	 *
 	 * @var string
 	 */
-	const SLUG_PATTERN = '[^.\/]+(?:\/[^.\/]+)?';
+	final public const SLUG_PATTERN = '[^.\/]+(?:\/[^.\/]+)?';
 
 	/**
 	 * Package repository.
